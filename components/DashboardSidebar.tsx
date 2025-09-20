@@ -46,20 +46,21 @@ export default function DashboardSidebar() {
     <div className="fixed inset-y-0 left-0 w-56 bg-white border-r flex flex-col">
       {/* Logo */}
       <div className="p-4 border-b">
-        <Link href="/dashboard" className="flex items-center space-x-2">
-          <span className="text-2xl">🔥</span>
-          <span className="text-xl font-semibold">Firecrawl</span>
+        <Link href="/dashboard" className="flex items-center space-x-2 group">
+          <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">
+            Illia
+          </span>
         </Link>
       </div>
 
       {/* Search */}
       <div className="p-4">
         <div className="relative">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
           <input
             type="text"
-            placeholder="Search"
-            className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            placeholder="Search past leads..."
+            className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
           />
           <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
         </div>
@@ -78,7 +79,7 @@ export default function DashboardSidebar() {
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-orange-50 text-orange-600'
+                    ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={(e) => {
@@ -104,7 +105,7 @@ export default function DashboardSidebar() {
                       href={subitem.href}
                       className={`block px-3 py-2 text-sm rounded-lg ${
                         pathname === subitem.href
-                          ? 'text-orange-600 bg-orange-50'
+                          ? 'text-teal-600 bg-teal-50'
                           : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                       }`}
                     >
@@ -121,11 +122,11 @@ export default function DashboardSidebar() {
       {/* What's New */}
       {showWhatsNew && (
         <div className="px-4 pb-3">
-          <div className="bg-orange-50 rounded-lg p-3">
+          <div className="bg-teal-50 rounded-lg p-3">
             <div className="flex items-start justify-between mb-2">
               <div className="flex items-center space-x-2">
-                <Sparkles className="h-4 w-4 text-orange-600" />
-                <span className="text-xs font-semibold text-orange-600">What's New (5)</span>
+                <Sparkles className="h-4 w-4 text-teal-600" />
+                <span className="text-xs font-semibold text-teal-600">What&apos;s New (5)</span>
               </div>
               <button
                 onClick={() => setShowWhatsNew(false)}
@@ -143,8 +144,8 @@ export default function DashboardSidebar() {
       <div className="border-t bg-white">
         {/* User email */}
         <div className="px-4 py-3 flex items-center space-x-3">
-          <div className="h-6 w-6 bg-orange-100 rounded-full flex items-center justify-center">
-            <span className="text-xs font-medium text-orange-600">S</span>
+          <div className="h-6 w-6 bg-teal-100 rounded-full flex items-center justify-center">
+            <span className="text-xs font-medium text-teal-600">S</span>
           </div>
           <span className="text-xs text-gray-700">samlee@content-mobbin.com</span>
         </div>

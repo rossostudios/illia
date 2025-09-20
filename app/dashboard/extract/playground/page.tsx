@@ -33,20 +33,20 @@ import {
 export default function ExtractPlaygroundPage() {
   const [showExtractMenu, setShowExtractMenu] = useState(true)
   const [showWhatsNew, setShowWhatsNew] = useState(true)
-  const [url, setUrl] = useState('https://firecrawl.dev/*')
+  const [url, setUrl] = useState('plumbers 29401')
   const [additionalUrl, setAdditionalUrl] = useState('')
   const [activeTab, setActiveTab] = useState<'options' | 'schema'>('options')
   const [showExtractPanel, setShowExtractPanel] = useState(false)
-  const [prompt, setPrompt] = useState('Extract the company name, mission, and determine if the company is open source.')
+  const [prompt, setPrompt] = useState('Extract lead name, business type, phone number, and lead score from Charleston area businesses.')
   const [enableWebSearch, setEnableWebSearch] = useState(false)
-  const [fireAgent, setFireAgent] = useState(false)
+  const [illiaAgent, setIlliaAgent] = useState(false)
   const [isExtracting, setIsExtracting] = useState(false)
   const [extractedData, setExtractedData] = useState<any>(null)
   const [schemaFields, setSchemaFields] = useState([
-    { id: '1', name: 'company', type: 'Object', required: true, children: [
+    { id: '1', name: 'business', type: 'Object', required: true, children: [
       { id: '1-1', name: 'name', type: 'String', required: true },
-      { id: '1-2', name: 'mission', type: 'String', required: true },
-      { id: '1-3', name: 'is_open_source', type: 'Boolean', required: true }
+      { id: '1-2', name: 'score', type: 'Number', required: true },
+      { id: '1-3', name: 'location', type: 'String', required: true }
     ]}
   ])
 
@@ -74,30 +74,30 @@ export default function ExtractPlaygroundPage() {
   const recentRuns = [
     {
       id: 1,
-      url: 'firecrawl.dev',
-      endpoint: 'Crawl',
+      query: 'illia dev',
+      mode: 'Schema',
       status: 'Success',
-      date: 'Sep 8, 2025',
+      date: 'Sep 20',
       time: '9:57 AM',
-      icon: '🔥'
+      icon: 'IL'
     },
     {
       id: 2,
-      url: 'www.firecrawl.dev/',
-      endpoint: 'Map',
+      query: 'plumbers 29401',
+      mode: 'Agent',
       status: 'Success',
-      date: 'Sep 4, 2025',
+      date: 'Sep 4',
       time: '3:38 PM',
-      icon: '🔥'
+      icon: 'IL'
     },
     {
       id: 3,
-      url: 'www.nngroup.com/articles/us...',
-      endpoint: 'Scrape',
+      query: 'cafes King St',
+      mode: 'ZIP search',
       status: 'Success',
-      date: 'Sep 2, 2025',
+      date: 'Sep 2',
       time: '7:46 AM',
-      icon: 'NN'
+      icon: 'IL'
     }
   ]
 
@@ -108,8 +108,8 @@ export default function ExtractPlaygroundPage() {
         {/* Logo */}
         <div className="p-4 border-b">
           <Link href="/dashboard" className="flex items-center space-x-2">
-            <span className="text-2xl">🔥</span>
-            <span className="text-xl font-semibold">Firecrawl</span>
+            <span className="text-2xl font-bold text-orange-600">IL</span>
+            <span className="text-xl font-semibold">Illia</span>
           </Link>
         </div>
 
@@ -120,7 +120,7 @@ export default function ExtractPlaygroundPage() {
             <input
               type="text"
               placeholder="Search"
-              className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
             />
             <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
           </div>
@@ -134,7 +134,7 @@ export default function ExtractPlaygroundPage() {
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   item.active
-                    ? 'bg-orange-50 text-orange-600'
+                    ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={(e) => {
@@ -160,7 +160,7 @@ export default function ExtractPlaygroundPage() {
                       href={subitem.href}
                       className={`block px-3 py-2 text-sm rounded-lg ${
                         subitem.active
-                          ? 'text-orange-600 bg-orange-50'
+                          ? 'text-teal-600 bg-teal-50'
                           : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                       }`}
                     >
@@ -176,11 +176,11 @@ export default function ExtractPlaygroundPage() {
         {/* What's New */}
         {showWhatsNew && (
           <div className="absolute bottom-4 left-4 right-4">
-            <div className="bg-orange-50 rounded-lg p-3">
+            <div className="bg-teal-50 rounded-lg p-3">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center space-x-2">
-                  <Sparkles className="h-4 w-4 text-orange-600" />
-                  <span className="text-xs font-semibold text-orange-600">What's New (5)</span>
+                  <Sparkles className="h-4 w-4 text-teal-600" />
+                  <span className="text-xs font-semibold text-teal-600">What&apos;s New (5)</span>
                 </div>
                 <button
                   onClick={() => setShowWhatsNew(false)}
@@ -242,33 +242,37 @@ export default function ExtractPlaygroundPage() {
         <div className="p-8">
           {/* Title */}
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Extract Playground</h1>
-            <p className="text-gray-600">API, Docs and Playground - all in one place</p>
+            <h1 className="text-3xl font-bold text-teal-600 mb-2 flex items-center justify-center">
+              <Play className="h-8 w-8 mr-2" />
+              Lead Extract Playground
+            </h1>
+            <p className="text-gray-700">Lead Extract Playground - Test custom schemas in one place</p>
           </div>
 
           {/* Main Interface */}
           <div className="max-w-7xl mx-auto">
-            {/* URL Input and Controls */}
+            {/* Lead Query Input and Controls */}
             <div className="bg-white rounded-xl border p-4 mb-6">
               <div className="space-y-3">
+                <label className="text-xs font-medium text-gray-700">Lead Query</label>
                 <div className="flex items-center space-x-3">
                   <input
                     type="text"
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    placeholder="https://firecrawl.dev/*"
+                    className="flex-1 px-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-600 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                    placeholder="Enter lead query (e.g., plumbers 29401)"
                   />
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <span className="text-sm text-gray-500">https://</span>
+                  <span className="text-sm text-gray-500">+</span>
                   <input
                     type="text"
                     value={additionalUrl}
                     onChange={(e) => setAdditionalUrl(e.target.value)}
-                    className="flex-1 px-3 py-2 text-sm text-gray-500 outline-none"
-                    placeholder="Add another URL..."
+                    className="flex-1 px-3 py-2 text-sm text-gray-500 outline-none hover:text-teal-600"
+                    placeholder="Add another ZIP or niche"
                   />
                 </div>
               </div>
@@ -290,7 +294,7 @@ export default function ExtractPlaygroundPage() {
                     >
                       <Settings className="h-4 w-4" />
                       <span>Options</span>
-                      {activeTab === 'options' && <span className="h-2 w-2 bg-orange-500 rounded-full" />}
+                      {activeTab === 'options' && <span className="h-2 w-2 bg-teal-500 rounded-full" />}
                     </button>
                     <button
                       onClick={() => setActiveTab('schema')}
@@ -302,13 +306,13 @@ export default function ExtractPlaygroundPage() {
                     >
                       <FileText className="h-4 w-4" />
                       <span>Schema</span>
-                      {activeTab === 'schema' && <span className="h-2 w-2 bg-orange-500 rounded-full" />}
+                      {activeTab === 'schema' && <span className="h-2 w-2 bg-teal-500 rounded-full" />}
                     </button>
                   </div>
 
-                  <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                  <button className="flex items-center space-x-2 px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors">
                     <Copy className="h-4 w-4" />
-                    <span className="text-sm font-medium">Get code</span>
+                    <span className="text-sm font-medium">Get Schema Code</span>
                   </button>
 
                   <button
@@ -318,17 +322,17 @@ export default function ExtractPlaygroundPage() {
                       setTimeout(() => {
                         setIsExtracting(false)
                         setExtractedData({
-                          company: {
-                            name: 'Firecrawl',
-                            mission: 'To make web data programmable through our full toolkit that covers web search and extraction, giving developers the tools they need to build powerful AI applications.',
-                            is_open_source: true
+                          business: {
+                            name: 'Charleston Plumbing Pros',
+                            score: 92,
+                            location: '123 King Street, Charleston, SC 29401'
                           }
                         })
                       }, 3000)
                     }}
-                    className="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors"
+                    className="px-6 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-medium transition-colors"
                   >
-                    Start extracting
+                    Start Extracting Leads
                   </button>
                 </div>
               </div>
@@ -358,20 +362,20 @@ export default function ExtractPlaygroundPage() {
                       <textarea
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
-                        className="w-full min-h-[100px] px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
-                        placeholder="Extract the company name, mission, and determine if the company is open source."
+                        className="w-full min-h-[100px] px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
+                        placeholder="Define schema (e.g., {name, score, location})"
                       />
                     </div>
 
                     <div className="flex items-center justify-between py-3 border-t">
                       <div className="flex items-center space-x-2">
                         <Search className="h-4 w-4 text-gray-400" />
-                        <span className="text-sm font-medium text-gray-700">Enable Web Search</span>
+                        <span className="text-sm font-medium text-gray-700">Enable ZIP search</span>
                       </div>
                       <button
                         onClick={() => setEnableWebSearch(!enableWebSearch)}
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                          enableWebSearch ? 'bg-orange-500' : 'bg-gray-200'
+                          enableWebSearch ? 'bg-teal-500' : 'bg-gray-200'
                         }`}
                       >
                         <span
@@ -385,17 +389,17 @@ export default function ExtractPlaygroundPage() {
                     <div className="flex items-center justify-between py-3 border-t">
                       <div className="flex items-center space-x-2">
                         <Sparkles className="h-4 w-4 text-gray-400" />
-                        <span className="text-sm font-medium text-gray-700">FIRE-1 Agent</span>
+                        <span className="text-sm font-medium text-gray-700">Lead Agent</span>
                       </div>
                       <button
-                        onClick={() => setFireAgent(!fireAgent)}
+                        onClick={() => setIlliaAgent(!illiaAgent)}
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                          fireAgent ? 'bg-orange-500' : 'bg-gray-200'
+                          illiaAgent ? 'bg-teal-500' : 'bg-gray-200'
                         }`}
                       >
                         <span
                           className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            fireAgent ? 'translate-x-6' : 'translate-x-1'
+                            illiaAgent ? 'translate-x-6' : 'translate-x-1'
                           }`}
                         />
                       </button>
@@ -414,17 +418,25 @@ export default function ExtractPlaygroundPage() {
                   </div>
 
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-medium text-gray-700 flex items-center">
-                        <FileText className="h-4 w-4 mr-2" />
-                        Schema
-                      </h4>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm font-medium text-gray-700">Schema</span>
-                        <select className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
-                          <option>JSON</option>
-                        </select>
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="text-sm font-medium text-gray-700 flex items-center">
+                          <FileText className="h-4 w-4 mr-2" />
+                          Schema
+                        </h4>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm font-medium text-gray-700">Format</span>
+                          <select className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                            <option>CSV</option>
+                            <option>JSON</option>
+                            <option>Excel</option>
+                          </select>
+                        </div>
                       </div>
+                      <textarea
+                        className="w-full min-h-[100px] px-3 py-2 border border-teal-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
+                        placeholder="Define schema (e.g., {name, email, score >80, location: Charleston})"
+                      />
                     </div>
 
                     <div className="space-y-2">
@@ -432,7 +444,7 @@ export default function ExtractPlaygroundPage() {
                         <div key={field.id}>
                           <div className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg">
                             <GripVertical className="h-4 w-4 text-gray-400" />
-                            <span className="text-sm font-medium">company</span>
+                            <span className="text-sm font-medium">business</span>
                             <select className="text-sm bg-white border rounded px-2 py-1 ml-auto">
                               <option>Object</option>
                             </select>
@@ -450,7 +462,7 @@ export default function ExtractPlaygroundPage() {
                               <select className="text-sm bg-white border rounded px-2 py-1 ml-auto">
                                 <option>{child.type}</option>
                               </select>
-                              <button className="text-orange-500">
+                              <button className="text-teal-500">
                                 <span className="text-lg">*</span>
                               </button>
                               <button className="text-gray-400 hover:text-gray-600">
@@ -460,7 +472,7 @@ export default function ExtractPlaygroundPage() {
                           ))}
                         </div>
                       ))}
-                      <button className="w-full py-2 text-sm text-gray-600 hover:text-gray-900 border-2 border-dashed rounded-lg hover:border-gray-400">
+                      <button className="w-full py-2 text-sm text-gray-600 hover:text-gray-900 border-2 border-dashed border-teal-300 rounded-lg hover:border-teal-400">
                         <Plus className="h-4 w-4 inline mr-1" />
                         Add field
                       </button>
@@ -487,7 +499,7 @@ export default function ExtractPlaygroundPage() {
                         </div>
                       </div>
                       <div className="flex flex-col items-center justify-center py-16">
-                        <div className="text-4xl mb-4">🔥</div>
+                        <div className="text-4xl mb-4 font-bold text-teal-600">IL</div>
                         <p className="text-sm text-gray-600">Parallelizing requests...</p>
                         <div className="mt-8 grid grid-cols-3 gap-2">
                           {[...Array(12)].map((_, i) => (
@@ -500,8 +512,8 @@ export default function ExtractPlaygroundPage() {
                     <div>
                       <div className="p-4 border-b flex items-center justify-between">
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-900">Extracted Data</h3>
-                          <p className="text-xs text-gray-500 mt-1">From 1 URL(s)</p>
+                          <h3 className="text-sm font-semibold text-gray-900">Extracted Leads</h3>
+                          <p className="text-xs text-gray-500 mt-1">From 1 search query</p>
                         </div>
                         <div className="flex items-center space-x-2">
                           <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900">
@@ -518,7 +530,7 @@ export default function ExtractPlaygroundPage() {
                         <pre className="text-xs font-mono text-gray-700">
 {`{
   "company": {
-    "name": "Firecrawl",
+    "name": "Illia",
     "mission": "To make web data programmable through our full toolkit that covers web search and extraction, giving developers the tools they need to build powerful AI applications.",
     "is_open_source": true
   }
@@ -537,36 +549,35 @@ export default function ExtractPlaygroundPage() {
 
             {/* Recent Runs */}
             <div className="mt-8">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Runs</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Extracts</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {recentRuns.map((run) => (
-                <div key={run.id} className="bg-white rounded-xl border p-6 hover:border-orange-500 hover:shadow-lg transition-all cursor-pointer">
+                <div key={run.id} className={`bg-white rounded-xl border p-6 hover:border-teal-500 hover:shadow-lg transition-all cursor-pointer ${run.id % 2 === 0 ? 'bg-gray-50' : ''}`}>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center space-x-3">
                       <span className="text-2xl">{run.icon}</span>
-                      <a href={`https://${run.url}`} className="text-gray-900 hover:text-orange-600 font-medium flex items-center">
-                        <span className="truncate max-w-[150px]">{run.url}</span>
-                        <ExternalLink className="h-3 w-3 ml-1 flex-shrink-0" />
-                      </a>
+                      <div className="text-gray-900 font-medium flex items-center">
+                        <span className="truncate max-w-[150px]">{run.query}</span>
+                      </div>
                     </div>
                   </div>
 
                   <div className="space-y-3">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-500">Endpoint</span>
+                      <span className="text-gray-500">Mode</span>
                       <span className="font-medium flex items-center">
-                        {run.endpoint === 'Crawl' && '🕸️'}
-                        {run.endpoint === 'Map' && '🗺️'}
-                        {run.endpoint === 'Scrape' && '⚡'}
-                        <span className="ml-1">{run.endpoint}</span>
+                        {run.mode === 'Schema' && '📋'}
+                        {run.mode === 'Agent' && '🤖'}
+                        {run.mode === 'ZIP search' && '📍'}
+                        <span className="ml-1">{run.mode}</span>
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">Status</span>
                       <span className="flex items-center">
-                        <span className="h-2 w-2 bg-green-500 rounded-full mr-1.5" />
-                        <span className="font-medium text-green-600">{run.status}</span>
+                        <span className="h-2 w-2 bg-teal-500 rounded-full mr-1.5" />
+                        <span className="font-medium text-teal-600">{run.status}</span>
                       </span>
                     </div>
 
@@ -578,9 +589,9 @@ export default function ExtractPlaygroundPage() {
                       </div>
                     </div>
 
-                    {run.endpoint === 'Scrape' && (
+                    {run.mode && (
                       <div className="pt-3 border-t">
-                        <span className="text-xs text-gray-500">Formats</span>
+                        <span className="text-xs text-gray-500">Leads found: {run.mode === 'Schema' ? '12' : run.mode === 'Agent' ? '18' : '15'}</span>
                       </div>
                     )}
                   </div>
@@ -593,7 +604,7 @@ export default function ExtractPlaygroundPage() {
       </div>
 
       {/* Intercom Chat */}
-      <button className="fixed bottom-4 right-4 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg">
+      <button className="fixed bottom-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full shadow-lg">
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>

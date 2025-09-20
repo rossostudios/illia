@@ -56,9 +56,8 @@ export default function UsagePage() {
       <div className="fixed inset-y-0 left-0 w-56 bg-white border-r">
         {/* Logo */}
         <div className="p-4 border-b">
-          <Link href="/dashboard" className="flex items-center space-x-2">
-            <span className="text-2xl">🔥</span>
-            <span className="text-xl font-semibold">Firecrawl</span>
+          <Link href="/dashboard" className="flex items-center space-x-2 group">
+            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">Illia</span>
           </Link>
         </div>
 
@@ -69,7 +68,7 @@ export default function UsagePage() {
             <input
               type="text"
               placeholder="Search"
-              className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
             />
             <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
           </div>
@@ -83,7 +82,7 @@ export default function UsagePage() {
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   item.active
-                    ? 'bg-orange-50 text-orange-600'
+                    ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={(e) => {
@@ -121,11 +120,11 @@ export default function UsagePage() {
         {/* What's New */}
         {showWhatsNew && (
           <div className="absolute bottom-4 left-4 right-4">
-            <div className="bg-orange-50 rounded-lg p-3">
+            <div className="bg-teal-50 rounded-lg p-3">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center space-x-2">
-                  <Sparkles className="h-4 w-4 text-orange-600" />
-                  <span className="text-xs font-semibold text-orange-600">What's New</span>
+                  <Sparkles className="h-4 w-4 text-teal-600" />
+                  <span className="text-xs font-semibold text-teal-600">What&apos;s New</span>
                 </div>
                 <button
                   onClick={() => setShowWhatsNew(false)}
@@ -157,7 +156,7 @@ export default function UsagePage() {
         <header className="bg-white border-b px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-orange-100 text-orange-700 px-3 py-1 rounded-lg">
+              <div className="flex items-center space-x-2 bg-teal-100 text-teal-700 px-3 py-1 rounded-lg">
                 <Users className="h-4 w-4" />
                 <span className="text-sm font-medium">Personal Team</span>
               </div>
@@ -187,8 +186,8 @@ export default function UsagePage() {
         <div className="p-8">
           {/* Title */}
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Usage</h1>
-            <p className="text-gray-600">Monitor your API usage and track performance</p>
+            <h1 className="text-2xl font-bold text-teal-600 mb-2">Lead Usage</h1>
+            <p className="text-gray-700">Monitor your lead usage and track performance</p>
           </div>
 
           {/* Billing Cycle Tabs */}
@@ -198,28 +197,28 @@ export default function UsagePage() {
                 onClick={() => setBillingCycle('current')}
                 className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
                   billingCycle === 'current'
-                    ? 'text-orange-600 border-orange-600'
+                    ? 'text-teal-600 border-teal-600'
                     : 'text-gray-500 border-transparent hover:text-gray-700'
                 }`}
               >
                 <span className="flex items-center space-x-2">
                   <span className="text-lg">1</span>
                   <span className="text-xs text-gray-400">/ 3 |</span>
-                  <span>CURRENT BILLING CYCLE</span>
+                  <span>CURRENT CYCLE</span>
                 </span>
               </button>
               <button
                 onClick={() => setBillingCycle('historical')}
                 className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
                   billingCycle === 'historical'
-                    ? 'text-orange-600 border-orange-600'
+                    ? 'text-teal-600 border-teal-600'
                     : 'text-gray-500 border-transparent hover:text-gray-700'
                 }`}
               >
                 <span className="flex items-center space-x-2">
                   <span className="text-lg">2</span>
                   <span className="text-xs text-gray-400">/ 3 |</span>
-                  <span>HISTORICAL USAGE</span>
+                  <span>HISTORICAL LEADS</span>
                 </span>
               </button>
             </div>
@@ -228,9 +227,9 @@ export default function UsagePage() {
           {billingCycle === 'current' ? (
             <>
               {/* Note */}
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+              <div className="bg-yellow-50 border border-yellow-400 rounded-lg p-4 mb-6">
                 <p className="text-sm text-gray-700">
-                  Note: Usage data may take at least one hour to reflect recent activity.
+                  Note: Lead generation data may take at least one hour to reflect recent lead gens. Pro plan: Unlimited leads!
                 </p>
               </div>
 
@@ -239,20 +238,20 @@ export default function UsagePage() {
                 {/* Credit Usage */}
                 <div className="bg-white rounded-xl border p-6">
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-lg font-semibold text-gray-900">Credit Usage</h3>
-                    <span className="text-2xl font-bold">4%</span>
+                    <h3 className="text-lg font-semibold text-gray-900">Lead Usage</h3>
+                    <span className="text-2xl font-bold text-gray-700">4%</span>
                   </div>
 
                   <div className="space-y-4">
                     <div>
-                      <p className="text-sm text-gray-600 mb-2">Credits Used</p>
+                      <p className="text-sm text-gray-600 mb-2">Leads Generated</p>
                       <div className="flex items-end space-x-2">
                         <span className="text-2xl font-bold">21</span>
-                        <span className="text-sm text-gray-500">/ 525 credits</span>
+                        <span className="text-sm text-gray-500">/ <span className="font-bold text-teal-600">500</span> leads</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
                         <div
-                          className="bg-orange-500 h-2 rounded-full"
+                          className="bg-teal-500 h-2 rounded-full"
                           style={{ width: '4%' }}
                         />
                       </div>
@@ -260,12 +259,12 @@ export default function UsagePage() {
 
                     <div className="pt-4 border-t space-y-2">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Additional credits remaining (coupon)</span>
+                        <span className="text-gray-600">Bonus leads from promo (ZIP 29401 focus)</span>
                         <span className="font-medium">4</span>
                       </div>
                       <p className="text-sm text-gray-500">
-                        Credits reset on undefined{' '}
-                        <Link href="/manage" className="text-orange-600 hover:underline">
+                        Leads reset monthly on Pro plan{' '}
+                        <Link href="/manage" className="text-teal-600 hover:underline">
                           Manage plan
                         </Link>
                       </p>
@@ -276,28 +275,31 @@ export default function UsagePage() {
                 {/* Extract Tokens Usage */}
                 <div className="bg-white rounded-xl border p-6">
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-lg font-semibold text-gray-900">Extract Tokens Usage</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">Extract Quota</h3>
                     <span className="text-2xl font-bold">0%</span>
                   </div>
 
                   <div className="space-y-4">
                     <div>
-                      <p className="text-sm text-gray-600 mb-2">Tokens Used</p>
+                      <p className="text-sm text-gray-600 mb-2">Leads used this cycle</p>
                       <div className="flex items-end space-x-2">
-                        <span className="text-2xl font-bold">358</span>
-                        <span className="text-sm text-gray-500">/ 500,000 tokens</span>
+                        <span className="text-2xl font-bold">0</span>
+                        <span className="text-sm text-gray-500">/ <span className="font-bold text-teal-600">500</span> leads</span>
+                      </div>
+                      <div className="w-full bg-gray-300 rounded-full h-2 mt-3">
+                        <div className="bg-gray-300 h-2 rounded-full" style={{ width: '0%' }} />
                       </div>
                     </div>
 
                     <div className="pt-4 border-t space-y-2">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Additional tokens remaining (coupon)</span>
+                        <span className="text-gray-600">Additional extracts remaining</span>
                         <span className="font-medium">0</span>
                       </div>
                       <p className="text-sm text-gray-500">
-                        Credit billing is via Stripe{' '}
-                        <Link href="/manage" className="text-orange-600 hover:underline">
-                          Manage plan
+                        Billing via Stripe—{' '}
+                        <Link href="/manage" className="text-teal-600 hover:underline">
+                          Pro for unlimited
                         </Link>
                       </p>
                     </div>
@@ -337,12 +339,12 @@ export default function UsagePage() {
                 <div className="bg-white rounded-xl border p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h3 className="text-sm font-semibold text-gray-900">API Credits</h3>
+                      <h3 className="text-sm font-semibold text-gray-900">API Leads</h3>
                       <p className="text-xs text-gray-500 mt-1">
                         Sep 2025 - Sep 2025 (by {chartView === 'weekly' ? 'week' : 'month'})
                       </p>
                     </div>
-                    <span className="text-2xl font-bold">21 credits</span>
+                    <span className="text-2xl font-bold">21 leads</span>
                   </div>
 
                   <div className="h-48 relative">
@@ -351,25 +353,29 @@ export default function UsagePage() {
                       <svg className="w-full h-full">
                         <defs>
                           <linearGradient id="creditGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stopColor="#fb923c" stopOpacity="0.3" />
-                            <stop offset="100%" stopColor="#fb923c" stopOpacity="0.05" />
+                            <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.3" />
+                            <stop offset="100%" stopColor="#14b8a6" stopOpacity="0.05" />
                           </linearGradient>
                         </defs>
+                        {/* Charleston lead generation spike on Sep 20 */}
                         <path
-                          d="M 0 140 L 100 138 L 200 135 L 300 120 L 400 100 L 400 180 L 0 180 Z"
+                          d="M 0 160 L 50 155 L 100 150 L 150 145 L 200 140 L 250 130 L 300 110 L 350 80 L 400 40 L 400 180 L 0 180 Z"
                           fill="url(#creditGradient)"
                         />
                         <path
-                          d="M 0 140 L 100 138 L 200 135 L 300 120 L 400 100"
-                          stroke="#fb923c"
+                          d="M 0 160 L 50 155 L 100 150 L 150 145 L 200 140 L 250 130 L 300 110 L 350 80 L 400 40"
+                          stroke="#14b8a6"
                           strokeWidth="2"
                           fill="none"
                         />
+                        {/* Orange dot for current day */}
+                        <circle cx="400" cy="40" r="4" fill="#f97316" />
                       </svg>
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 flex justify-between text-xs text-gray-500">
-                      <span>Week 1, Sep 2025</span>
-                      <span>Week 2, Sep 2025</span>
+                      <span>Sep 1, 2025</span>
+                      <span>Sep 10, 2025</span>
+                      <span>Sep 20, 2025</span>
                     </div>
                   </div>
                 </div>
@@ -378,18 +384,42 @@ export default function UsagePage() {
                 <div className="bg-white rounded-xl border p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h3 className="text-sm font-semibold text-gray-900">Extract Tokens</h3>
+                      <h3 className="text-sm font-semibold text-gray-900">Extract Leads</h3>
                       <p className="text-xs text-gray-500 mt-1">
                         Sep 2025 - Sep 2025 (by {chartView === 'weekly' ? 'week' : 'month'})
                       </p>
                     </div>
-                    <span className="text-2xl font-bold">358 tokens</span>
+                    <span className="text-2xl font-bold">15 leads</span>
                   </div>
 
-                  <div className="h-48 relative flex items-end justify-center">
-                    <div className="h-2 w-2 bg-orange-500 rounded-full" />
+                  <div className="h-48 relative">
+                    <div className="absolute inset-0">
+                      <svg className="w-full h-full">
+                        <defs>
+                          <linearGradient id="extractGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.3" />
+                            <stop offset="100%" stopColor="#14b8a6" stopOpacity="0.05" />
+                          </linearGradient>
+                        </defs>
+                        {/* Flat line with small spike on weekends */}
+                        <path
+                          d="M 0 170 L 100 170 L 150 165 L 200 170 L 250 170 L 300 160 L 350 150 L 400 145 L 400 180 L 0 180 Z"
+                          fill="url(#extractGradient)"
+                        />
+                        <path
+                          d="M 0 170 L 100 170 L 150 165 L 200 170 L 250 170 L 300 160 L 350 150 L 400 145"
+                          stroke="#14b8a6"
+                          strokeWidth="2"
+                          fill="none"
+                        />
+                        {/* Orange dot for current day */}
+                        <circle cx="400" cy="145" r="4" fill="#f97316" />
+                      </svg>
+                    </div>
                     <div className="absolute bottom-0 left-0 right-0 flex justify-between text-xs text-gray-500">
-                      <span>Week 2, Sep 2025</span>
+                      <span>Sep 1, 2025</span>
+                      <span>Sep 10, 2025</span>
+                      <span>Sep 20, 2025</span>
                     </div>
                   </div>
                 </div>
@@ -404,14 +434,14 @@ export default function UsagePage() {
                     onClick={() => setHistoricalView('browser')}
                     className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors ${
                       historicalView === 'browser'
-                        ? 'text-orange-600 border-orange-600'
+                        ? 'text-teal-600 border-teal-600'
                         : 'text-gray-500 border-transparent hover:text-gray-700'
                     }`}
                   >
                     <span className="flex items-center space-x-2">
                       <span className="text-lg">3</span>
                       <span className="text-xs text-gray-400">/ 3 |</span>
-                      <span>HISTORICAL BROWSER CONCURRENCY</span>
+                      <span>LEAD GENERATION TRENDS</span>
                     </span>
                   </button>
                 </div>
@@ -420,7 +450,7 @@ export default function UsagePage() {
               {/* Concurrency Chart */}
               <div className="bg-white rounded-xl border p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-sm font-medium text-gray-700">MAX CONCURRENCY: 2</h3>
+                  <h3 className="text-sm font-medium text-gray-700">MAX DAILY LEADS: 50</h3>
                   <div className="flex items-center space-x-2 text-xs text-gray-500">
                     <span>2</span>
                     <span className="border-l h-4" />
@@ -439,7 +469,7 @@ export default function UsagePage() {
                     <span className="absolute -top-3 -left-8 text-xs text-gray-500">2</span>
                   </div>
 
-                  <div className="absolute bottom-0 right-10 w-1 bg-orange-500" style={{ height: '60%' }} />
+                  <div className="absolute bottom-0 right-10 w-1 bg-teal-500" style={{ height: '60%' }} />
 
                   <div className="absolute bottom-0 left-0 right-0 flex justify-between text-xs text-gray-500 pt-2 border-t">
                     <span>04:00 PM</span>
@@ -460,7 +490,7 @@ export default function UsagePage() {
       </div>
 
       {/* Intercom Chat */}
-      <button className="fixed bottom-4 right-4 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg">
+      <button className="fixed bottom-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full shadow-lg">
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>

@@ -35,9 +35,9 @@ export default function APIKeysPage() {
     {
       id: 1,
       name: 'Default',
-      key: 'fc-92ae5••••••••••••••••••••••••••••dfcaaebf',
-      fullKey: 'fc-92ae5kj34h5kj3h45kj3h45kj3h45kj3dfcaaebf',
-      created: 'Aug 27, 25 04:46 AM',
+      key: 'illia_def•••••••••••••••••••••••••••••••401',
+      fullKey: 'illia_default_29401_kj34h5kj3h45kj3h45kj3dfcaaebf',
+      created: 'Sep 20, 2025 10:15 AM',
       visible: false
     }
   ])
@@ -69,9 +69,9 @@ export default function APIKeysPage() {
       const newKey = {
         id: apiKeys.length + 1,
         name: keyName,
-        key: 'fc-788ba••••••••••••••••••••••••••••b6642577',
-        fullKey: 'fc-788ba9d8f7g6h5j4k3l2m1n0p9q8r7s6b6642577',
-        created: 'Sep 08, 25 03:48 AM',
+        key: 'illia_custom_••••••••••••••••••••••••',
+        fullKey: 'illia_custom_9d8f7g6h5j4k3l2m1n0p9q8r7s6b6642577',
+        created: 'Sep 20, 2025 03:48 PM',
         visible: true
       }
       setApiKeys([newKey, ...apiKeys])
@@ -107,9 +107,8 @@ export default function APIKeysPage() {
       <div className="fixed inset-y-0 left-0 w-56 bg-white border-r">
         {/* Logo */}
         <div className="p-4 border-b">
-          <Link href="/dashboard" className="flex items-center space-x-2">
-            <span className="text-2xl">🔥</span>
-            <span className="text-xl font-semibold">Firecrawl</span>
+          <Link href="/dashboard" className="flex items-center space-x-2 group">
+            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">Illia</span>
           </Link>
         </div>
 
@@ -120,7 +119,7 @@ export default function APIKeysPage() {
             <input
               type="text"
               placeholder="Search"
-              className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
             />
             <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
           </div>
@@ -134,7 +133,7 @@ export default function APIKeysPage() {
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   item.active
-                    ? 'bg-orange-50 text-orange-600'
+                    ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={(e) => {
@@ -172,11 +171,11 @@ export default function APIKeysPage() {
         {/* What's New */}
         {showWhatsNew && (
           <div className="absolute bottom-4 left-4 right-4">
-            <div className="bg-orange-50 rounded-lg p-3">
+            <div className="bg-teal-50 rounded-lg p-3">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center space-x-2">
-                  <Sparkles className="h-4 w-4 text-orange-600" />
-                  <span className="text-xs font-semibold text-orange-600">What's New (5)</span>
+                  <Sparkles className="h-4 w-4 text-teal-600" />
+                  <span className="text-xs font-semibold text-teal-600">What&apos;s New (5)</span>
                 </div>
                 <button
                   onClick={() => setShowWhatsNew(false)}
@@ -208,7 +207,7 @@ export default function APIKeysPage() {
         <header className="bg-white border-b px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-orange-100 text-orange-700 px-3 py-1 rounded-lg">
+              <div className="flex items-center space-x-2 bg-teal-100 text-teal-700 px-3 py-1 rounded-lg">
                 <Users className="h-4 w-4" />
                 <span className="text-sm font-medium">Personal Team</span>
               </div>
@@ -238,62 +237,64 @@ export default function APIKeysPage() {
         <div className="p-8">
           {/* Title */}
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">API Keys</h1>
-            <p className="text-gray-600">
-              Create and manage API keys to authenticate with the Firecrawl API
+            <h1 className="text-2xl font-bold text-teal-600 mb-2">Lead API Keys</h1>
+            <p className="text-gray-700">
+              Create and manage API keys to authenticate with the Illia API
             </p>
           </div>
 
           {/* API Keys Section */}
           <div className="bg-white rounded-xl border">
             <div className="px-6 py-4 border-b flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Your API Keys</h2>
+              <div>
+                <h2 className="text-lg font-semibold text-teal-600">Your Lead API Keys</h2>
+                <p className="text-sm text-gray-600 mt-1">Use for Zapier auto-exports from 29401 queries</p>
+              </div>
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="flex items-center space-x-2 px-4 py-2 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg transition-colors"
               >
                 <Plus className="h-4 w-4" />
-                <span className="text-sm font-medium">Create</span>
+                <span className="text-sm font-medium">Create New Key</span>
               </button>
             </div>
 
             <div className="divide-y">
               {apiKeys.map((apiKey) => (
-                <div key={apiKey.id} className="px-6 py-4">
+                <div key={apiKey.id} className="px-6 py-4 bg-teal-50 hover:bg-teal-100 transition-colors">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-medium text-gray-900">{apiKey.name}</h3>
-                    {apiKey.id === 2 && (
-                      <button
-                        onClick={() => deleteKey(apiKey.id)}
-                        className="text-gray-400 hover:text-gray-600"
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                    )}
+                    <button
+                      onClick={() => deleteKey(apiKey.id)}
+                      className="text-red-400 hover:text-red-600 p-2 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Revoke key"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                   </div>
 
                   <div className="flex items-center space-x-3">
-                    <code className="flex-1 font-mono text-sm text-gray-700 bg-gray-50 px-3 py-2 rounded-lg">
+                    <code className="flex-1 font-mono text-sm text-gray-700 bg-white/50 px-3 py-2 rounded-lg border border-teal-200">
                       {apiKey.visible ? apiKey.fullKey : apiKey.key}
                     </code>
                     <button
                       onClick={() => toggleKeyVisibility(apiKey.id)}
-                      className="p-2 hover:bg-gray-100 rounded-lg"
+                      className="p-2 hover:bg-teal-200 rounded-lg transition-colors"
                     >
                       {apiKey.visible ? (
-                        <EyeOff className="h-4 w-4 text-gray-600" />
+                        <EyeOff className="h-4 w-4 text-teal-600" title="Hide key" />
                       ) : (
-                        <Eye className="h-4 w-4 text-gray-600" />
+                        <Eye className="h-4 w-4 text-teal-600" title="Reveal key" />
                       )}
                     </button>
                     <button
                       onClick={() => copyToClipboard(apiKey.fullKey, apiKey.id)}
-                      className="p-2 hover:bg-gray-100 rounded-lg"
+                      className="p-2 hover:bg-teal-200 rounded-lg transition-colors"
                     >
                       {copiedKeyId === apiKey.id ? (
                         <Check className="h-4 w-4 text-green-600" />
                       ) : (
-                        <Copy className="h-4 w-4 text-gray-600" />
+                        <Copy className="h-4 w-4 text-teal-600" title="Copy for integrations" />
                       )}
                     </button>
                   </div>
@@ -329,8 +330,8 @@ export default function APIKeysPage() {
                   type="text"
                   value={keyName}
                   onChange={(e) => setKeyName(e.target.value)}
-                  placeholder="e.g., Production API Key"
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  placeholder="e.g., Zapier Integration Key"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
                 <p className="text-xs text-gray-500 mt-2">
                   Give your API key a descriptive name to help you identify it later.
@@ -339,7 +340,7 @@ export default function APIKeysPage() {
 
               <button
                 onClick={handleCreateKey}
-                className="w-full px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors"
+                className="w-full px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg font-medium transition-colors"
               >
                 Create Key
               </button>
@@ -353,13 +354,13 @@ export default function APIKeysPage() {
         <div className="fixed bottom-4 right-4 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50">
           <div className="flex items-center space-x-2">
             <Check className="h-5 w-5 text-green-600" />
-            <span className="text-sm font-medium">API key created successfully</span>
+            <span className="text-sm font-medium">Lead API key created - ready for Zapier export!</span>
           </div>
         </div>
       )}
 
       {/* Intercom Chat */}
-      <button className="fixed bottom-4 right-4 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg">
+      <button className="fixed bottom-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full shadow-lg">
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>

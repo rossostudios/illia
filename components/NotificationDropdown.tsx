@@ -55,8 +55,8 @@ export default function NotificationDropdown({ onClose }: NotificationDropdownPr
             <div className="h-2 w-2 bg-red-500 rounded-full mt-2" />
             <div className="flex-1">
               <p className="text-sm text-gray-900">
-                You're hitting your concurrency limit very often. This means that you could be scraping faster.
-                If you'd like to increase it, please upgrade your plan.
+                You&apos;re hitting your concurrency limit very often. This means that you could be scraping faster.
+                If you&apos;d like to increase it, please upgrade your plan.
               </p>
               <p className="text-xs text-gray-500 mt-1">about 4 hours ago</p>
             </div>

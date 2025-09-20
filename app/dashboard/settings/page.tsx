@@ -68,9 +68,8 @@ export default function SettingsPage() {
       <div className="fixed inset-y-0 left-0 w-56 bg-white border-r">
         {/* Logo */}
         <div className="p-4 border-b">
-          <Link href="/dashboard" className="flex items-center space-x-2">
-            <span className="text-2xl">🔥</span>
-            <span className="text-xl font-semibold">Firecrawl</span>
+          <Link href="/dashboard" className="flex items-center space-x-2 group">
+            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">Illia</span>
           </Link>
         </div>
 
@@ -81,7 +80,7 @@ export default function SettingsPage() {
             <input
               type="text"
               placeholder="Search"
-              className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
             />
             <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
           </div>
@@ -95,7 +94,7 @@ export default function SettingsPage() {
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   item.active
-                    ? 'bg-orange-50 text-orange-600'
+                    ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={(e) => {
@@ -133,11 +132,11 @@ export default function SettingsPage() {
         {/* What's New */}
         {showWhatsNew && (
           <div className="absolute bottom-20 left-4 right-4">
-            <div className="bg-orange-50 rounded-lg p-3">
+            <div className="bg-teal-50 rounded-lg p-3">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center space-x-2">
-                  <Sparkles className="h-4 w-4 text-orange-600" />
-                  <span className="text-xs font-semibold text-orange-600">What's New (5)</span>
+                  <Sparkles className="h-4 w-4 text-teal-600" />
+                  <span className="text-xs font-semibold text-teal-600">What&apos;s New (5)</span>
                 </div>
                 <button
                   onClick={() => setShowWhatsNew(false)}
@@ -155,8 +154,8 @@ export default function SettingsPage() {
         <div className="absolute bottom-0 left-0 right-0 border-t bg-white">
           {/* User email */}
           <div className="px-4 py-3 flex items-center space-x-3">
-            <div className="h-6 w-6 bg-orange-100 rounded-full flex items-center justify-center">
-              <span className="text-xs font-medium text-orange-600">S</span>
+            <div className="h-6 w-6 bg-teal-100 rounded-full flex items-center justify-center">
+              <span className="text-xs font-medium text-teal-600">S</span>
             </div>
             <span className="text-xs text-gray-700">samlee@content-mobbin.com</span>
           </div>
@@ -175,7 +174,7 @@ export default function SettingsPage() {
         <header className="bg-white border-b px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-orange-100 text-orange-700 px-3 py-1 rounded-lg">
+              <div className="flex items-center space-x-2 bg-teal-100 text-teal-700 px-3 py-1 rounded-lg">
                 <Users className="h-4 w-4" />
                 <span className="text-sm font-medium">Personal Team</span>
               </div>
@@ -219,7 +218,7 @@ export default function SettingsPage() {
                 onClick={() => setActiveTab('team')}
                 className={`w-full text-left flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   activeTab === 'team'
-                    ? 'bg-orange-50 text-orange-600'
+                    ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
@@ -230,7 +229,7 @@ export default function SettingsPage() {
                 onClick={() => setActiveTab('billing')}
                 className={`w-full text-left flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   activeTab === 'billing'
-                    ? 'bg-orange-50 text-orange-600'
+                    ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
@@ -241,7 +240,7 @@ export default function SettingsPage() {
                 onClick={() => setActiveTab('account')}
                 className={`w-full text-left flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   activeTab === 'account'
-                    ? 'bg-orange-50 text-orange-600'
+                    ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
@@ -258,13 +257,13 @@ export default function SettingsPage() {
                 {/* Team Name */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-700 mb-1">Team Name</h3>
-                  <p className="text-sm text-gray-500 mb-4">Update your team's display name</p>
+                  <p className="text-sm text-gray-500 mb-4">Update your team&apos;s display name</p>
                   <div className="flex items-center space-x-3">
                     <input
                       type="text"
                       value={teamName}
                       onChange={(e) => setTeamName(e.target.value)}
-                      className="flex-1 max-w-sm px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className="flex-1 max-w-sm px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                     />
                     <button className="px-4 py-2 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg text-sm font-medium">
                       Save
@@ -282,7 +281,7 @@ export default function SettingsPage() {
                       value={inviteEmail}
                       onChange={(e) => setInviteEmail(e.target.value)}
                       placeholder="Enter email address"
-                      className="flex-1 max-w-sm px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      className="flex-1 max-w-sm px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                     />
                     <select
                       value={inviteRole}
@@ -305,18 +304,18 @@ export default function SettingsPage() {
                 {/* Team Members */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-700 mb-1">Team Members</h3>
-                  <p className="text-sm text-gray-500 mb-4">Manage your team's access and permissions</p>
+                  <p className="text-sm text-gray-500 mb-4">Manage your team&apos;s access and permissions</p>
                   <div className="bg-white border rounded-lg divide-y">
                     <div className="p-4 flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className="h-8 w-8 bg-orange-100 rounded-full flex items-center justify-center">
-                          <span className="text-sm font-medium text-orange-600">S</span>
+                        <div className="h-8 w-8 bg-teal-100 rounded-full flex items-center justify-center">
+                          <span className="text-sm font-medium text-teal-600">S</span>
                         </div>
                         <div>
                           <div className="font-medium text-sm">samlee@content-mobbin.com</div>
                           <div className="text-xs text-gray-500">samlee@content-mobbin.com</div>
                         </div>
-                        <span className="px-2 py-0.5 bg-orange-100 text-orange-600 text-xs font-medium rounded">
+                        <span className="px-2 py-0.5 bg-teal-100 text-teal-600 text-xs font-medium rounded">
                           ADMIN
                         </span>
                       </div>
@@ -333,7 +332,7 @@ export default function SettingsPage() {
                   <p className="text-sm text-gray-600">
                     Manage your subscription and payment methods
                   </p>
-                  <button className="mt-4 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm font-medium">
+                  <button className="mt-4 px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg text-sm font-medium">
                     Manage Subscription
                   </button>
                 </div>
@@ -344,20 +343,29 @@ export default function SettingsPage() {
               <div className="max-w-3xl space-y-8">
                 {/* Email Preferences */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Email Preferences</h3>
-                  <ul className="text-sm text-gray-600 space-y-2 mb-4">
-                    <li>• You will be sent an email with a link to the Subscription Center.</li>
-                    <li>• From there, you can subscribe or unsubscribe to any topic — or unsubscribe globally.</li>
-                  </ul>
-                  <button className="flex items-center space-x-2 px-4 py-2 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg text-sm font-medium">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Lead Notifications</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-700">Email Alerts</p>
+                        <p className="text-sm text-gray-500">New high-score leads in 29401</p>
+                      </div>
+                      <button className="relative inline-flex h-6 w-11 items-center rounded-full bg-teal-500 transition-colors">
+                        <span className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-6" />
+                      </button>
+                    </div>
+                    <p className="text-sm text-gray-600">You'll be sent emails with links to your dashboard for new Charleston leads.</p>
+                  </div>
+                  <button className="mt-4 flex items-center space-x-2 px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg text-sm font-medium">
                     <Mail className="h-4 w-4" />
-                    <span>Send</span>
+                    <span>Save Preferences</span>
                   </button>
                 </div>
 
                 {/* Edit Password */}
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Edit Password</h3>
+                  <p className="text-sm text-gray-600 mb-4">Update your Supabase authentication password</p>
                   <div className="flex items-center space-x-3">
                     <div className="relative flex-1 max-w-sm">
                       <input
@@ -365,7 +373,7 @@ export default function SettingsPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder={showPassword ? "Enter new password (min. 12 characters)" : "••••••••••"}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                       />
                       <button
                         onClick={() => setShowPassword(!showPassword)}
@@ -380,9 +388,9 @@ export default function SettingsPage() {
                     </div>
                     <button
                       disabled={password.length < 12}
-                      className="px-4 py-2 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Save
+                      Save Changes
                     </button>
                   </div>
                 </div>
@@ -391,18 +399,18 @@ export default function SettingsPage() {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Delete Account</h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    Once you delete your account, there is no going back. Please be certain.
+                    Delete your account—leads history will be lost. Be certain.
                   </p>
                   <div className="flex items-center space-x-3">
                     <div className="flex items-center space-x-2">
-                      <div className="h-2 w-2 bg-orange-500 rounded-full" />
+                      <div className="h-2 w-2 bg-teal-500 rounded-full" />
                       <span className="text-sm">samlee@content-mobbin.com</span>
                     </div>
                     <button
                       onClick={() => setShowDeleteModal(true)}
                       className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium"
                     >
-                      Remove
+                      Delete Account
                     </button>
                   </div>
                 </div>
@@ -461,7 +469,7 @@ export default function SettingsPage() {
       )}
 
       {/* Intercom Chat */}
-      <button className="fixed bottom-4 right-4 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg">
+      <button className="fixed bottom-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full shadow-lg">
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>

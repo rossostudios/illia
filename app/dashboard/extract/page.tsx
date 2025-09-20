@@ -50,10 +50,18 @@ export default function ExtractPage() {
   const extractLogs = [
     {
       id: 1,
-      url: 'https://firecrawl.dev/*',
-      date: 'Sep 08, 25',
+      query: 'plumbers 29401',
+      date: 'Sep 08',
       time: '10:15 AM',
-      tokens: 358,
+      leads: 12,
+      hasLink: true
+    },
+    {
+      id: 2,
+      query: 'cafes King St',
+      date: 'Sep 20',
+      time: '3:38 PM',
+      leads: 8,
       hasLink: true
     }
   ]
@@ -64,9 +72,8 @@ export default function ExtractPage() {
       <div className="fixed inset-y-0 left-0 w-56 bg-white border-r">
         {/* Logo */}
         <div className="p-4 border-b">
-          <Link href="/dashboard" className="flex items-center space-x-2">
-            <span className="text-2xl">🔥</span>
-            <span className="text-xl font-semibold">Firecrawl</span>
+          <Link href="/dashboard" className="flex items-center space-x-2 group">
+            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">Illia</span>
           </Link>
         </div>
 
@@ -76,8 +83,8 @@ export default function ExtractPage() {
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search"
-              className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              placeholder="Search past leads..."
+              className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
             />
             <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
           </div>
@@ -91,7 +98,7 @@ export default function ExtractPage() {
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   item.active
-                    ? 'bg-orange-50 text-orange-600'
+                    ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={(e) => {
@@ -117,7 +124,7 @@ export default function ExtractPage() {
                       href={subitem.href}
                       className={`block px-3 py-2 text-sm rounded-lg ${
                         subitem.active
-                          ? 'text-orange-600 bg-orange-50'
+                          ? 'text-teal-600 bg-teal-50'
                           : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                       }`}
                     >
@@ -133,11 +140,11 @@ export default function ExtractPage() {
         {/* What's New */}
         {showWhatsNew && (
           <div className="absolute bottom-4 left-4 right-4">
-            <div className="bg-orange-50 rounded-lg p-3">
+            <div className="bg-teal-50 rounded-lg p-3">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center space-x-2">
-                  <Sparkles className="h-4 w-4 text-orange-600" />
-                  <span className="text-xs font-semibold text-orange-600">What's New (5)</span>
+                  <Sparkles className="h-4 w-4 text-teal-600" />
+                  <span className="text-xs font-semibold text-teal-600">What&apos;s New (5)</span>
                 </div>
                 <button
                   onClick={() => setShowWhatsNew(false)}
@@ -169,7 +176,7 @@ export default function ExtractPage() {
         <header className="bg-white border-b px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-orange-100 text-orange-700 px-3 py-1 rounded-lg">
+              <div className="flex items-center space-x-2 bg-teal-100 text-teal-700 px-3 py-1 rounded-lg">
                 <Users className="h-4 w-4" />
                 <span className="text-sm font-medium">Personal Team</span>
               </div>
@@ -188,7 +195,7 @@ export default function ExtractPage() {
                 <FileCode className="h-4 w-4" />
                 <span className="text-sm font-medium">Docs</span>
               </Link>
-              <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors">
+              <button className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors">
                 Upgrade
               </button>
             </div>
@@ -199,45 +206,48 @@ export default function ExtractPage() {
         <div className="p-8">
           {/* Title */}
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Extract Overview</h1>
-            <p className="text-gray-600">Extract structured data from single page, multiple pages or entire websites with AI.</p>
+            <h1 className="text-2xl font-bold text-teal-600 mb-2 flex items-center">
+              <Download className="h-6 w-6 mr-2" />
+              Lead Extract Overview
+            </h1>
+            <p className="text-gray-700">Extract structured leads from single niches, multiple ZIPs, or entire Charleston areas with AI.</p>
           </div>
 
           {/* Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {/* Documentation Card */}
-            <Link href="/docs/extract" className="bg-white rounded-xl border p-6 hover:border-orange-500 hover:shadow-lg transition-all group">
+            {/* Lead Docs Card */}
+            <Link href="/docs/extract" className="bg-white rounded-xl border border-teal-200 p-6 hover:border-teal-500 hover:shadow-lg transition-all group">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="p-2 bg-gray-100 rounded-lg">
-                  <FileText className="h-5 w-5 text-gray-600" />
+                <div className="p-2 bg-teal-50 rounded-lg">
+                  <FileText className="h-5 w-5 text-teal-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900">Documentation</h3>
+                <h3 className="font-semibold text-gray-900">Lead Docs</h3>
               </div>
-              <p className="text-sm text-gray-600">Explore API reference and guides</p>
+              <p className="text-sm text-gray-600">Explore lead gen reference and guides</p>
             </Link>
 
-            {/* Extract Playground Card */}
-            <Link href="/dashboard/extract/playground" className="bg-white rounded-xl border p-6 hover:border-orange-500 hover:shadow-lg transition-all group">
+            {/* Lead Playground Card */}
+            <Link href="/dashboard/playground" className="bg-white rounded-xl border border-teal-200 p-6 hover:border-teal-500 hover:shadow-lg transition-all group">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="p-2 bg-gray-100 rounded-lg">
-                  <Play className="h-5 w-5 text-gray-600" />
+                <div className="p-2 bg-teal-50 rounded-lg">
+                  <Play className="h-5 w-5 text-teal-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900">Extract Playground</h3>
+                <h3 className="font-semibold text-gray-900">Lead Playground</h3>
               </div>
-              <p className="text-sm text-gray-600">Easily get structured data</p>
+              <p className="text-sm text-gray-600">Easily get structured leads</p>
             </Link>
 
-            {/* Zapier Integration Card */}
-            <Link href="/integrations/zapier" className="bg-white rounded-xl border p-6 hover:border-orange-500 hover:shadow-lg transition-all group">
+            {/* Integrations Card */}
+            <Link href="/integrations/zapier" className="bg-white rounded-xl border border-teal-200 p-6 hover:border-teal-500 hover:shadow-lg transition-all group">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="p-2 bg-gray-100 rounded-lg">
-                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                <div className="p-2 bg-teal-50 rounded-lg">
+                  <svg className="h-5 w-5 text-teal-600" viewBox="0 0 24 24" fill="none">
                     <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
-                <h3 className="font-semibold text-gray-900">Zapier Integration</h3>
+                <h3 className="font-semibold text-gray-900">Integrations</h3>
               </div>
               <p className="text-sm text-gray-600">Integrate to automate workflows</p>
             </Link>
@@ -248,58 +258,64 @@ export default function ExtractPage() {
             <div className="bg-white rounded-xl border p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold text-gray-900">Usage</h2>
-                <span className="text-2xl font-bold">0%</span>
+                <span className="text-2xl font-bold text-teal-600">7%</span>
               </div>
 
               <div className="space-y-4">
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-600">Tokens Used</span>
+                    <span className="text-sm text-gray-600">Leads Extracted</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <span className="text-xl font-semibold">
-                      {extractLogs.length > 0 ? '358' : '0'}
+                    <span className="text-xl font-semibold text-gray-900">
+                      {extractLogs.length > 0 ? '35' : '0'}
                     </span>
-                    <span className="text-sm text-gray-500">/ 500,000 tokens</span>
+                    <span className="text-sm text-gray-500">/ 500 leads</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
+                    <div className="bg-teal-500 h-2 rounded-full" style={{ width: '7%' }}></div>
                   </div>
                 </div>
 
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Additional credits remaining (coupon)</span>
-                    <span className="text-sm font-medium">0</span>
+                    <span className="text-sm text-gray-600">Bonus leads from promo (ZIP 29401 focus)</span>
+                    <span className="text-sm font-medium">15</span>
                   </div>
                   <p className="text-sm text-gray-500 mt-2">
-                    Credit billing is via Stripe <Link href="/manage" className="text-orange-600 hover:underline">Manage plan</Link>
+                    Billing via Stripe—<Link href="/manage" className="text-teal-600 hover:underline">Pro unlocks unlimited</Link>
                   </p>
                 </div>
               </div>
 
-              {/* Extract logs */}
+              {/* Recent Lead Pulls */}
               {extractLogs.length > 0 && (
                 <div className="mt-6 pt-6 border-t">
-                  <h3 className="text-sm font-medium text-gray-700 mb-4">Recent Extracts</h3>
+                  <h3 className="text-sm font-medium text-gray-700 mb-4">Recent Lead Pulls</h3>
                   <div className="space-y-3">
                     {extractLogs.map((log) => (
-                      <div key={log.id} className="bg-gray-50 rounded-lg p-3">
+                      <div key={log.id} className="bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors">
                         <div className="flex items-center justify-between mb-2">
-                          <a href={log.url} className="text-sm text-gray-900 hover:text-orange-600 flex items-center">
-                            {log.url}
-                            {log.hasLink && <ExternalLink className="h-3 w-3 ml-1" />}
-                          </a>
-                          <button className="text-gray-400 hover:text-gray-600">
+                          <span className="text-sm text-teal-700 font-medium flex items-center">
+                            {log.query}
+                            {log.hasLink && <ExternalLink className="h-3 w-3 ml-1 text-teal-600" />}
+                          </span>
+                          <button className="text-teal-600 hover:text-teal-700" title="Download leads">
                             <Download className="h-4 w-4" />
                           </button>
                         </div>
-                        <div className="flex items-center justify-between text-xs text-gray-500">
-                          <span>{log.date} • {log.time}</span>
-                          <span>{log.tokens} tokens</span>
+                        <div className="flex items-center justify-between text-xs">
+                          <div className="flex items-center space-x-2">
+                            <span className="h-2 w-2 bg-green-500 rounded-full"></span>
+                            <span className="text-gray-500">{log.date} • {log.time}</span>
+                          </div>
+                          <span className="text-green-600 font-medium">{log.leads} leads</span>
                         </div>
                       </div>
                     ))}
                   </div>
                   <div className="mt-4 text-center">
-                    <p className="text-xs text-gray-500">Showing 1-1 of 1 items • Page 1</p>
+                    <p className="text-xs text-gray-500">Showing 1-2 of 2 items • Page 1</p>
                   </div>
                 </div>
               )}
@@ -314,25 +330,40 @@ export default function ExtractPage() {
               )}
             </div>
 
-            {/* Extract Pricing */}
-            <div className="bg-white rounded-xl border p-6">
+            {/* Lead Extraction Pricing */}
+            <div className="bg-teal-50 rounded-xl border border-teal-200 p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Extract Pricing</h2>
-                <Link href="/pricing" className="text-sm text-gray-600 hover:text-gray-900 flex items-center">
-                  <span>Extract plans</span>
+                <h2 className="text-lg font-semibold text-gray-900">Lead Extraction Pricing</h2>
+                <Link href="/pricing" className="text-sm text-teal-700 hover:text-teal-900 flex items-center">
+                  <span>View plans</span>
                   <ExternalLink className="h-3 w-3 ml-1" />
                 </Link>
               </div>
 
-              <p className="text-sm text-gray-600 mb-6">
-                Unlock more extractions and higher rate limits with an Extract subscription.
+              <p className="text-sm text-gray-700 mb-6">
+                Unlock more extractions and higher limits with Pro subscription.
               </p>
+
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center text-sm">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-gray-700">Unlimited Charleston area searches</span>
+                </div>
+                <div className="flex items-center text-sm">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-gray-700">Advanced lead scoring</span>
+                </div>
+                <div className="flex items-center text-sm">
+                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="text-gray-700">CRM integration</span>
+                </div>
+              </div>
 
               <Link
                 href="/pricing"
-                className="inline-flex items-center justify-center w-full px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors"
+                className="inline-flex items-center justify-center w-full px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-medium transition-colors"
               >
-                View pricing
+                View Plans
                 <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
@@ -343,7 +374,7 @@ export default function ExtractPage() {
       </div>
 
       {/* Intercom Chat */}
-      <button className="fixed bottom-4 right-4 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg">
+      <button className="fixed bottom-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full shadow-lg">
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>

@@ -26,8 +26,8 @@ export default function SignUpPage() {
           {/* Logo */}
           <div className="flex justify-center mb-8">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="text-3xl">🔥</span>
-              <span className="text-2xl font-semibold">Firecrawl</span>
+              <span className="text-3xl font-bold text-orange-600">IL</span>
+              <span className="text-2xl font-semibold">Illia</span>
             </Link>
           </div>
 
@@ -158,8 +158,8 @@ export default function SignUpPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">🔥</span>
-              <span className="text-xl font-semibold">Firecrawl</span>
+              <span className="text-2xl font-bold text-orange-600">IL</span>
+              <span className="text-xl font-semibold">Illia</span>
             </div>
             <div className="flex items-center space-x-4 text-sm text-gray-400">
               <span>curated by</span>

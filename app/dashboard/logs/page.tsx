@@ -30,119 +30,120 @@ export default function ActivityLogsPage() {
   const [showExtractMenu, setShowExtractMenu] = useState(false)
   const [showWhatsNew, setShowWhatsNew] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedEndpoint, setSelectedEndpoint] = useState<string>('All Endpoints')
+  const [selectedEndpoint, setSelectedEndpoint] = useState<string>('All Generations')
   const [dateRange, setDateRange] = useState('Last 7 days')
   const [showEndpointDropdown, setShowEndpointDropdown] = useState(false)
   const [showDateDropdown, setShowDateDropdown] = useState(false)
   const [showCalendar, setShowCalendar] = useState(false)
-  const [hasLogs, setHasLogs] = useState(false)
+  const [hasLogs, setHasLogs] = useState(true)
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null)
   const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null)
 
   const endpoints = [
-    'All Endpoints',
-    '/scrape',
-    '/batch/scrape',
-    '/crawl',
-    '/map',
-    '/search'
+    'All Generations',
+    'Basic',
+    'Advanced',
+    'Schema',
+    'Agent',
+    'ZIP search'
   ]
 
   const dateRanges = [
     'Last 7 days',
     'Last 30 days',
     'Last 90 days',
+    'All Time',
     'Custom range'
   ]
 
   const activityLogs = [
     {
-      endpoint: '/CRAWL',
-      url: 'http://firecrawl.dev',
-      status: 'COMPLETED',
-      credits: 10,
-      date: 'Sep 08, 25',
+      mode: 'Schema',
+      query: 'plumbers 29401',
+      status: 'Success',
+      leads: 18,
+      date: 'Sep 20, 25',
       time: '09:57 AM'
     },
     {
-      endpoint: '/MAP',
-      url: 'http://www.firecrawl.dev/',
-      status: 'COMPLETED',
-      credits: 1,
-      date: 'Sep 04, 25',
+      mode: 'Agent',
+      query: 'hvac contractors 29403',
+      status: 'Success',
+      leads: 12,
+      date: 'Sep 19, 25',
       time: '03:38 PM'
     },
     {
-      endpoint: '/SCRAPE',
-      url: 'http://www.nngroup.com/articles/usability-101-introduction-to-usability/',
-      status: 'COMPLETED',
-      credits: 5,
-      date: 'Sep 02, 25',
+      mode: 'ZIP search',
+      query: 'cafes King St',
+      status: 'Success',
+      leads: 15,
+      date: 'Sep 18, 25',
       time: '07:46 AM'
     },
     {
-      endpoint: '/SCRAPE',
-      url: 'http://www.nngroup.com/articles/usability-101-introduction-to-usability/',
-      status: 'COMPLETED',
-      credits: 5,
-      date: 'Sep 02, 25',
-      time: '07:38 AM'
+      mode: 'Basic',
+      query: 'roofing companies Charleston',
+      status: 'Success',
+      leads: 22,
+      date: 'Sep 17, 25',
+      time: '11:23 AM'
     },
     {
-      endpoint: '/SCRAPE',
-      url: 'https://www.firecrawl.dev/careers',
-      status: 'COMPLETED',
-      credits: 1,
-      date: 'Sep 08, 25',
-      time: '09:57 AM'
+      mode: 'Advanced',
+      query: 'dentists Mount Pleasant',
+      status: 'Success',
+      leads: 8,
+      date: 'Sep 16, 25',
+      time: '02:15 PM'
     },
     {
-      endpoint: '/SCRAPE',
-      url: 'https://www.firecrawl.dev/playground/extract',
-      status: 'COMPLETED',
-      credits: 1,
-      date: 'Sep 08, 25',
-      time: '09:57 AM'
+      mode: 'Schema',
+      query: 'auto repair 29407',
+      status: 'Success',
+      leads: 14,
+      date: 'Sep 15, 25',
+      time: '09:30 AM'
     },
     {
-      endpoint: '/SCRAPE',
-      url: 'https://www.firecrawl.dev/extract',
-      status: 'COMPLETED',
-      credits: 1,
-      date: 'Sep 08, 25',
-      time: '09:57 AM'
+      mode: 'Agent',
+      query: 'law firms downtown Charleston',
+      status: 'Success',
+      leads: 25,
+      date: 'Sep 14, 25',
+      time: '04:45 PM'
     },
     {
-      endpoint: '/SCRAPE',
-      url: 'https://www.firecrawl.dev/templates',
-      status: 'FAILED',
-      credits: 0,
-      date: 'Sep 08, 25',
-      time: '09:57 AM'
+      mode: 'ZIP search',
+      query: 'pet services 29412',
+      status: 'Failed',
+      leads: 0,
+      date: 'Sep 13, 25',
+      time: '10:20 AM'
     },
     {
-      endpoint: '/SCRAPE',
-      url: 'https://www.firecrawl.dev/signin/signup',
-      status: 'FAILED',
-      credits: 0,
-      date: 'Sep 08, 25',
-      time: '09:57 AM'
+      mode: 'Basic',
+      query: 'landscaping services James Island',
+      status: 'Failed',
+      leads: 0,
+      date: 'Sep 12, 25',
+      time: '08:15 AM'
     },
     {
-      endpoint: '/SCRAPE',
-      url: 'https://www.firecrawl.dev/changelog',
-      status: 'COMPLETED',
-      credits: 1,
-      date: 'Sep 08, 25',
-      time: '09:57 AM'
+      mode: 'Schema',
+      query: 'real estate agents 29401',
+      status: 'Success',
+      leads: 30,
+      date: 'Sep 11, 25',
+      time: '01:30 PM'
     },
     {
-      endpoint: '/SCRAPE',
-      url: 'https://www.firecrawl.dev/playground?endpoint=scrape&url=&a...',
-      status: 'COMPLETED',
-      credits: 1,
-      date: 'Sep 08, 25',
-      time: '09:57 AM'
+      mode: 'Advanced',
+      query: 'fitness centers West Ashley',
+      status: 'Success',
+      leads: 11,
+      date: 'Sep 10, 25',
+      time: '05:00 PM'
     }
   ]
 
@@ -166,11 +167,9 @@ export default function ActivityLogsPage() {
     { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
   ]
 
-  const filteredLogs = selectedEndpoint === '/scrape'
-    ? activityLogs.filter(log => log.endpoint === '/SCRAPE')
-    : selectedEndpoint === 'All Endpoints'
+  const filteredLogs = selectedEndpoint === 'All Generations'
     ? activityLogs
-    : activityLogs.filter(log => log.endpoint.toLowerCase() === selectedEndpoint.toLowerCase())
+    : activityLogs.filter(log => log.mode === selectedEndpoint)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -178,9 +177,8 @@ export default function ActivityLogsPage() {
       <div className="fixed inset-y-0 left-0 w-56 bg-white border-r">
         {/* Logo */}
         <div className="p-4 border-b">
-          <Link href="/dashboard" className="flex items-center space-x-2">
-            <span className="text-2xl">🔥</span>
-            <span className="text-xl font-semibold">Firecrawl</span>
+          <Link href="/dashboard" className="flex items-center space-x-2 group">
+            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">Illia</span>
           </Link>
         </div>
 
@@ -191,7 +189,7 @@ export default function ActivityLogsPage() {
             <input
               type="text"
               placeholder="Search"
-              className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
             />
             <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
           </div>
@@ -205,7 +203,7 @@ export default function ActivityLogsPage() {
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   item.active
-                    ? 'bg-orange-50 text-orange-600'
+                    ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={(e) => {
@@ -243,11 +241,11 @@ export default function ActivityLogsPage() {
         {/* What's New */}
         {showWhatsNew && (
           <div className="absolute bottom-4 left-4 right-4">
-            <div className="bg-orange-50 rounded-lg p-3">
+            <div className="bg-teal-50 rounded-lg p-3">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center space-x-2">
-                  <Sparkles className="h-4 w-4 text-orange-600" />
-                  <span className="text-xs font-semibold text-orange-600">What's New (5)</span>
+                  <Sparkles className="h-4 w-4 text-teal-600" />
+                  <span className="text-xs font-semibold text-teal-600">What&apos;s New (5)</span>
                 </div>
                 <button
                   onClick={() => setShowWhatsNew(false)}
@@ -279,11 +277,11 @@ export default function ActivityLogsPage() {
         <header className="bg-white border-b px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-orange-100 text-orange-700 px-3 py-1 rounded-lg">
+              <div className="flex items-center space-x-2 bg-teal-100 text-teal-700 px-3 py-1 rounded-lg">
                 <Users className="h-4 w-4" />
                 <span className="text-sm font-medium">Personal Team</span>
                 {hasLogs && (
-                  <span className="bg-orange-600 text-white text-xs px-1.5 py-0.5 rounded-full">1</span>
+                  <span className="bg-teal-600 text-white text-xs px-1.5 py-0.5 rounded-full">1</span>
                 )}
               </div>
             </div>
@@ -291,7 +289,7 @@ export default function ActivityLogsPage() {
               <button className="p-2 hover:bg-gray-100 rounded-lg relative">
                 <Bell className="h-5 w-5 text-gray-600" />
                 {hasLogs && (
-                  <span className="absolute top-1 right-1 h-2 w-2 bg-orange-600 rounded-full" />
+                  <span className="absolute top-1 right-1 h-2 w-2 bg-teal-600 rounded-full" />
                 )}
               </button>
               <button className="p-2 hover:bg-gray-100 rounded-lg">
@@ -315,8 +313,8 @@ export default function ActivityLogsPage() {
         <div className="p-8">
           {/* Title */}
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Activity Logs</h1>
-            <p className="text-gray-600">Take a look at your requests activity</p>
+            <h1 className="text-2xl font-bold text-teal-600 mb-2">Lead Activity Logs</h1>
+            <p className="text-gray-700">Take a look at your lead generations activity</p>
           </div>
 
           {/* Filters */}
@@ -328,8 +326,8 @@ export default function ActivityLogsPage() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search..."
-                className="w-full pl-10 pr-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                placeholder="Search lead queries (e.g., plumbers 29401)"
+                className="w-full pl-10 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-600 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
               />
             </div>
 
@@ -349,7 +347,7 @@ export default function ActivityLogsPage() {
               {showEndpointDropdown && (
                 <div className="absolute z-10 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg">
                   <div className="p-2 border-b">
-                    <p className="text-xs text-gray-500 px-2">Filter by Endpoint</p>
+                    <p className="text-xs text-gray-500 px-2">Filter by Generation Type</p>
                   </div>
                   <div className="p-2">
                     {endpoints.map((endpoint) => (
@@ -361,7 +359,7 @@ export default function ActivityLogsPage() {
                           setHasLogs(true)
                         }}
                         className={`w-full text-left px-3 py-2 text-sm rounded-lg flex items-center justify-between hover:bg-gray-50 ${
-                          selectedEndpoint === endpoint ? 'text-orange-600' : 'text-gray-700'
+                          selectedEndpoint === endpoint ? 'text-teal-600' : 'text-gray-700'
                         }`}
                       >
                         <span>{endpoint}</span>
@@ -411,7 +409,7 @@ export default function ActivityLogsPage() {
                           }
                         }}
                         className={`w-full text-left px-3 py-2 text-sm rounded-lg flex items-center justify-between hover:bg-gray-50 ${
-                          dateRange === range ? 'text-orange-600' : 'text-gray-700'
+                          dateRange === range ? 'text-teal-600' : 'text-gray-700'
                         }`}
                       >
                         <span>{range}</span>
@@ -459,7 +457,7 @@ export default function ActivityLogsPage() {
                         <button
                           key={day}
                           className={`p-2 text-sm hover:bg-gray-100 rounded ${
-                            day === 8 ? 'bg-orange-500 text-white hover:bg-orange-600' : ''
+                            day === 8 ? 'bg-teal-500 text-white hover:bg-teal-600' : ''
                           }`}
                         >
                           {day}
@@ -509,7 +507,7 @@ export default function ActivityLogsPage() {
                       setDateRange('Custom range')
                       setShowCalendar(false)
                     }}
-                    className="px-4 py-2 text-sm bg-orange-500 hover:bg-orange-600 text-white rounded-lg"
+                    className="px-4 py-2 text-sm bg-teal-500 hover:bg-teal-600 text-white rounded-lg"
                   >
                     Apply
                   </button>
@@ -522,9 +520,10 @@ export default function ActivityLogsPage() {
           {!hasLogs ? (
             <div className="bg-white rounded-xl border p-16">
               <div className="flex flex-col items-center justify-center">
-                <Clock className="h-12 w-12 text-gray-300 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No activity logs found</h3>
-                <p className="text-sm text-gray-500">Your API requests will appear here</p>
+                <Clock className="h-12 w-12 text-teal-300 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No lead generations yet?</h3>
+                <p className="text-sm text-gray-500 mb-1">Your runs will appear here once you start in Playground.</p>
+                <p className="text-sm text-gray-500">Track queries, scores, and exports from Charleston ZIPs.</p>
               </div>
             </div>
           ) : (
@@ -534,19 +533,19 @@ export default function ActivityLogsPage() {
                   <thead className="bg-gray-50 border-b">
                     <tr>
                       <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Endpoint
+                        Mode
                       </th>
                       <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        URL
+                        Query
                       </th>
                       <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Status
                       </th>
                       <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        # Credits
+                        Leads Found
                       </th>
                       <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Time
+                        Started
                       </th>
                       <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
@@ -555,22 +554,25 @@ export default function ActivityLogsPage() {
                   </thead>
                   <tbody className="divide-y">
                     {filteredLogs.map((log, index) => (
-                      <tr key={index} className="hover:bg-gray-50">
+                      <tr key={index} className={`hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {log.endpoint}
+                          {log.mode}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-900">
-                          <span className="truncate block max-w-md">{log.url}</span>
+                          <span className="truncate block max-w-md">{log.query}</span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`text-xs font-medium ${
-                            log.status === 'COMPLETED' ? 'text-green-600' : 'text-red-600'
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            log.status === 'Success' ? 'bg-teal-100 text-teal-800' : 'bg-red-100 text-red-800'
                           }`}>
+                            <span className={`h-1.5 w-1.5 rounded-full mr-1.5 ${
+                              log.status === 'Success' ? 'bg-teal-500' : 'bg-red-500'
+                            }`} />
                             {log.status}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {log.credits}
+                          {log.leads}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           <div>
@@ -609,7 +611,7 @@ export default function ActivityLogsPage() {
       </div>
 
       {/* Intercom Chat */}
-      <button className="fixed bottom-4 right-4 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg">
+      <button className="fixed bottom-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full shadow-lg">
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>

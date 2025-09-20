@@ -19,6 +19,7 @@ import {
   X,
   Globe,
   Map,
+  MapPin,
   Sparkles,
   ExternalLink,
   Copy,
@@ -31,9 +32,9 @@ import {
 } from 'lucide-react'
 
 export default function PlaygroundPage() {
-  const [selectedEndpoint, setSelectedEndpoint] = useState('scrape')
-  const [url, setUrl] = useState('https://example.com')
-  const [format, setFormat] = useState('markdown')
+  const [selectedEndpoint, setSelectedEndpoint] = useState('generate')
+  const [url, setUrl] = useState('plumbers, 29401')
+  const [format, setFormat] = useState('CSV')
   const [isLoading, setIsLoading] = useState(false)
   const [showExtractMenu, setShowExtractMenu] = useState(false)
   const [showWhatsNew, setShowWhatsNew] = useState(true)
@@ -42,37 +43,39 @@ export default function PlaygroundPage() {
   const [showOptions, setShowOptions] = useState(false)
 
   const endpoints = [
-    { id: 'scrape', label: 'Scrape', icon: '⚡' },
-    { id: 'search', label: 'Search', icon: '🔍', badge: 'New' },
-    { id: 'map', label: 'Map', icon: '🗺️' },
-    { id: 'crawl', label: 'Crawl', icon: '🕸️' }
+    { id: 'generate', label: 'Generate', icon: '⚡' },
+    { id: 'basic', label: 'Basic', icon: '🔍', badge: 'New' },
+    { id: 'advanced', label: 'Advanced', icon: '🎯' },
+    { id: 'export', label: 'Export', icon: '📊' }
   ]
 
   const recentRuns = [
     {
       id: 1,
-      url: 'www.firecrawl.dev/',
-      endpoint: 'Map',
+      query: 'plumbers 29401',
+      mode: 'Basic',
       status: 'Success',
-      date: 'Sep 4, 2025',
+      date: 'Sep 20',
       time: '3:38 PM',
-      icon: '🔥'
+      icon: '🔍'
     },
     {
       id: 2,
-      url: 'www.nngroup.com/articles/us...',
-      endpoint: 'Scrape',
+      query: 'HVAC contractors 29403',
+      mode: 'Advanced',
       status: 'Success',
-      date: 'Sep 2, 2025',
-      time: '7:46 AM'
+      date: 'Sep 20',
+      time: '2:15 PM',
+      icon: '🎯'
     },
     {
       id: 3,
-      url: 'www.nngroup.com/articles/us...',
-      endpoint: 'Scrape',
+      query: 'electricians 29401',
+      mode: 'Basic',
       status: 'Success',
-      date: 'Sep 2, 2025',
-      time: '7:38 AM'
+      date: 'Sep 19',
+      time: '4:22 PM',
+      icon: '🔍'
     }
   ]
 
@@ -120,7 +123,7 @@ export default function PlaygroundPage() {
 
   const handleGetCode = () => {
     // Copy code to clipboard logic
-    const code = `fetch('https://api.firecrawl.dev/v1/${selectedEndpoint}', {
+    const code = `fetch('https://api.illia.dev/v1/${selectedEndpoint}', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -144,9 +147,10 @@ export default function PlaygroundPage() {
       <div className="fixed inset-y-0 left-0 w-56 bg-white border-r">
         {/* Logo */}
         <div className="p-4 border-b">
-          <Link href="/dashboard" className="flex items-center space-x-2">
-            <span className="text-2xl">🔥</span>
-            <span className="text-xl font-semibold">Firecrawl</span>
+          <Link href="/dashboard" className="flex items-center space-x-2 group">
+            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">
+              Illia
+            </span>
           </Link>
         </div>
 
@@ -156,8 +160,8 @@ export default function PlaygroundPage() {
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search"
-              className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              placeholder="Search past leads..."
+              className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
             />
             <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
           </div>
@@ -171,7 +175,7 @@ export default function PlaygroundPage() {
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   item.active
-                    ? 'bg-orange-50 text-orange-600'
+                    ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={(e) => {
@@ -209,11 +213,11 @@ export default function PlaygroundPage() {
         {/* What's New */}
         {showWhatsNew && (
           <div className="absolute bottom-4 left-4 right-4">
-            <div className="bg-orange-50 rounded-lg p-3">
+            <div className="bg-teal-50 rounded-lg p-3">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center space-x-2">
-                  <Sparkles className="h-4 w-4 text-orange-600" />
-                  <span className="text-xs font-semibold text-orange-600">What's New (5)</span>
+                  <Sparkles className="h-4 w-4 text-teal-600" />
+                  <span className="text-xs font-semibold text-teal-600">What&apos;s New (5)</span>
                 </div>
                 <button
                   onClick={() => setShowWhatsNew(false)}
@@ -245,7 +249,7 @@ export default function PlaygroundPage() {
         <header className="bg-white border-b px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-orange-100 text-orange-700 px-3 py-1 rounded-lg">
+              <div className="flex items-center space-x-2 bg-teal-100 text-teal-700 px-3 py-1 rounded-lg">
                 <Users className="h-4 w-4" />
                 <span className="text-sm font-medium">Personal Team</span>
               </div>
@@ -264,7 +268,7 @@ export default function PlaygroundPage() {
                 <FileCode className="h-4 w-4" />
                 <span className="text-sm font-medium">Docs</span>
               </Link>
-              <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors">
+              <button className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors">
                 Upgrade
               </button>
             </div>
@@ -275,27 +279,30 @@ export default function PlaygroundPage() {
         <div className="p-8">
           {/* Title */}
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Playground</h1>
-            <p className="text-gray-600">API, Docs and Playground - all in one place</p>
+            <h1 className="text-3xl font-bold text-teal-600 mb-2 flex items-center justify-center">
+              <MapPin className="h-8 w-8 mr-2" />
+              Lead Playground
+            </h1>
+            <p className="text-gray-700">Lead Playground - Test & Generate in One Place</p>
           </div>
 
           {/* Endpoint tabs */}
           <div className="flex justify-center mb-8">
-            <div className="inline-flex bg-white rounded-lg border p-1">
+            <div className="inline-flex flex-wrap bg-white rounded-lg border p-1">
               {endpoints.map((endpoint) => (
                 <button
                   key={endpoint.id}
                   onClick={() => setSelectedEndpoint(endpoint.id)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
                     selectedEndpoint === endpoint.id
-                      ? 'bg-gray-100 text-gray-900'
+                      ? 'bg-teal-100 text-teal-900'
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
                   <span>{endpoint.icon}</span>
                   <span>{endpoint.label}</span>
                   {endpoint.badge && (
-                    <span className="text-xs bg-orange-100 text-orange-600 px-1.5 py-0.5 rounded-full">
+                    <span className="text-xs bg-teal-100 text-teal-600 px-1.5 py-0.5 rounded-full">
                       {endpoint.badge}
                     </span>
                   )}
@@ -309,26 +316,14 @@ export default function PlaygroundPage() {
             <div className="bg-white rounded-xl border p-6">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="flex-1 flex items-center space-x-2">
-                  {selectedEndpoint === 'search' ? (
-                    <input
-                      type="text"
-                      value={url}
-                      onChange={(e) => setUrl(e.target.value)}
-                      className="flex-1 text-gray-900 outline-none"
-                      placeholder="Top restaurants in San Francisco"
-                    />
-                  ) : (
-                    <>
-                      <span className="text-gray-500 text-sm">https://</span>
-                      <input
-                        type="text"
-                        value={url.replace('https://', '')}
-                        onChange={(e) => setUrl('https://' + e.target.value)}
-                        className="flex-1 text-gray-900 outline-none"
-                        placeholder="example.com"
-                      />
-                    </>
-                  )}
+                  <MapPin className="h-5 w-5 text-teal-600" />
+                  <input
+                    type="text"
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    className="flex-1 text-gray-900 bg-gray-200 px-3 py-2 rounded-md outline-none focus:bg-white focus:ring-2 focus:ring-teal-500"
+                    placeholder="plumbers, 29401"
+                  />
                 </div>
               </div>
 
@@ -349,12 +344,11 @@ export default function PlaygroundPage() {
                     <select
                       value={format}
                       onChange={(e) => setFormat(e.target.value)}
-                      className="text-sm font-medium text-gray-900 bg-transparent border rounded px-2 py-1 outline-none focus:ring-2 focus:ring-orange-500"
+                      className="text-sm font-medium text-gray-900 bg-transparent border rounded px-2 py-1 outline-none focus:ring-2 focus:ring-teal-500"
                     >
-                      <option value="markdown">Markdown</option>
-                      <option value="json">JSON</option>
-                      <option value="html">HTML</option>
-                      <option value="text">Text</option>
+                      <option value="CSV">CSV</option>
+                      <option value="JSON">JSON</option>
+                      <option value="Preview">Preview</option>
                     </select>
                   </div>
                 </div>
@@ -370,15 +364,15 @@ export default function PlaygroundPage() {
                   <button
                     onClick={handleStartScraping}
                     disabled={isLoading}
-                    className="flex items-center space-x-2 px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+                    className="flex items-center space-x-2 px-6 py-2 bg-teal-500 hover:bg-teal-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
                   >
                     {isLoading ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        <span>Scraping...</span>
+                        <span>Generating...</span>
                       </>
                     ) : (
-                      <span>Start scraping</span>
+                      <span>Generate Leads</span>
                     )}
                   </button>
                 </div>
@@ -386,10 +380,10 @@ export default function PlaygroundPage() {
             </div>
           </div>
 
-          {/* Results or Recent Runs */}
+          {/* Results or Recent Generations */}
           {!result && !isLoading ? (
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Runs</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Generations</h2>
               <div className="bg-white rounded-xl border">
                 <div className="divide-y">
                   {recentRuns.map((run) => (
@@ -398,16 +392,15 @@ export default function PlaygroundPage() {
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
                             {run.icon && <span className="text-xl">{run.icon}</span>}
-                            <a href={`https://${run.url}`} className="text-gray-900 hover:text-orange-600 font-medium flex items-center">
-                              {run.url}
-                              <ExternalLink className="h-3 w-3 ml-1" />
-                            </a>
+                            <span className="text-gray-900 font-medium">
+                              {run.query}
+                            </span>
                           </div>
                           <div className="flex items-center space-x-6 text-sm">
                             <div className="flex items-center space-x-2">
-                              <span className="text-gray-500">Endpoint</span>
+                              <span className="text-gray-500">Mode</span>
                               <span className="font-medium flex items-center">
-                                {run.endpoint === 'Map' ? '🗺️' : '⚡'} {run.endpoint}
+                                {run.icon} {run.mode}
                               </span>
                             </div>
                             <div className="flex items-center space-x-2">
@@ -434,8 +427,8 @@ export default function PlaygroundPage() {
             <div className="max-w-4xl mx-auto">
               <div className="bg-white rounded-xl border p-8">
                 <div className="flex flex-col items-center justify-center">
-                  <Loader2 className="h-8 w-8 animate-spin text-orange-500 mb-4" />
-                  <p className="text-gray-600">Scraping in progress...</p>
+                  <Loader2 className="h-8 w-8 animate-spin text-teal-500 mb-4" />
+                  <p className="text-gray-600">Generating leads...</p>
                 </div>
               </div>
             </div>
@@ -481,7 +474,7 @@ export default function PlaygroundPage() {
       )}
 
       {/* Intercom Chat */}
-      <button className="fixed bottom-4 right-4 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg">
+      <button className="fixed bottom-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full shadow-lg">
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>

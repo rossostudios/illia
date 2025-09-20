@@ -86,7 +86,7 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
         <div className="p-6 border-b">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-semibold text-gray-900">
-              {currentStep === 1 && "What are you using Firecrawl for?"}
+              {currentStep === 1 && "What are you using Illia for?"}
               {currentStep === 2 && "Where did you hear about us?"}
               {currentStep === 3 && "Terms of Service & Privacy Policy"}
               {currentStep === 4 && "Terms of Service & Privacy Policy"}
@@ -261,11 +261,11 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                     <p className="text-sm text-gray-600 mb-4">Date of last revision: November 5, 2024</p>
                     <div className="prose prose-sm text-gray-600">
                       <p className="mb-4">
-                        This terms of use or service agreement ("Agreement") is between SideGuide Technologies, Inc.
-                        d/b/a Firecrawl, a Delaware Corporation ("Firecrawl," "Company," "we," "us," "our," or "ourselves") and
-                        the person or entity ("you" or "your") that has decided to use our services; any of our websites or
+                        This terms of use or service agreement (&quot;Agreement&quot;) is between SideGuide Technologies, Inc.
+                        d/b/a Illia, a Delaware Corporation (&quot;Illia,&quot; &quot;Company,&quot; &quot;we,&quot; &quot;us,&quot; &quot;our,&quot; or &quot;ourselves&quot;) and
+                        the person or entity (&quot;you&quot; or &quot;your&quot;) that has decided to use our services; any of our websites or
                         apps; or any features, products, graphics, text, images, photos, audio, video, location data,
-                        computer code, and all other forms of data and communications (collectively, "Services").
+                        computer code, and all other forms of data and communications (collectively, &quot;Services&quot;).
                       </p>
                       <p className="font-medium text-gray-700">
                         YOU MUST CONSENT TO THIS AGREEMENT TO USE OUR SERVICES. If you do not accept and...
@@ -282,7 +282,7 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                         className="mt-0.5 h-4 w-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500"
                       />
                       <span className="text-sm text-gray-700">
-                        I agree to Firecrawl's <a href="#" className="text-orange-600 underline">Terms of Service</a> and{' '}
+                        I agree to Illia&apos;s <a href="#" className="text-orange-600 underline">Terms of Service</a> and{' '}
                         <a href="#" className="text-orange-600 underline">Privacy Policy</a>.
                       </span>
                     </label>
@@ -313,12 +313,12 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                     <p className="text-sm text-gray-600 mb-4">
                       We respect the rights of all of our users, regardless of location or citizenship. If you have any
                       questions or concerns about any of these rights, or if you would like to assert any of these rights at
-                      any time, please contact help@firecrawl.com.
+                      any time, please contact help@illia.com.
                     </p>
 
                     <h3 className="font-semibold text-gray-900 mb-4">4. Questions about Policy</h3>
                     <p className="text-sm text-gray-600 mb-4">
-                      If you have any questions about this privacy policy, contact us at: help@firecrawl.com. By
+                      If you have any questions about this privacy policy, contact us at: help@illia.com. By
                       accessing any of our services or content, you are affirming that you understand and agree with the
                       terms of our privacy policy.
                     </p>
@@ -333,7 +333,7 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                         className="h-4 w-4 text-orange-600 rounded border-gray-300"
                       />
                       <span className="ml-3 text-sm text-gray-700">
-                        I agree to Firecrawl's <a href="#" className="text-orange-600 underline">Terms of Service</a> and{' '}
+                        I agree to Illia&apos;s <a href="#" className="text-orange-600 underline">Terms of Service</a> and{' '}
                         <a href="#" className="text-orange-600 underline">Privacy Policy</a>.
                       </span>
                       <div className="ml-auto">

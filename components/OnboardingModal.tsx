@@ -70,7 +70,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
         <div className="p-6 border-b">
           <div className="flex items-start justify-between">
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900">Let's get you started</h2>
+              <h2 className="text-2xl font-semibold text-gray-900">Let&apos;s get you started</h2>
               <p className="text-gray-500 mt-1">Complete these quick actions to earn bonus credits for your account.</p>
             </div>
             <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">OPTIONAL</span>
