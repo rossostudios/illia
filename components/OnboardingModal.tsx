@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { X, Check, Github } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { X } from 'lucide-react'
 
 interface OnboardingModalProps {
   isOpen: boolean
@@ -10,12 +10,13 @@ interface OnboardingModalProps {
 }
 
 export default function OnboardingModal({ isOpen, onClose, onComplete }: OnboardingModalProps) {
-  const [currentStep, setCurrentStep] = useState(1)
+  const [mounted, setMounted] = useState(false)
   const totalSteps = 4
 
   const steps = [
     {
       id: 1,
+      icon: '✉️',
       title: 'Email Verified',
       description: 'Your email has been verified',
       claimed: true,
@@ -23,6 +24,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
     },
     {
       id: 2,
+      icon: '⭐',
       title: 'Star our GitHub repo',
       description: 'Check out our open source code and contribute',
       claimed: false,
@@ -30,6 +32,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
     },
     {
       id: 3,
+      icon: '💬',
       title: 'Join our Discord',
       description: 'Connect with us and get community help',
       claimed: false,
@@ -37,6 +40,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
     },
     {
       id: 4,
+      icon: '𝕏',
       title: 'Follow us on X',
       description: 'Stay updated on new features and launches',
       claimed: false,
@@ -46,6 +50,10 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
 
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set([1]))
 
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const handleStepComplete = (stepId: number) => {
     setCompletedSteps(prev => new Set([...prev, stepId]))
   }
@@ -54,132 +62,164 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
     if (completedSteps.size === totalSteps) {
       onComplete()
     } else {
-      // Just close the modal for now
       onClose()
     }
   }
 
-  if (!isOpen) return null
+  if (!isOpen || !mounted) return null
 
   const progressPercentage = (completedSteps.size / totalSteps) * 100
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="p-6 border-b">
-          <div className="flex items-start justify-between">
-            <div>
-              <h2 className="text-2xl font-semibold text-gray-900">Let&apos;s get you started</h2>
-              <p className="text-gray-500 mt-1">Complete these quick actions to earn bonus credits for your account.</p>
+    <>
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      {/* Modal - Responsive positioning */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6">
+        <div className="relative w-full max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto">
+          {/* Modal Content - Full height on mobile, constrained on desktop */}
+          <div className="bg-white rounded-2xl shadow-2xl max-h-[95vh] sm:max-h-[90vh] md:max-h-[85vh] overflow-hidden flex flex-col min-w-0">
+
+            {/* Header - Fixed */}
+            <div className="flex-shrink-0 px-6 py-5 sm:p-6 lg:px-8 border-b bg-white">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900">
+                    Let&apos;s get you started
+                  </h2>
+                  <p className="text-sm sm:text-base lg:text-lg text-gray-600 mt-1">
+                    Complete these quick actions to earn bonus credits for your account.
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2 flex-shrink-0">
+                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                    OPTIONAL
+                  </span>
+                  <button
+                    onClick={onClose}
+                    className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                    aria-label="Close modal"
+                  >
+                    <X className="h-5 w-5 text-gray-500" />
+                  </button>
+                </div>
+              </div>
             </div>
-            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">OPTIONAL</span>
-          </div>
-        </div>
 
-        {/* Progress bar */}
-        <div className="px-6 pt-6">
-          <div className="flex items-center justify-between mb-2">
-            <div className="h-2 bg-gray-200 rounded-full flex-1 mr-4">
-              <div
-                className="h-full bg-orange-500 rounded-full transition-all duration-300"
-                style={{ width: `${progressPercentage}%` }}
-              />
+            {/* Progress Bar - Fixed */}
+            <div className="flex-shrink-0 px-6 py-4 bg-gray-50">
+              <div className="flex items-center justify-between">
+                <div className="flex-1 mr-4">
+                  <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-teal-500 rounded-full transition-all duration-300 ease-out"
+                      style={{ width: `${progressPercentage}%` }}
+                    />
+                  </div>
+                </div>
+                <span className="text-sm font-medium text-gray-700 flex-shrink-0">
+                  STEP {completedSteps.size} OF {totalSteps}
+                </span>
+              </div>
             </div>
-            <span className="text-sm text-gray-500">
-              STEP {completedSteps.size} OF {totalSteps}
-            </span>
-          </div>
-        </div>
 
-        {/* Steps */}
-        <div className="p-6 space-y-4">
-          {steps.map((step) => {
-            const isCompleted = completedSteps.has(step.id)
+            {/* Steps List - Scrollable */}
+            <div className="flex-1 overflow-y-auto px-6 py-4 sm:p-6 lg:p-8">
+              <div className="space-y-4">
+                {steps.map((step) => {
+                  const isCompleted = completedSteps.has(step.id)
 
-            return (
-              <div
-                key={step.id}
-                className={`border rounded-lg p-4 transition-all ${
-                  isCompleted ? 'bg-gray-50 border-gray-200' : 'border-gray-300 hover:border-gray-400'
-                }`}
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3">
-                      {step.id === 1 && (
-                        <div className="text-2xl">✉️</div>
-                      )}
-                      {step.id === 2 && (
-                        <Github className="h-6 w-6" />
-                      )}
-                      {step.id === 3 && (
-                        <div className="text-2xl">💬</div>
-                      )}
-                      {step.id === 4 && (
-                        <div className="text-2xl">𝕏</div>
-                      )}
-                      <div>
-                        <h3 className={`font-medium ${isCompleted ? 'text-gray-500' : 'text-gray-900'}`}>
-                          {step.title}
-                        </h3>
-                        <p className="text-sm text-gray-500">{step.description}</p>
+                  return (
+                    <div
+                      key={step.id}
+                      className={`border rounded-lg p-5 transition-all ${
+                        isCompleted
+                          ? 'bg-gray-50 border-gray-200'
+                          : 'bg-white border-gray-300 hover:border-teal-400 hover:shadow-sm'
+                      }`}
+                    >
+                      <div className="flex items-start gap-6">
+                        {/* Icon */}
+                        <div className="flex-shrink-0 text-2xl mt-0.5">
+                          {step.icon}
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className={`font-medium text-base lg:text-lg ${
+                            isCompleted ? 'text-gray-500' : 'text-gray-900'
+                          }`}>
+                            {step.title}
+                          </h3>
+                          <p className="text-sm lg:text-base text-gray-600 mt-1">
+                            {step.description}
+                          </p>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex items-center gap-4 flex-shrink-0">
+                          {step.credits > 0 && (
+                            <span className="text-sm font-medium text-gray-700">
+                              +{step.credits} credits
+                            </span>
+                          )}
+                          {isCompleted ? (
+                            <span className="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-medium">
+                              CLAIMED
+                            </span>
+                          ) : step.id !== 1 ? (
+                            <button
+                              onClick={() => handleStepComplete(step.id)}
+                              className="text-sm text-teal-600 hover:text-teal-700 font-medium whitespace-nowrap"
+                            >
+                              Complete →
+                            </button>
+                          ) : null}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    {step.credits > 0 && (
-                      <span className="text-sm font-medium text-gray-600">
-                        +{step.credits} credits
-                      </span>
-                    )}
-                    {isCompleted ? (
-                      <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full font-medium">
-                        CLAIMED
-                      </span>
-                    ) : step.id !== 1 ? (
-                      <button
-                        onClick={() => handleStepComplete(step.id)}
-                        className="text-sm text-orange-600 hover:text-orange-700 font-medium"
-                      >
-                        Complete →
-                      </button>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-            )
-          })}
+                  )
+                })}
 
-          {/* LinkedIn step (optional, not counted) */}
-          <div className="border border-gray-300 rounded-lg p-4 hover:border-gray-400 transition-all">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="flex items-center space-x-3">
-                  <div className="text-2xl">💼</div>
-                  <div>
-                    <h3 className="font-medium text-gray-900">Follow us on LinkedIn</h3>
-                    <p className="text-sm text-gray-500">Professional updates and insights</p>
+                {/* LinkedIn step (optional, not counted) */}
+                <div className="border border-gray-300 rounded-lg p-5 hover:border-teal-400 hover:shadow-sm transition-all bg-white">
+                  <div className="flex items-start gap-6">
+                    <div className="flex-shrink-0 text-2xl mt-0.5">
+                      💼
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-base lg:text-lg text-gray-900">
+                        Follow us on LinkedIn
+                      </h3>
+                      <p className="text-sm lg:text-base text-gray-600 mt-1">
+                        Professional updates and insights
+                      </p>
+                    </div>
+                    <button className="text-sm text-teal-600 hover:text-teal-700 font-medium whitespace-nowrap flex-shrink-0">
+                      Follow →
+                    </button>
                   </div>
                 </div>
               </div>
-              <button className="text-sm text-orange-600 hover:text-orange-700 font-medium">
-                Follow →
+            </div>
+
+            {/* Footer - Fixed */}
+            <div className="flex-shrink-0 p-6 border-t bg-gray-50">
+              <button
+                onClick={handleContinue}
+                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-3 px-6 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Continue
               </button>
             </div>
           </div>
         </div>
-
-        {/* Footer */}
-        <div className="p-6 border-t">
-          <button
-            onClick={handleContinue}
-            className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg transition-all"
-          >
-            Continue
-          </button>
-        </div>
       </div>
-    </div>
+    </>
   )
 }

@@ -19,9 +19,10 @@ import {
 interface DashboardSidebarProps {
   isCollapsed?: boolean
   onToggleCollapse?: () => void
+  userEmail?: string | null
 }
 
-export default function DashboardSidebar({ isCollapsed = false }: DashboardSidebarProps) {
+export default function DashboardSidebar({ isCollapsed = false, userEmail }: DashboardSidebarProps) {
   const pathname = usePathname()
   const [showExtractMenu, setShowExtractMenu] = useState(pathname.includes('/extract'))
   const [showWhatsNew, setShowWhatsNew] = useState(true)
@@ -155,12 +156,19 @@ export default function DashboardSidebar({ isCollapsed = false }: DashboardSideb
 
       {/* User section */}
       {!isCollapsed && (
-        <div className="border-t bg-white px-4 py-3 flex items-center space-x-3">
+        <Link
+          href="/dashboard/settings"
+          className="border-t bg-white px-4 py-3 flex items-center space-x-3 hover:bg-gray-50 transition-colors"
+        >
           <div className="h-6 w-6 bg-teal-100 rounded-full flex items-center justify-center">
-            <span className="text-xs font-medium text-teal-600">S</span>
+            <span className="text-xs font-medium text-teal-600">
+              {userEmail ? userEmail.charAt(0).toUpperCase() : 'G'}
+            </span>
           </div>
-          <span className="text-xs text-gray-700">samlee@content-mobbin.com</span>
-        </div>
+          <span className="text-xs text-gray-700">
+            {userEmail || 'Guest'}
+          </span>
+        </Link>
       )}
     </div>
   )

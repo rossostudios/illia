@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import DashboardSidebar from '@/components/DashboardSidebar'
-import { Menu, Bell, HelpCircle, FileCode } from 'lucide-react'
+import { Menu, Bell, HelpCircle } from 'lucide-react'
 import Link from 'next/link'
+import { useSession } from '@/hooks/useSession'
 
 export default function DashboardLayout({
   children,
@@ -11,12 +12,11 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  const { user } = useSession()
 
   useEffect(() => {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768
-      setIsMobile(mobile)
       if (mobile && !localStorage.getItem('sidebarCollapsed')) {
         setIsSidebarCollapsed(true)
       }
@@ -41,7 +41,7 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <DashboardSidebar isCollapsed={isSidebarCollapsed} onToggleCollapse={toggleSidebar} />
+      <DashboardSidebar isCollapsed={isSidebarCollapsed} onToggleCollapse={toggleSidebar} userEmail={user?.email} />
 
       {/* Main content area with responsive margin */}
       <div className={`transition-all duration-300 ease-in-out ${
@@ -60,7 +60,7 @@ export default function DashboardLayout({
                 <Menu className="h-5 w-5 text-gray-600" />
               </button>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
               <button className="p-2 hover:bg-gray-100 rounded-lg" aria-label="Notifications">
                 <Bell className="h-5 w-5 text-gray-600" />
                 <span className="sr-only">Notifications</span>
@@ -70,10 +70,9 @@ export default function DashboardLayout({
               </button>
               <Link
                 href="/docs"
-                className="flex items-center space-x-2 px-3 py-1.5 hover:bg-gray-100 rounded-lg"
+                className="text-gray-800 hover:text-teal-600 hover:underline text-sm font-medium px-2"
               >
-                <FileCode className="h-4 w-4" />
-                <span className="text-sm font-medium">Docs</span>
+                Docs
               </Link>
               <button className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors">
                 Upgrade

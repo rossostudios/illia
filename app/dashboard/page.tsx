@@ -171,16 +171,17 @@ export default function DashboardPage() {
   return (
     <>
       {/* Dashboard content */}
-          {/* Title */}
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-teal-600 mb-2">Welcome back, {user?.email?.split('@')[0] || 'chris'}!</h1>
-            <p className="text-gray-700">Power your Charleston business with AI-scored leads—start generating now.</p>
-          </div>
+      <div>
+        {/* Title */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-teal-600 mb-2">Welcome back, {user?.email?.split('@')[0] || 'chris'}!</h1>
+          <p className="text-gray-700">Power your Charleston business with AI-scored leads—start generating now.</p>
+        </div>
 
-          {/* Endpoint Cards */}
-          <section aria-labelledby="endpoints-heading">
-            <h2 id="endpoints-heading" className="sr-only">Available API endpoints</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Endpoint Cards */}
+        <section aria-labelledby="endpoints-heading">
+          <h2 id="endpoints-heading" className="sr-only">Available API endpoints</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {endpoints.map((endpoint) => {
                 const Component = endpoint.onClick ? 'button' : Link
                 const props: any = endpoint.onClick
@@ -231,13 +232,13 @@ export default function DashboardPage() {
                   </Component>
                 )
               })}
-            </div>
-          </section>
+          </div>
+        </section>
 
-          {/* Stats and API Key */}
-          <section aria-labelledby="stats-heading">
-            <h2 id="stats-heading" className="sr-only">Dashboard statistics and settings</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {/* Stats and API Key */}
+        <section aria-labelledby="stats-heading">
+          <h2 id="stats-heading" className="sr-only">Dashboard statistics and settings</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
               {/* Leads Generated chart */}
               <div className="bg-white rounded-xl p-6 border">
                 <div className="flex items-center justify-between mb-4">
@@ -322,16 +323,16 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
-          </section>
+        </section>
 
-          {/* Recent Leads Table */}
-          <section className="mb-8">
-            <RecentLeads />
-          </section>
+        {/* Recent Leads Table */}
+        <section className="mb-8">
+          <RecentLeads />
+        </section>
 
-          {/* Usage Trends */}
-          <section aria-labelledby="usage-heading">
-            <div className="bg-white rounded-xl p-6 border">
+        {/* Usage Trends */}
+        <section aria-labelledby="usage-heading">
+          <div className="bg-white rounded-xl p-6 border">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 id="usage-heading" className="font-semibold text-gray-900">Usage Trends</h3>
@@ -347,29 +348,25 @@ export default function DashboardPage() {
               0 of 2 active sessions
             </div>
           </div>
-          </section>
+        </section>
 
-          {/* What's New */}
-          <div className="bg-teal-50 border border-teal-200 rounded-xl p-4 mb-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <span className="bg-teal-100 text-teal-800 px-2 py-1 rounded text-xs font-semibold mr-3">
-                  What's New (5)
-                </span>
-                <p className="text-sm text-gray-700">
-                  View our latest update: Charleston tourist scoring
-                </p>
-              </div>
-              <button className="text-teal-600 hover:text-teal-700 text-sm font-medium">
-                View All →
-              </button>
+        {/* What's New */}
+        <div className="bg-teal-50 border border-teal-200 rounded-xl p-4 mb-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <span className="bg-teal-100 text-teal-800 px-2 py-1 rounded text-xs font-semibold mr-3">
+                What's New (5)
+              </span>
+              <p className="text-sm text-gray-700">
+                View our latest update: Charleston tourist scoring
+              </p>
             </div>
+            <button className="text-teal-600 hover:text-teal-700 text-sm font-medium">
+              View All →
+            </button>
           </div>
-
-          {/* Welcome Message */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-600">Welcome to Illia!</p>
-          </div>
+        </div>
+      </div>
 
       {/* Onboarding Survey */}
       <OnboardingSurvey
