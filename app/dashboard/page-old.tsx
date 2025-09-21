@@ -12,6 +12,7 @@ import { useTier } from '@/hooks/useTier'
 import { useCredits } from '@/hooks/useCredits'
 import { useRecentLeads } from '@/hooks/useRecentLeads'
 import { createClient } from '@/lib/supabase/client'
+import type { Database } from '@/types/database'
 import {
   Eye,
   EyeOff,
@@ -20,6 +21,10 @@ import {
   Loader2,
   Sparkles
 } from 'lucide-react'
+
+type Lead = Database['public']['Tables']['illia_leads']['Row']
+type Log = Database['public']['Tables']['illia_leads_logs']['Row']
+type Purchase = Database['public']['Tables']['purchases']['Row']
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -34,6 +39,22 @@ export default function DashboardPage() {
   const [showApiKey, setShowApiKey] = useState(false)
   const [showGenerateModal, setShowGenerateModal] = useState(false)
   const [generatingLeads, setGeneratingLeads] = useState(false)
+
+  useEffect(() => {
+    if (!sessionLoading && !user) {
+      router.push('/login')
+    } else if (user) {
+      const surveyCompleted = localStorage.getItem('onboardingSurveyCompleted')
+      if (!surveyCompleted) {
+        setShowSurvey(true)
+      } else {
+        const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding')
+        if (!hasSeenOnboarding) {
+          setShowOnboarding(true)
+        }
+      }
+    }
+  }, [user, sessionLoading, router])
 
   const handleGenerateFirstLeads = async () => {
     if (!user?.email) return
@@ -85,22 +106,6 @@ export default function DashboardPage() {
     }
   }
 
-  useEffect(() => {
-    if (!sessionLoading && !user) {
-      router.push('/login')
-    } else if (user) {
-      const surveyCompleted = localStorage.getItem('onboardingSurveyCompleted')
-      if (!surveyCompleted) {
-        setShowSurvey(true)
-      } else {
-        const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding')
-        if (!hasSeenOnboarding) {
-          setShowOnboarding(true)
-        }
-      }
-    }
-  }, [user, sessionLoading, router])
-
   const handleSurveyComplete = () => {
     setShowSurvey(false)
     setShowOnboarding(true)
@@ -131,13 +136,8 @@ export default function DashboardPage() {
       badge: 'NEW',
       badgeColor: 'bg-teal-100 text-teal-600',
       description: 'Top 3 from your last run.',
-      bottomContent: leadsLoading ? 'Loading...' :
-        recentLeads.length > 0 ?
-          recentLeads.map(l => `${l.name} (${l.score})`).join('\n') :
-          'No leads generated yet',
-      link: '/dashboard/leads',
-      showButton: recentLeads.length === 0 && !leadsLoading,
-      onButtonClick: handleGenerateFirstLeads
+      bottomContent: 'Sample Plumber (95)\nCharleston HVAC (92)\nLowcountry Electric (88)',
+      link: '/dashboard/leads'
     },
     {
       title: 'Analytics',
@@ -156,6 +156,7 @@ export default function DashboardPage() {
     }
   ]
 
+
   if (sessionLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -173,7 +174,7 @@ export default function DashboardPage() {
       {/* Dashboard content */}
           {/* Title */}
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-teal-600 mb-2">Welcome back, {user?.email?.split('@')[0] || 'chris'}!</h1>
+            <h1 className="text-2xl font-bold text-teal-600 mb-2">Welcome back, {user?.email?.split('@')[0]}!</h1>
             <p className="text-gray-700">Power your Charleston business with AI-scored leads—start generating now.</p>
           </div>
 
@@ -211,23 +212,6 @@ export default function DashboardPage() {
                         {endpoint.bottomContent}
                       </div>
                     )}
-                    {endpoint.showButton && (
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          endpoint.onButtonClick?.()
-                        }}
-                        disabled={generatingLeads}
-                        className="mt-3 w-full bg-teal-600 text-white px-3 py-1.5 rounded text-xs font-medium hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                      >
-                        {generatingLeads ? (
-                          <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Generating...</>
-                        ) : (
-                          'Generate Your First Leads'
-                        )}
-                      </button>
-                    )}
                   </Component>
                 )
               })}
@@ -243,55 +227,44 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="font-semibold text-gray-900">Leads Generated - Last 7 days</h3>
-                    <p className="text-sm text-gray-500 mt-1">Credit usage: {creditsLoading ? '...' : credits} total</p>
+                    <p className="text-sm text-gray-500 mt-1">Credit usage: {creditsUsed} total</p>
                   </div>
                 </div>
-                <div className="flex items-end justify-center h-32">
-                  <div className="text-5xl font-bold text-gray-900">
-                    {creditsLoading ? (
-                      <Loader2 className="h-12 w-12 animate-spin text-gray-400 mx-auto" />
-                    ) : (
-                      credits
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
-                  <span>0/21</span>
-                  <span>00/24</span>
-                  <span>00/25</span>
-                </div>
+              <div className="flex items-end justify-center h-32">
+                <div className="text-5xl font-bold text-gray-900">{leadsCount}</div>
               </div>
+              <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
+                <span>0/21</span>
+                <span>00/24</span>
+                <span>00/25</span>
+              </div>
+            </div>
 
             {/* Your Tier */}
             <div className="bg-white rounded-xl p-6 border">
               <h3 className="font-semibold text-gray-900 mb-2">Your Tier</h3>
-              {tierLoading || creditsLoading ? (
-                <div className="animate-pulse">
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                  <div className="h-10 bg-gray-200 rounded"></div>
+              <p className="text-sm text-gray-500 mb-4">
+                {userTier === 'basic' ? 'Limited to 10 leads per generation' :
+                 userTier === 'pro' ? 'Up to 50 leads per generation' :
+                 'Unlimited leads per generation'}
+              </p>
+              <div className="flex items-center space-x-2">
+                <div className="flex-1 font-mono text-sm bg-gray-50 px-3 py-2 rounded-lg border border-teal-300" aria-label="Your tier">
+                  {userTier.charAt(0).toUpperCase() + userTier.slice(1)} - {user?.email}
                 </div>
-              ) : (
-                <>
-                  <p className="text-sm text-gray-500 mb-4">
-                    {!tier || tier === 'basic' ? 'No tier yet—upgrade!' :
-                     tier === 'pro' ? 'Up to 50 leads per generation' :
-                     'Unlimited leads per generation'}
-                  </p>
-                  <div className="flex items-center space-x-2">
-                    <div className="flex-1 font-mono text-sm bg-gray-50 px-3 py-2 rounded-lg border border-teal-300" aria-label="Your tier">
-                      Tier: {tier || 'Basic'} - Leads used: {credits}/500
-                    </div>
-                    <button
-                      onClick={() => setShowApiKey(!showApiKey)}
-                      className="p-2 hover:bg-gray-100 rounded-lg"
-                      aria-label={showApiKey ? "Hide tier info" : "Show tier info"}
-                    >
-                      {showApiKey ? <EyeOff className="h-4 w-4" aria-hidden="true" /> : <Eye className="h-4 w-4" aria-hidden="true" />}
-                    </button>
-                    <button className="p-2 hover:bg-gray-100 rounded-lg" aria-label="Copy tier info">
-                      <Copy className="h-4 w-4" aria-hidden="true" />
-                    </button>
-                  </div>
+                <button
+                  onClick={() => setShowApiKey(!showApiKey)}
+                  className="p-2 hover:bg-gray-100 rounded-lg"
+                  aria-label={showApiKey ? "Hide tier info" : "Show tier info"}
+                >
+                  {showApiKey ? <EyeOff className="h-4 w-4" aria-hidden="true" /> : <Eye className="h-4 w-4" aria-hidden="true" />}
+                </button>
+                <button className="p-2 hover:bg-gray-100 rounded-lg" aria-label="Copy tier info">
+                  <Copy className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </div>
+                </button>
+                </div>
                 </>
               )}
               {!tierLoading && (
@@ -326,7 +299,7 @@ export default function DashboardPage() {
 
           {/* Recent Leads Table */}
           <section className="mb-8">
-            <RecentLeads />
+            <RecentLeads key={refreshKey} />
           </section>
 
           {/* Usage Trends */}
@@ -366,10 +339,10 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Welcome Message */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-600">Welcome to Illia!</p>
-          </div>
+        {/* Welcome Message */}
+        <div className="mt-8 text-center">
+          <p className="text-gray-600">Welcome to Illia!</p>
+        </div>
 
       {/* Onboarding Survey */}
       <OnboardingSurvey
