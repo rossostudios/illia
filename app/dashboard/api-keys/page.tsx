@@ -1,30 +1,30 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
 import {
-  Search,
-  Home,
-  Play,
-  FileText,
   BarChart3,
-  Key,
-  Settings,
-  ChevronDown,
   Bell,
-  HelpCircle,
-  FileCode,
-  X,
-  Sparkles,
-  MessageSquare,
+  Check,
+  ChevronDown,
   ChevronLeft,
-  Plus,
+  Copy,
   Eye,
   EyeOff,
-  Copy,
+  FileCode,
+  FileText,
+  HelpCircle,
+  Home,
+  Key,
+  MessageSquare,
+  Play,
+  Plus,
+  Search,
+  Settings,
+  Sparkles,
   Trash2,
-  Check
+  X,
 } from 'lucide-react'
+import Link from 'next/link'
+import { useState } from 'react'
 
 export default function APIKeysPage() {
   const [showExtractMenu, setShowExtractMenu] = useState(false)
@@ -38,8 +38,8 @@ export default function APIKeysPage() {
       key: 'illia_def•••••••••••••••••••••••••••••••401',
       fullKey: 'illia_default_29401_kj34h5kj3h45kj3h45kj3dfcaaebf',
       created: 'Sep 20, 2025 10:15 AM',
-      visible: false
-    }
+      visible: false,
+    },
   ])
   const [copiedKeyId, setCopiedKeyId] = useState<number | null>(null)
   const [showSuccess, setShowSuccess] = useState(false)
@@ -55,8 +55,8 @@ export default function APIKeysPage() {
       isOpen: showExtractMenu,
       submenu: [
         { label: 'Overview', href: '/dashboard/extract' },
-        { label: 'Playground', href: '/dashboard/extract/playground' }
-      ]
+        { label: 'Playground', href: '/dashboard/extract/playground' },
+      ],
     },
     { icon: BarChart3, label: 'Activity Logs', href: '/dashboard/logs' },
     { icon: BarChart3, label: 'Usage', href: '/dashboard/usage' },
@@ -72,7 +72,7 @@ export default function APIKeysPage() {
         key: 'illia_custom_••••••••••••••••••••••••',
         fullKey: 'illia_custom_9d8f7g6h5j4k3l2m1n0p9q8r7s6b6642577',
         created: 'Sep 20, 2025 03:48 PM',
-        visible: true
+        visible: true,
       }
       setApiKeys([newKey, ...apiKeys])
       setKeyName('')
@@ -83,9 +83,7 @@ export default function APIKeysPage() {
   }
 
   const toggleKeyVisibility = (id: number) => {
-    setApiKeys(apiKeys.map(key =>
-      key.id === id ? { ...key, visible: !key.visible } : key
-    ))
+    setApiKeys(apiKeys.map((key) => (key.id === id ? { ...key, visible: !key.visible } : key)))
   }
 
   const copyToClipboard = (key: string, id: number) => {
@@ -98,7 +96,7 @@ export default function APIKeysPage() {
   }
 
   const deleteKey = (id: number) => {
-    setApiKeys(apiKeys.filter(key => key.id !== id))
+    setApiKeys(apiKeys.filter((key) => key.id !== id))
   }
 
   return (
@@ -108,7 +106,9 @@ export default function APIKeysPage() {
         {/* Logo */}
         <div className="p-4 border-b">
           <Link href="/dashboard" className="flex items-center space-x-2 group">
-            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">Illia</span>
+            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">
+              Illia
+            </span>
           </Link>
         </div>
 
@@ -132,9 +132,7 @@ export default function APIKeysPage() {
               <Link
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  item.active
-                    ? 'bg-teal-50 text-teal-600'
-                    : 'text-gray-700 hover:bg-gray-100'
+                  item.active ? 'bg-teal-50 text-teal-600' : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={(e) => {
                   if (item.hasSubmenu) {
@@ -148,7 +146,9 @@ export default function APIKeysPage() {
                   <span>{item.label}</span>
                 </div>
                 {item.hasSubmenu && (
-                  <ChevronDown className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`}
+                  />
                 )}
               </Link>
               {item.hasSubmenu && item.isOpen && (
@@ -188,9 +188,7 @@ export default function APIKeysPage() {
             </div>
 
             {/* User email */}
-            <div className="mt-4 px-3 py-2 text-xs text-gray-500">
-              samlee@content-mobbin.com
-            </div>
+            <div className="mt-4 px-3 py-2 text-xs text-gray-500">samlee@content-mobbin.com</div>
 
             {/* Collapse button */}
             <button className="flex items-center space-x-2 mt-2 text-xs text-gray-600 hover:text-gray-900">
@@ -248,7 +246,9 @@ export default function APIKeysPage() {
             <div className="px-6 py-4 border-b flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-semibold text-teal-600">Your Lead API Keys</h2>
-                <p className="text-sm text-gray-600 mt-1">Use for Zapier auto-exports from 29401 queries</p>
+                <p className="text-sm text-gray-600 mt-1">
+                  Use for Zapier auto-exports from 29401 queries
+                </p>
               </div>
               <button
                 onClick={() => setShowCreateModal(true)}
@@ -261,7 +261,10 @@ export default function APIKeysPage() {
 
             <div className="divide-y">
               {apiKeys.map((apiKey) => (
-                <div key={apiKey.id} className="px-6 py-4 bg-teal-50 hover:bg-teal-100 transition-colors">
+                <div
+                  key={apiKey.id}
+                  className="px-6 py-4 bg-teal-50 hover:bg-teal-100 transition-colors"
+                >
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-medium text-gray-900">{apiKey.name}</h3>
                     <button
@@ -323,9 +326,7 @@ export default function APIKeysPage() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Key Name
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Key Name</label>
                 <input
                   type="text"
                   value={keyName}
@@ -354,7 +355,9 @@ export default function APIKeysPage() {
         <div className="fixed bottom-4 right-4 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50">
           <div className="flex items-center space-x-2">
             <Check className="h-5 w-5 text-green-600" />
-            <span className="text-sm font-medium">Lead API key created - ready for Zapier export!</span>
+            <span className="text-sm font-medium">
+              Lead API key created - ready for Zapier export!
+            </span>
           </div>
         </div>
       )}
@@ -369,7 +372,13 @@ export default function APIKeysPage() {
 
 function Users({ className }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
       <circle cx="9" cy="7" r="4" />
       <path d="M23 21v-2a4 4 0 0 0-3-3.87" />

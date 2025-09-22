@@ -1,7 +1,16 @@
 'use client'
 
+import {
+  Brain,
+  ChevronLeft,
+  FileText,
+  Globe,
+  MessageSquare,
+  ShoppingBag,
+  Users,
+  X,
+} from 'lucide-react'
 import { useState } from 'react'
-import { X, ChevronLeft, Globe, Users, Brain, ShoppingBag, FileText, MessageSquare } from 'lucide-react'
 
 interface OnboardingSurveyProps {
   isOpen: boolean
@@ -17,7 +26,7 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
     source: '',
     otherSource: '',
     termsAccepted: false,
-    emailUpdates: false
+    emailUpdates: false,
   })
   const [isLoading, setIsLoading] = useState(false)
 
@@ -27,23 +36,23 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
     {
       id: 'lead-generation',
       title: 'Lead Generation / Sales Data',
-      description: 'Find & filter data for prospecting'
+      description: 'Find & filter data for prospecting',
     },
     {
       id: 'ai-knowledge',
       title: 'AI Knowledge Base',
-      description: 'Build RAG systems or internal AI assistants'
+      description: 'Build RAG systems or internal AI assistants',
     },
     {
       id: 'product-scraping',
       title: 'Product Page Scraping',
-      description: 'Extract structured product data from sites'
+      description: 'Extract structured product data from sites',
     },
     {
       id: 'content-generation',
       title: 'Content Generation',
-      description: 'Produce or repurpose content from websites'
-    }
+      description: 'Produce or repurpose content from websites',
+    },
   ]
 
   const sources = [
@@ -52,7 +61,7 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
     { id: 'blog', label: 'Blog', icon: '📝' },
     { id: 'friend', label: 'From a friend', icon: '👤' },
     { id: 'github', label: 'GitHub', icon: '💻' },
-    { id: 'linkedin', label: 'LinkedIn', icon: '💼' }
+    { id: 'linkedin', label: 'LinkedIn', icon: '💼' },
   ]
 
   const handleNext = () => {
@@ -70,7 +79,7 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
   const handleFinish = async () => {
     setIsLoading(true)
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise((resolve) => setTimeout(resolve, 2000))
     localStorage.setItem('onboardingSurveyCompleted', 'true')
     onComplete()
   }
@@ -86,10 +95,10 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
         <div className="p-6 border-b">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-semibold text-gray-900">
-              {currentStep === 1 && "What are you using Illia for?"}
-              {currentStep === 2 && "Where did you hear about us?"}
-              {currentStep === 3 && "Terms of Service & Privacy Policy"}
-              {currentStep === 4 && "Terms of Service & Privacy Policy"}
+              {currentStep === 1 && 'What are you using Illia for?'}
+              {currentStep === 2 && 'Where did you hear about us?'}
+              {currentStep === 3 && 'Terms of Service & Privacy Policy'}
+              {currentStep === 4 && 'Terms of Service & Privacy Policy'}
             </h2>
             {currentStep <= 2 && (
               <button
@@ -101,10 +110,14 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
             )}
           </div>
           {currentStep <= 2 && (
-            <p className="text-gray-500">Please answer a few questions to help us improve your experience.</p>
+            <p className="text-gray-500">
+              Please answer a few questions to help us improve your experience.
+            </p>
           )}
           {currentStep >= 3 && (
-            <p className="text-gray-500">Please review and accept our terms and privacy policy to continue.</p>
+            <p className="text-gray-500">
+              Please review and accept our terms and privacy policy to continue.
+            </p>
           )}
         </div>
 
@@ -149,7 +162,9 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                           type="text"
                           placeholder="Please specify..."
                           value={formData.otherUseCase}
-                          onChange={(e) => setFormData({ ...formData, otherUseCase: e.target.value })}
+                          onChange={(e) =>
+                            setFormData({ ...formData, otherUseCase: e.target.value })
+                          }
                           className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
                           autoFocus
                         />
@@ -167,14 +182,24 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                   >
                     <div className="flex items-start space-x-3">
                       <div className="pt-0.5">
-                        <div className={`h-4 w-4 rounded border-2 ${
-                          formData.useCase === useCase.id
-                            ? 'border-orange-500 bg-orange-500'
-                            : 'border-gray-300'
-                        }`}>
+                        <div
+                          className={`h-4 w-4 rounded border-2 ${
+                            formData.useCase === useCase.id
+                              ? 'border-orange-500 bg-orange-500'
+                              : 'border-gray-300'
+                          }`}
+                        >
                           {formData.useCase === useCase.id && (
-                            <svg className="h-3 w-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            <svg
+                              className="h-3 w-3 text-white"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clipRule="evenodd"
+                              />
                             </svg>
                           )}
                         </div>
@@ -210,7 +235,9 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                           type="text"
                           placeholder="Please specify..."
                           value={formData.otherSource}
-                          onChange={(e) => setFormData({ ...formData, otherSource: e.target.value })}
+                          onChange={(e) =>
+                            setFormData({ ...formData, otherSource: e.target.value })
+                          }
                           className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
                           autoFocus
                         />
@@ -231,16 +258,22 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         <span className="text-xl">{source.icon}</span>
-                        <span className={`font-medium ${
-                          formData.source === source.id ? 'text-orange-600' : 'text-gray-900'
-                        }`}>
+                        <span
+                          className={`font-medium ${
+                            formData.source === source.id ? 'text-orange-600' : 'text-gray-900'
+                          }`}
+                        >
                           {source.label}
                         </span>
                       </div>
                       {(formData.source === source.id || source.selected) && (
                         <div className="text-orange-500">
                           <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
                           </svg>
                         </div>
                       )}
@@ -257,18 +290,26 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
               {currentStep === 3 && (
                 <>
                   <div className="bg-gray-50 rounded-lg p-6 max-h-96 overflow-y-auto">
-                    <h3 className="font-semibold text-gray-900 mb-4">TERMS OF USE / SERVICE AGREEMENT</h3>
-                    <p className="text-sm text-gray-600 mb-4">Date of last revision: November 5, 2024</p>
+                    <h3 className="font-semibold text-gray-900 mb-4">
+                      TERMS OF USE / SERVICE AGREEMENT
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Date of last revision: November 5, 2024
+                    </p>
                     <div className="prose prose-sm text-gray-600">
                       <p className="mb-4">
-                        This terms of use or service agreement (&quot;Agreement&quot;) is between SideGuide Technologies, Inc.
-                        d/b/a Illia, a Delaware Corporation (&quot;Illia,&quot; &quot;Company,&quot; &quot;we,&quot; &quot;us,&quot; &quot;our,&quot; or &quot;ourselves&quot;) and
-                        the person or entity (&quot;you&quot; or &quot;your&quot;) that has decided to use our services; any of our websites or
-                        apps; or any features, products, graphics, text, images, photos, audio, video, location data,
-                        computer code, and all other forms of data and communications (collectively, &quot;Services&quot;).
+                        This terms of use or service agreement (&quot;Agreement&quot;) is between
+                        SideGuide Technologies, Inc. d/b/a Illia, a Delaware Corporation
+                        (&quot;Illia,&quot; &quot;Company,&quot; &quot;we,&quot; &quot;us,&quot;
+                        &quot;our,&quot; or &quot;ourselves&quot;) and the person or entity
+                        (&quot;you&quot; or &quot;your&quot;) that has decided to use our services;
+                        any of our websites or apps; or any features, products, graphics, text,
+                        images, photos, audio, video, location data, computer code, and all other
+                        forms of data and communications (collectively, &quot;Services&quot;).
                       </p>
                       <p className="font-medium text-gray-700">
-                        YOU MUST CONSENT TO THIS AGREEMENT TO USE OUR SERVICES. If you do not accept and...
+                        YOU MUST CONSENT TO THIS AGREEMENT TO USE OUR SERVICES. If you do not accept
+                        and...
                       </p>
                     </div>
                   </div>
@@ -278,12 +319,21 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                       <input
                         type="checkbox"
                         checked={formData.termsAccepted}
-                        onChange={(e) => setFormData({ ...formData, termsAccepted: e.target.checked })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, termsAccepted: e.target.checked })
+                        }
                         className="mt-0.5 h-4 w-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500"
                       />
                       <span className="text-sm text-gray-700">
-                        I agree to Illia&apos;s <a href="#" className="text-orange-600 underline">Terms of Service</a> and{' '}
-                        <a href="#" className="text-orange-600 underline">Privacy Policy</a>.
+                        I agree to Illia&apos;s{' '}
+                        <a href="#" className="text-orange-600 underline">
+                          Terms of Service
+                        </a>{' '}
+                        and{' '}
+                        <a href="#" className="text-orange-600 underline">
+                          Privacy Policy
+                        </a>
+                        .
                       </span>
                     </label>
 
@@ -291,18 +341,19 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                       <input
                         type="checkbox"
                         checked={formData.emailUpdates}
-                        onChange={(e) => setFormData({ ...formData, emailUpdates: e.target.checked })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, emailUpdates: e.target.checked })
+                        }
                         className="mt-0.5 h-4 w-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500"
                       />
                       <span className="text-sm text-gray-700">
-                        I want to receive product updates and launch emails. You can unsubscribe at any time.
+                        I want to receive product updates and launch emails. You can unsubscribe at
+                        any time.
                       </span>
                     </label>
                   </div>
 
-                  <div className="text-xs text-gray-500 text-right">
-                    SCROLL TO BOTTOM
-                  </div>
+                  <div className="text-xs text-gray-500 text-right">SCROLL TO BOTTOM</div>
                 </>
               )}
 
@@ -311,16 +362,17 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                   <div className="bg-gray-50 rounded-lg p-6 max-h-96 overflow-y-auto">
                     <h3 className="font-semibold text-gray-900 mb-4">3. Complaints</h3>
                     <p className="text-sm text-gray-600 mb-4">
-                      We respect the rights of all of our users, regardless of location or citizenship. If you have any
-                      questions or concerns about any of these rights, or if you would like to assert any of these rights at
-                      any time, please contact help@illia.com.
+                      We respect the rights of all of our users, regardless of location or
+                      citizenship. If you have any questions or concerns about any of these rights,
+                      or if you would like to assert any of these rights at any time, please contact
+                      help@illia.com.
                     </p>
 
                     <h3 className="font-semibold text-gray-900 mb-4">4. Questions about Policy</h3>
                     <p className="text-sm text-gray-600 mb-4">
-                      If you have any questions about this privacy policy, contact us at: help@illia.com. By
-                      accessing any of our services or content, you are affirming that you understand and agree with the
-                      terms of our privacy policy.
+                      If you have any questions about this privacy policy, contact us at:
+                      help@illia.com. By accessing any of our services or content, you are affirming
+                      that you understand and agree with the terms of our privacy policy.
                     </p>
                   </div>
 
@@ -333,8 +385,15 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                         className="h-4 w-4 text-orange-600 rounded border-gray-300"
                       />
                       <span className="ml-3 text-sm text-gray-700">
-                        I agree to Illia&apos;s <a href="#" className="text-orange-600 underline">Terms of Service</a> and{' '}
-                        <a href="#" className="text-orange-600 underline">Privacy Policy</a>.
+                        I agree to Illia&apos;s{' '}
+                        <a href="#" className="text-orange-600 underline">
+                          Terms of Service
+                        </a>{' '}
+                        and{' '}
+                        <a href="#" className="text-orange-600 underline">
+                          Privacy Policy
+                        </a>
+                        .
                       </span>
                       <div className="ml-auto">
                         <div className="h-6 w-12 bg-orange-500 rounded-full relative">
@@ -351,7 +410,8 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                         className="h-4 w-4 text-gray-300 rounded border-gray-300"
                       />
                       <span className="ml-3 text-sm text-gray-700">
-                        I want to receive product updates and launch emails. You can unsubscribe at any time.
+                        I want to receive product updates and launch emails. You can unsubscribe at
+                        any time.
                       </span>
                       <div className="ml-auto">
                         <div className="h-6 w-12 bg-gray-200 rounded-full relative">
@@ -387,9 +447,9 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                   (currentStep === 3 && !formData.termsAccepted)
                 }
                 className={`px-6 py-2.5 rounded-lg font-medium transition-all ${
-                  ((currentStep === 1 && formData.useCase) ||
-                   (currentStep === 2 && formData.source) ||
-                   (currentStep === 3 && formData.termsAccepted))
+                  (currentStep === 1 && formData.useCase) ||
+                  (currentStep === 2 && formData.source) ||
+                  (currentStep === 3 && formData.termsAccepted)
                     ? 'bg-gray-900 hover:bg-gray-800 text-white'
                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                 }`}

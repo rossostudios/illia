@@ -1,26 +1,26 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
 import {
-  Search,
-  Home,
-  Play,
-  FileText,
   BarChart3,
-  Key,
-  Settings,
-  ChevronDown,
   Bell,
-  HelpCircle,
-  FileCode,
-  X,
-  Sparkles,
-  MessageSquare,
+  ChevronDown,
   ChevronLeft,
+  Download,
   ExternalLink,
-  Download
+  FileCode,
+  FileText,
+  HelpCircle,
+  Home,
+  Key,
+  MessageSquare,
+  Play,
+  Search,
+  Settings,
+  Sparkles,
+  X,
 } from 'lucide-react'
+import Link from 'next/link'
+import { useState } from 'react'
 
 export default function ExtractPage() {
   const [showExtractMenu, setShowExtractMenu] = useState(true)
@@ -38,8 +38,8 @@ export default function ExtractPage() {
       isOpen: showExtractMenu,
       submenu: [
         { label: 'Overview', href: '/dashboard/extract', active: true },
-        { label: 'Playground', href: '/dashboard/extract/playground' }
-      ]
+        { label: 'Playground', href: '/dashboard/extract/playground' },
+      ],
     },
     { icon: BarChart3, label: 'Activity Logs', href: '/dashboard/logs' },
     { icon: BarChart3, label: 'Usage', href: '/dashboard/usage' },
@@ -54,7 +54,7 @@ export default function ExtractPage() {
       date: 'Sep 08',
       time: '10:15 AM',
       leads: 12,
-      hasLink: true
+      hasLink: true,
     },
     {
       id: 2,
@@ -62,8 +62,8 @@ export default function ExtractPage() {
       date: 'Sep 20',
       time: '3:38 PM',
       leads: 8,
-      hasLink: true
-    }
+      hasLink: true,
+    },
   ]
 
   return (
@@ -73,7 +73,9 @@ export default function ExtractPage() {
         {/* Logo */}
         <div className="p-4 border-b">
           <Link href="/dashboard" className="flex items-center space-x-2 group">
-            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">Illia</span>
+            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">
+              Illia
+            </span>
           </Link>
         </div>
 
@@ -97,9 +99,7 @@ export default function ExtractPage() {
               <Link
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  item.active
-                    ? 'bg-teal-50 text-teal-600'
-                    : 'text-gray-700 hover:bg-gray-100'
+                  item.active ? 'bg-teal-50 text-teal-600' : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={(e) => {
                   if (item.hasSubmenu) {
@@ -113,7 +113,9 @@ export default function ExtractPage() {
                   <span>{item.label}</span>
                 </div>
                 {item.hasSubmenu && (
-                  <ChevronDown className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`}
+                  />
                 )}
               </Link>
               {item.hasSubmenu && item.isOpen && (
@@ -157,9 +159,7 @@ export default function ExtractPage() {
             </div>
 
             {/* User email */}
-            <div className="mt-4 px-3 py-2 text-xs text-gray-500">
-              samlee@content-mobbin.com
-            </div>
+            <div className="mt-4 px-3 py-2 text-xs text-gray-500">samlee@content-mobbin.com</div>
 
             {/* Collapse button */}
             <button className="flex items-center space-x-2 mt-2 text-xs text-gray-600 hover:text-gray-900">
@@ -210,13 +210,19 @@ export default function ExtractPage() {
               <Download className="h-6 w-6 mr-2" />
               Lead Extract Overview
             </h1>
-            <p className="text-gray-700">Extract structured leads from single niches, multiple ZIPs, or entire Charleston areas with AI.</p>
+            <p className="text-gray-700">
+              Extract structured leads from single niches, multiple ZIPs, or entire Charleston areas
+              with AI.
+            </p>
           </div>
 
           {/* Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {/* Lead Docs Card */}
-            <Link href="/docs/extract" className="bg-white rounded-xl border border-teal-200 p-6 hover:border-teal-500 hover:shadow-lg transition-all group">
+            <Link
+              href="/docs/extract"
+              className="bg-white rounded-xl border border-teal-200 p-6 hover:border-teal-500 hover:shadow-lg transition-all group"
+            >
               <div className="flex items-center space-x-3 mb-4">
                 <div className="p-2 bg-teal-50 rounded-lg">
                   <FileText className="h-5 w-5 text-teal-600" />
@@ -227,7 +233,10 @@ export default function ExtractPage() {
             </Link>
 
             {/* Lead Playground Card */}
-            <Link href="/dashboard/playground" className="bg-white rounded-xl border border-teal-200 p-6 hover:border-teal-500 hover:shadow-lg transition-all group">
+            <Link
+              href="/dashboard/playground"
+              className="bg-white rounded-xl border border-teal-200 p-6 hover:border-teal-500 hover:shadow-lg transition-all group"
+            >
               <div className="flex items-center space-x-3 mb-4">
                 <div className="p-2 bg-teal-50 rounded-lg">
                   <Play className="h-5 w-5 text-teal-600" />
@@ -238,13 +247,34 @@ export default function ExtractPage() {
             </Link>
 
             {/* Integrations Card */}
-            <Link href="/integrations/zapier" className="bg-white rounded-xl border border-teal-200 p-6 hover:border-teal-500 hover:shadow-lg transition-all group">
+            <Link
+              href="/integrations/zapier"
+              className="bg-white rounded-xl border border-teal-200 p-6 hover:border-teal-500 hover:shadow-lg transition-all group"
+            >
               <div className="flex items-center space-x-3 mb-4">
                 <div className="p-2 bg-teal-50 rounded-lg">
                   <svg className="h-5 w-5 text-teal-600" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path
+                      d="M12 2L2 7L12 12L22 7L12 2Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M2 17L12 22L22 17"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M2 12L12 17L22 12"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </div>
                 <h3 className="font-semibold text-gray-900">Integrations</h3>
@@ -279,11 +309,16 @@ export default function ExtractPage() {
 
                 <div className="pt-4 border-t">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Bonus leads from promo (ZIP 29401 focus)</span>
+                    <span className="text-sm text-gray-600">
+                      Bonus leads from promo (ZIP 29401 focus)
+                    </span>
                     <span className="text-sm font-medium">15</span>
                   </div>
                   <p className="text-sm text-gray-500 mt-2">
-                    Billing via Stripe—<Link href="/manage" className="text-teal-600 hover:underline">Pro unlocks unlimited</Link>
+                    Billing via Stripe—
+                    <Link href="/manage" className="text-teal-600 hover:underline">
+                      Pro unlocks unlimited
+                    </Link>
                   </p>
                 </div>
               </div>
@@ -294,20 +329,28 @@ export default function ExtractPage() {
                   <h3 className="text-sm font-medium text-gray-700 mb-4">Recent Lead Pulls</h3>
                   <div className="space-y-3">
                     {extractLogs.map((log) => (
-                      <div key={log.id} className="bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors">
+                      <div
+                        key={log.id}
+                        className="bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors"
+                      >
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm text-teal-700 font-medium flex items-center">
                             {log.query}
                             {log.hasLink && <ExternalLink className="h-3 w-3 ml-1 text-teal-600" />}
                           </span>
-                          <button className="text-teal-600 hover:text-teal-700" title="Download leads">
+                          <button
+                            className="text-teal-600 hover:text-teal-700"
+                            title="Download leads"
+                          >
                             <Download className="h-4 w-4" />
                           </button>
                         </div>
                         <div className="flex items-center justify-between text-xs">
                           <div className="flex items-center space-x-2">
                             <span className="h-2 w-2 bg-green-500 rounded-full"></span>
-                            <span className="text-gray-500">{log.date} • {log.time}</span>
+                            <span className="text-gray-500">
+                              {log.date} • {log.time}
+                            </span>
                           </div>
                           <span className="text-green-600 font-medium">{log.leads} leads</span>
                         </div>
@@ -334,7 +377,10 @@ export default function ExtractPage() {
             <div className="bg-teal-50 rounded-xl border border-teal-200 p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-gray-900">Lead Extraction Pricing</h2>
-                <Link href="/pricing" className="text-sm text-teal-700 hover:text-teal-900 flex items-center">
+                <Link
+                  href="/pricing"
+                  className="text-sm text-teal-700 hover:text-teal-900 flex items-center"
+                >
                   <span>View plans</span>
                   <ExternalLink className="h-3 w-3 ml-1" />
                 </Link>
@@ -365,7 +411,12 @@ export default function ExtractPage() {
               >
                 View Plans
                 <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </Link>
             </div>
@@ -383,7 +434,13 @@ export default function ExtractPage() {
 
 function Users({ className }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
       <circle cx="9" cy="7" r="4" />
       <path d="M23 21v-2a4 4 0 0 0-3-3.87" />

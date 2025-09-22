@@ -1,8 +1,19 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { FiStar, FiMapPin, FiDollarSign, FiClock, FiMail, FiPhone, FiUser, FiHeart, FiShare2, FiArrowRight } from 'react-icons/fi'
+import { useEffect, useState } from 'react'
+import {
+  FiArrowRight,
+  FiClock,
+  FiDollarSign,
+  FiHeart,
+  FiMail,
+  FiMapPin,
+  FiPhone,
+  FiShare2,
+  FiStar,
+  FiUser,
+} from 'react-icons/fi'
 
 type Match = {
   id: string
@@ -44,13 +55,13 @@ const SERVICE_EMOJIS: { [key: string]: string } = {
   gardening: '🌿',
   laundry: '👔',
   driver: '🚗',
-  other: '📋'
+  other: '📋',
 }
 
 const LANGUAGE_FLAGS: { [key: string]: string } = {
   english: '🇺🇸',
   spanish: '🇪🇸',
-  portuguese: '🇧🇷'
+  portuguese: '🇧🇷',
 }
 
 function formatCurrency(amount: number, currency: string): string {
@@ -114,7 +125,9 @@ export default function MatchesPage() {
     if (match.phone) {
       window.open(`https://wa.me/${match.phone}?text=${encodeURIComponent(message)}`, '_blank')
     } else {
-      window.open(`mailto:${match.email || 'contact@illia.club'}?subject=Service Inquiry from Illia.club&body=${encodeURIComponent(message)}`)
+      window.open(
+        `mailto:${match.email || 'contact@illia.club'}?subject=Service Inquiry from Illia.club&body=${encodeURIComponent(message)}`
+      )
     }
   }
 
@@ -149,7 +162,8 @@ export default function MatchesPage() {
             </div>
             <h1 className="text-3xl font-bold mb-4">No Matches Found</h1>
             <p className="text-gray-600 mb-8 max-w-md mx-auto">
-              We couldn't find any providers matching your specific criteria. Try adjusting your preferences and take the quiz again.
+              We couldn't find any providers matching your specific criteria. Try adjusting your
+              preferences and take the quiz again.
             </p>
             <button
               onClick={retakeQuiz}
@@ -169,7 +183,8 @@ export default function MatchesPage() {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-4">Your Perfect Matches! 🎉</h1>
           <p className="text-gray-600 text-lg">
-            We found {matches.length} amazing provider{matches.length !== 1 ? 's' : ''} for you in {quizData?.city}
+            We found {matches.length} amazing provider{matches.length !== 1 ? 's' : ''} for you in{' '}
+            {quizData?.city}
           </p>
           <button
             onClick={retakeQuiz}
@@ -186,7 +201,7 @@ export default function MatchesPage() {
               <div>
                 <span className="font-medium text-gray-500">Services:</span>
                 <div className="mt-1">
-                  {quizData.services.map(service => (
+                  {quizData.services.map((service) => (
                     <span key={service} className="inline-flex items-center space-x-1 mr-2">
                       <span>{SERVICE_EMOJIS[service] || '📋'}</span>
                       <span className="capitalize">{service.replace('_', ' ')}</span>
@@ -197,7 +212,7 @@ export default function MatchesPage() {
               <div>
                 <span className="font-medium text-gray-500">Languages:</span>
                 <div className="mt-1">
-                  {quizData.languages.map(lang => (
+                  {quizData.languages.map((lang) => (
                     <span key={lang} className="inline-flex items-center space-x-1 mr-2">
                       <span>{LANGUAGE_FLAGS[lang] || '🌍'}</span>
                       <span className="capitalize">{lang}</span>
@@ -223,7 +238,11 @@ export default function MatchesPage() {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center space-x-4">
                     <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                      {match.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                      {match.name
+                        .split(' ')
+                        .map((n) => n[0])
+                        .join('')
+                        .toUpperCase()}
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-900">{match.name}</h3>
@@ -240,7 +259,9 @@ export default function MatchesPage() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${getScoreColor(match.match_score)}`}>
+                    <div
+                      className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${getScoreColor(match.match_score)}`}
+                    >
                       {match.match_score}% match
                     </div>
                     <p className="text-xs text-gray-500 mt-1">{getScoreLabel(match.match_score)}</p>
@@ -260,7 +281,7 @@ export default function MatchesPage() {
                   <div>
                     <span className="text-sm font-medium text-gray-500">Services:</span>
                     <div className="flex flex-wrap gap-2 mt-1">
-                      {match.services.map(service => (
+                      {match.services.map((service) => (
                         <span
                           key={service}
                           className="inline-flex items-center space-x-1 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs"
@@ -276,7 +297,7 @@ export default function MatchesPage() {
                     <div>
                       <span className="text-sm font-medium text-gray-500">Languages:</span>
                       <div className="flex space-x-1 mt-1">
-                        {match.languages.map(lang => (
+                        {match.languages.map((lang) => (
                           <span key={lang} className="text-sm">
                             {LANGUAGE_FLAGS[lang] || '🌍'} {lang}
                           </span>
@@ -295,7 +316,7 @@ export default function MatchesPage() {
                     <div>
                       <span className="text-sm font-medium text-gray-500">Specialties:</span>
                       <div className="flex flex-wrap gap-1 mt-1">
-                        {match.specialties.map(specialty => (
+                        {match.specialties.map((specialty) => (
                           <span
                             key={specialty}
                             className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs"
@@ -314,7 +335,9 @@ export default function MatchesPage() {
                         <span className="text-sm font-medium">{match.rating_avg || 5.0}</span>
                       </div>
                       {match.reviews_count && (
-                        <span className="text-sm text-gray-500">({match.reviews_count} reviews)</span>
+                        <span className="text-sm text-gray-500">
+                          ({match.reviews_count} reviews)
+                        </span>
                       )}
                     </div>
                   )}
@@ -336,7 +359,9 @@ export default function MatchesPage() {
                         : 'border-gray-200 hover:border-purple-300 text-gray-600'
                     }`}
                   >
-                    <FiHeart className={`w-5 h-5 ${selectedMatch === match.id ? 'fill-current' : ''}`} />
+                    <FiHeart
+                      className={`w-5 h-5 ${selectedMatch === match.id ? 'fill-current' : ''}`}
+                    />
                   </button>
                 </div>
               </div>
@@ -353,27 +378,34 @@ export default function MatchesPage() {
                   <FiMail className="w-6 h-6 text-purple-600" />
                 </div>
                 <h3 className="font-semibold mb-2">1. Contact Providers</h3>
-                <p className="text-sm text-gray-600">Reach out to your top matches via WhatsApp or email</p>
+                <p className="text-sm text-gray-600">
+                  Reach out to your top matches via WhatsApp or email
+                </p>
               </div>
               <div>
                 <div className="w-12 h-12 mx-auto mb-3 bg-purple-100 rounded-full flex items-center justify-center">
                   <FiPhone className="w-6 h-6 text-purple-600" />
                 </div>
                 <h3 className="font-semibold mb-2">2. Schedule Meetings</h3>
-                <p className="text-sm text-gray-600">Set up video calls or in-person meetings to discuss details</p>
+                <p className="text-sm text-gray-600">
+                  Set up video calls or in-person meetings to discuss details
+                </p>
               </div>
               <div>
                 <div className="w-12 h-12 mx-auto mb-3 bg-purple-100 rounded-full flex items-center justify-center">
                   <FiStar className="w-6 h-6 text-purple-600" />
                 </div>
                 <h3 className="font-semibold mb-2">3. Start Service</h3>
-                <p className="text-sm text-gray-600">Begin working with your chosen provider and leave reviews</p>
+                <p className="text-sm text-gray-600">
+                  Begin working with your chosen provider and leave reviews
+                </p>
               </div>
             </div>
 
             <div className="mt-8 p-4 bg-purple-50 rounded-xl">
               <p className="text-sm text-purple-800">
-                <strong>💡 Pro tip:</strong> Contact multiple providers to compare rates and availability. Most providers offer free consultations!
+                <strong>💡 Pro tip:</strong> Contact multiple providers to compare rates and
+                availability. Most providers offer free consultations!
               </p>
             </div>
           </div>
@@ -384,7 +416,9 @@ export default function MatchesPage() {
             Need help finding the right provider? We're here to help!
           </p>
           <button
-            onClick={() => window.open('mailto:support@illia.club?subject=Help with provider matching')}
+            onClick={() =>
+              window.open('mailto:support@illia.club?subject=Help with provider matching')
+            }
             className="text-purple-600 hover:text-purple-800 transition-colors"
           >
             Contact Support →

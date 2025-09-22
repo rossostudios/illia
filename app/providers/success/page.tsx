@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { CheckCircle, Home, MessageSquare, Share2 } from 'lucide-react'
+import Link from 'next/link'
 
 export default function ProviderSuccessPage() {
   return (
@@ -8,12 +8,11 @@ export default function ProviderSuccessPage() {
         <div className="bg-white rounded-xl shadow-lg p-8 text-center">
           <CheckCircle className="h-20 w-20 text-green-500 mx-auto mb-6" />
 
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Welcome to Illia.club! 🎉
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Welcome to Illia.club! 🎉</h1>
 
           <p className="text-lg text-gray-600 mb-8">
-            Your application has been received and is under review. We typically approve new providers within 24-48 hours.
+            Your application has been received and is under review. We typically approve new
+            providers within 24-48 hours.
           </p>
 
           <div className="bg-teal-50 border border-teal-200 rounded-lg p-6 mb-8 text-left">
@@ -76,9 +75,7 @@ export default function ProviderSuccessPage() {
               providers@illia.club
             </a>
           </p>
-          <p className="text-xs text-gray-500">
-            Follow us on social media for tips and updates
-          </p>
+          <p className="text-xs text-gray-500">Follow us on social media for tips and updates</p>
         </div>
       </div>
     </div>

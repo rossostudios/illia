@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import Link from 'next/link'
 import { Sparkles } from 'lucide-react'
+import Link from 'next/link'
 
 export default function AnnouncementBar() {
   return (
@@ -11,7 +11,10 @@ export default function AnnouncementBar() {
         <span className="text-gray-800 font-medium">
           New in Medellín: 50+ Vetted Cleaners Added!
         </span>
-        <Link href="/dashboard/explore" className="font-semibold text-green-600 hover:text-green-700 underline underline-offset-2">
+        <Link
+          href="/dashboard/explore"
+          className="font-semibold text-green-600 hover:text-green-700 underline underline-offset-2"
+        >
           Explore Now →
         </Link>
       </div>

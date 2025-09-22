@@ -1,7 +1,7 @@
 'use client'
 
+import { Bell, X } from 'lucide-react'
 import { useState } from 'react'
-import { X, Bell } from 'lucide-react'
 
 interface NotificationDropdownProps {
   onClose: () => void
@@ -15,10 +15,7 @@ export default function NotificationDropdown({ onClose }: NotificationDropdownPr
       {/* Header */}
       <div className="px-4 py-3 border-b flex items-center justify-between">
         <h3 className="text-lg font-semibold">Notifications</h3>
-        <button
-          onClick={onClose}
-          className="text-gray-400 hover:text-gray-600"
-        >
+        <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
           <X className="h-5 w-5" />
         </button>
       </div>
@@ -55,8 +52,8 @@ export default function NotificationDropdown({ onClose }: NotificationDropdownPr
             <div className="h-2 w-2 bg-red-500 rounded-full mt-2" />
             <div className="flex-1">
               <p className="text-sm text-gray-900">
-                You&apos;re hitting your concurrency limit very often. This means that you could be scraping faster.
-                If you&apos;d like to increase it, please upgrade your plan.
+                You&apos;re hitting your concurrency limit very often. This means that you could be
+                scraping faster. If you&apos;d like to increase it, please upgrade your plan.
               </p>
               <p className="text-xs text-gray-500 mt-1">about 4 hours ago</p>
             </div>

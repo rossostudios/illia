@@ -2,30 +2,30 @@
 
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
 import {
-  Search,
-  Users,
-  Star,
-  MapPin,
-  DollarSign,
+  Award,
   Calendar,
   Check,
   ChevronDown,
-  X,
-  Filter,
-  Home,
-  Utensils,
-  Globe,
   ChevronLeft,
   ChevronRight,
-  Info,
-  MessageSquare,
   Clock,
+  DollarSign,
+  Filter,
+  Globe,
   Heart,
-  Award
+  Home,
+  Info,
+  MapPin,
+  MessageSquare,
+  Search,
+  Star,
+  Users,
+  Utensils,
+  X,
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
 
 // Mock provider data
 const MOCK_PROVIDERS = [
@@ -46,7 +46,7 @@ const MOCK_PROVIDERS = [
     specialties: ['Eco-friendly', 'Pet-friendly', 'Deep cleaning'],
     availability: 'Mon-Fri mornings',
     experience: '10 years',
-    responseTime: '< 2 hours'
+    responseTime: '< 2 hours',
   },
   {
     id: 2,
@@ -65,7 +65,7 @@ const MOCK_PROVIDERS = [
     specialties: ['Organization', 'Deep cleaning', 'Move-in/out'],
     availability: 'Flexible schedule',
     experience: '7 years',
-    responseTime: '< 1 hour'
+    responseTime: '< 1 hour',
   },
   {
     id: 3,
@@ -84,7 +84,7 @@ const MOCK_PROVIDERS = [
     specialties: ['Colombian cuisine', 'Meal planning', 'Vegan options'],
     availability: 'Weekday evenings',
     experience: '5 years',
-    responseTime: '< 4 hours'
+    responseTime: '< 4 hours',
   },
   {
     id: 4,
@@ -103,7 +103,7 @@ const MOCK_PROVIDERS = [
     specialties: ['Laundry', 'Ironing', 'Window cleaning'],
     availability: 'Tue-Thu all day',
     experience: '8 years',
-    responseTime: '< 3 hours'
+    responseTime: '< 3 hours',
   },
   {
     id: 5,
@@ -122,7 +122,7 @@ const MOCK_PROVIDERS = [
     specialties: ['Gourmet cooking', 'Dietary restrictions', 'Wine pairing'],
     availability: 'Mon-Wed-Fri',
     experience: '12 years',
-    responseTime: '< 30 min'
+    responseTime: '< 30 min',
   },
   {
     id: 6,
@@ -141,7 +141,7 @@ const MOCK_PROVIDERS = [
     specialties: ['KonMari method', 'Closet organization', 'Deep cleaning'],
     availability: 'Weekdays',
     experience: '6 years',
-    responseTime: '< 2 hours'
+    responseTime: '< 2 hours',
   },
   {
     id: 7,
@@ -160,7 +160,7 @@ const MOCK_PROVIDERS = [
     specialties: ['Handyman tasks', 'Grocery shopping', 'Pet care'],
     availability: 'Full-time available',
     experience: '4 years',
-    responseTime: '< 6 hours'
+    responseTime: '< 6 hours',
   },
   {
     id: 8,
@@ -179,8 +179,8 @@ const MOCK_PROVIDERS = [
     specialties: ['Luxury homes', 'Airbnb', 'Green cleaning'],
     availability: 'By appointment',
     experience: '9 years',
-    responseTime: '< 1 hour'
-  }
+    responseTime: '< 1 hour',
+  },
 ]
 
 const SERVICES = [
@@ -189,7 +189,7 @@ const SERVICES = [
   { id: 'cleaning-cooking', label: 'Cleaning + Cooking', icon: Home },
   { id: 'meal-prep', label: 'Meal Prep', icon: Utensils },
   { id: 'organization', label: 'Organization', icon: Home },
-  { id: 'general', label: 'General Help', icon: Users }
+  { id: 'general', label: 'General Help', icon: Users },
 ]
 
 export default function DirectoryPage() {
@@ -211,11 +211,14 @@ export default function DirectoryPage() {
 
   // Filter providers based on criteria
   const filteredProviders = useMemo(() => {
-    return MOCK_PROVIDERS.filter(provider => {
+    return MOCK_PROVIDERS.filter((provider) => {
       // Search query
-      if (searchQuery && !provider.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          !provider.bio.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          !provider.location.toLowerCase().includes(searchQuery.toLowerCase())) {
+      if (
+        searchQuery &&
+        !provider.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !provider.bio.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        !provider.location.toLowerCase().includes(searchQuery.toLowerCase())
+      ) {
         return false
       }
 
@@ -227,7 +230,7 @@ export default function DirectoryPage() {
       // Service filter
       if (selectedServices.length > 0) {
         const providerServices = provider.service.toLowerCase()
-        const hasService = selectedServices.some(service =>
+        const hasService = selectedServices.some((service) =>
           providerServices.includes(service.replace('-', ' '))
         )
         if (!hasService) return false
@@ -245,15 +248,19 @@ export default function DirectoryPage() {
 
       // Extras filter
       if (selectedExtras.length > 0) {
-        if (selectedExtras.includes('english') &&
-            !provider.languages.some(lang => lang.toLowerCase() === 'english')) {
+        if (
+          selectedExtras.includes('english') &&
+          !provider.languages.some((lang) => lang.toLowerCase() === 'english')
+        ) {
           return false
         }
         if (selectedExtras.includes('verified') && !provider.verified) {
           return false
         }
-        if (selectedExtras.includes('eco') &&
-            !provider.specialties.some(spec => spec.toLowerCase().includes('eco'))) {
+        if (
+          selectedExtras.includes('eco') &&
+          !provider.specialties.some((spec) => spec.toLowerCase().includes('eco'))
+        ) {
           return false
         }
       }
@@ -271,18 +278,14 @@ export default function DirectoryPage() {
   const totalPages = Math.ceil(filteredProviders.length / itemsPerPage)
 
   const handleServiceToggle = (serviceId: string) => {
-    setSelectedServices(prev =>
-      prev.includes(serviceId)
-        ? prev.filter(id => id !== serviceId)
-        : [...prev, serviceId]
+    setSelectedServices((prev) =>
+      prev.includes(serviceId) ? prev.filter((id) => id !== serviceId) : [...prev, serviceId]
     )
   }
 
   const handleExtraToggle = (extra: string) => {
-    setSelectedExtras(prev =>
-      prev.includes(extra)
-        ? prev.filter(e => e !== extra)
-        : [...prev, extra]
+    setSelectedExtras((prev) =>
+      prev.includes(extra) ? prev.filter((e) => e !== extra) : [...prev, extra]
     )
   }
 
@@ -296,8 +299,13 @@ export default function DirectoryPage() {
     setCurrentPage(1)
   }
 
-  const hasActiveFilters = selectedCity !== 'all' || selectedServices.length > 0 ||
-    priceRange[0] !== 100 || priceRange[1] !== 400 || minRating > 0 || selectedExtras.length > 0
+  const hasActiveFilters =
+    selectedCity !== 'all' ||
+    selectedServices.length > 0 ||
+    priceRange[0] !== 100 ||
+    priceRange[1] !== 400 ||
+    minRating > 0 ||
+    selectedExtras.length > 0
 
   // Detect screen size for responsive view
   useEffect(() => {
@@ -327,13 +335,16 @@ export default function DirectoryPage() {
               {showTooltip && (
                 <div className="absolute left-0 top-8 w-64 p-3 bg-white rounded-lg shadow-lg border border-teal-100 z-10">
                   <p className="text-sm text-gray-600">
-                    Discover trusted cleaners, cooks, and more. Filters help narrow by city/service—verified by our community.
+                    Discover trusted cleaners, cooks, and more. Filters help narrow by
+                    city/service—verified by our community.
                   </p>
                 </div>
               )}
             </div>
           </div>
-          <p className="text-gray-600 mt-2">Browse vetted home help providers in Medellín & Florianópolis</p>
+          <p className="text-gray-600 mt-2">
+            Browse vetted home help providers in Medellín & Florianópolis
+          </p>
         </div>
 
         {/* Search & Filters Bar */}
@@ -415,7 +426,7 @@ export default function DirectoryPage() {
               </button>
               {showServiceDropdown && (
                 <div className="absolute top-full mt-2 w-64 bg-white rounded-lg shadow-lg border p-3 z-30">
-                  {SERVICES.map(service => {
+                  {SERVICES.map((service) => {
                     const Icon = service.icon
                     const isSelected = selectedServices.includes(service.id)
                     return (
@@ -449,14 +460,12 @@ export default function DirectoryPage() {
               >
                 <Star className="h-4 w-4" />
                 Rating
-                {minRating > 0 && (
-                  <span className="text-sm text-teal-600">{minRating}+</span>
-                )}
+                {minRating > 0 && <span className="text-sm text-teal-600">{minRating}+</span>}
                 <ChevronDown className="h-4 w-4" />
               </button>
               {showRatingDropdown && (
                 <div className="absolute top-full mt-2 w-48 bg-white rounded-lg shadow-lg border p-3 z-30">
-                  {[0, 4, 4.5, 4.8].map(rating => (
+                  {[0, 4, 4.5, 4.8].map((rating) => (
                     <button
                       key={rating}
                       onClick={() => {
@@ -478,7 +487,9 @@ export default function DirectoryPage() {
             {/* Price Range */}
             <div className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg">
               <DollarSign className="h-4 w-4 text-gray-500" />
-              <span className="text-sm">${priceRange[0]}-${priceRange[1]}/mo</span>
+              <span className="text-sm">
+                ${priceRange[0]}-${priceRange[1]}/mo
+              </span>
             </div>
 
             {/* Extras */}
@@ -565,9 +576,7 @@ export default function DirectoryPage() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <h3 className="font-semibold text-gray-900">{provider.name}</h3>
-                          {provider.verified && (
-                            <Check className="h-4 w-4 text-teal-600" />
-                          )}
+                          {provider.verified && <Check className="h-4 w-4 text-teal-600" />}
                         </div>
                         <p className="text-sm text-gray-600">{provider.location}</p>
                         <div className="flex items-center gap-1 mt-1">
@@ -579,9 +588,7 @@ export default function DirectoryPage() {
                     </div>
 
                     {/* Bio */}
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                      {provider.bio}
-                    </p>
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{provider.bio}</p>
 
                     {/* Service & Rate */}
                     <div className="flex items-center justify-between mb-3">
@@ -591,7 +598,7 @@ export default function DirectoryPage() {
 
                     {/* Specialties */}
                     <div className="flex flex-wrap gap-1 mb-3">
-                      {provider.specialties.slice(0, 2).map(specialty => (
+                      {provider.specialties.slice(0, 2).map((specialty) => (
                         <span
                           key={specialty}
                           className="px-2 py-0.5 bg-teal-50 text-teal-700 text-xs rounded-full"
@@ -645,7 +652,7 @@ export default function DirectoryPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {paginatedProviders.map(provider => (
+                    {paginatedProviders.map((provider) => (
                       <tr key={provider.id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
@@ -656,10 +663,10 @@ export default function DirectoryPage() {
                             />
                             <div>
                               <div className="flex items-center gap-2">
-                                <div className="text-sm font-medium text-gray-900">{provider.name}</div>
-                                {provider.verified && (
-                                  <Check className="h-4 w-4 text-teal-600" />
-                                )}
+                                <div className="text-sm font-medium text-gray-900">
+                                  {provider.name}
+                                </div>
+                                {provider.verified && <Check className="h-4 w-4 text-teal-600" />}
                               </div>
                               <div className="text-sm text-gray-500 truncate max-w-xs">
                                 {provider.bio}
@@ -677,7 +684,9 @@ export default function DirectoryPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm font-semibold text-teal-600">{provider.rate}</span>
+                          <span className="text-sm font-semibold text-teal-600">
+                            {provider.rate}
+                          </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-1">
@@ -746,10 +755,17 @@ export default function DirectoryPage() {
           /* Empty State */
           <div className="text-center py-16">
             <MapPin className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No providers match your filters</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              No providers match your filters
+            </h3>
             <p className="text-gray-600 mb-6">
-              Try broadening your search—{selectedCity === 'medellin' ? 'Medellín' :
-              selectedCity === 'florianopolis' ? 'Florianópolis' : 'both cities'} have 200+ cleaners!
+              Try broadening your search—
+              {selectedCity === 'medellin'
+                ? 'Medellín'
+                : selectedCity === 'florianopolis'
+                  ? 'Florianópolis'
+                  : 'both cities'}{' '}
+              have 200+ cleaners!
             </p>
             <button
               onClick={clearFilters}
@@ -775,7 +791,9 @@ export default function DirectoryPage() {
                     />
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <h2 className="text-2xl font-bold text-gray-900">{selectedProvider.name}</h2>
+                        <h2 className="text-2xl font-bold text-gray-900">
+                          {selectedProvider.name}
+                        </h2>
                         {selectedProvider.verified && (
                           <div className="flex items-center gap-1 px-2 py-1 bg-teal-100 rounded-full">
                             <Check className="h-3 w-3 text-teal-600" />
@@ -785,15 +803,20 @@ export default function DirectoryPage() {
                       </div>
                       <p className="text-gray-600 mb-2">
                         <MapPin className="h-4 w-4 inline mr-1" />
-                        {selectedProvider.location}, {selectedProvider.city === 'medellin' ? 'Medellín' : 'Florianópolis'}
+                        {selectedProvider.location},{' '}
+                        {selectedProvider.city === 'medellin' ? 'Medellín' : 'Florianópolis'}
                       </p>
                       <div className="flex items-center gap-4 text-sm">
                         <div className="flex items-center gap-1">
                           <Star className="h-4 w-4 text-sunset-500 fill-sunset-500" />
                           <span className="font-semibold">{selectedProvider.rating}</span>
-                          <span className="text-gray-500">({selectedProvider.reviews} reviews)</span>
+                          <span className="text-gray-500">
+                            ({selectedProvider.reviews} reviews)
+                          </span>
                         </div>
-                        <span className="font-bold text-teal-600 text-lg">{selectedProvider.rate}</span>
+                        <span className="font-bold text-teal-600 text-lg">
+                          {selectedProvider.rate}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -828,17 +851,23 @@ export default function DirectoryPage() {
                   <div className="text-center p-3 bg-teal-50 rounded-lg">
                     <Award className="h-5 w-5 text-teal-600 mx-auto mb-1" />
                     <p className="text-xs text-gray-500">Experience</p>
-                    <p className="text-sm font-medium text-gray-900">{selectedProvider.experience}</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {selectedProvider.experience}
+                    </p>
                   </div>
                   <div className="text-center p-3 bg-sunset-50 rounded-lg">
                     <Clock className="h-5 w-5 text-sunset-600 mx-auto mb-1" />
                     <p className="text-xs text-gray-500">Response Time</p>
-                    <p className="text-sm font-medium text-gray-900">{selectedProvider.responseTime}</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {selectedProvider.responseTime}
+                    </p>
                   </div>
                   <div className="text-center p-3 bg-warmth-50 rounded-lg">
                     <Globe className="h-5 w-5 text-warmth-500 mx-auto mb-1" />
                     <p className="text-xs text-gray-500">Languages</p>
-                    <p className="text-sm font-medium text-gray-900">{selectedProvider.languages.join(', ')}</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {selectedProvider.languages.join(', ')}
+                    </p>
                   </div>
                 </div>
 

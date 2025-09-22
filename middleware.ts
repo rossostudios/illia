@@ -1,5 +1,5 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { type CookieOptions, createServerClient } from '@supabase/ssr'
+import { type NextRequest, NextResponse } from 'next/server'
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
@@ -54,7 +54,9 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { session } } = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
   // Protected routes
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
@@ -74,9 +76,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/dashboard/:path*',
-    '/login',
-    '/signup',
-  ],
+  matcher: ['/dashboard/:path*', '/login', '/signup'],
 }

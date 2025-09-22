@@ -1,8 +1,8 @@
 'use client'
 
+import type { User } from '@supabase/supabase-js'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import type { User } from '@supabase/supabase-js'
 
 type SessionContextType = {
   user: User | null
@@ -26,7 +26,9 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const getSession = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession()
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
         setUser(session?.user ?? null)
       } catch (error) {
         console.error('Error fetching session:', error)
@@ -37,18 +39,14 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
     getSession()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null)
-      }
-    )
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
 
     return () => subscription.unsubscribe()
   }, [supabase])
 
-  return (
-    <SessionContext.Provider value={{ user, loading }}>
-      {children}
-    </SessionContext.Provider>
-  )
+  return <SessionContext.Provider value={{ user, loading }}>{children}</SessionContext.Provider>
 }

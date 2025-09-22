@@ -1,7 +1,7 @@
 // use context7
-import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/server'
+import { type NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
+import { createServiceClient } from '@/lib/supabase/server'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -20,10 +20,7 @@ export async function POST(request: NextRequest) {
 
     // Validate input
     if (!city || !services || services.length === 0) {
-      return NextResponse.json(
-        { error: 'City and services are required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'City and services are required' }, { status: 400 })
     }
 
     // Fetch all verified providers from the selected city
@@ -36,10 +33,7 @@ export async function POST(request: NextRequest) {
 
     if (providersError) {
       console.error('Error fetching providers:', providersError)
-      return NextResponse.json(
-        { error: 'Failed to fetch providers' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'Failed to fetch providers' }, { status: 500 })
     }
 
     if (!providers || providers.length === 0) {
@@ -61,7 +55,7 @@ export async function POST(request: NextRequest) {
       years_experience: p.years_experience,
       rating: p.rating_avg || 0,
       reviews_count: p.reviews_count || 0,
-      featured: p.featured
+      featured: p.featured,
     }))
 
     // Create the GPT-5 prompt
@@ -99,11 +93,11 @@ export async function POST(request: NextRequest) {
       model: MODEL,
       messages: [
         { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt }
+        { role: 'user', content: userPrompt },
       ],
       temperature: 0.7,
       max_tokens: 1000,
-      response_format: { type: "json_object" } // Ensure JSON response
+      response_format: { type: 'json_object' }, // Ensure JSON response
     })
 
     const responseContent = completion.choices[0].message.content
@@ -121,21 +115,24 @@ export async function POST(request: NextRequest) {
 
       const { data: lead, error: leadError } = await supabase
         .from('leads')
-        .upsert({
-          email,
-          name,
-          phone,
-          city,
-          services,
-          languages,
-          budget,
-          frequency,
-          preferences,
-          quiz_completed_at: new Date().toISOString(),
-          status: 'new'
-        }, {
-          onConflict: 'email'
-        })
+        .upsert(
+          {
+            email,
+            name,
+            phone,
+            city,
+            services,
+            languages,
+            budget,
+            frequency,
+            preferences,
+            quiz_completed_at: new Date().toISOString(),
+            status: 'new',
+          },
+          {
+            onConflict: 'email',
+          }
+        )
         .select()
         .single()
 
@@ -151,14 +148,14 @@ export async function POST(request: NextRequest) {
           provider_id: match.id,
           score: Math.min(100, Math.max(0, match.score)),
           explanation: match.explanation,
-          ai_model: MODEL
+          ai_model: MODEL,
         }))
 
         const { data: savedMatches, error: saveError } = await supabase
           .from('matches')
           .upsert(matchesToSave, {
             onConflict: 'user_id,provider_id',
-            ignoreDuplicates: false
+            ignoreDuplicates: false,
           })
           .select()
 
@@ -177,10 +174,7 @@ export async function POST(request: NextRequest) {
 
     if (fullProvidersError) {
       console.error('Error fetching full providers:', fullProvidersError)
-      return NextResponse.json(
-        { error: 'Failed to fetch provider details' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'Failed to fetch provider details' }, { status: 500 })
     }
 
     // Combine AI scores with provider data
@@ -189,7 +183,7 @@ export async function POST(request: NextRequest) {
       return {
         ...provider,
         match_score: match.score,
-        match_explanation: match.explanation
+        match_explanation: match.explanation,
       }
     })
 
@@ -201,9 +195,8 @@ export async function POST(request: NextRequest) {
       matches: enrichedMatches,
       total_providers_analyzed: providers.length,
       model_used: MODEL,
-      user_id: userId
+      user_id: userId,
     })
-
   } catch (error: any) {
     console.error('[Matches API Error]:', error)
 
@@ -222,10 +215,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    return NextResponse.json(
-      { error: 'An error occurred while finding matches' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'An error occurred while finding matches' }, { status: 500 })
   }
 }
 
@@ -235,7 +225,10 @@ export async function GET(request: NextRequest) {
     const supabase = createClient()
 
     // Get user session
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -253,22 +246,15 @@ export async function GET(request: NextRequest) {
 
     if (matchesError) {
       console.error('Error fetching matches:', matchesError)
-      return NextResponse.json(
-        { error: 'Failed to fetch matches' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'Failed to fetch matches' }, { status: 500 })
     }
 
     return NextResponse.json({
       success: true,
-      matches: matches || []
+      matches: matches || [],
     })
-
   } catch (error) {
     console.error('[Matches GET Error]:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch matches' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to fetch matches' }, { status: 500 })
   }
 }

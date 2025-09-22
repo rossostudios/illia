@@ -1,8 +1,8 @@
 import AnnouncementBar from '@/components/AnnouncementBar'
-import Navbar from '@/components/Navbar'
-import Hero from '@/components/Hero'
-import SocialProof from '@/components/SocialProof'
 import Features from '@/components/Features'
+import Hero from '@/components/Hero'
+import Navbar from '@/components/Navbar'
+import SocialProof from '@/components/SocialProof'
 
 export default function Home() {
   return (

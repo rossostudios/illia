@@ -1,7 +1,7 @@
 'use client'
 
+import { Info, Plus, X } from 'lucide-react'
 import { useState } from 'react'
-import { X, Plus, Info } from 'lucide-react'
 
 interface OptionsPanelProps {
   isOpen: boolean
@@ -54,10 +54,7 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b">
         <h3 className="text-lg font-semibold text-gray-900">Options</h3>
-        <button
-          onClick={onClose}
-          className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
-        >
+        <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
           <X className="h-5 w-5 text-gray-500" />
         </button>
       </div>
@@ -145,7 +142,8 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
                 </button>
                 {showExcludeTooltip && (
                   <div className="absolute left-0 top-6 w-48 p-2 bg-gray-800 text-white text-xs rounded-lg shadow-lg z-10">
-                    Only include tags, classes and ids from the page in the final output. Use comma separated values.
+                    Only include tags, classes and ids from the page in the final output. Use comma
+                    separated values.
                   </div>
                 )}
               </div>
@@ -159,7 +157,10 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
             </button>
           </div>
           {excludeTags.map((tag, index) => (
-            <div key={index} className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2">
+            <div
+              key={index}
+              className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2"
+            >
               <span className="text-sm text-gray-700">{tag}</span>
               <button
                 onClick={() => setExcludeTags(excludeTags.filter((_, i) => i !== index))}
@@ -192,7 +193,10 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
             </button>
           </div>
           {includeTags.map((tag, index) => (
-            <div key={index} className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2">
+            <div
+              key={index}
+              className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2"
+            >
               <span className="text-sm text-gray-700">{tag}</span>
               <button
                 onClick={() => setIncludeTags(includeTags.filter((_, i) => i !== index))}

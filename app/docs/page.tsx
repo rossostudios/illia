@@ -1,10 +1,21 @@
-'use client';
+'use client'
 
-import { useState, useEffect, useRef } from 'react';
-import { ChevronRight, Check, ChevronDown, Search, Menu, X, Code, FileText, Image, ArrowUp } from 'lucide-react';
+import {
+  ArrowUp,
+  Check,
+  ChevronDown,
+  ChevronRight,
+  Code,
+  FileText,
+  Image,
+  Menu,
+  Search,
+  X,
+} from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 
 function FAQItem({ faq }: { faq: { q: string; a: string; expanded?: string } }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
     <div className="border-2 border-gray-200 rounded-lg overflow-hidden hover:border-teal-300 transition-colors">
@@ -32,15 +43,15 @@ function FAQItem({ faq }: { faq: { q: string; a: string; expanded?: string } }) 
         </div>
       )}
     </div>
-  );
+  )
 }
 
 export default function Docs() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeSection, setActiveSection] = useState('');
-  const [isTocOpen, setIsTocOpen] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
+  const [searchQuery, setSearchQuery] = useState('')
+  const [activeSection, setActiveSection] = useState('')
+  const [isTocOpen, setIsTocOpen] = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+  const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({})
 
   const sections = [
     {
@@ -55,8 +66,8 @@ export default function Docs() {
       expanded: {
         title: 'Quick Start Video',
         content: 'Watch our 2-minute overview to see Illia in action.',
-        placeholder: '[Video Player: Illia Dashboard Walkthrough]'
-      }
+        placeholder: '[Video Player: Illia Dashboard Walkthrough]',
+      },
     },
     {
       id: 'how-it-works',
@@ -66,20 +77,24 @@ export default function Docs() {
         {
           number: '1',
           icon: 'INPUT',
-          description: 'Enter Your Turf: Niche (e.g., "cafes") + ZIP (29401 default) + radius (5mi). Takes 30s.',
-          details: 'Pro tip: Use specific keywords like "emergency plumber" for higher intent scores.'
+          description:
+            'Enter Your Turf: Niche (e.g., "cafes") + ZIP (29401 default) + radius (5mi). Takes 30s.',
+          details:
+            'Pro tip: Use specific keywords like "emergency plumber" for higher intent scores.',
         },
         {
           number: '2',
           icon: 'AI',
-          description: 'AI Digs Deep: Scrapes public data, extracts emails/phones, scores 0-100 on intent (e.g., "emergency leak" = 95 via ChatGPT 5).',
-          details: 'Our algorithm analyzes review patterns, response times, and urgency signals.'
+          description:
+            'AI Digs Deep: Scrapes public data, extracts emails/phones, scores 0-100 on intent (e.g., "emergency leak" = 95 via ChatGPT 5).',
+          details: 'Our algorithm analyzes review patterns, response times, and urgency signals.',
         },
         {
           number: '3',
           icon: 'EXPORT',
-          description: 'Export & Crush: CSV with name/email/phone/notes. Book meetings 2x faster—track in Analytics.',
-          details: 'Compatible with all major CRMs: Salesforce, HubSpot, Pipedrive, and more.'
+          description:
+            'Export & Crush: CSV with name/email/phone/notes. Book meetings 2x faster—track in Analytics.',
+          details: 'Compatible with all major CRMs: Salesforce, HubSpot, Pipedrive, and more.',
         },
       ],
       codeExample: `// Example API Integration
@@ -92,7 +107,7 @@ const response = await fetch('/api/generate-leads', {
     radius: 5
   })
 });
-const leads = await response.json();`
+const leads = await response.json();`,
     },
     {
       id: 'pricing',
@@ -104,30 +119,30 @@ const leads = await response.json();`
           price: 'Free',
           credits: '1 lead/trial',
           features: ['Quick test in 29401', 'Basic scoring', 'Email support'],
-          popular: false
+          popular: false,
         },
         {
           name: 'Basic',
           price: '$99/mo',
           credits: '500 leads/mo',
           features: ['Full ZIP/radius', 'CSV export', 'Analytics', 'Chat support'],
-          popular: true
+          popular: true,
         },
         {
           name: 'Pro',
           price: '$299/mo',
           credits: 'Unlimited',
           features: ['Advanced agent', 'Zapier/Sheets', 'Priority support', 'Custom fields'],
-          popular: false
+          popular: false,
         },
         {
           name: 'Enterprise',
           price: 'Custom',
           credits: 'Unlimited + API',
           features: ['Custom schemas', 'MEDC integrations', 'Dedicated setup', 'SLA guarantee'],
-          popular: false
+          popular: false,
         },
-      ]
+      ],
     },
     {
       id: 'dashboard',
@@ -136,35 +151,36 @@ const leads = await response.json();`
       guide: [
         {
           step: 'Quick Generate Card',
-          description: 'Click to input niche/ZIP—get 10 leads instantly. Start here for your first run.',
+          description:
+            'Click to input niche/ZIP—get 10 leads instantly. Start here for your first run.',
           icon: 'QUICK',
-          screenshot: '[Screenshot: Quick Generate interface with form fields]'
+          screenshot: '[Screenshot: Quick Generate interface with form fields]',
         },
         {
           step: 'Recent Leads',
           description: 'Top 3 from last gen—click "Export CSV" to download. Empty? Hit Generate!',
           icon: 'RECENT',
-          screenshot: '[Screenshot: Recent leads table with export button]'
+          screenshot: '[Screenshot: Recent leads table with export button]',
         },
         {
           step: 'Analytics',
           description: 'Track ROI (conversion rate, avg score). See trends for King St spikes.',
           icon: 'ANALYTICS',
-          screenshot: '[Screenshot: Analytics dashboard with charts]'
+          screenshot: '[Screenshot: Analytics dashboard with charts]',
         },
         {
           step: 'Upgrade',
           description: 'Switch tiers—Basic for 500 leads, Pro for unlimited. Billing via Stripe.',
           icon: 'UPGRADE',
-          screenshot: '[Screenshot: Pricing tier comparison]'
+          screenshot: '[Screenshot: Pricing tier comparison]',
         },
         {
           step: 'Integrations',
           description: 'Connect Zapier for auto-emails or Sheets for CRM. Pro only.',
           icon: 'INTEGRATIONS',
-          screenshot: '[Screenshot: Integration settings panel]'
+          screenshot: '[Screenshot: Integration settings panel]',
         },
-      ]
+      ],
     },
     {
       id: 'credits',
@@ -181,9 +197,9 @@ const leads = await response.json();`
           ['Generate Lead', '1', 'Per business found'],
           ['Export CSV', '0', 'Unlimited exports'],
           ['Re-score Lead', '0.5', 'Update intent scoring'],
-          ['Bulk Import', '0', 'Pro feature only']
-        ]
-      }
+          ['Bulk Import', '0', 'Pro feature only'],
+        ],
+      },
     },
     {
       id: 'faq',
@@ -193,105 +209,121 @@ const leads = await response.json();`
         {
           q: 'Best niches for Charleston?',
           a: 'Plumbers/HVAC (summers), cafes/bars (tourists), real estate (NoMo boom). Try "roofers Folly Beach" for storm season leads.',
-          expanded: 'Charleston\'s unique climate creates seasonal opportunities. Summer humidity drives HVAC demand, while tourist season (Mar-Nov) boosts hospitality businesses. Hurricane season (Jun-Nov) spikes demand for roofers, tree services, and restoration companies.'
+          expanded:
+            "Charleston's unique climate creates seasonal opportunities. Summer humidity drives HVAC demand, while tourist season (Mar-Nov) boosts hospitality businesses. Hurricane season (Jun-Nov) spikes demand for roofers, tree services, and restoration companies.",
         },
         {
           q: 'How accurate are scores?',
           a: '90% via reviews—high (80+) means urgent (e.g., "leaky faucet now"). Ethical: Public data only.',
-          expanded: 'Our AI analyzes review sentiment, response patterns, and keyword urgency. Scores above 80 indicate immediate need ("emergency," "urgent," "ASAP"). 60-79 suggests planned work. Below 60 is general interest. We never access private data—only public reviews and listings.'
+          expanded:
+            'Our AI analyzes review sentiment, response patterns, and keyword urgency. Scores above 80 indicate immediate need ("emergency," "urgent," "ASAP"). 60-79 suggests planned work. Below 60 is general interest. We never access private data—only public reviews and listings.',
         },
         {
           q: 'Integrations available?',
           a: 'Zapier for auto-SMS, Sheets for CRM. Pro unlocks; setup in Integrations card.',
-          expanded: 'Connect to 5000+ apps via Zapier: auto-send emails, SMS (Twilio), add to CRMs (HubSpot, Salesforce), or sync with Google Sheets. Pro users get webhooks for real-time data. Setup takes <5 minutes with our templates.'
+          expanded:
+            'Connect to 5000+ apps via Zapier: auto-send emails, SMS (Twilio), add to CRMs (HubSpot, Salesforce), or sync with Google Sheets. Pro users get webhooks for real-time data. Setup takes <5 minutes with our templates.',
         },
         {
           q: 'Billing & Cancel?',
           a: 'Stripe monthly—no contracts. Cancel anytime in Billing toggle (Settings).',
-          expanded: 'We use Stripe for secure payments. Plans renew monthly on your signup date. Cancel anytime—you keep access until period ends. Upgrade/downgrade instantly. Need a pause? Email us for vacation holds. Enterprise gets NET30 invoicing.'
+          expanded:
+            'We use Stripe for secure payments. Plans renew monthly on your signup date. Cancel anytime—you keep access until period ends. Upgrade/downgrade instantly. Need a pause? Email us for vacation holds. Enterprise gets NET30 invoicing.',
         },
         {
           q: 'API Documentation?',
           a: 'REST API for Pro/Enterprise. Rate limits: 100/min (Pro), unlimited (Enterprise).',
-          expanded: 'Full REST API with JWT auth. Endpoints: /leads/generate, /leads/export, /analytics/summary. SDKs for Node.js, Python, PHP. Rate limits: Basic (10/min), Pro (100/min), Enterprise (unlimited). See docs.illia-leads.com/api.'
+          expanded:
+            'Full REST API with JWT auth. Endpoints: /leads/generate, /leads/export, /analytics/summary. SDKs for Node.js, Python, PHP. Rate limits: Basic (10/min), Pro (100/min), Enterprise (unlimited). See docs.illia-leads.com/api.',
         },
         {
           q: 'Data Privacy & GDPR?',
           a: 'CCPA/GDPR compliant. Public data only, encrypted storage, auto-deletion options.',
-          expanded: 'We only collect publicly available business data. All data encrypted at rest (AES-256) and in transit (TLS 1.3). GDPR: EU data stays in EU servers. Right to deletion within 48hrs. CCPA: California residents can opt-out. SOC2 Type II certified.'
+          expanded:
+            'We only collect publicly available business data. All data encrypted at rest (AES-256) and in transit (TLS 1.3). GDPR: EU data stays in EU servers. Right to deletion within 48hrs. CCPA: California residents can opt-out. SOC2 Type II certified.',
         },
         {
           q: 'Support Response Times?',
           a: 'Email: 24hrs. Chat: 2hrs (Pro), 30min (Enterprise). Phone for Enterprise only.',
-          expanded: 'Starter: Email only (hello@illia-leads.com), 24-48hr response. Basic: Email + chat, 24hr email, 4hr chat. Pro: Priority queue, 12hr email, 2hr chat. Enterprise: Dedicated account manager, 30min SLA, phone support, Slack channel.'
-        }
-      ]
-    }
-  ];
+          expanded:
+            'Starter: Email only (hello@illia-leads.com), 24-48hr response. Basic: Email + chat, 24hr email, 4hr chat. Pro: Priority queue, 12hr email, 2hr chat. Enterprise: Dedicated account manager, 30min SLA, phone support, Slack channel.',
+        },
+      ],
+    },
+  ]
 
-  const tocItems = sections.map(section => ({
+  const tocItems = sections.map((section) => ({
     id: section.id,
     title: section.title.split(':')[0],
-    icon: getIconForSection(section.id)
-  }));
+    icon: getIconForSection(section.id),
+  }))
 
   function getIconForSection(id: string) {
-    switch(id) {
-      case 'welcome': return '🏠';
-      case 'how-it-works': return '⚙️';
-      case 'pricing': return '💳';
-      case 'dashboard': return '📊';
-      case 'credits': return '🪙';
-      case 'faq': return '❓';
-      default: return '📄';
+    switch (id) {
+      case 'welcome':
+        return '🏠'
+      case 'how-it-works':
+        return '⚙️'
+      case 'pricing':
+        return '💳'
+      case 'dashboard':
+        return '📊'
+      case 'credits':
+        return '🪙'
+      case 'faq':
+        return '❓'
+      default:
+        return '📄'
     }
   }
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 400);
+      setShowScrollTop(window.scrollY > 400)
 
-      const scrollPosition = window.scrollY + 100;
-      let currentSection = '';
+      const scrollPosition = window.scrollY + 100
+      let currentSection = ''
 
       Object.entries(sectionRefs.current).forEach(([id, ref]) => {
         if (ref && ref.offsetTop <= scrollPosition) {
-          currentSection = id;
+          currentSection = id
         }
-      });
+      })
 
-      setActiveSection(currentSection);
-    };
+      setActiveSection(currentSection)
+    }
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    window.addEventListener('scroll', handleScroll)
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const scrollToSection = (sectionId: string) => {
-    const element = sectionRefs.current[sectionId];
+    const element = sectionRefs.current[sectionId]
     if (element) {
-      const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+      const offset = 80
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY
       window.scrollTo({
         top: elementPosition - offset,
-        behavior: 'smooth'
-      });
-      setIsTocOpen(false);
+        behavior: 'smooth',
+      })
+      setIsTocOpen(false)
     }
-  };
+  }
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
-  const filteredSections = sections.filter(section => {
-    if (!searchQuery) return true;
-    const query = searchQuery.toLowerCase();
-    return section.title.toLowerCase().includes(query) ||
-           section.subtitle?.toLowerCase().includes(query) ||
-           JSON.stringify(section).toLowerCase().includes(query);
-  });
+  const filteredSections = sections.filter((section) => {
+    if (!searchQuery) return true
+    const query = searchQuery.toLowerCase()
+    return (
+      section.title.toLowerCase().includes(query) ||
+      section.subtitle?.toLowerCase().includes(query) ||
+      JSON.stringify(section).toLowerCase().includes(query)
+    )
+  })
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -301,13 +333,19 @@ const leads = await response.json();`
         className="lg:hidden fixed top-20 left-4 z-50 p-3 bg-white rounded-lg shadow-lg border border-gray-200 hover:bg-gray-50"
         aria-label="Toggle table of contents"
       >
-        {isTocOpen ? <X className="h-5 w-5 text-gray-700" /> : <Menu className="h-5 w-5 text-gray-700" />}
+        {isTocOpen ? (
+          <X className="h-5 w-5 text-gray-700" />
+        ) : (
+          <Menu className="h-5 w-5 text-gray-700" />
+        )}
       </button>
 
       {/* TOC Sidebar */}
-      <aside className={`fixed top-0 left-0 h-full w-72 bg-white border-r border-gray-200 shadow-xl z-40 transform transition-transform duration-300 ${
-        isTocOpen ? 'translate-x-0' : '-translate-x-full'
-      } lg:translate-x-0 overflow-y-auto`}>
+      <aside
+        className={`fixed top-0 left-0 h-full w-72 bg-white border-r border-gray-200 shadow-xl z-40 transform transition-transform duration-300 ${
+          isTocOpen ? 'translate-x-0' : '-translate-x-full'
+        } lg:translate-x-0 overflow-y-auto`}
+      >
         <div className="p-6 sticky top-0 bg-white border-b border-gray-200">
           <h2 className="text-lg font-bold text-gray-800 mb-4">Documentation</h2>
           <div className="relative">
@@ -356,8 +394,12 @@ const leads = await response.json();`
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <header className="mb-12 text-center">
-            <h1 className="text-4xl font-bold text-teal-600 mb-4">Illia Docs: Your Lowcountry Lead Guide</h1>
-            <p className="text-gray-700 text-lg">Power your Charleston business with AI—step-by-step from setup to scaling.</p>
+            <h1 className="text-4xl font-bold text-teal-600 mb-4">
+              Illia Docs: Your Lowcountry Lead Guide
+            </h1>
+            <p className="text-gray-700 text-lg">
+              Power your Charleston business with AI—step-by-step from setup to scaling.
+            </p>
           </header>
 
           {/* Sections */}
@@ -365,7 +407,9 @@ const leads = await response.json();`
             <section
               key={section.id}
               id={section.id}
-              ref={(el) => { sectionRefs.current[section.id] = el }}
+              ref={(el) => {
+                sectionRefs.current[section.id] = el
+              }}
               className="mb-12 bg-white rounded-xl shadow-md p-8 scroll-mt-20"
             >
               <h2 className="text-2xl font-semibold text-gray-900 mb-2 flex items-center">
@@ -403,7 +447,10 @@ const leads = await response.json();`
                 <>
                   <div className="grid md:grid-cols-3 gap-6 mb-6">
                     {section.steps.map((step, j) => (
-                      <div key={j} className="text-center p-6 border-2 border-teal-100 rounded-xl bg-gradient-to-b from-teal-50 to-white hover:shadow-lg transition-shadow">
+                      <div
+                        key={j}
+                        className="text-center p-6 border-2 border-teal-100 rounded-xl bg-gradient-to-b from-teal-50 to-white hover:shadow-lg transition-shadow"
+                      >
                         <div className="w-14 h-14 bg-gradient-to-br from-teal-100 to-teal-200 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
                           <span className="text-2xl font-bold text-teal-700">{step.number}</span>
                         </div>
@@ -431,11 +478,14 @@ const leads = await response.json();`
               {section.tiers && (
                 <div className="grid md:grid-cols-4 gap-4">
                   {section.tiers.map((tier, j) => (
-                    <div key={j} className={`border-2 rounded-xl p-6 text-center ${
-                      tier.popular
-                        ? 'border-teal-500 bg-gradient-to-b from-teal-50 to-white shadow-lg scale-105'
-                        : 'border-gray-200 bg-white'
-                    }`}>
+                    <div
+                      key={j}
+                      className={`border-2 rounded-xl p-6 text-center ${
+                        tier.popular
+                          ? 'border-teal-500 bg-gradient-to-b from-teal-50 to-white shadow-lg scale-105'
+                          : 'border-gray-200 bg-white'
+                      }`}
+                    >
                       {tier.popular && (
                         <span className="inline-block px-3 py-1 bg-teal-500 text-white text-xs rounded-full mb-3 font-semibold">
                           Most Popular
@@ -485,7 +535,10 @@ const leads = await response.json();`
                     <thead>
                       <tr className="bg-gray-100">
                         {section.table.headers.map((header, idx) => (
-                          <th key={idx} className="border border-gray-300 px-4 py-2 text-left font-semibold text-gray-800">
+                          <th
+                            key={idx}
+                            className="border border-gray-300 px-4 py-2 text-left font-semibold text-gray-800"
+                          >
                             {header}
                           </th>
                         ))}
@@ -495,7 +548,10 @@ const leads = await response.json();`
                       {section.table.rows.map((row, idx) => (
                         <tr key={idx} className="hover:bg-gray-50">
                           {row.map((cell, cellIdx) => (
-                            <td key={cellIdx} className="border border-gray-300 px-4 py-2 text-gray-700">
+                            <td
+                              key={cellIdx}
+                              className="border border-gray-300 px-4 py-2 text-gray-700"
+                            >
                               {cell}
                             </td>
                           ))}
@@ -520,7 +576,9 @@ const leads = await response.json();`
           {/* Support CTA */}
           <div className="text-center mt-12 p-8 bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl shadow-lg border-2 border-teal-200">
             <h2 className="text-2xl font-bold text-teal-700 mb-4">Need Help?</h2>
-            <p className="text-gray-700 mb-6 text-lg">Questions on credits, integrations, or Charleston tips?</p>
+            <p className="text-gray-700 mb-6 text-lg">
+              Questions on credits, integrations, or Charleston tips?
+            </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="mailto:hello@illia-leads.com"
@@ -550,5 +608,5 @@ const leads = await response.json();`
         </button>
       )}
     </div>
-  );
+  )
 }

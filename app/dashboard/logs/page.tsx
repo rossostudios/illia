@@ -1,30 +1,30 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
 import {
-  Search,
-  Home,
-  Play,
-  FileText,
   BarChart3,
-  Key,
-  Settings,
-  ChevronDown,
   Bell,
-  HelpCircle,
-  FileCode,
-  X,
-  Sparkles,
-  MessageSquare,
-  ChevronLeft,
-  Download,
-  Filter,
   Calendar,
-  Clock,
   Check,
-  ChevronRight
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Download,
+  FileCode,
+  FileText,
+  Filter,
+  HelpCircle,
+  Home,
+  Key,
+  MessageSquare,
+  Play,
+  Search,
+  Settings,
+  Sparkles,
+  X,
 } from 'lucide-react'
+import Link from 'next/link'
+import { useState } from 'react'
 
 export default function ActivityLogsPage() {
   const [showExtractMenu, setShowExtractMenu] = useState(false)
@@ -39,22 +39,9 @@ export default function ActivityLogsPage() {
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null)
   const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null)
 
-  const endpoints = [
-    'All Generations',
-    'Basic',
-    'Advanced',
-    'Schema',
-    'Agent',
-    'ZIP search'
-  ]
+  const endpoints = ['All Generations', 'Basic', 'Advanced', 'Schema', 'Agent', 'ZIP search']
 
-  const dateRanges = [
-    'Last 7 days',
-    'Last 30 days',
-    'Last 90 days',
-    'All Time',
-    'Custom range'
-  ]
+  const dateRanges = ['Last 7 days', 'Last 30 days', 'Last 90 days', 'All Time', 'Custom range']
 
   const activityLogs = [
     {
@@ -63,7 +50,7 @@ export default function ActivityLogsPage() {
       status: 'Success',
       leads: 18,
       date: 'Sep 20, 25',
-      time: '09:57 AM'
+      time: '09:57 AM',
     },
     {
       mode: 'Agent',
@@ -71,7 +58,7 @@ export default function ActivityLogsPage() {
       status: 'Success',
       leads: 12,
       date: 'Sep 19, 25',
-      time: '03:38 PM'
+      time: '03:38 PM',
     },
     {
       mode: 'ZIP search',
@@ -79,7 +66,7 @@ export default function ActivityLogsPage() {
       status: 'Success',
       leads: 15,
       date: 'Sep 18, 25',
-      time: '07:46 AM'
+      time: '07:46 AM',
     },
     {
       mode: 'Basic',
@@ -87,7 +74,7 @@ export default function ActivityLogsPage() {
       status: 'Success',
       leads: 22,
       date: 'Sep 17, 25',
-      time: '11:23 AM'
+      time: '11:23 AM',
     },
     {
       mode: 'Advanced',
@@ -95,7 +82,7 @@ export default function ActivityLogsPage() {
       status: 'Success',
       leads: 8,
       date: 'Sep 16, 25',
-      time: '02:15 PM'
+      time: '02:15 PM',
     },
     {
       mode: 'Schema',
@@ -103,7 +90,7 @@ export default function ActivityLogsPage() {
       status: 'Success',
       leads: 14,
       date: 'Sep 15, 25',
-      time: '09:30 AM'
+      time: '09:30 AM',
     },
     {
       mode: 'Agent',
@@ -111,7 +98,7 @@ export default function ActivityLogsPage() {
       status: 'Success',
       leads: 25,
       date: 'Sep 14, 25',
-      time: '04:45 PM'
+      time: '04:45 PM',
     },
     {
       mode: 'ZIP search',
@@ -119,7 +106,7 @@ export default function ActivityLogsPage() {
       status: 'Failed',
       leads: 0,
       date: 'Sep 13, 25',
-      time: '10:20 AM'
+      time: '10:20 AM',
     },
     {
       mode: 'Basic',
@@ -127,7 +114,7 @@ export default function ActivityLogsPage() {
       status: 'Failed',
       leads: 0,
       date: 'Sep 12, 25',
-      time: '08:15 AM'
+      time: '08:15 AM',
     },
     {
       mode: 'Schema',
@@ -135,7 +122,7 @@ export default function ActivityLogsPage() {
       status: 'Success',
       leads: 30,
       date: 'Sep 11, 25',
-      time: '01:30 PM'
+      time: '01:30 PM',
     },
     {
       mode: 'Advanced',
@@ -143,8 +130,8 @@ export default function ActivityLogsPage() {
       status: 'Success',
       leads: 11,
       date: 'Sep 10, 25',
-      time: '05:00 PM'
-    }
+      time: '05:00 PM',
+    },
   ]
 
   const sidebarItems = [
@@ -158,8 +145,8 @@ export default function ActivityLogsPage() {
       isOpen: showExtractMenu,
       submenu: [
         { label: 'Overview', href: '/dashboard/extract' },
-        { label: 'Playground', href: '/dashboard/extract/playground' }
-      ]
+        { label: 'Playground', href: '/dashboard/extract/playground' },
+      ],
     },
     { icon: BarChart3, label: 'Activity Logs', href: '/dashboard/logs', active: true },
     { icon: BarChart3, label: 'Usage', href: '/dashboard/usage' },
@@ -167,9 +154,10 @@ export default function ActivityLogsPage() {
     { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
   ]
 
-  const filteredLogs = selectedEndpoint === 'All Generations'
-    ? activityLogs
-    : activityLogs.filter(log => log.mode === selectedEndpoint)
+  const filteredLogs =
+    selectedEndpoint === 'All Generations'
+      ? activityLogs
+      : activityLogs.filter((log) => log.mode === selectedEndpoint)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -178,7 +166,9 @@ export default function ActivityLogsPage() {
         {/* Logo */}
         <div className="p-4 border-b">
           <Link href="/dashboard" className="flex items-center space-x-2 group">
-            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">Illia</span>
+            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">
+              Illia
+            </span>
           </Link>
         </div>
 
@@ -202,9 +192,7 @@ export default function ActivityLogsPage() {
               <Link
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  item.active
-                    ? 'bg-teal-50 text-teal-600'
-                    : 'text-gray-700 hover:bg-gray-100'
+                  item.active ? 'bg-teal-50 text-teal-600' : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={(e) => {
                   if (item.hasSubmenu) {
@@ -218,7 +206,9 @@ export default function ActivityLogsPage() {
                   <span>{item.label}</span>
                 </div>
                 {item.hasSubmenu && (
-                  <ChevronDown className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`}
+                  />
                 )}
               </Link>
               {item.hasSubmenu && item.isOpen && (
@@ -258,9 +248,7 @@ export default function ActivityLogsPage() {
             </div>
 
             {/* User email */}
-            <div className="mt-4 px-3 py-2 text-xs text-gray-500">
-              samlee@content-mobbin.com
-            </div>
+            <div className="mt-4 px-3 py-2 text-xs text-gray-500">samlee@content-mobbin.com</div>
 
             {/* Collapse button */}
             <button className="flex items-center space-x-2 mt-2 text-xs text-gray-600 hover:text-gray-900">
@@ -281,7 +269,9 @@ export default function ActivityLogsPage() {
                 <Users className="h-4 w-4" />
                 <span className="text-sm font-medium">Personal Team</span>
                 {hasLogs && (
-                  <span className="bg-teal-600 text-white text-xs px-1.5 py-0.5 rounded-full">1</span>
+                  <span className="bg-teal-600 text-white text-xs px-1.5 py-0.5 rounded-full">
+                    1
+                  </span>
                 )}
               </div>
             </div>
@@ -453,7 +443,10 @@ export default function ActivityLogsPage() {
                         </div>
                       ))}
                       {/* September calendar days */}
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30].map((day) => (
+                      {[
+                        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+                        22, 23, 24, 25, 26, 27, 28, 29, 30,
+                      ].map((day) => (
                         <button
                           key={day}
                           className={`p-2 text-sm hover:bg-gray-100 rounded ${
@@ -483,11 +476,11 @@ export default function ActivityLogsPage() {
                       ))}
                       {/* October calendar days */}
                       <div className="col-span-2" />
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31].map((day) => (
-                        <button
-                          key={day}
-                          className="p-2 text-sm hover:bg-gray-100 rounded"
-                        >
+                      {[
+                        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+                        22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+                      ].map((day) => (
+                        <button key={day} className="p-2 text-sm hover:bg-gray-100 rounded">
                           {day}
                         </button>
                       ))}
@@ -522,8 +515,12 @@ export default function ActivityLogsPage() {
               <div className="flex flex-col items-center justify-center">
                 <Clock className="h-12 w-12 text-teal-300 mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">No lead generations yet?</h3>
-                <p className="text-sm text-gray-500 mb-1">Your runs will appear here once you start in Playground.</p>
-                <p className="text-sm text-gray-500">Track queries, scores, and exports from Charleston ZIPs.</p>
+                <p className="text-sm text-gray-500 mb-1">
+                  Your runs will appear here once you start in Playground.
+                </p>
+                <p className="text-sm text-gray-500">
+                  Track queries, scores, and exports from Charleston ZIPs.
+                </p>
               </div>
             </div>
           ) : (
@@ -554,7 +551,10 @@ export default function ActivityLogsPage() {
                   </thead>
                   <tbody className="divide-y">
                     {filteredLogs.map((log, index) => (
-                      <tr key={index} className={`hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                      <tr
+                        key={index}
+                        className={`hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
+                      >
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {log.mode}
                         </td>
@@ -562,12 +562,18 @@ export default function ActivityLogsPage() {
                           <span className="truncate block max-w-md">{log.query}</span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            log.status === 'Success' ? 'bg-teal-100 text-teal-800' : 'bg-red-100 text-red-800'
-                          }`}>
-                            <span className={`h-1.5 w-1.5 rounded-full mr-1.5 ${
-                              log.status === 'Success' ? 'bg-teal-500' : 'bg-red-500'
-                            }`} />
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                              log.status === 'Success'
+                                ? 'bg-teal-100 text-teal-800'
+                                : 'bg-red-100 text-red-800'
+                            }`}
+                          >
+                            <span
+                              className={`h-1.5 w-1.5 rounded-full mr-1.5 ${
+                                log.status === 'Success' ? 'bg-teal-500' : 'bg-red-500'
+                              }`}
+                            />
                             {log.status}
                           </span>
                         </td>
@@ -593,9 +599,7 @@ export default function ActivityLogsPage() {
 
               {/* Pagination */}
               <div className="px-6 py-3 border-t flex items-center justify-between">
-                <div className="text-sm text-gray-500">
-                  Page 1
-                </div>
+                <div className="text-sm text-gray-500">Page 1</div>
                 <div className="flex items-center space-x-2">
                   <button className="p-1 hover:bg-gray-100 rounded text-gray-400">
                     <ChevronLeft className="h-4 w-4" />
@@ -620,7 +624,13 @@ export default function ActivityLogsPage() {
 
 function Users({ className }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
       <circle cx="9" cy="7" r="4" />
       <path d="M23 21v-2a4 4 0 0 0-3-3.87" />

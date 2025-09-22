@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 interface OnboardingModalProps {
   isOpen: boolean
@@ -20,7 +20,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
       title: 'Email Verified',
       description: 'Your email has been verified',
       claimed: true,
-      credits: 0
+      credits: 0,
     },
     {
       id: 2,
@@ -28,7 +28,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
       title: 'Star our GitHub repo',
       description: 'Check out our open source code and contribute',
       claimed: false,
-      credits: 100
+      credits: 100,
     },
     {
       id: 3,
@@ -36,7 +36,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
       title: 'Join our Discord',
       description: 'Connect with us and get community help',
       claimed: false,
-      credits: 50
+      credits: 50,
     },
     {
       id: 4,
@@ -44,8 +44,8 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
       title: 'Follow us on X',
       description: 'Stay updated on new features and launches',
       claimed: false,
-      credits: 50
-    }
+      credits: 50,
+    },
   ]
 
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set([1]))
@@ -55,7 +55,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
   }, [])
 
   const handleStepComplete = (stepId: number) => {
-    setCompletedSteps(prev => new Set([...prev, stepId]))
+    setCompletedSteps((prev) => new Set([...prev, stepId]))
   }
 
   const handleContinue = () => {
@@ -84,7 +84,6 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
         <div className="relative w-full max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto">
           {/* Modal Content - Full height on mobile, constrained on desktop */}
           <div className="bg-white rounded-2xl shadow-2xl max-h-[95vh] sm:max-h-[90vh] md:max-h-[85vh] overflow-hidden flex flex-col min-w-0">
-
             {/* Header - Fixed */}
             <div className="flex-shrink-0 px-6 py-5 sm:p-6 lg:px-8 border-b bg-white">
               <div className="flex items-start justify-between gap-4">
@@ -145,15 +144,15 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
                     >
                       <div className="flex items-start gap-6">
                         {/* Icon */}
-                        <div className="flex-shrink-0 text-2xl mt-0.5">
-                          {step.icon}
-                        </div>
+                        <div className="flex-shrink-0 text-2xl mt-0.5">{step.icon}</div>
 
                         {/* Content */}
                         <div className="flex-1 min-w-0">
-                          <h3 className={`font-medium text-base lg:text-lg ${
-                            isCompleted ? 'text-gray-500' : 'text-gray-900'
-                          }`}>
+                          <h3
+                            className={`font-medium text-base lg:text-lg ${
+                              isCompleted ? 'text-gray-500' : 'text-gray-900'
+                            }`}
+                          >
                             {step.title}
                           </h3>
                           <p className="text-sm lg:text-base text-gray-600 mt-1">
@@ -189,9 +188,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
                 {/* LinkedIn step (optional, not counted) */}
                 <div className="border border-gray-300 rounded-lg p-5 hover:border-teal-400 hover:shadow-sm transition-all bg-white">
                   <div className="flex items-start gap-6">
-                    <div className="flex-shrink-0 text-2xl mt-0.5">
-                      💼
-                    </div>
+                    <div className="flex-shrink-0 text-2xl mt-0.5">💼</div>
                     <div className="flex-1 min-w-0">
                       <h3 className="font-medium text-base lg:text-lg text-gray-900">
                         Follow us on LinkedIn

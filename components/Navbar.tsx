@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import Link from "next/link";
+import Link from 'next/link'
 
 export default function Navbar() {
   return (
@@ -17,19 +17,34 @@ export default function Navbar() {
             </Link>
 
             <div className="ml-10 hidden md:flex items-center space-x-6">
-              <Link href="/" className="text-gray-900 hover:text-green-600 text-sm font-semibold transition-colors">
+              <Link
+                href="/"
+                className="text-gray-900 hover:text-green-600 text-sm font-semibold transition-colors"
+              >
                 Home
               </Link>
-              <Link href="/features" className="text-gray-700 hover:text-green-600 text-sm font-medium transition-colors">
+              <Link
+                href="/features"
+                className="text-gray-700 hover:text-green-600 text-sm font-medium transition-colors"
+              >
                 Features
               </Link>
-              <Link href="/dashboard/explore" className="text-gray-700 hover:text-green-600 text-sm font-medium transition-colors">
+              <Link
+                href="/dashboard/explore"
+                className="text-gray-700 hover:text-green-600 text-sm font-medium transition-colors"
+              >
                 Explore
               </Link>
-              <Link href="/pricing" className="text-gray-700 hover:text-green-600 text-sm font-medium transition-colors">
+              <Link
+                href="/pricing"
+                className="text-gray-700 hover:text-green-600 text-sm font-medium transition-colors"
+              >
                 Pricing
               </Link>
-              <Link href="/blog" className="text-gray-700 hover:text-green-600 text-sm font-medium transition-colors">
+              <Link
+                href="/blog"
+                className="text-gray-700 hover:text-green-600 text-sm font-medium transition-colors"
+              >
                 Blog
               </Link>
             </div>
@@ -52,5 +67,5 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-  );
+  )
 }

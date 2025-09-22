@@ -7,30 +7,30 @@
 
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import {
+  Award,
+  Calendar,
+  CheckCircle,
+  ChevronRight,
+  Clock,
+  DollarSign,
+  Globe,
+  Heart,
+  Home,
+  Loader2,
+  MapPin,
+  MessageSquare,
+  Search,
+  Star,
+  TrendingUp,
+  Users,
+  X,
+} from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
 import { useSession } from '@/hooks/useSession'
 import { createClient } from '@/lib/supabase/client'
-import {
-  MapPin,
-  Star,
-  MessageSquare,
-  Loader2,
-  Users,
-  TrendingUp,
-  Calendar,
-  ChevronRight,
-  Globe,
-  Home,
-  DollarSign,
-  Clock,
-  CheckCircle,
-  Heart,
-  Award,
-  Search,
-  X
-} from 'lucide-react'
 
 // Mock data for service providers
 const SAMPLE_PROVIDERS = [
@@ -46,7 +46,7 @@ const SAMPLE_PROVIDERS = [
     photo: 'https://i.pravatar.cc/150?img=1',
     verified: true,
     specialties: ['Vegan cooking', 'Pet-friendly'],
-    availability: 'Mon-Fri mornings'
+    availability: 'Mon-Fri mornings',
   },
   {
     id: 2,
@@ -60,7 +60,7 @@ const SAMPLE_PROVIDERS = [
     photo: 'https://i.pravatar.cc/150?img=5',
     verified: true,
     specialties: ['Deep cleaning', 'Organization'],
-    availability: 'Flexible schedule'
+    availability: 'Flexible schedule',
   },
   {
     id: 3,
@@ -74,8 +74,8 @@ const SAMPLE_PROVIDERS = [
     photo: 'https://i.pravatar.cc/150?img=8',
     verified: false,
     specialties: ['Colombian cuisine', 'Meal planning'],
-    availability: 'Weekday evenings'
-  }
+    availability: 'Weekday evenings',
+  },
 ]
 
 const COMMUNITY_POSTS = [
@@ -85,7 +85,7 @@ const COMMUNITY_POSTS = [
     author: 'Sarah M.',
     replies: 12,
     time: '2 hours ago',
-    trending: true
+    trending: true,
   },
   {
     id: 2,
@@ -93,7 +93,7 @@ const COMMUNITY_POSTS = [
     author: 'Mike D.',
     replies: 8,
     time: '5 hours ago',
-    trending: false
+    trending: false,
   },
   {
     id: 3,
@@ -101,8 +101,8 @@ const COMMUNITY_POSTS = [
     author: 'Emma L.',
     replies: 23,
     time: '1 day ago',
-    trending: true
-  }
+    trending: true,
+  },
 ]
 
 // Popular search suggestions
@@ -113,7 +113,7 @@ const SEARCH_SUGGESTIONS = [
   'house cleaning Florianópolis',
   'pet-friendly cleaners',
   'vegan meal prep',
-  'deep cleaning service'
+  'deep cleaning service',
 ]
 
 export default function DashboardPage() {
@@ -155,7 +155,7 @@ export default function DashboardPage() {
   useEffect(() => {
     // Filter suggestions based on query
     if (searchQuery.length > 0) {
-      const filtered = SEARCH_SUGGESTIONS.filter(suggestion =>
+      const filtered = SEARCH_SUGGESTIONS.filter((suggestion) =>
         suggestion.toLowerCase().includes(searchQuery.toLowerCase())
       )
       setFilteredSuggestions(filtered.length > 0 ? filtered : SEARCH_SUGGESTIONS.slice(0, 3))
@@ -178,7 +178,7 @@ export default function DashboardPage() {
       return
     }
     console.log('Requesting intro to provider:', providerId)
-    setMatchesUsed(prev => prev + 1)
+    setMatchesUsed((prev) => prev + 1)
   }
 
   if (sessionLoading) {
@@ -200,7 +200,8 @@ export default function DashboardPage() {
               Welcome back, {user?.email?.split('@')[0] || 'Explorer'}!
             </h1>
             <p className="text-base md:text-lg text-gray-600">
-              Ready to find your ideal home helper in {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}?
+              Ready to find your ideal home helper in{' '}
+              {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}?
             </p>
           </div>
 
@@ -301,7 +302,9 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-semibold text-gray-900">Your Quick Matches</h2>
-                  <p className="text-sm text-gray-500 mt-1">AI-suggested providers based on your preferences</p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    AI-suggested providers based on your preferences
+                  </p>
                 </div>
                 <Link
                   href="/dashboard/explore"
@@ -314,7 +317,10 @@ export default function DashboardPage() {
 
             <div className="p-6 space-y-4">
               {SAMPLE_PROVIDERS.map((provider) => (
-                <div key={provider.id} className="border rounded-lg p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer group">
+                <div
+                  key={provider.id}
+                  className="border rounded-lg p-4 hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer group"
+                >
                   <div className="flex items-start gap-4">
                     <img
                       src={provider.photo}
@@ -326,9 +332,7 @@ export default function DashboardPage() {
                         <div>
                           <div className="flex items-center gap-2">
                             <h3 className="font-semibold text-gray-900">{provider.name}</h3>
-                            {provider.verified && (
-                              <CheckCircle className="h-4 w-4 text-teal-600" />
-                            )}
+                            {provider.verified && <CheckCircle className="h-4 w-4 text-teal-600" />}
                           </div>
                           <p className="text-sm text-gray-600">{provider.service}</p>
                           <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
@@ -344,7 +348,10 @@ export default function DashboardPage() {
                           </div>
                           <div className="flex gap-2 mt-2">
                             {provider.specialties.map((specialty, idx) => (
-                              <span key={idx} className="text-xs bg-warmth-50 text-gray-700 px-2 py-1 rounded">
+                              <span
+                                key={idx}
+                                className="text-xs bg-warmth-50 text-gray-700 px-2 py-1 rounded"
+                              >
                                 {specialty}
                               </span>
                             ))}
@@ -357,7 +364,12 @@ export default function DashboardPage() {
                             <div className="mt-2 p-2 bg-teal-50 rounded text-xs text-gray-600">
                               <span className="font-medium">High Match Score:</span>
                               <ul className="mt-1 space-y-0.5 ml-2">
-                                <li>✓ Speaks {provider.languages.includes('English') ? 'English' : 'your language'}</li>
+                                <li>
+                                  ✓ Speaks{' '}
+                                  {provider.languages.includes('English')
+                                    ? 'English'
+                                    : 'your language'}
+                                </li>
                                 <li>✓ In your budget range</li>
                                 <li>✓ Available {provider.availability}</li>
                                 {provider.verified && <li>✓ Verified provider</li>}
@@ -374,8 +386,11 @@ export default function DashboardPage() {
                           }`}
                           disabled={membershipTier === 'free' && matchesUsed >= matchesLimit}
                         >
-                          {membershipTier === 'premium' ? 'Request Intro' :
-                           matchesUsed >= matchesLimit ? 'Upgrade' : 'Request Intro'}
+                          {membershipTier === 'premium'
+                            ? 'Request Intro'
+                            : matchesUsed >= matchesLimit
+                              ? 'Upgrade'
+                              : 'Request Intro'}
                         </button>
                       </div>
                     </div>
@@ -388,8 +403,13 @@ export default function DashboardPage() {
                 <div className="text-center py-8 bg-warmth-50 rounded-lg">
                   <Users className="h-12 w-12 text-sunset-500 mx-auto mb-3" />
                   <h3 className="font-medium text-gray-900 mb-2">Let's find your perfect match!</h3>
-                  <p className="text-sm text-gray-600 mb-4">Take our 2-minute quiz to get personalized recommendations</p>
-                  <Link href="/quiz" className="inline-block px-6 py-2 bg-sunset-500 text-white rounded-lg hover:bg-sunset-600 transition-colors">
+                  <p className="text-sm text-gray-600 mb-4">
+                    Take our 2-minute quiz to get personalized recommendations
+                  </p>
+                  <Link
+                    href="/quiz"
+                    className="inline-block px-6 py-2 bg-sunset-500 text-white rounded-lg hover:bg-sunset-600 transition-colors"
+                  >
                     Start Quiz →
                   </Link>
                 </div>
@@ -404,11 +424,13 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-gray-900">Your Membership</h3>
-              <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                membershipTier === 'premium'
-                  ? 'bg-yellow-100 text-yellow-800'
-                  : 'bg-gray-100 text-gray-700'
-              }`}>
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  membershipTier === 'premium'
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : 'bg-gray-100 text-gray-700'
+                }`}
+              >
                 {membershipTier === 'premium' ? 'Premium' : 'Free Tier'}
               </span>
             </div>
@@ -417,7 +439,9 @@ export default function DashboardPage() {
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-600">Matches Used</span>
-                  <span className="font-medium">{matchesUsed}/{matchesLimit}</span>
+                  <span className="font-medium">
+                    {matchesUsed}/{matchesLimit}
+                  </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
@@ -450,7 +474,10 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-gray-900">Community Buzz</h3>
-              <Link href="/dashboard/community" className="text-sm text-teal-600 hover:text-teal-700">
+              <Link
+                href="/dashboard/community"
+                className="text-sm text-teal-600 hover:text-teal-700"
+              >
                 View All
               </Link>
             </div>
@@ -496,7 +523,8 @@ export default function DashboardPage() {
                   <div>
                     <p className="text-sm font-medium text-gray-900">Tip of the Day</p>
                     <p className="text-xs text-gray-600 mt-1">
-                      In Colombia, always agree on payment terms upfront. Weekly payments are common for domestic help.
+                      In Colombia, always agree on payment terms upfront. Weekly payments are common
+                      for domestic help.
                     </p>
                   </div>
                 </div>
@@ -517,7 +545,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-
     </div>
   )
 }

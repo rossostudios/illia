@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import type { Database } from '@/types/database'
 
@@ -10,7 +10,9 @@ export async function POST(req: NextRequest) {
     const serviceSupabase = await createServiceClient()
 
     // Get user session
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -46,7 +48,7 @@ export async function POST(req: NextRequest) {
         phone: `(843) 555-${String(1000 + i).padStart(4, '0')}`,
         score: Math.floor(Math.random() * 30) + 70,
         notes: `Located in ${location}`,
-        status: 'new'
+        status: 'new',
       })
     }
 
@@ -62,15 +64,13 @@ export async function POST(req: NextRequest) {
     }
 
     // Log the action
-    const { error: logError } = await serviceSupabase
-      .from('illia_leads_logs')
-      .insert({
-        user_email: user.email,
-        niche,
-        zip_code: zipCode,
-        count: mockLeads.length,
-        status: 'success'
-      })
+    const { error: logError } = await serviceSupabase.from('illia_leads_logs').insert({
+      user_email: user.email,
+      niche,
+      zip_code: zipCode,
+      count: mockLeads.length,
+      status: 'success',
+    })
 
     if (logError) {
       console.error('Error logging action:', logError)
@@ -80,14 +80,10 @@ export async function POST(req: NextRequest) {
       success: true,
       leads: insertedLeads,
       count: mockLeads.length,
-      tier
+      tier,
     })
-
   } catch (error) {
     console.error('Error in generate-leads API:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

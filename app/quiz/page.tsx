@@ -1,8 +1,17 @@
 'use client'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { FiChevronRight, FiChevronLeft, FiMapPin, FiHome, FiGlobe, FiDollarSign, FiCalendar, FiUser } from 'react-icons/fi'
+import { useState } from 'react'
+import {
+  FiCalendar,
+  FiChevronLeft,
+  FiChevronRight,
+  FiDollarSign,
+  FiGlobe,
+  FiHome,
+  FiMapPin,
+  FiUser,
+} from 'react-icons/fi'
 
 type QuizData = {
   city: string
@@ -18,7 +27,7 @@ type QuizData = {
 
 const CITIES = [
   { value: 'medellin', label: 'Medellín, Colombia', icon: '🇨🇴' },
-  { value: 'florianopolis', label: 'Florianópolis, Brazil', icon: '🇧🇷' }
+  { value: 'florianopolis', label: 'Florianópolis, Brazil', icon: '🇧🇷' },
 ]
 
 const SERVICES = [
@@ -31,13 +40,13 @@ const SERVICES = [
   { value: 'gardening', label: 'Gardening', icon: '🌿' },
   { value: 'laundry', label: 'Laundry Service', icon: '👔' },
   { value: 'driver', label: 'Personal Driver', icon: '🚗' },
-  { value: 'other', label: 'Other', icon: '📋' }
+  { value: 'other', label: 'Other', icon: '📋' },
 ]
 
 const LANGUAGES = [
   { value: 'english', label: 'English' },
   { value: 'spanish', label: 'Spanish' },
-  { value: 'portuguese', label: 'Portuguese' }
+  { value: 'portuguese', label: 'Portuguese' },
 ]
 
 const BUDGETS = {
@@ -45,14 +54,14 @@ const BUDGETS = {
     { value: '0-500000', label: 'Under 500,000 COP/month' },
     { value: '500000-800000', label: '500,000 - 800,000 COP/month' },
     { value: '800000-1200000', label: '800,000 - 1,200,000 COP/month' },
-    { value: '1200000+', label: 'Over 1,200,000 COP/month' }
+    { value: '1200000+', label: 'Over 1,200,000 COP/month' },
   ],
   florianopolis: [
     { value: '0-1500', label: 'Under R$1,500/month' },
     { value: '1500-2500', label: 'R$1,500 - R$2,500/month' },
     { value: '2500-4000', label: 'R$2,500 - R$4,000/month' },
-    { value: '4000+', label: 'Over R$4,000/month' }
-  ]
+    { value: '4000+', label: 'Over R$4,000/month' },
+  ],
 }
 
 const FREQUENCIES = [
@@ -60,7 +69,7 @@ const FREQUENCIES = [
   { value: 'weekly', label: '2-3 times per week' },
   { value: 'biweekly', label: 'Once a week' },
   { value: 'monthly', label: '2-3 times per month' },
-  { value: 'occasional', label: 'Occasionally' }
+  { value: 'occasional', label: 'Occasionally' },
 ]
 
 export default function QuizPage() {
@@ -73,43 +82,51 @@ export default function QuizPage() {
     languages: [],
     budget: '',
     frequency: '',
-    preferences: ''
+    preferences: '',
   })
 
   const totalSteps = 7
 
   const updateData = (field: keyof QuizData, value: any) => {
-    setData(prev => ({ ...prev, [field]: value }))
+    setData((prev) => ({ ...prev, [field]: value }))
   }
 
   const toggleService = (service: string) => {
-    setData(prev => ({
+    setData((prev) => ({
       ...prev,
       services: prev.services.includes(service)
-        ? prev.services.filter(s => s !== service)
-        : [...prev.services, service]
+        ? prev.services.filter((s) => s !== service)
+        : [...prev.services, service],
     }))
   }
 
   const toggleLanguage = (language: string) => {
-    setData(prev => ({
+    setData((prev) => ({
       ...prev,
       languages: prev.languages.includes(language)
-        ? prev.languages.filter(l => l !== language)
-        : [...prev.languages, language]
+        ? prev.languages.filter((l) => l !== language)
+        : [...prev.languages, language],
     }))
   }
 
   const canContinue = () => {
     switch (step) {
-      case 1: return data.city !== ''
-      case 2: return data.services.length > 0
-      case 3: return data.languages.length > 0
-      case 4: return data.budget !== ''
-      case 5: return data.frequency !== ''
-      case 6: return data.preferences.trim() !== ''
-      case 7: return data.name && data.email
-      default: return false
+      case 1:
+        return data.city !== ''
+      case 2:
+        return data.services.length > 0
+      case 3:
+        return data.languages.length > 0
+      case 4:
+        return data.budget !== ''
+      case 5:
+        return data.frequency !== ''
+      case 6:
+        return data.preferences.trim() !== ''
+      case 7:
+        return data.name && data.email
+      default:
+        return false
     }
   }
 
@@ -122,15 +139,26 @@ export default function QuizPage() {
     setError('')
 
     try {
-      const response = await fetch('/api/matches', {
+      // Save preferences and get matches
+      const response = await fetch('/api/quiz/preferences', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify({
+          city: data.city,
+          services: data.services,
+          languages: data.languages,
+          budget: data.budget,
+          frequency: data.frequency,
+          preferences: {
+            ...data,
+            specificNeeds: data.preferences,
+          },
+        }),
       })
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.error || `Failed to get matches (${response.status})`)
+        throw new Error(errorData.error || `Failed to save preferences (${response.status})`)
       }
 
       const result = await response.json()
@@ -144,13 +172,15 @@ export default function QuizPage() {
         return
       }
 
+      // Store matches and quiz data for the matches page
       sessionStorage.setItem('matches', JSON.stringify(result.matches))
       sessionStorage.setItem('quizData', JSON.stringify(data))
 
       router.push('/matches')
     } catch (error) {
       console.error('Error:', error)
-      const errorMessage = error instanceof Error ? error.message : 'Failed to get matches. Please try again.'
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to save preferences. Please try again.'
       setError(errorMessage)
     } finally {
       setLoading(false)
@@ -165,7 +195,9 @@ export default function QuizPage() {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-bold text-gray-900">Find Your Perfect Match</h1>
-            <span className="text-sm text-gray-500">Step {step} of {totalSteps}</span>
+            <span className="text-sm text-gray-500">
+              Step {step} of {totalSteps}
+            </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
@@ -184,7 +216,7 @@ export default function QuizPage() {
                 <p className="text-gray-600">We'll match you with providers in your city</p>
               </div>
               <div className="space-y-3">
-                {CITIES.map(city => (
+                {CITIES.map((city) => (
                   <button
                     key={city.value}
                     onClick={() => updateData('city', city.value)}
@@ -219,7 +251,7 @@ export default function QuizPage() {
                 <p className="text-gray-600">Select all that apply</p>
               </div>
               <div className="grid grid-cols-2 gap-3">
-                {SERVICES.map(service => (
+                {SERVICES.map((service) => (
                   <button
                     key={service.value}
                     onClick={() => toggleService(service.value)}
@@ -247,7 +279,7 @@ export default function QuizPage() {
                 <p className="text-gray-600">Select languages you're comfortable with</p>
               </div>
               <div className="space-y-3">
-                {LANGUAGES.map(lang => (
+                {LANGUAGES.map((lang) => (
                   <button
                     key={lang.value}
                     onClick={() => toggleLanguage(lang.value)}
@@ -279,7 +311,7 @@ export default function QuizPage() {
                 <p className="text-gray-600">Monthly service budget</p>
               </div>
               <div className="space-y-3">
-                {(BUDGETS[data.city as keyof typeof BUDGETS] || BUDGETS.medellin).map(budget => (
+                {(BUDGETS[data.city as keyof typeof BUDGETS] || BUDGETS.medellin).map((budget) => (
                   <button
                     key={budget.value}
                     onClick={() => updateData('budget', budget.value)}
@@ -311,7 +343,7 @@ export default function QuizPage() {
                 <p className="text-gray-600">Service frequency</p>
               </div>
               <div className="space-y-3">
-                {FREQUENCIES.map(freq => (
+                {FREQUENCIES.map((freq) => (
                   <button
                     key={freq.value}
                     onClick={() => updateData('frequency', freq.value)}

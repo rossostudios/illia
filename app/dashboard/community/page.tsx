@@ -2,30 +2,31 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
 import {
-  Search,
-  MessageSquare,
-  TrendingUp,
+  ChevronRight,
   Clock,
   Eye,
-  MapPin,
-  Info,
-  Plus,
-  X,
-  ChevronRight,
   Flag,
   Heart,
+  Info,
+  MapPin,
+  MessageSquare,
+  Plus,
   Reply,
-  Users
+  Search,
+  TrendingUp,
+  Users,
+  X,
 } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 // Mock thread data
 const MOCK_THREADS = [
   {
     id: 1,
     title: 'Reliable weekly cook in Laureles?',
-    excerpt: 'Looking for someone who can meal prep 3x/week. Any recommendations for Colombian cuisine experts?',
+    excerpt:
+      'Looking for someone who can meal prep 3x/week. Any recommendations for Colombian cuisine experts?',
     author: 'Sarah M.',
     authorAvatar: 'https://i.pravatar.cc/150?img=1',
     category: 'cooking',
@@ -40,32 +41,36 @@ const MOCK_THREADS = [
         id: 1,
         author: 'Sarah M.',
         avatar: 'https://i.pravatar.cc/150?img=1',
-        content: 'Looking for someone who can meal prep 3x/week. Any recommendations for Colombian cuisine experts? Budget around $200/month.',
+        content:
+          'Looking for someone who can meal prep 3x/week. Any recommendations for Colombian cuisine experts? Budget around $200/month.',
         timestamp: '2 hours ago',
-        isPremium: false
+        isPremium: false,
       },
       {
         id: 2,
         author: 'Mike D.',
         avatar: 'https://i.pravatar.cc/150?img=8',
-        content: 'I highly recommend Carlos Martinez! He\'s been cooking for us for 6 months. Amazing arepas and bandeja paisa. DM me for his WhatsApp.',
+        content:
+          "I highly recommend Carlos Martinez! He's been cooking for us for 6 months. Amazing arepas and bandeja paisa. DM me for his WhatsApp.",
         timestamp: '1 hour ago',
-        isPremium: true
+        isPremium: true,
       },
       {
         id: 3,
         author: 'Emma L.',
         avatar: 'https://i.pravatar.cc/150?img=5',
-        content: 'Check the Directory page - there are several cooks in Laureles with great ratings. I use Diego and he\'s fantastic for meal prep.',
+        content:
+          "Check the Directory page - there are several cooks in Laureles with great ratings. I use Diego and he's fantastic for meal prep.",
         timestamp: '30 minutes ago',
-        isPremium: false
-      }
-    ]
+        isPremium: false,
+      },
+    ],
   },
   {
     id: 2,
     title: 'Best cleaners in El Poblado - vetted list',
-    excerpt: 'After 2 years here, sharing my trusted cleaners list. All speak some English and are very reliable...',
+    excerpt:
+      'After 2 years here, sharing my trusted cleaners list. All speak some English and are very reliable...',
     author: 'John K.',
     authorAvatar: 'https://i.pravatar.cc/150?img=11',
     category: 'cleaning',
@@ -75,12 +80,13 @@ const MOCK_THREADS = [
     lastReply: '5 hours ago',
     isHot: true,
     isPremium: true,
-    posts: []
+    posts: [],
   },
   {
     id: 3,
     title: 'Visa renewal tips for Florianópolis?',
-    excerpt: 'My digital nomad visa expires next month. What documents do I need for renewal? Any gotchas?',
+    excerpt:
+      'My digital nomad visa expires next month. What documents do I need for renewal? Any gotchas?',
     author: 'Lisa R.',
     authorAvatar: 'https://i.pravatar.cc/150?img=9',
     category: 'general',
@@ -90,12 +96,13 @@ const MOCK_THREADS = [
     lastReply: '1 day ago',
     isHot: false,
     isPremium: false,
-    posts: []
+    posts: [],
   },
   {
     id: 4,
     title: 'Warning: Avoid this cleaning service',
-    excerpt: 'Had a bad experience with XYZ Cleaning. They damaged my apartment and refused to compensate...',
+    excerpt:
+      'Had a bad experience with XYZ Cleaning. They damaged my apartment and refused to compensate...',
     author: 'Carlos P.',
     authorAvatar: 'https://i.pravatar.cc/150?img=33',
     category: 'reviews',
@@ -105,12 +112,13 @@ const MOCK_THREADS = [
     lastReply: '3 hours ago',
     isHot: true,
     isPremium: false,
-    posts: []
+    posts: [],
   },
   {
     id: 5,
     title: 'Eco-friendly cleaners in Campeche?',
-    excerpt: 'Looking for green cleaning services near the beach. Any providers use natural products?',
+    excerpt:
+      'Looking for green cleaning services near the beach. Any providers use natural products?',
     author: 'Ana B.',
     authorAvatar: 'https://i.pravatar.cc/150?img=20',
     category: 'cleaning',
@@ -120,12 +128,13 @@ const MOCK_THREADS = [
     lastReply: '2 days ago',
     isHot: false,
     isPremium: false,
-    posts: []
+    posts: [],
   },
   {
     id: 6,
     title: 'Monthly potluck meetup - join us!',
-    excerpt: 'Every first Saturday we do a potluck in Parque Lleras. Great way to meet other expats and share tips!',
+    excerpt:
+      'Every first Saturday we do a potluck in Parque Lleras. Great way to meet other expats and share tips!',
     author: 'Tom W.',
     authorAvatar: 'https://i.pravatar.cc/150?img=15',
     category: 'general',
@@ -135,12 +144,13 @@ const MOCK_THREADS = [
     lastReply: '6 hours ago',
     isHot: true,
     isPremium: false,
-    posts: []
+    posts: [],
   },
   {
     id: 7,
     title: 'Meal prep services comparison',
-    excerpt: 'I tried 5 different meal prep services this month. Here\'s my detailed review with prices and quality...',
+    excerpt:
+      "I tried 5 different meal prep services this month. Here's my detailed review with prices and quality...",
     author: 'Rachel G.',
     authorAvatar: 'https://i.pravatar.cc/150?img=25',
     category: 'cooking',
@@ -150,12 +160,13 @@ const MOCK_THREADS = [
     lastReply: '12 hours ago',
     isHot: true,
     isPremium: true,
-    posts: []
+    posts: [],
   },
   {
     id: 8,
     title: 'Contract template for home help?',
-    excerpt: 'Does anyone have a Spanish/Portuguese contract template for hiring cleaners? Want to do things properly.',
+    excerpt:
+      'Does anyone have a Spanish/Portuguese contract template for hiring cleaners? Want to do things properly.',
     author: 'David L.',
     authorAvatar: 'https://i.pravatar.cc/150?img=12',
     category: 'general',
@@ -165,8 +176,8 @@ const MOCK_THREADS = [
     lastReply: '3 days ago',
     isHot: false,
     isPremium: false,
-    posts: []
-  }
+    posts: [],
+  },
 ]
 
 const CATEGORIES = [
@@ -176,7 +187,7 @@ const CATEGORIES = [
   { id: 'cleaning', label: 'Cleaning', count: 45 },
   { id: 'cooking', label: 'Cooking', count: 32 },
   { id: 'reviews', label: 'Reviews', count: 28 },
-  { id: 'general', label: 'General', count: 51 }
+  { id: 'general', label: 'General', count: 51 },
 ]
 
 const RELATED_PROVIDERS = [
@@ -185,22 +196,22 @@ const RELATED_PROVIDERS = [
     name: 'Carlos Martinez',
     service: 'Cooking & Meal Prep',
     rating: 4.7,
-    location: 'Laureles'
+    location: 'Laureles',
   },
   {
     id: 2,
     name: 'Diego Ramirez',
     service: 'Meal Prep',
     rating: 4.9,
-    location: 'Envigado'
+    location: 'Envigado',
   },
   {
     id: 3,
     name: 'Ana Silva',
     service: 'House Cleaning',
     rating: 4.9,
-    location: 'Lagoa'
-  }
+    location: 'Lagoa',
+  },
 ]
 
 export default function CommunityPage() {
@@ -214,13 +225,16 @@ export default function CommunityPage() {
     title: '',
     body: '',
     city: 'medellin',
-    category: 'general'
+    category: 'general',
   })
 
   // Filter threads
-  const filteredThreads = MOCK_THREADS.filter(thread => {
-    if (searchQuery && !thread.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !thread.excerpt.toLowerCase().includes(searchQuery.toLowerCase())) {
+  const filteredThreads = MOCK_THREADS.filter((thread) => {
+    if (
+      searchQuery &&
+      !thread.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      !thread.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
+    ) {
       return false
     }
     if (selectedCategory !== 'all') {
@@ -263,7 +277,8 @@ export default function CommunityPage() {
               {showTooltip && (
                 <div className="absolute left-0 top-8 w-64 p-3 bg-white rounded-lg shadow-lg border border-teal-100 z-10">
                   <p className="text-sm text-gray-600">
-                    Our forums are for real talk on settling in—ask about maids in Medellín or cooking pros in Floripa. Premium: Unlimited replies & priority visibility.
+                    Our forums are for real talk on settling in—ask about maids in Medellín or
+                    cooking pros in Floripa. Premium: Unlimited replies & priority visibility.
                   </p>
                 </div>
               )}
@@ -299,7 +314,7 @@ export default function CommunityPage() {
 
           {/* Category Tabs */}
           <div className="flex flex-wrap gap-2 mt-4">
-            {CATEGORIES.map(category => (
+            {CATEGORIES.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
@@ -405,9 +420,7 @@ export default function CommunityPage() {
           <div className="text-center py-16 bg-white rounded-xl">
             <Users className="h-16 w-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">No threads found</h3>
-            <p className="text-gray-600 mb-6">
-              Start the conversation—post your first question!
-            </p>
+            <p className="text-gray-600 mb-6">Start the conversation—post your first question!</p>
             <button
               onClick={() => setShowNewPostModal(true)}
               className="px-6 py-3 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors"
@@ -435,9 +448,7 @@ export default function CommunityPage() {
                 {/* Form */}
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Title
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
                     <input
                       type="text"
                       value={newPost.title}
@@ -462,9 +473,7 @@ export default function CommunityPage() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        City
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
                       <select
                         value={newPost.city}
                         onChange={(e) => setNewPost({ ...newPost, city: e.target.value })}
@@ -523,7 +532,9 @@ export default function CommunityPage() {
                   {/* Thread Header */}
                   <div className="flex items-start justify-between mb-6 pb-4 border-b">
                     <div>
-                      <h2 className="text-2xl font-bold text-gray-900 mb-2">{selectedThread.title}</h2>
+                      <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                        {selectedThread.title}
+                      </h2>
                       <div className="flex items-center gap-3 text-sm text-gray-500">
                         <span className="flex items-center gap-1">
                           <MapPin className="h-4 w-4" />
@@ -545,16 +556,19 @@ export default function CommunityPage() {
 
                   {/* Posts */}
                   <div className="space-y-4 mb-6">
-                    {(selectedThread.posts.length > 0 ? selectedThread.posts : [
-                      {
-                        id: 1,
-                        author: selectedThread.author,
-                        avatar: selectedThread.authorAvatar,
-                        content: selectedThread.excerpt,
-                        timestamp: selectedThread.lastReply,
-                        isPremium: selectedThread.isPremium
-                      }
-                    ]).map((post: any) => (
+                    {(selectedThread.posts.length > 0
+                      ? selectedThread.posts
+                      : [
+                          {
+                            id: 1,
+                            author: selectedThread.author,
+                            avatar: selectedThread.authorAvatar,
+                            content: selectedThread.excerpt,
+                            timestamp: selectedThread.lastReply,
+                            isPremium: selectedThread.isPremium,
+                          },
+                        ]
+                    ).map((post: any) => (
                       <div key={post.id} className="flex gap-3">
                         <img
                           src={post.avatar}
@@ -624,7 +638,7 @@ export default function CommunityPage() {
               <div className="w-80 border-l bg-gray-50 p-6 overflow-y-auto">
                 <h3 className="font-semibold text-gray-900 mb-4">Related Providers</h3>
                 <div className="space-y-3 mb-6">
-                  {RELATED_PROVIDERS.map(provider => (
+                  {RELATED_PROVIDERS.map((provider) => (
                     <div key={provider.id} className="bg-white rounded-lg p-3">
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-medium text-sm">{provider.name}</span>
@@ -644,7 +658,7 @@ export default function CommunityPage() {
 
                 <h3 className="font-semibold text-gray-900 mb-4">Similar Threads</h3>
                 <div className="space-y-3">
-                  {MOCK_THREADS.slice(0, 3).map(thread => (
+                  {MOCK_THREADS.slice(0, 3).map((thread) => (
                     <div key={thread.id} className="text-sm">
                       <p className="font-medium text-gray-800 hover:text-teal-600 cursor-pointer line-clamp-2">
                         {thread.title}

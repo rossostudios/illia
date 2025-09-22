@@ -2,32 +2,32 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import {
-  UserCircle,
-  Camera,
-  Save,
-  Shield,
-  CreditCard,
-  Globe,
+  AlertTriangle,
   Bell,
-  Download,
-  Trash2,
+  Calendar,
+  Camera,
   Check,
-  X,
+  ChevronDown,
+  CreditCard,
+  DollarSign,
+  Download,
+  Globe,
+  Home,
   Info,
   LogOut,
-  ChevronDown,
+  Mail,
   MapPin,
-  DollarSign,
-  Calendar,
-  AlertTriangle,
-  Home,
-  Utensils,
+  Save,
+  Shield,
+  Trash2,
+  UserCircle,
   Users,
-  Mail
+  Utensils,
+  X,
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 // Mock user data
 const MOCK_USER = {
@@ -47,25 +47,25 @@ const MOCK_USER = {
     email: true,
     matches: true,
     forum: false,
-    marketing: false
+    marketing: false,
   },
   privacy: {
     discoverable: true,
     showInForums: true,
-    shareLocation: false
+    shareLocation: false,
   },
   joinDate: '2024-08-15',
   billingHistory: [
     { date: '2024-09-01', amount: '$0.00', description: 'Free Plan' },
-    { date: '2024-08-01', amount: '$0.00', description: 'Free Plan' }
-  ]
+    { date: '2024-08-01', amount: '$0.00', description: 'Free Plan' },
+  ],
 }
 
 const TABS = [
   { id: 'personal', label: 'Personal Info', icon: UserCircle },
   { id: 'preferences', label: 'Preferences', icon: Home },
   { id: 'membership', label: 'Membership', icon: CreditCard },
-  { id: 'privacy', label: 'Privacy', icon: Shield }
+  { id: 'privacy', label: 'Privacy', icon: Shield },
 ]
 
 const SERVICES = [
@@ -73,13 +73,13 @@ const SERVICES = [
   { id: 'cooking', label: 'Cooking', icon: Utensils },
   { id: 'meal-prep', label: 'Meal Prep', icon: Utensils },
   { id: 'laundry', label: 'Laundry', icon: Home },
-  { id: 'organization', label: 'Organization', icon: Home }
+  { id: 'organization', label: 'Organization', icon: Home },
 ]
 
 const LANGUAGES = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
   { code: 'es', label: 'Español', flag: '🇪🇸' },
-  { code: 'pt', label: 'Português', flag: '🇧🇷' }
+  { code: 'pt', label: 'Português', flag: '🇧🇷' },
 ]
 
 export default function ProfilePage() {
@@ -101,7 +101,7 @@ export default function ProfilePage() {
     budget: MOCK_USER.budget,
     language: MOCK_USER.language,
     notifications: { ...MOCK_USER.notifications },
-    privacy: { ...MOCK_USER.privacy }
+    privacy: { ...MOCK_USER.privacy },
   })
 
   const handleSave = (section: string) => {
@@ -117,31 +117,31 @@ export default function ProfilePage() {
   }
 
   const handleServiceToggle = (serviceId: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       services: prev.services.includes(serviceId)
-        ? prev.services.filter(id => id !== serviceId)
-        : [...prev.services, serviceId]
+        ? prev.services.filter((id) => id !== serviceId)
+        : [...prev.services, serviceId],
     }))
   }
 
   const handleNotificationToggle = (key: keyof typeof formData.notifications) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       notifications: {
         ...prev.notifications,
-        [key]: !prev.notifications[key]
-      }
+        [key]: !prev.notifications[key],
+      },
     }))
   }
 
   const handlePrivacyToggle = (key: keyof typeof formData.privacy) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       privacy: {
         ...prev.privacy,
-        [key]: !prev.privacy[key]
-      }
+        [key]: !prev.privacy[key],
+      },
     }))
   }
 
@@ -177,7 +177,8 @@ export default function ProfilePage() {
                 {showTooltip && (
                   <div className="absolute left-0 top-8 w-64 p-3 bg-white rounded-lg shadow-lg border border-teal-100 z-10">
                     <p className="text-sm text-gray-600">
-                      Update your details to get better matches—your info stays private unless shared.
+                      Update your details to get better matches—your info stays private unless
+                      shared.
                     </p>
                   </div>
                 )}
@@ -191,16 +192,16 @@ export default function ProfilePage() {
                 className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <Globe className="h-4 w-4" />
-                <span>{LANGUAGES.find(l => l.code === formData.language)?.label}</span>
+                <span>{LANGUAGES.find((l) => l.code === formData.language)?.label}</span>
                 <ChevronDown className="h-4 w-4" />
               </button>
               {showLanguageDropdown && (
                 <div className="absolute top-full right-0 mt-1 w-48 bg-white rounded-lg shadow-lg border z-10">
-                  {LANGUAGES.map(lang => (
+                  {LANGUAGES.map((lang) => (
                     <button
                       key={lang.code}
                       onClick={() => {
-                        setFormData(prev => ({ ...prev, language: lang.code }))
+                        setFormData((prev) => ({ ...prev, language: lang.code }))
                         setShowLanguageDropdown(false)
                         showSuccessToast(`Language changed to ${lang.label}`)
                       }}
@@ -221,7 +222,7 @@ export default function ProfilePage() {
 
         {/* Tabs Navigation */}
         <div className="flex gap-1 mb-6 bg-white rounded-lg p-1 shadow-sm">
-          {TABS.map(tab => {
+          {TABS.map((tab) => {
             const Icon = tab.icon
             return (
               <button
@@ -261,19 +262,19 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-900">Profile Photo</p>
-                  <p className="text-xs text-gray-500">Upload a photo to help providers recognize you</p>
+                  <p className="text-xs text-gray-500">
+                    Upload a photo to help providers recognize you
+                  </p>
                 </div>
               </div>
 
               {/* Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                 <input
                   type="text"
                   value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
@@ -294,12 +295,10 @@ export default function ProfilePage() {
 
               {/* Bio */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  About You
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">About You</label>
                 <textarea
                   value={formData.bio}
-                  onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, bio: e.target.value }))}
                   placeholder="Tell us about your expat setup..."
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                   rows={4}
@@ -332,7 +331,7 @@ export default function ProfilePage() {
                 </label>
                 <div className="grid grid-cols-2 gap-4">
                   <button
-                    onClick={() => setFormData(prev => ({ ...prev, city: 'medellin' }))}
+                    onClick={() => setFormData((prev) => ({ ...prev, city: 'medellin' }))}
                     className={`p-4 rounded-lg border-2 transition-all ${
                       formData.city === 'medellin'
                         ? 'border-teal-500 bg-teal-50'
@@ -344,7 +343,7 @@ export default function ProfilePage() {
                     <p className="text-xs text-gray-500 mt-1">Colombia</p>
                   </button>
                   <button
-                    onClick={() => setFormData(prev => ({ ...prev, city: 'florianopolis' }))}
+                    onClick={() => setFormData((prev) => ({ ...prev, city: 'florianopolis' }))}
                     className={`p-4 rounded-lg border-2 transition-all ${
                       formData.city === 'florianopolis'
                         ? 'border-teal-500 bg-teal-50'
@@ -364,7 +363,7 @@ export default function ProfilePage() {
                   Service Interests
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {SERVICES.map(service => {
+                  {SERVICES.map((service) => {
                     const Icon = service.icon
                     const isSelected = formData.services.includes(service.id)
                     return (
@@ -377,12 +376,16 @@ export default function ProfilePage() {
                             : 'border-gray-200 hover:border-gray-300'
                         }`}
                       >
-                        <Icon className={`h-5 w-5 mb-1 mx-auto ${
-                          isSelected ? 'text-teal-600' : 'text-gray-500'
-                        }`} />
-                        <p className={`text-xs font-medium ${
-                          isSelected ? 'text-teal-700' : 'text-gray-600'
-                        }`}>
+                        <Icon
+                          className={`h-5 w-5 mb-1 mx-auto ${
+                            isSelected ? 'text-teal-600' : 'text-gray-500'
+                          }`}
+                        />
+                        <p
+                          className={`text-xs font-medium ${
+                            isSelected ? 'text-teal-700' : 'text-gray-600'
+                          }`}
+                        >
                           {service.label}
                         </p>
                       </button>
@@ -402,10 +405,12 @@ export default function ProfilePage() {
                     min="100"
                     max="500"
                     value={formData.budget[1]}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      budget: [prev.budget[0], parseInt(e.target.value)]
-                    }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        budget: [prev.budget[0], parseInt(e.target.value)],
+                      }))
+                    }
                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-teal-600"
                   />
                 </div>
@@ -459,12 +464,16 @@ export default function ProfilePage() {
                 <div className="mb-4">
                   <div className="flex justify-between text-sm mb-2">
                     <span className="text-gray-600">Match Requests Used</span>
-                    <span className="font-medium">{MOCK_USER.matchesUsed} of {MOCK_USER.matchesLimit}</span>
+                    <span className="font-medium">
+                      {MOCK_USER.matchesUsed} of {MOCK_USER.matchesLimit}
+                    </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
                       className="bg-teal-600 h-2 rounded-full transition-all"
-                      style={{ width: `${(MOCK_USER.matchesUsed / MOCK_USER.matchesLimit) * 100}%` }}
+                      style={{
+                        width: `${(MOCK_USER.matchesUsed / MOCK_USER.matchesLimit) * 100}%`,
+                      }}
                     />
                   </div>
                   {MOCK_USER.tier === 'free' && (
@@ -503,9 +512,15 @@ export default function ProfilePage() {
                   <table className="w-full">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="text-left px-4 py-2 text-sm font-medium text-gray-700">Date</th>
-                        <th className="text-left px-4 py-2 text-sm font-medium text-gray-700">Description</th>
-                        <th className="text-right px-4 py-2 text-sm font-medium text-gray-700">Amount</th>
+                        <th className="text-left px-4 py-2 text-sm font-medium text-gray-700">
+                          Date
+                        </th>
+                        <th className="text-left px-4 py-2 text-sm font-medium text-gray-700">
+                          Description
+                        </th>
+                        <th className="text-right px-4 py-2 text-sm font-medium text-gray-700">
+                          Amount
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -550,9 +565,11 @@ export default function ProfilePage() {
                       formData.privacy.discoverable ? 'bg-teal-600' : 'bg-gray-200'
                     }`}
                   >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      formData.privacy.discoverable ? 'translate-x-6' : 'translate-x-1'
-                    }`} />
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        formData.privacy.discoverable ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
                   </button>
                 </label>
 
@@ -570,9 +587,11 @@ export default function ProfilePage() {
                       formData.privacy.showInForums ? 'bg-teal-600' : 'bg-gray-200'
                     }`}
                   >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      formData.privacy.showInForums ? 'translate-x-6' : 'translate-x-1'
-                    }`} />
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        formData.privacy.showInForums ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
                   </button>
                 </label>
 
@@ -590,9 +609,11 @@ export default function ProfilePage() {
                       formData.privacy.shareLocation ? 'bg-teal-600' : 'bg-gray-200'
                     }`}
                   >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      formData.privacy.shareLocation ? 'translate-x-6' : 'translate-x-1'
-                    }`} />
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        formData.privacy.shareLocation ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
                   </button>
                 </label>
               </div>
@@ -615,9 +636,11 @@ export default function ProfilePage() {
                       formData.notifications.matches ? 'bg-teal-600' : 'bg-gray-200'
                     }`}
                   >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      formData.notifications.matches ? 'translate-x-6' : 'translate-x-1'
-                    }`} />
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        formData.notifications.matches ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
                   </button>
                 </label>
 
@@ -635,9 +658,11 @@ export default function ProfilePage() {
                       formData.notifications.forum ? 'bg-teal-600' : 'bg-gray-200'
                     }`}
                   >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      formData.notifications.forum ? 'translate-x-6' : 'translate-x-1'
-                    }`} />
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        formData.notifications.forum ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
                   </button>
                 </label>
               </div>
@@ -659,7 +684,8 @@ export default function ProfilePage() {
                   </button>
                 </div>
                 <p className="text-xs text-gray-500">
-                  Your data is secure and encrypted. We never share your personal information without consent.
+                  Your data is secure and encrypted. We never share your personal information
+                  without consent.
                 </p>
               </div>
 
@@ -696,7 +722,8 @@ export default function ProfilePage() {
                 <h2 className="text-xl font-bold text-gray-900">Delete Account?</h2>
               </div>
               <p className="text-gray-600 mb-6">
-                This action cannot be undone. All your data, matches, and forum posts will be permanently deleted.
+                This action cannot be undone. All your data, matches, and forum posts will be
+                permanently deleted.
               </p>
               <div className="flex gap-3">
                 <button

@@ -1,27 +1,27 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
 import {
-  Search,
-  Home,
-  Play,
-  FileText,
   BarChart3,
-  Key,
-  Settings,
-  ChevronDown,
   Bell,
-  HelpCircle,
-  FileCode,
-  X,
-  Sparkles,
-  MessageSquare,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  Clock,
+  FileCode,
+  FileText,
+  HelpCircle,
+  Home,
+  Key,
+  MessageSquare,
+  Play,
+  Search,
+  Settings,
+  Sparkles,
   TrendingUp,
-  Clock
+  X,
 } from 'lucide-react'
+import Link from 'next/link'
+import { useState } from 'react'
 
 export default function UsagePage() {
   const [showExtractMenu, setShowExtractMenu] = useState(false)
@@ -41,8 +41,8 @@ export default function UsagePage() {
       isOpen: showExtractMenu,
       submenu: [
         { label: 'Overview', href: '/dashboard/extract' },
-        { label: 'Playground', href: '/dashboard/extract/playground' }
-      ]
+        { label: 'Playground', href: '/dashboard/extract/playground' },
+      ],
     },
     { icon: BarChart3, label: 'Activity Logs', href: '/dashboard/logs' },
     { icon: BarChart3, label: 'Usage', href: '/dashboard/usage', active: true },
@@ -57,7 +57,9 @@ export default function UsagePage() {
         {/* Logo */}
         <div className="p-4 border-b">
           <Link href="/dashboard" className="flex items-center space-x-2 group">
-            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">Illia</span>
+            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">
+              Illia
+            </span>
           </Link>
         </div>
 
@@ -81,9 +83,7 @@ export default function UsagePage() {
               <Link
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  item.active
-                    ? 'bg-teal-50 text-teal-600'
-                    : 'text-gray-700 hover:bg-gray-100'
+                  item.active ? 'bg-teal-50 text-teal-600' : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={(e) => {
                   if (item.hasSubmenu) {
@@ -97,7 +97,9 @@ export default function UsagePage() {
                   <span>{item.label}</span>
                 </div>
                 {item.hasSubmenu && (
-                  <ChevronDown className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`}
+                  />
                 )}
               </Link>
               {item.hasSubmenu && item.isOpen && (
@@ -137,9 +139,7 @@ export default function UsagePage() {
             </div>
 
             {/* User email */}
-            <div className="mt-4 px-3 py-2 text-xs text-gray-500">
-              samlee@content-mobbin.com
-            </div>
+            <div className="mt-4 px-3 py-2 text-xs text-gray-500">samlee@content-mobbin.com</div>
 
             {/* Collapse button */}
             <button className="flex items-center space-x-2 mt-2 text-xs text-gray-600 hover:text-gray-900">
@@ -229,7 +229,8 @@ export default function UsagePage() {
               {/* Note */}
               <div className="bg-yellow-50 border border-yellow-400 rounded-lg p-4 mb-6">
                 <p className="text-sm text-gray-700">
-                  Note: Lead generation data may take at least one hour to reflect recent lead gens. Pro plan: Unlimited leads!
+                  Note: Lead generation data may take at least one hour to reflect recent lead gens.
+                  Pro plan: Unlimited leads!
                 </p>
               </div>
 
@@ -247,19 +248,20 @@ export default function UsagePage() {
                       <p className="text-sm text-gray-600 mb-2">Leads Generated</p>
                       <div className="flex items-end space-x-2">
                         <span className="text-2xl font-bold">21</span>
-                        <span className="text-sm text-gray-500">/ <span className="font-bold text-teal-600">500</span> leads</span>
+                        <span className="text-sm text-gray-500">
+                          / <span className="font-bold text-teal-600">500</span> leads
+                        </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
-                        <div
-                          className="bg-teal-500 h-2 rounded-full"
-                          style={{ width: '4%' }}
-                        />
+                        <div className="bg-teal-500 h-2 rounded-full" style={{ width: '4%' }} />
                       </div>
                     </div>
 
                     <div className="pt-4 border-t space-y-2">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Bonus leads from promo (ZIP 29401 focus)</span>
+                        <span className="text-gray-600">
+                          Bonus leads from promo (ZIP 29401 focus)
+                        </span>
                         <span className="font-medium">4</span>
                       </div>
                       <p className="text-sm text-gray-500">
@@ -284,7 +286,9 @@ export default function UsagePage() {
                       <p className="text-sm text-gray-600 mb-2">Leads used this cycle</p>
                       <div className="flex items-end space-x-2">
                         <span className="text-2xl font-bold">0</span>
-                        <span className="text-sm text-gray-500">/ <span className="font-bold text-teal-600">500</span> leads</span>
+                        <span className="text-sm text-gray-500">
+                          / <span className="font-bold text-teal-600">500</span> leads
+                        </span>
                       </div>
                       <div className="w-full bg-gray-300 rounded-full h-2 mt-3">
                         <div className="bg-gray-300 h-2 rounded-full" style={{ width: '0%' }} />
@@ -465,11 +469,17 @@ export default function UsagePage() {
                 </div>
 
                 <div className="h-64 relative">
-                  <div className="absolute top-0 left-0 right-0 border-t-2 border-dashed border-gray-300" style={{ top: '0%' }}>
+                  <div
+                    className="absolute top-0 left-0 right-0 border-t-2 border-dashed border-gray-300"
+                    style={{ top: '0%' }}
+                  >
                     <span className="absolute -top-3 -left-8 text-xs text-gray-500">2</span>
                   </div>
 
-                  <div className="absolute bottom-0 right-10 w-1 bg-teal-500" style={{ height: '60%' }} />
+                  <div
+                    className="absolute bottom-0 right-10 w-1 bg-teal-500"
+                    style={{ height: '60%' }}
+                  />
 
                   <div className="absolute bottom-0 left-0 right-0 flex justify-between text-xs text-gray-500 pt-2 border-t">
                     <span>04:00 PM</span>
@@ -499,7 +509,13 @@ export default function UsagePage() {
 
 function Users({ className }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
       <circle cx="9" cy="7" r="4" />
       <path d="M23 21v-2a4 4 0 0 0-3-3.87" />

@@ -10,9 +10,15 @@ export default function AppFooter() {
       <div className="max-w-7xl mx-auto text-center text-sm text-gray-600 space-y-2">
         <div className="flex justify-center items-center gap-4 flex-wrap">
           <span>© 2025 Illia.club. All rights reserved.</span>
-          <a href="/privacy" className="hover:text-teal-600 underline">Privacy</a>
-          <a href="/terms" className="hover:text-teal-600 underline">Terms</a>
-          <a href="/support" className="hover:text-teal-600 underline">Support</a>
+          <a href="/privacy" className="hover:text-teal-600 underline">
+            Privacy
+          </a>
+          <a href="/terms" className="hover:text-teal-600 underline">
+            Terms
+          </a>
+          <a href="/support" className="hover:text-teal-600 underline">
+            Support
+          </a>
         </div>
         <select
           value={lang}

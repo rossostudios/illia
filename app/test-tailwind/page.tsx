@@ -6,12 +6,8 @@ export default function TailwindTest() {
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header with Gradient Text */}
         <header className="text-center space-y-4 animate-in">
-          <h1 className="text-gradient">
-            Tailwind CSS v4 Optimized
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Modern styling with Illia's brand colors
-          </p>
+          <h1 className="text-gradient">Tailwind CSS v4 Optimized</h1>
+          <p className="text-gray-600 text-lg">Modern styling with Illia's brand colors</p>
         </header>
 
         {/* Component Showcase */}
@@ -20,15 +16,9 @@ export default function TailwindTest() {
           <div className="card hover-lift">
             <h3 className="mb-4">Button Styles</h3>
             <div className="space-y-3">
-              <button className="btn-primary w-full">
-                Primary Button
-              </button>
-              <button className="btn-secondary w-full">
-                Secondary Button
-              </button>
-              <button className="btn-outline w-full">
-                Outline Button
-              </button>
+              <button className="btn-primary w-full">Primary Button</button>
+              <button className="btn-secondary w-full">Secondary Button</button>
+              <button className="btn-outline w-full">Outline Button</button>
             </div>
           </div>
 
@@ -39,9 +29,7 @@ export default function TailwindTest() {
               <span className="badge-success">Success</span>
               <span className="badge-warning">Warning</span>
               <span className="badge-error">Error</span>
-              <span className="badge bg-primary-100 text-primary-800">
-                Custom
-              </span>
+              <span className="badge bg-primary-100 text-primary-800">Custom</span>
             </div>
           </div>
 
@@ -49,15 +37,8 @@ export default function TailwindTest() {
           <div className="card hover-lift">
             <h3 className="mb-4">Form Inputs</h3>
             <div className="space-y-3">
-              <input
-                type="text"
-                className="input"
-                placeholder="Standard input field"
-              />
-              <textarea
-                className="input min-h-[100px]"
-                placeholder="Textarea with same styling"
-              />
+              <input type="text" className="input" placeholder="Standard input field" />
+              <textarea className="input min-h-[100px]" placeholder="Textarea with same styling" />
             </div>
           </div>
 
@@ -66,9 +47,7 @@ export default function TailwindTest() {
             <div className="absolute inset-0 bg-gradient-to-r from-primary-400 to-primary-600" />
             <div className="relative glass p-6 text-white">
               <h3 className="mb-2 text-white">Glass Morphism</h3>
-              <p className="text-white/90 text-sm">
-                Modern glassmorphic design with backdrop blur
-              </p>
+              <p className="text-white/90 text-sm">Modern glassmorphic design with backdrop blur</p>
             </div>
           </div>
 
@@ -99,7 +78,7 @@ export default function TailwindTest() {
         <section className="card">
           <h3 className="mb-4">Illia Color Palette</h3>
           <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
-            {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map(shade => (
+            {[50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map((shade) => (
               <div key={shade} className="space-y-2">
                 <div
                   className={`w-full aspect-square rounded-lg bg-teal-${shade}`}
@@ -131,7 +110,7 @@ export default function TailwindTest() {
         <section className="card">
           <h3 className="mb-4">Responsive Grid System</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map(i => (
+            {[1, 2, 3, 4].map((i) => (
               <div key={i} className="p-4 bg-gray-100 rounded-lg text-center">
                 <p className="font-medium">Item {i}</p>
               </div>
@@ -143,9 +122,7 @@ export default function TailwindTest() {
         <section className="card">
           <h3 className="mb-4">Accessibility</h3>
           <div className="space-y-4">
-            <button className="btn-primary focus-visible-ring">
-              Tab to see focus ring
-            </button>
+            <button className="btn-primary focus-visible-ring">Tab to see focus ring</button>
             <p className="text-sm text-gray-600">
               All interactive elements have proper focus states and ARIA labels
             </p>

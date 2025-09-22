@@ -1,37 +1,37 @@
-import { Zap, Target, Database, ChartBar, Shield, Globe } from 'lucide-react'
+import { ChartBar, Database, Globe, Shield, Target, Zap } from 'lucide-react'
 
 export default function Features() {
   const features = [
     {
       icon: Zap,
       title: 'Lightning Matches',
-      description: 'Discover & match with vetted pros in seconds—AI-curated for your needs.'
+      description: 'Discover & match with vetted pros in seconds—AI-curated for your needs.',
     },
     {
       icon: Target,
       title: 'Smart Matching',
-      description: 'AI scores providers on fit (English level, rates, reviews)—no more guesswork.'
+      description: 'AI scores providers on fit (English level, rates, reviews)—no more guesswork.',
     },
     {
       icon: Database,
       title: 'Vetted Profiles',
-      description: 'Rich details: Bios, rates, photos, & community reviews—all verified.'
+      description: 'Rich details: Bios, rates, photos, & community reviews—all verified.',
     },
     {
       icon: ChartBar,
       title: 'Match Insights',
-      description: 'Track your hires & savings with simple dashboards—see ROI in real-time.'
+      description: 'Track your hires & savings with simple dashboards—see ROI in real-time.',
     },
     {
       icon: Shield,
       title: 'Privacy-First',
-      description: 'Secure & compliant—your data (and matches) protected like family.'
+      description: 'Secure & compliant—your data (and matches) protected like family.',
     },
     {
       icon: Globe,
       title: 'City-Savvy',
-      description: 'Tailored for Medellín & Florianópolis—local insights from expat networks.'
-    }
+      description: 'Tailored for Medellín & Florianópolis—local insights from expat networks.',
+    },
   ]
 
   return (
@@ -42,7 +42,8 @@ export default function Features() {
             Everything You Need for Seamless Expat Living
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Curated tools designed for expats to find and connect with reliable home help—fast & safe.
+            Curated tools designed for expats to find and connect with reliable home help—fast &
+            safe.
           </p>
         </div>
 

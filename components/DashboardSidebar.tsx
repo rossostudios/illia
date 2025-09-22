@@ -1,23 +1,23 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
 import {
-  Search,
-  Home,
-  Users,
-  Star,
+  ChevronDown,
   CreditCard,
   Globe,
-  Settings,
-  ChevronDown,
-  Sparkles,
-  X,
+  Home,
   LogOut,
+  MessageSquare,
+  Search,
+  Settings,
+  Sparkles,
+  Star,
   User,
-  MessageSquare
+  Users,
+  X,
 } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { supabase } from '@/utils/supabase/client'
 
 interface DashboardSidebarProps {
@@ -26,7 +26,10 @@ interface DashboardSidebarProps {
   userEmail?: string | null
 }
 
-export default function DashboardSidebar({ isCollapsed = false, userEmail }: DashboardSidebarProps) {
+export default function DashboardSidebar({
+  isCollapsed = false,
+  userEmail,
+}: DashboardSidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const [showExtractMenu, setShowExtractMenu] = useState(pathname.includes('/extract'))
@@ -42,22 +45,41 @@ export default function DashboardSidebar({ isCollapsed = false, userEmail }: Das
     { icon: Search, label: 'Explore', href: '/dashboard/explore', subtitle: 'Discover matches' },
     { icon: Users, label: 'Directory', href: '/dashboard/directory', subtitle: 'Browse providers' },
     { icon: Star, label: 'My Matches', href: '/dashboard/matches', subtitle: 'Reviews & intros' },
-    { icon: MessageSquare, label: 'Community', href: '/dashboard/community', subtitle: 'Expat forums' },
-    { icon: CreditCard, label: 'Membership', href: '/dashboard/membership', subtitle: 'Tier & benefits' },
-    { icon: Settings, label: 'Profile', href: '/dashboard/profile', subtitle: 'Account & settings' },
+    {
+      icon: MessageSquare,
+      label: 'Community',
+      href: '/dashboard/community',
+      subtitle: 'Expat forums',
+    },
+    {
+      icon: CreditCard,
+      label: 'Membership',
+      href: '/dashboard/membership',
+      subtitle: 'Tier & benefits',
+    },
+    {
+      icon: Settings,
+      label: 'Profile',
+      href: '/dashboard/profile',
+      subtitle: 'Account & settings',
+    },
   ]
 
   return (
-    <div className={`fixed inset-y-0 left-0 bg-white border-r flex flex-col transition-all duration-300 ease-in-out ${
-      isCollapsed ? 'w-16' : 'w-64'
-    }`}>
+    <div
+      className={`fixed inset-y-0 left-0 bg-white border-r flex flex-col transition-all duration-300 ease-in-out ${
+        isCollapsed ? 'w-16' : 'w-64'
+      }`}
+    >
       {/* Logo */}
       <div className={`border-b ${isCollapsed ? 'p-2' : 'p-4'}`}>
         <Link href="/dashboard" className="flex items-center space-x-2 group">
           <div className="flex flex-col">
-            <span className={`font-bold text-teal-600 drop-shadow-sm transition-all group-hover:text-teal-700 group-hover:drop-shadow-md ${
-              isCollapsed ? 'text-lg' : 'text-xl md:text-2xl'
-            }`}>
+            <span
+              className={`font-bold text-teal-600 drop-shadow-sm transition-all group-hover:text-teal-700 group-hover:drop-shadow-md ${
+                isCollapsed ? 'text-lg' : 'text-xl md:text-2xl'
+              }`}
+            >
               {isCollapsed ? 'I' : 'Illia.club'}
             </span>
             {!isCollapsed && (
@@ -85,9 +107,7 @@ export default function DashboardSidebar({ isCollapsed = false, userEmail }: Das
       {/* Navigation */}
       <nav className={`space-y-1 flex-1 ${isCollapsed ? 'px-2' : 'px-3'}`}>
         {sidebarItems.map((item) => {
-          const isActive = item.hasSubmenu
-            ? pathname.includes(item.href)
-            : pathname === item.href
+          const isActive = item.hasSubmenu ? pathname.includes(item.href) : pathname === item.href
 
           return (
             <div key={item.label}>
@@ -95,11 +115,7 @@ export default function DashboardSidebar({ isCollapsed = false, userEmail }: Das
                 href={item.href}
                 className={`flex items-center justify-between rounded-lg text-sm font-medium transition-colors ${
                   isCollapsed ? 'px-2 py-2' : 'px-3 py-2'
-                } ${
-                  isActive
-                    ? 'bg-teal-50 text-teal-600'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
+                } ${isActive ? 'bg-teal-50 text-teal-600' : 'text-gray-700 hover:bg-gray-100'}`}
                 onClick={(e) => {
                   if (item.hasSubmenu && !isCollapsed) {
                     e.preventDefault()
@@ -108,8 +124,12 @@ export default function DashboardSidebar({ isCollapsed = false, userEmail }: Das
                 }}
                 title={isCollapsed ? item.label : undefined}
               >
-                <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'}`}>
-                  <item.icon className={`${isCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${isActive ? 'text-teal-600' : ''}`} />
+                <div
+                  className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'}`}
+                >
+                  <item.icon
+                    className={`${isCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${isActive ? 'text-teal-600' : ''}`}
+                  />
                   {!isCollapsed && (
                     <div className="flex flex-col">
                       <span>{item.label}</span>
@@ -120,7 +140,9 @@ export default function DashboardSidebar({ isCollapsed = false, userEmail }: Das
                   )}
                 </div>
                 {item.hasSubmenu && !isCollapsed && (
-                  <ChevronDown className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`}
+                  />
                 )}
               </Link>
               {item.hasSubmenu && item.isOpen && !isCollapsed && (
@@ -179,11 +201,11 @@ export default function DashboardSidebar({ isCollapsed = false, userEmail }: Das
                   {userEmail ? userEmail.charAt(0).toUpperCase() : 'G'}
                 </span>
               </div>
-              <span className="text-xs text-gray-700">
-                {userEmail || 'Guest'}
-              </span>
+              <span className="text-xs text-gray-700">{userEmail || 'Guest'}</span>
             </div>
-            <ChevronDown className={`h-3 w-3 text-gray-500 transition-transform ${showUserDropdown ? 'rotate-180' : ''}`} />
+            <ChevronDown
+              className={`h-3 w-3 text-gray-500 transition-transform ${showUserDropdown ? 'rotate-180' : ''}`}
+            />
           </button>
 
           {/* Dropdown Menu */}

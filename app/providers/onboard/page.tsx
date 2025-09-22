@@ -1,26 +1,26 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 import {
+  AlertCircle,
+  Briefcase,
+  CheckCircle,
+  DollarSign,
+  Languages,
+  Loader2,
+  Mail,
+  MapPin,
+  Phone,
   Upload,
   User,
-  MapPin,
-  Languages,
-  DollarSign,
-  Briefcase,
-  Phone,
-  Mail,
-  CheckCircle,
-  AlertCircle,
-  Loader2,
-  X
+  X,
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
 const CITIES = [
   { value: 'medellin', label: 'Medellín, Colombia' },
-  { value: 'florianopolis', label: 'Florianópolis, Brazil' }
+  { value: 'florianopolis', label: 'Florianópolis, Brazil' },
 ]
 
 const SERVICES = [
@@ -31,7 +31,7 @@ const SERVICES = [
   { value: 'pet_care', label: 'Pet Care' },
   { value: 'gardening', label: 'Gardening' },
   { value: 'handyman', label: 'Handyman' },
-  { value: 'other', label: 'Other' }
+  { value: 'other', label: 'Other' },
 ]
 
 const LANGUAGES = [
@@ -40,7 +40,7 @@ const LANGUAGES = [
   { value: 'portuguese', label: 'Portuguese' },
   { value: 'french', label: 'French' },
   { value: 'german', label: 'German' },
-  { value: 'italian', label: 'Italian' }
+  { value: 'italian', label: 'Italian' },
 ]
 
 export default function ProviderOnboardPage() {
@@ -66,7 +66,7 @@ export default function ProviderOnboardPage() {
     whatsapp_number: '',
     email: '',
     phone: '',
-    photo: null as File | null
+    photo: null as File | null,
   })
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,20 +86,20 @@ export default function ProviderOnboardPage() {
   }
 
   const handleServiceToggle = (service: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       services: prev.services.includes(service)
-        ? prev.services.filter(s => s !== service)
-        : [...prev.services, service]
+        ? prev.services.filter((s) => s !== service)
+        : [...prev.services, service],
     }))
   }
 
   const handleLanguageToggle = (language: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       languages: prev.languages.includes(language)
-        ? prev.languages.filter(l => l !== language)
-        : [...prev.languages, language]
+        ? prev.languages.filter((l) => l !== language)
+        : [...prev.languages, language],
     }))
   }
 
@@ -137,9 +137,9 @@ export default function ProviderOnboardPage() {
         if (uploadError) throw uploadError
 
         // Get public URL
-        const { data: { publicUrl } } = supabase.storage
-          .from('avatars')
-          .getPublicUrl(filePath)
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from('avatars').getPublicUrl(filePath)
 
         avatar_url = publicUrl
       }
@@ -154,7 +154,10 @@ export default function ProviderOnboardPage() {
           city: formData.city,
           languages: formData.languages,
           services: formData.services,
-          specialties: formData.specialties.split(',').map(s => s.trim()).filter(Boolean),
+          specialties: formData.specialties
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean),
           rate_hourly: formData.rate_hourly ? parseFloat(formData.rate_hourly) : null,
           rate_weekly: formData.rate_weekly ? parseFloat(formData.rate_weekly) : null,
           rate_monthly: formData.rate_monthly ? parseFloat(formData.rate_monthly) : null,
@@ -163,7 +166,7 @@ export default function ProviderOnboardPage() {
           whatsapp_number: formData.whatsapp_number,
           email: formData.email,
           phone: formData.phone,
-          status: 'pending'
+          status: 'pending',
         })
         .select()
 
@@ -175,7 +178,6 @@ export default function ProviderOnboardPage() {
       setTimeout(() => {
         router.push('/providers/success')
       }, 3000)
-
     } catch (err: any) {
       setError(err.message || 'Something went wrong')
     } finally {
@@ -190,11 +192,10 @@ export default function ProviderOnboardPage() {
           <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Application Submitted!</h1>
           <p className="text-gray-600 mb-4">
-            Thank you for joining Illia.club! We'll review your application and get back to you within 24-48 hours.
+            Thank you for joining Illia.club! We'll review your application and get back to you
+            within 24-48 hours.
           </p>
-          <p className="text-sm text-gray-500">
-            Redirecting you to the success page...
-          </p>
+          <p className="text-sm text-gray-500">Redirecting you to the success page...</p>
         </div>
       </div>
     )
@@ -206,8 +207,8 @@ export default function ProviderOnboardPage() {
         <div className="bg-white rounded-xl shadow-lg p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Become a Service Provider</h1>
           <p className="text-gray-600 mb-8">
-            Join Illia.club and connect with expats in Medellín and Florianópolis.
-            Get approved and receive a $50 bonus after your first completed service!
+            Join Illia.club and connect with expats in Medellín and Florianópolis. Get approved and
+            receive a $50 bonus after your first completed service!
           </p>
 
           {error && (
@@ -220,9 +221,7 @@ export default function ProviderOnboardPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Photo Upload */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Profile Photo
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Profile Photo</label>
               <div className="flex items-center gap-4">
                 {photoPreview ? (
                   <div className="relative">
@@ -264,9 +263,7 @@ export default function ProviderOnboardPage() {
 
             {/* Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Full Name *
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
               <input
                 type="text"
                 required
@@ -279,9 +276,7 @@ export default function ProviderOnboardPage() {
 
             {/* Bio */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                About You *
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">About You *</label>
               <textarea
                 required
                 value={formData.bio}
@@ -294,15 +289,13 @@ export default function ProviderOnboardPage() {
 
             {/* City */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                City *
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">City *</label>
               <select
                 value={formData.city}
                 onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               >
-                {CITIES.map(city => (
+                {CITIES.map((city) => (
                   <option key={city.value} value={city.value}>
                     {city.label}
                   </option>
@@ -316,7 +309,7 @@ export default function ProviderOnboardPage() {
                 Services You Offer *
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {SERVICES.map(service => (
+                {SERVICES.map((service) => (
                   <label
                     key={service.value}
                     className={`flex items-center gap-2 p-3 border rounded-lg cursor-pointer transition-colors ${
@@ -343,7 +336,7 @@ export default function ProviderOnboardPage() {
                 Languages You Speak *
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {LANGUAGES.map(language => (
+                {LANGUAGES.map((language) => (
                   <label
                     key={language.value}
                     className={`flex items-center gap-2 p-3 border rounded-lg cursor-pointer transition-colors ${
@@ -436,9 +429,7 @@ export default function ProviderOnboardPage() {
               <h3 className="font-medium text-gray-900">Contact Information</h3>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email *
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Email *</label>
                 <input
                   type="email"
                   required
@@ -463,9 +454,7 @@ export default function ProviderOnboardPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                 <input
                   type="text"
                   value={formData.phone}

@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function PlaygroundPage() {
   const router = useRouter()
@@ -14,30 +14,22 @@ export default function PlaygroundPage() {
   return null
 }
 
-// Old playground code archived below for reference
-/*
-import { useState } from 'react'
-import { useSession } from '@/hooks/useSession'
-import { useRecentLeads } from '@/hooks/useRecentLeads'
-import { CHARLESTON_PERSONAS } from '@/lib/charleston-personas'
-import { calculateLeadScore } from '@/utils/lead-scoring'
-import LocalSEOWidget from '@/components/LocalSEOWidget'
-import LowcountryROICalculator from '@/components/LowcountryROICalculator'
+/* Old code - commented out as playground redirects to service-finder
 import {
-  MapPin,
+  Calendar,
+  CheckCircle,
   Copy,
   Download,
-  Loader2,
+  FileText,
   Info,
-  Calendar,
-  Star,
-  Phone,
+  Loader2,
   Mail,
-  CheckCircle,
-  FileText
+  MapPin,
+  Phone,
+  Star
 } from 'lucide-react'
 
-export default function PlaygroundPage() {
+function OldPlaygroundPage() {
   const { user } = useSession()
   const { recentLeads, loading: leadsLoading, refetch: fetchRecentLeads } = useRecentLeads()
 

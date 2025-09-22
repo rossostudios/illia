@@ -1,16 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import DashboardSidebar from '@/components/DashboardSidebar'
-import { Menu, Bell, HelpCircle } from 'lucide-react'
+import { Bell, HelpCircle, Menu } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import DashboardSidebar from '@/components/DashboardSidebar'
 import { useSession } from '@/hooks/useSession'
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const { user } = useSession()
 
@@ -41,12 +37,18 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
-      <DashboardSidebar isCollapsed={isSidebarCollapsed} onToggleCollapse={toggleSidebar} userEmail={user?.email} />
+      <DashboardSidebar
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={toggleSidebar}
+        userEmail={user?.email}
+      />
 
       {/* Main content area with responsive margin */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
-        isSidebarCollapsed ? 'ml-16' : 'ml-64'
-      }`}>
+      <div
+        className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
+          isSidebarCollapsed ? 'ml-16' : 'ml-64'
+        }`}
+      >
         {/* Top navigation bar */}
         <header className="bg-white border-b px-4 md:px-8 py-4 sticky top-0 z-10">
           <div className="flex items-center justify-between">
@@ -82,9 +84,7 @@ export default function DashboardLayout({
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-4 md:p-8">
-          {children}
-        </main>
+        <main className="flex-1 p-4 md:p-8">{children}</main>
       </div>
     </div>
   )

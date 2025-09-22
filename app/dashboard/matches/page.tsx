@@ -2,8 +2,8 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
-import { ChevronDown, X, Search } from 'lucide-react'
+import { ChevronDown, Search, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 // Mock match data
 const MOCK_MATCHES = [
@@ -22,7 +22,7 @@ const MOCK_MATCHES = [
       { date: '2024-09-08', action: 'Intro requested' },
       { date: '2024-09-09', action: 'Provider responded' },
       { date: '2024-09-10', action: 'You hired provider' },
-    ]
+    ],
   },
   {
     id: 2,
@@ -38,7 +38,7 @@ const MOCK_MATCHES = [
     interactions: [
       { date: '2024-09-20', action: 'Intro requested' },
       { date: '2024-09-20', action: 'Awaiting response' },
-    ]
+    ],
   },
   {
     id: 3,
@@ -49,14 +49,14 @@ const MOCK_MATCHES = [
     lastInteraction: 'Archived 1 month ago',
     dateRequested: '2024-08-15',
     rating: 4,
-    notes: 'Good cook but schedule didn\'t work out.',
+    notes: "Good cook but schedule didn't work out.",
     photo: '',
     interactions: [
       { date: '2024-08-15', action: 'Intro requested' },
       { date: '2024-08-16', action: 'Provider responded' },
       { date: '2024-08-20', action: 'Trial session completed' },
       { date: '2024-08-22', action: 'You archived match' },
-    ]
+    ],
   },
   {
     id: 4,
@@ -69,9 +69,7 @@ const MOCK_MATCHES = [
     rating: null,
     notes: 'Waiting for response, seems promising.',
     photo: '',
-    interactions: [
-      { date: '2024-09-17', action: 'Intro requested' },
-    ]
+    interactions: [{ date: '2024-09-17', action: 'Intro requested' }],
   },
   {
     id: 5,
@@ -90,8 +88,8 @@ const MOCK_MATCHES = [
       { date: '2024-09-16', action: 'Trial meal prepared' },
       { date: '2024-09-17', action: 'You hired provider' },
       { date: '2024-09-22', action: 'You rated 5 stars' },
-    ]
-  }
+    ],
+  },
 ]
 
 export default function MatchesPage() {
@@ -107,7 +105,7 @@ export default function MatchesPage() {
   // Initialize notes from mock data
   useEffect(() => {
     const initialNotes: Record<number, string> = {}
-    MOCK_MATCHES.forEach(match => {
+    MOCK_MATCHES.forEach((match) => {
       initialNotes[match.id] = match.notes
     })
     setUserNotes(initialNotes)
@@ -124,9 +122,12 @@ export default function MatchesPage() {
   }, [])
 
   // Filter and sort matches
-  const filteredMatches = MOCK_MATCHES.filter(match => {
-    if (searchQuery && !match.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !match.service.toLowerCase().includes(searchQuery.toLowerCase())) {
+  const filteredMatches = MOCK_MATCHES.filter((match) => {
+    if (
+      searchQuery &&
+      !match.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      !match.service.toLowerCase().includes(searchQuery.toLowerCase())
+    ) {
       return false
     }
     if (statusFilter !== 'all' && match.status !== statusFilter) {
@@ -185,12 +186,15 @@ export default function MatchesPage() {
               onClick={() => setShowStatusDropdown(!showStatusDropdown)}
               className="px-4 py-2 border border-gray-300 rounded flex items-center gap-2 hover:bg-gray-50"
             >
-              Status: {statusFilter === 'all' ? 'All' : statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}
+              Status:{' '}
+              {statusFilter === 'all'
+                ? 'All'
+                : statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}
               <ChevronDown className="h-4 w-4" />
             </button>
             {showStatusDropdown && (
               <div className="absolute top-full mt-1 w-48 bg-white border border-gray-300 rounded shadow-sm z-10">
-                {['all', 'pending', 'hired', 'archived'].map(status => (
+                {['all', 'pending', 'hired', 'archived'].map((status) => (
                   <button
                     key={status}
                     onClick={() => {
@@ -277,7 +281,7 @@ export default function MatchesPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {filteredMatches.map(match => (
+                    {filteredMatches.map((match) => (
                       <tr key={match.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
@@ -322,7 +326,7 @@ export default function MatchesPage() {
             {/* Card View (Mobile) */}
             {viewMode === 'cards' && (
               <div className="space-y-4 mb-8">
-                {filteredMatches.map(match => (
+                {filteredMatches.map((match) => (
                   <div key={match.id} className="border border-gray-300 rounded p-4">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
@@ -423,10 +427,12 @@ export default function MatchesPage() {
                   <h3 className="font-medium text-gray-900 mb-2">Your Notes</h3>
                   <textarea
                     value={userNotes[selectedMatch.id] || ''}
-                    onChange={(e) => setUserNotes({
-                      ...userNotes,
-                      [selectedMatch.id]: e.target.value
-                    })}
+                    onChange={(e) =>
+                      setUserNotes({
+                        ...userNotes,
+                        [selectedMatch.id]: e.target.value,
+                      })
+                    }
                     placeholder="Add notes about this provider..."
                     className="w-full p-3 border border-gray-300 rounded text-sm"
                     rows={3}

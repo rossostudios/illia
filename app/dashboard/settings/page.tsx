@@ -1,34 +1,34 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
 import {
-  Search,
-  Home,
-  Play,
-  FileText,
   BarChart3,
-  Key,
-  Settings,
-  ChevronDown,
   Bell,
-  HelpCircle,
-  FileCode,
-  X,
-  Sparkles,
-  MessageSquare,
+  ChevronDown,
   ChevronLeft,
-  Users as UsersIcon,
   CreditCard,
-  SettingsIcon,
-  Mail,
-  Lock,
-  Trash2,
-  Send,
-  UserPlus,
   Eye,
-  EyeOff
+  EyeOff,
+  FileCode,
+  FileText,
+  HelpCircle,
+  Home,
+  Key,
+  Lock,
+  Mail,
+  MessageSquare,
+  Play,
+  Search,
+  Send,
+  Settings,
+  SettingsIcon,
+  Sparkles,
+  Trash2,
+  UserPlus,
+  Users as UsersIcon,
+  X,
 } from 'lucide-react'
+import Link from 'next/link'
+import { useState } from 'react'
 
 export default function SettingsPage() {
   const [showExtractMenu, setShowExtractMenu] = useState(false)
@@ -53,8 +53,8 @@ export default function SettingsPage() {
       isOpen: showExtractMenu,
       submenu: [
         { label: 'Overview', href: '/dashboard/extract' },
-        { label: 'Playground', href: '/dashboard/extract/playground' }
-      ]
+        { label: 'Playground', href: '/dashboard/extract/playground' },
+      ],
     },
     { icon: BarChart3, label: 'Activity Logs', href: '/dashboard/logs' },
     { icon: BarChart3, label: 'Usage', href: '/dashboard/usage' },
@@ -69,7 +69,9 @@ export default function SettingsPage() {
         {/* Logo */}
         <div className="p-4 border-b">
           <Link href="/dashboard" className="flex items-center space-x-2 group">
-            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">Illia</span>
+            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">
+              Illia
+            </span>
           </Link>
         </div>
 
@@ -93,9 +95,7 @@ export default function SettingsPage() {
               <Link
                 href={item.href}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  item.active
-                    ? 'bg-teal-50 text-teal-600'
-                    : 'text-gray-700 hover:bg-gray-100'
+                  item.active ? 'bg-teal-50 text-teal-600' : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={(e) => {
                   if (item.hasSubmenu) {
@@ -109,7 +109,9 @@ export default function SettingsPage() {
                   <span>{item.label}</span>
                 </div>
                 {item.hasSubmenu && (
-                  <ChevronDown className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`}
+                  />
                 )}
               </Link>
               {item.hasSubmenu && item.isOpen && (
@@ -209,8 +211,7 @@ export default function SettingsPage() {
             <p className="text-sm text-gray-600 mb-6">
               {activeTab === 'account'
                 ? 'Manage your account settings and preferences'
-                : 'Manage your team, billing, and account preferences'
-              }
+                : 'Manage your team, billing, and account preferences'}
             </p>
 
             <nav className="space-y-1">
@@ -304,7 +305,9 @@ export default function SettingsPage() {
                 {/* Team Members */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-700 mb-1">Team Members</h3>
-                  <p className="text-sm text-gray-500 mb-4">Manage your team&apos;s access and permissions</p>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Manage your team&apos;s access and permissions
+                  </p>
                   <div className="bg-white border rounded-lg divide-y">
                     <div className="p-4 flex items-center justify-between">
                       <div className="flex items-center space-x-3">
@@ -354,7 +357,9 @@ export default function SettingsPage() {
                         <span className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-6" />
                       </button>
                     </div>
-                    <p className="text-sm text-gray-600">You'll be sent emails with links to your dashboard for new Charleston leads.</p>
+                    <p className="text-sm text-gray-600">
+                      You'll be sent emails with links to your dashboard for new Charleston leads.
+                    </p>
                   </div>
                   <button className="mt-4 flex items-center space-x-2 px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg text-sm font-medium">
                     <Mail className="h-4 w-4" />
@@ -365,14 +370,18 @@ export default function SettingsPage() {
                 {/* Edit Password */}
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Edit Password</h3>
-                  <p className="text-sm text-gray-600 mb-4">Update your Supabase authentication password</p>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Update your Supabase authentication password
+                  </p>
                   <div className="flex items-center space-x-3">
                     <div className="relative flex-1 max-w-sm">
                       <input
-                        type={showPassword ? "text" : "password"}
+                        type={showPassword ? 'text' : 'password'}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder={showPassword ? "Enter new password (min. 12 characters)" : "••••••••••"}
+                        placeholder={
+                          showPassword ? 'Enter new password (min. 12 characters)' : '••••••••••'
+                        }
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                       />
                       <button
@@ -439,14 +448,16 @@ export default function SettingsPage() {
 
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
               <p className="text-sm text-red-800">
-                This action cannot be undone. This will permanently delete your account and remove all associated data.
+                This action cannot be undone. This will permanently delete your account and remove
+                all associated data.
               </p>
             </div>
 
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Type <span className="font-mono bg-gray-100 px-1 rounded">DELETE</span> to confirm:
+                  Type <span className="font-mono bg-gray-100 px-1 rounded">DELETE</span> to
+                  confirm:
                 </label>
                 <input
                   type="text"
@@ -478,7 +489,13 @@ export default function SettingsPage() {
 
 function Users({ className }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
       <circle cx="9" cy="7" r="4" />
       <path d="M23 21v-2a4 4 0 0 0-3-3.87" />

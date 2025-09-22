@@ -1,7 +1,7 @@
 'use client'
 
+import { Clock, Hash, MapPin, X } from 'lucide-react'
 import { useState } from 'react'
-import { X, MapPin, Clock, Hash } from 'lucide-react'
 
 interface SearchOptionsPanelProps {
   isOpen: boolean
@@ -22,7 +22,7 @@ export default function SearchOptionsPanel({ isOpen, onClose }: SearchOptionsPan
     { label: 'Past 24 hours', value: '24hours' },
     { label: 'Past week', value: 'week' },
     { label: 'Past month', value: 'month' },
-    { label: 'Past year', value: 'year' }
+    { label: 'Past year', value: 'year' },
   ]
 
   const handleReset = () => {
@@ -41,10 +41,7 @@ export default function SearchOptionsPanel({ isOpen, onClose }: SearchOptionsPan
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b">
         <h3 className="text-lg font-semibold text-gray-900">Options</h3>
-        <button
-          onClick={onClose}
-          className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
-        >
+        <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
           <X className="h-5 w-5 text-gray-500" />
         </button>
       </div>
@@ -80,9 +77,21 @@ export default function SearchOptionsPanel({ isOpen, onClose }: SearchOptionsPan
               onClick={() => setShowTimeDropdown(!showTimeDropdown)}
               className="w-full px-3 py-2 text-left border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white"
             >
-              {timeRange ? timeOptions.find(opt => opt.value === timeRange)?.label : 'Select a time'}
-              <svg className="absolute right-3 top-3 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              {timeRange
+                ? timeOptions.find((opt) => opt.value === timeRange)?.label
+                : 'Select a time'}
+              <svg
+                className="absolute right-3 top-3 h-4 w-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </button>
             {showTimeDropdown && (
@@ -126,10 +135,22 @@ export default function SearchOptionsPanel({ isOpen, onClose }: SearchOptionsPan
         {/* Scrape content from search results */}
         <div className="flex items-center justify-between py-2">
           <div className="flex items-center space-x-2">
-            <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <svg
+              className="h-4 w-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
-            <span className="text-sm font-medium text-gray-700">Scrape content from search results</span>
+            <span className="text-sm font-medium text-gray-700">
+              Scrape content from search results
+            </span>
           </div>
           <button
             onClick={() => setScrapeResults(!scrapeResults)}
@@ -153,8 +174,18 @@ export default function SearchOptionsPanel({ isOpen, onClose }: SearchOptionsPan
         {/* Main content only */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+            <svg
+              className="h-4 w-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 10h16M4 14h16M4 18h16"
+              />
             </svg>
             <span className="text-sm font-medium text-gray-700">Main content only</span>
           </div>
@@ -175,8 +206,18 @@ export default function SearchOptionsPanel({ isOpen, onClose }: SearchOptionsPan
         {/* Parse PDF */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            <svg
+              className="h-4 w-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+              />
             </svg>
             <span className="text-sm font-medium text-gray-700">Parse PDF</span>
           </div>

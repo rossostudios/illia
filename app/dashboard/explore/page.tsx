@@ -2,24 +2,24 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import {
-  MapPin,
-  Home,
-  Utensils,
-  Sparkles,
-  DollarSign,
   Calendar,
-  Info,
+  Check,
   ChevronLeft,
   ChevronRight,
-  Check,
+  DollarSign,
   Globe,
   Heart,
+  Home,
+  Info,
+  Loader2,
+  MapPin,
+  Sparkles,
   Star,
-  Loader2
+  Utensils,
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 const SERVICES = [
   { id: 'cleaning', label: 'House Cleaning', icon: Home, color: 'teal' },
@@ -27,7 +27,7 @@ const SERVICES = [
   { id: 'deep-clean', label: 'Deep Clean', icon: Sparkles, color: 'teal' },
   { id: 'meal-prep', label: 'Meal Prep', icon: Utensils, color: 'sunset' },
   { id: 'laundry', label: 'Laundry', icon: Home, color: 'teal' },
-  { id: 'organization', label: 'Organization', icon: Home, color: 'sunset' }
+  { id: 'organization', label: 'Organization', icon: Home, color: 'sunset' },
 ]
 
 const MOCK_MATCHES = [
@@ -41,7 +41,7 @@ const MOCK_MATCHES = [
     location: 'El Poblado',
     verified: true,
     specialties: ['English speaker', 'Pet-friendly', 'Eco-friendly'],
-    availability: 'Mon-Fri mornings'
+    availability: 'Mon-Fri mornings',
   },
   {
     id: 2,
@@ -53,7 +53,7 @@ const MOCK_MATCHES = [
     location: 'Laureles',
     verified: true,
     specialties: ['Vegan options', 'Meal planning', 'Colombian cuisine'],
-    availability: 'Flexible schedule'
+    availability: 'Flexible schedule',
   },
   {
     id: 3,
@@ -65,8 +65,8 @@ const MOCK_MATCHES = [
     location: 'Envigado',
     verified: false,
     specialties: ['Organization', 'Deep cleaning', 'Pet-friendly'],
-    availability: 'Weekends available'
-  }
+    availability: 'Weekends available',
+  },
 ]
 
 export default function ExplorePage() {
@@ -82,28 +82,48 @@ export default function ExplorePage() {
   const [showTooltip, setShowTooltip] = useState(false)
 
   const handleServiceToggle = (serviceId: string) => {
-    setSelectedServices(prev =>
-      prev.includes(serviceId)
-        ? prev.filter(id => id !== serviceId)
-        : [...prev, serviceId]
+    setSelectedServices((prev) =>
+      prev.includes(serviceId) ? prev.filter((id) => id !== serviceId) : [...prev, serviceId]
     )
   }
 
   const handleExtraToggle = (extra: string) => {
-    setExtras(prev =>
-      prev.includes(extra)
-        ? prev.filter(e => e !== extra)
-        : [...prev, extra]
-    )
+    setExtras((prev) => (prev.includes(extra) ? prev.filter((e) => e !== extra) : [...prev, extra]))
   }
 
   const handleFindMatches = async () => {
     setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
+
+    try {
+      // Build query parameters
+      const params = new URLSearchParams({
+        city: selectedCity,
+        services: selectedServices.join(','),
+        budget_max: (budget[1] * 100).toString(), // Convert to cents
+      })
+
+      // Add extras as language preferences if applicable
+      const languageExtras = extras.includes('English speaker') ? ['english'] : []
+      if (languageExtras.length > 0) {
+        params.append('languages', languageExtras.join(','))
+      }
+
+      const response = await fetch(`/api/providers?${params}`)
+      const data = await response.json()
+
+      if (data.success && data.providers) {
+        setMatches(data.providers)
+      } else {
+        // Fall back to mock data if no providers found
+        setMatches(MOCK_MATCHES)
+      }
+    } catch (error) {
+      console.error('Error fetching providers:', error)
+      // Fall back to mock data on error
       setMatches(MOCK_MATCHES)
+    } finally {
       setIsLoading(false)
-    }, 1500)
+    }
   }
 
   const canProceed = () => {
@@ -122,18 +142,18 @@ export default function ExplorePage() {
   const getTips = () => {
     if (currentStep === 1) {
       return selectedCity === 'medellin'
-        ? "El Poblado and Laureles are the most popular expat neighborhoods with the highest concentration of English-speaking helpers."
-        : "Lagoa and Campeche have great options for beach-loving expats. Most helpers here speak some English."
+        ? 'El Poblado and Laureles are the most popular expat neighborhoods with the highest concentration of English-speaking helpers.'
+        : 'Lagoa and Campeche have great options for beach-loving expats. Most helpers here speak some English.'
     }
     if (currentStep === 2) {
       return selectedServices.length > 0
         ? `Great choice! Bundling ${selectedServices.length} services usually saves 15-20% compared to booking separately.`
-        : "Pro tip: Combining cleaning + cooking is the most popular package among expats (saves ~$50/month)."
+        : 'Pro tip: Combining cleaning + cooking is the most popular package among expats (saves ~$50/month).'
     }
     if (currentStep === 3) {
       return frequency === 'weekly'
         ? `Weekly service in ${selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'} averages $${budget[0]}-$${budget[1]}/month. Most expats start here.`
-        : "Bi-weekly service is perfect for minimalists. Consider adding a monthly deep clean for best results."
+        : 'Bi-weekly service is perfect for minimalists. Consider adding a monthly deep clean for best results.'
     }
     return null
   }
@@ -164,7 +184,8 @@ export default function ExplorePage() {
               {showTooltip && (
                 <div className="absolute left-0 top-8 w-64 p-3 bg-white rounded-lg shadow-lg border border-teal-100 z-10">
                   <p className="text-sm text-gray-600">
-                    Our interactive tool lets you explore home help options. Answer a few questions for AI-matched recommendations—free previews, Premium for intros.
+                    Our interactive tool lets you explore home help options. Answer a few questions
+                    for AI-matched recommendations—free previews, Premium for intros.
                   </p>
                 </div>
               )}
@@ -267,14 +288,20 @@ export default function ExplorePage() {
                                 : 'border-gray-200 hover:border-gray-300'
                             }`}
                           >
-                            <Icon className={`h-6 w-6 mb-2 mx-auto ${
-                              isSelected
-                                ? service.color === 'sunset' ? 'text-sunset-600' : 'text-teal-600'
-                                : 'text-gray-500'
-                            }`} />
-                            <p className={`text-sm font-medium ${
-                              isSelected ? 'text-gray-900' : 'text-gray-600'
-                            }`}>
+                            <Icon
+                              className={`h-6 w-6 mb-2 mx-auto ${
+                                isSelected
+                                  ? service.color === 'sunset'
+                                    ? 'text-sunset-600'
+                                    : 'text-teal-600'
+                                  : 'text-gray-500'
+                              }`}
+                            />
+                            <p
+                              className={`text-sm font-medium ${
+                                isSelected ? 'text-gray-900' : 'text-gray-600'
+                              }`}
+                            >
                               {service.label}
                             </p>
                           </button>
@@ -334,19 +361,21 @@ export default function ExplorePage() {
                         Special Requirements
                       </label>
                       <div className="flex flex-wrap gap-2">
-                        {['English speaker', 'Pet-friendly', 'Vegan cooking', 'Eco-friendly'].map((extra) => (
-                          <button
-                            key={extra}
-                            onClick={() => handleExtraToggle(extra)}
-                            className={`px-3 py-1.5 rounded-full text-sm transition-all ${
-                              extras.includes(extra)
-                                ? 'bg-teal-600 text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
-                          >
-                            {extra}
-                          </button>
-                        ))}
+                        {['English speaker', 'Pet-friendly', 'Vegan cooking', 'Eco-friendly'].map(
+                          (extra) => (
+                            <button
+                              key={extra}
+                              onClick={() => handleExtraToggle(extra)}
+                              className={`px-3 py-1.5 rounded-full text-sm transition-all ${
+                                extras.includes(extra)
+                                  ? 'bg-teal-600 text-white'
+                                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                              }`}
+                            >
+                              {extra}
+                            </button>
+                          )
+                        )}
                       </div>
                     </div>
                   </div>
@@ -415,9 +444,7 @@ export default function ExplorePage() {
                 <Heart className="h-5 w-5 text-sunset-500" />
                 Pro Tips
               </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                {getTips()}
-              </p>
+              <p className="text-sm text-gray-600 mb-4">{getTips()}</p>
 
               {getPreview() && (
                 <div className="mt-4 p-3 bg-teal-50 rounded-lg">
@@ -426,7 +453,9 @@ export default function ExplorePage() {
               )}
 
               <div className="mt-6 pt-6 border-t border-gray-100">
-                <p className="text-xs text-gray-500 mb-2">Popular in {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}:</p>
+                <p className="text-xs text-gray-500 mb-2">
+                  Popular in {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}:
+                </p>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Cleaning + Cooking</span>
@@ -466,9 +495,7 @@ export default function ExplorePage() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold text-gray-900">{match.name}</h3>
-                        {match.verified && (
-                          <Check className="h-4 w-4 text-teal-600" />
-                        )}
+                        {match.verified && <Check className="h-4 w-4 text-teal-600" />}
                       </div>
                       <p className="text-sm text-gray-600">{match.location}</p>
                       <div className="flex items-center gap-1 mt-1">
