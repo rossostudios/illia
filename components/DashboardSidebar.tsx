@@ -2,19 +2,23 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   Search,
   Home,
-  Play,
-  FileText,
-  BarChart3,
-  Key,
+  Users,
+  Star,
+  CreditCard,
+  Globe,
   Settings,
   ChevronDown,
   Sparkles,
-  X
+  X,
+  LogOut,
+  User,
+  MessageSquare
 } from 'lucide-react'
+import { supabase } from '@/utils/supabase/client'
 
 interface DashboardSidebarProps {
   isCollapsed?: boolean
@@ -24,27 +28,23 @@ interface DashboardSidebarProps {
 
 export default function DashboardSidebar({ isCollapsed = false, userEmail }: DashboardSidebarProps) {
   const pathname = usePathname()
+  const router = useRouter()
   const [showExtractMenu, setShowExtractMenu] = useState(pathname.includes('/extract'))
   const [showWhatsNew, setShowWhatsNew] = useState(true)
+  const [showUserDropdown, setShowUserDropdown] = useState(false)
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
 
   const sidebarItems = [
-    { icon: Home, label: 'Overview', href: '/dashboard' },
-    { icon: Play, label: 'Playground', href: '/dashboard/playground' },
-    {
-      icon: FileText,
-      label: 'Extract',
-      href: '/dashboard/extract',
-      hasSubmenu: true,
-      isOpen: showExtractMenu,
-      submenu: [
-        { label: 'Overview', href: '/dashboard/extract' },
-        { label: 'Playground', href: '/dashboard/extract/playground' }
-      ]
-    },
-    { icon: BarChart3, label: 'Activity Logs', href: '/dashboard/logs' },
-    { icon: BarChart3, label: 'Usage', href: '/dashboard/usage' },
-    { icon: Key, label: 'API Keys', href: '/dashboard/api-keys' },
-    { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
+    { icon: Home, label: 'Dashboard', href: '/dashboard', subtitle: 'Your home base' },
+    { icon: Search, label: 'Explore', href: '/dashboard/explore', subtitle: 'Discover matches' },
+    { icon: Users, label: 'Directory', href: '/dashboard/directory', subtitle: 'Browse providers' },
+    { icon: Star, label: 'My Matches', href: '/dashboard/matches', subtitle: 'Reviews & intros' },
+    { icon: MessageSquare, label: 'Community', href: '/dashboard/community', subtitle: 'Expat forums' },
+    { icon: CreditCard, label: 'Membership', href: '/dashboard/membership', subtitle: 'Tier & benefits' },
+    { icon: Settings, label: 'Profile', href: '/dashboard/profile', subtitle: 'Account & settings' },
   ]
 
   return (
@@ -54,11 +54,16 @@ export default function DashboardSidebar({ isCollapsed = false, userEmail }: Das
       {/* Logo */}
       <div className={`border-b ${isCollapsed ? 'p-2' : 'p-4'}`}>
         <Link href="/dashboard" className="flex items-center space-x-2 group">
-          <span className={`font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md ${
-            isCollapsed ? 'text-lg' : 'text-xl md:text-2xl'
-          }`}>
-            {isCollapsed ? 'I' : 'Illia'}
-          </span>
+          <div className="flex flex-col">
+            <span className={`font-bold text-teal-600 drop-shadow-sm transition-all group-hover:text-teal-700 group-hover:drop-shadow-md ${
+              isCollapsed ? 'text-lg' : 'text-xl md:text-2xl'
+            }`}>
+              {isCollapsed ? 'I' : 'Illia.club'}
+            </span>
+            {!isCollapsed && (
+              <span className="text-xs text-gray-500 mt-0.5">Your Expat Lifeline</span>
+            )}
+          </div>
         </Link>
       </div>
 
@@ -69,8 +74,8 @@ export default function DashboardSidebar({ isCollapsed = false, userEmail }: Das
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
             <input
               type="text"
-              placeholder="Search past leads..."
-              className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+              placeholder="Find cleaners in El Poblado..."
+              className="w-full pl-9 pr-3 py-2 bg-warmth-50 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
             />
             <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
           </div>
@@ -104,8 +109,15 @@ export default function DashboardSidebar({ isCollapsed = false, userEmail }: Das
                 title={isCollapsed ? item.label : undefined}
               >
                 <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'}`}>
-                  <item.icon className={`${isCollapsed ? 'h-5 w-5' : 'h-4 w-4'}`} />
-                  <span className={isCollapsed ? 'sr-only' : ''}>{item.label}</span>
+                  <item.icon className={`${isCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${isActive ? 'text-teal-600' : ''}`} />
+                  {!isCollapsed && (
+                    <div className="flex flex-col">
+                      <span>{item.label}</span>
+                      {item.subtitle && (
+                        <span className="text-xs text-gray-500 mt-0.5">{item.subtitle}</span>
+                      )}
+                    </div>
+                  )}
                 </div>
                 {item.hasSubmenu && !isCollapsed && (
                   <ChevronDown className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`} />
@@ -149,26 +161,52 @@ export default function DashboardSidebar({ isCollapsed = false, userEmail }: Das
                 <X className="h-3 w-3" />
               </button>
             </div>
-            <p className="text-xs text-gray-600">View our latest update</p>
+            <p className="text-xs text-gray-600">New: Medellín cleaners added!</p>
           </div>
         </div>
       )}
 
       {/* User section */}
       {!isCollapsed && (
-        <Link
-          href="/dashboard/settings"
-          className="border-t bg-white px-4 py-3 flex items-center space-x-3 hover:bg-gray-50 transition-colors"
-        >
-          <div className="h-6 w-6 bg-teal-100 rounded-full flex items-center justify-center">
-            <span className="text-xs font-medium text-teal-600">
-              {userEmail ? userEmail.charAt(0).toUpperCase() : 'G'}
-            </span>
-          </div>
-          <span className="text-xs text-gray-700">
-            {userEmail || 'Guest'}
-          </span>
-        </Link>
+        <div className="relative border-t bg-white">
+          <button
+            onClick={() => setShowUserDropdown(!showUserDropdown)}
+            className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+          >
+            <div className="flex items-center space-x-3">
+              <div className="h-6 w-6 bg-teal-100 rounded-full flex items-center justify-center">
+                <span className="text-xs font-medium text-teal-600">
+                  {userEmail ? userEmail.charAt(0).toUpperCase() : 'G'}
+                </span>
+              </div>
+              <span className="text-xs text-gray-700">
+                {userEmail || 'Guest'}
+              </span>
+            </div>
+            <ChevronDown className={`h-3 w-3 text-gray-500 transition-transform ${showUserDropdown ? 'rotate-180' : ''}`} />
+          </button>
+
+          {/* Dropdown Menu */}
+          {showUserDropdown && (
+            <div className="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 rounded-lg shadow-lg">
+              <Link
+                href="/dashboard/settings"
+                className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                onClick={() => setShowUserDropdown(false)}
+              >
+                <User className="h-4 w-4" />
+                <span>Account Settings</span>
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 border-t border-gray-100"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          )}
+        </div>
       )}
     </div>
   )

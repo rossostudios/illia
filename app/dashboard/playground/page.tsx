@@ -1,139 +1,155 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+
+export default function PlaygroundPage() {
+  const router = useRouter()
+
+  useEffect(() => {
+    // Redirect to the new Service Finder page
+    router.replace('/dashboard/service-finder')
+  }, [router])
+
+  return null
+}
+
+// Old playground code archived below for reference
+/*
 import { useState } from 'react'
-import Link from 'next/link'
-import OptionsPanel from '@/components/OptionsPanel'
-import SearchOptionsPanel from '@/components/SearchOptionsPanel'
+import { useSession } from '@/hooks/useSession'
+import { useRecentLeads } from '@/hooks/useRecentLeads'
+import { CHARLESTON_PERSONAS } from '@/lib/charleston-personas'
+import { calculateLeadScore } from '@/utils/lead-scoring'
+import LocalSEOWidget from '@/components/LocalSEOWidget'
+import LowcountryROICalculator from '@/components/LowcountryROICalculator'
 import {
-  Search,
-  Home,
-  Play,
-  FileText,
-  BarChart3,
-  Key,
-  Settings,
-  ChevronDown,
-  Bell,
-  HelpCircle,
-  FileCode,
-  X,
-  Globe,
-  Map,
   MapPin,
-  Sparkles,
-  ExternalLink,
   Copy,
   Download,
-  Check,
   Loader2,
-  MessageSquare,
-  ChevronLeft,
-  SlidersHorizontal
+  Info,
+  Calendar,
+  Star,
+  Phone,
+  Mail,
+  CheckCircle,
+  FileText
 } from 'lucide-react'
 
 export default function PlaygroundPage() {
-  const [selectedEndpoint, setSelectedEndpoint] = useState('generate')
-  const [url, setUrl] = useState('plumbers, 29401')
-  const [format, setFormat] = useState('CSV')
+  const { user } = useSession()
+  const { recentLeads, loading: leadsLoading, refetch: fetchRecentLeads } = useRecentLeads()
+
+  const [inputValue, setInputValue] = useState('plumbers, 29401')
+  const [format, setFormat] = useState('preview')
   const [isLoading, setIsLoading] = useState(false)
-  const [showExtractMenu, setShowExtractMenu] = useState(false)
-  const [showWhatsNew, setShowWhatsNew] = useState(true)
   const [result, setResult] = useState<any>(null)
-  const [showRecentRuns, setShowRecentRuns] = useState(false)
-  const [showOptions, setShowOptions] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [showInfoTooltip, setShowInfoTooltip] = useState(false)
+  const [selectedPersona, setSelectedPersona] = useState<string | null>(null)
 
-  const endpoints = [
-    { id: 'generate', label: 'Generate', icon: '⚡' },
-    { id: 'basic', label: 'Basic', icon: '🔍', badge: 'New' },
-    { id: 'advanced', label: 'Advanced', icon: '🎯' },
-    { id: 'export', label: 'Export', icon: '📊' }
-  ]
-
-  const recentRuns = [
-    {
-      id: 1,
-      query: 'plumbers 29401',
-      mode: 'Basic',
-      status: 'Success',
-      date: 'Sep 20',
-      time: '3:38 PM',
-      icon: '🔍'
-    },
-    {
-      id: 2,
-      query: 'HVAC contractors 29403',
-      mode: 'Advanced',
-      status: 'Success',
-      date: 'Sep 20',
-      time: '2:15 PM',
-      icon: '🎯'
-    },
-    {
-      id: 3,
-      query: 'electricians 29401',
-      mode: 'Basic',
-      status: 'Success',
-      date: 'Sep 19',
-      time: '4:22 PM',
-      icon: '🔍'
-    }
-  ]
-
-  const sidebarItems = [
-    { icon: Home, label: 'Overview', href: '/dashboard' },
-    { icon: Play, label: 'Playground', href: '/dashboard/playground', active: true },
-    {
-      icon: FileText,
-      label: 'Extract',
-      href: '/dashboard/extract',
-      hasSubmenu: true,
-      isOpen: showExtractMenu,
-      submenu: [
-        { label: 'Overview', href: '/dashboard/extract' },
-        { label: 'Playground', href: '/dashboard/extract/playground' }
-      ]
-    },
-    { icon: BarChart3, label: 'Activity Logs', href: '/dashboard/logs' },
-    { icon: BarChart3, label: 'Usage', href: '/dashboard/usage' },
-    { icon: Key, label: 'API Keys', href: '/dashboard/api-keys' },
-    { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
-  ]
-
-  const handleStartScraping = async () => {
-    setIsLoading(true)
-    setShowRecentRuns(false)
-
-    // Simulate API call
-    setTimeout(() => {
-      setResult({
-        status: 'success',
-        data: {
-          title: 'Example Domain',
-          content: '# Example Domain\n\nThis domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.\n\n[More information...](https://www.iana.org/domains/example)',
-          metadata: {
-            statusCode: 200,
-            contentType: 'text/html',
-            timestamp: new Date().toISOString()
-          }
+  // Parse input to extract niche and ZIP
+  const parseInput = (input: string) => {
+    const parts = input.split(',').map(p => p.trim())
+    if (parts.length >= 2) {
+      const zipMatch = parts[parts.length - 1].match(/\d{5}/)
+      if (zipMatch) {
+        return {
+          niche: parts.slice(0, -1).join(', '),
+          zipCode: zipMatch[0],
+          location: 'Charleston, SC'
         }
+      }
+    }
+    // Default fallback
+    return {
+      niche: parts[0] || 'plumbers',
+      zipCode: '29401',
+      location: 'Charleston, SC'
+    }
+  }
+
+  const handleGenerateLeads = async () => {
+    if (!user?.email) {
+      setError('Please log in to generate leads')
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+    setResult(null)
+
+    const { niche, zipCode, location } = parseInput(inputValue)
+
+    try {
+      const response = await fetch('/api/generate-leads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          niche,
+          location,
+          zipCode,
+          radius: 5,
+        }),
       })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate leads')
+      }
+
+      // Format the leads for display
+      const formattedLeads = data.leads?.map((lead: any) => ({
+        ...lead,
+        score: calculateLeadScore({
+          name: lead.name,
+          niche: lead.niche,
+          zipCode: lead.zip_code,
+          hasWebsite: true,
+          reviewCount: Math.floor(Math.random() * 100) + 10,
+          rating: 3.5 + Math.random() * 1.5
+        })
+      })) || []
+
+      setResult({
+        leads: formattedLeads,
+        count: formattedLeads.length,
+        niche,
+        zipCode
+      })
+
+      // Refresh recent leads
+      fetchRecentLeads()
+    } catch (error) {
+      setError((error as Error).message || 'Failed to generate leads')
+    } finally {
       setIsLoading(false)
-    }, 2000)
+    }
   }
 
   const handleGetCode = () => {
-    // Copy code to clipboard logic
-    const code = `fetch('https://api.illia.dev/v1/${selectedEndpoint}', {
+    const { niche, zipCode } = parseInput(inputValue)
+    const code = `// Using Illia API to generate leads
+const response = await fetch('https://api.illia.dev/v1/generate-leads', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer YOUR_API_KEY'
   },
   body: JSON.stringify({
-    url: '${url}',
-    format: '${format}'
+    niche: '${niche}',
+    zipCode: '${zipCode}',
+    location: 'Charleston, SC',
+    radius: 5
   })
-})`
+})
+
+const leads = await response.json()`
+
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(code).catch((err) => {
         console.error('Failed to copy code:', err)
@@ -141,353 +157,369 @@ export default function PlaygroundPage() {
     }
   }
 
+  const handleExport = () => {
+    if (!result || !result.leads) return
+
+    if (format === 'csv') {
+      const headers = ['Name', 'Score', 'Email', 'Phone', 'ZIP', 'Niche', 'Intent']
+      const csvContent = [
+        headers.join(','),
+        ...result.leads.map((lead: any) => [
+          lead.name,
+          lead.score?.finalScore || lead.score || 0,
+          lead.email || '',
+          lead.phone || '',
+          lead.zip_code || lead.zipCode || '',
+          lead.niche || '',
+          lead.score?.intent || 'medium'
+        ].join(','))
+      ].join('\n')
+
+      const blob = new Blob([csvContent], { type: 'text/csv' })
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `illia-leads-${result.niche}-${result.zipCode}.csv`
+      a.click()
+    } else if (format === 'json') {
+      const jsonContent = JSON.stringify(result.leads, null, 2)
+      const blob = new Blob([jsonContent], { type: 'application/json' })
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `illia-leads-${result.niche}-${result.zipCode}.json`
+      a.click()
+    }
+  }
+
+  const handlePersonaSelect = (personaId: string) => {
+    const persona = CHARLESTON_PERSONAS.find(p => p.id === personaId)
+    if (persona) {
+      setInputValue(`${persona.niche}, ${persona.zipCode}`)
+      setSelectedPersona(personaId)
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 w-56 bg-white border-r">
-        {/* Logo */}
-        <div className="p-4 border-b">
-          <Link href="/dashboard" className="flex items-center space-x-2 group">
-            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">
-              Illia
-            </span>
-          </Link>
-        </div>
-
-        {/* Search */}
-        <div className="p-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search past leads..."
-              className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-            />
-            <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="px-3 space-y-1">
-          {sidebarItems.map((item) => (
-            <div key={item.label}>
-              <Link
-                href={item.href}
-                className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  item.active
-                    ? 'bg-teal-50 text-teal-600'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-                onClick={(e) => {
-                  if (item.hasSubmenu) {
-                    e.preventDefault()
-                    setShowExtractMenu(!showExtractMenu)
-                  }
-                }}
-              >
-                <div className="flex items-center space-x-3">
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.label}</span>
-                </div>
-                {item.hasSubmenu && (
-                  <ChevronDown className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`} />
-                )}
-              </Link>
-              {item.hasSubmenu && item.isOpen && (
-                <div className="ml-7 mt-1 space-y-1">
-                  {item.submenu?.map((subitem) => (
-                    <Link
-                      key={subitem.label}
-                      href={subitem.href}
-                      className="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg"
-                    >
-                      {subitem.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </nav>
-
-        {/* What's New */}
-        {showWhatsNew && (
-          <div className="absolute bottom-4 left-4 right-4">
-            <div className="bg-teal-50 rounded-lg p-3">
-              <div className="flex items-start justify-between mb-2">
-                <div className="flex items-center space-x-2">
-                  <Sparkles className="h-4 w-4 text-teal-600" />
-                  <span className="text-xs font-semibold text-teal-600">What&apos;s New (5)</span>
-                </div>
-                <button
-                  onClick={() => setShowWhatsNew(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              </div>
-              <p className="text-xs text-gray-600">View our latest update</p>
-            </div>
-
-            {/* User email */}
-            <div className="mt-4 px-3 py-2 text-xs text-gray-500">
-              samlee@content-mobbin.com
-            </div>
-
-            {/* Collapse button */}
-            <button className="flex items-center space-x-2 mt-2 text-xs text-gray-600 hover:text-gray-900">
-              <ChevronLeft className="h-3 w-3" />
-              <span>Collapse</span>
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Main content */}
-      <div className="ml-56">
-        {/* Header */}
-        <header className="bg-white border-b px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-teal-100 text-teal-700 px-3 py-1 rounded-lg">
-                <Users className="h-4 w-4" />
-                <span className="text-sm font-medium">Personal Team</span>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
-                <Bell className="h-5 w-5 text-gray-600" />
-              </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
-                <HelpCircle className="h-5 w-5 text-gray-600" />
-              </button>
-              <Link
-                href="/docs"
-                className="flex items-center space-x-2 px-3 py-1.5 hover:bg-gray-100 rounded-lg"
-              >
-                <FileCode className="h-4 w-4" />
-                <span className="text-sm font-medium">Docs</span>
-              </Link>
-              <button className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors">
-                Upgrade
-              </button>
-            </div>
-          </div>
-        </header>
-
-        {/* Playground content */}
-        <div className="p-8">
-          {/* Title */}
-          <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-teal-600 mb-2 flex items-center justify-center">
-              <MapPin className="h-8 w-8 mr-2" />
-              Lead Playground
-            </h1>
-            <p className="text-gray-700">Lead Playground - Test & Generate in One Place</p>
-          </div>
-
-          {/* Endpoint tabs */}
-          <div className="flex justify-center mb-8">
-            <div className="inline-flex flex-wrap bg-white rounded-lg border p-1">
-              {endpoints.map((endpoint) => (
-                <button
-                  key={endpoint.id}
-                  onClick={() => setSelectedEndpoint(endpoint.id)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                    selectedEndpoint === endpoint.id
-                      ? 'bg-teal-100 text-teal-900'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  <span>{endpoint.icon}</span>
-                  <span>{endpoint.label}</span>
-                  {endpoint.badge && (
-                    <span className="text-xs bg-teal-100 text-teal-600 px-1.5 py-0.5 rounded-full">
-                      {endpoint.badge}
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* URL/Search Input and Controls */}
-          <div className="max-w-4xl mx-auto mb-8">
-            <div className="bg-white rounded-xl border p-6">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="flex-1 flex items-center space-x-2">
-                  <MapPin className="h-5 w-5 text-teal-600" />
-                  <input
-                    type="text"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    className="flex-1 text-gray-900 bg-gray-200 px-3 py-2 rounded-md outline-none focus:bg-white focus:ring-2 focus:ring-teal-500"
-                    placeholder="plumbers, 29401"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <button
-                    onClick={() => setShowOptions(!showOptions)}
-                    className={`p-2 hover:bg-gray-100 rounded-lg transition-colors ${
-                      showOptions ? 'bg-gray-100' : ''
-                    }`}
-                  >
-                    <SlidersHorizontal className="h-4 w-4 text-gray-600" />
-                  </button>
-
-                  <div className="flex items-center space-x-2">
-                    <FileText className="h-4 w-4 text-gray-600" />
-                    <span className="text-sm text-gray-600">Format:</span>
-                    <select
-                      value={format}
-                      onChange={(e) => setFormat(e.target.value)}
-                      className="text-sm font-medium text-gray-900 bg-transparent border rounded px-2 py-1 outline-none focus:ring-2 focus:ring-teal-500"
-                    >
-                      <option value="CSV">CSV</option>
-                      <option value="JSON">JSON</option>
-                      <option value="Preview">Preview</option>
-                    </select>
+    <div className="space-y-6">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold text-teal-600 mb-2 flex items-center justify-center relative">
+          <MapPin className="h-8 w-8 mr-2" />
+          Lead Playground
+          <button
+            className="ml-2 relative"
+            onMouseEnter={() => setShowInfoTooltip(true)}
+            onMouseLeave={() => setShowInfoTooltip(false)}
+          >
+            <Info className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+            {showInfoTooltip && (
+              <div className="absolute z-10 left-1/2 -translate-x-1/2 top-8 w-80 bg-gray-900 text-white text-sm rounded-lg p-4 shadow-xl">
+                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-gray-900"></div>
+                <h4 className="font-semibold mb-2">🎯 What is Lead Playground?</h4>
+                <p className="mb-3 text-gray-200">
+                  A testing environment to experiment with lead generation before running full campaigns.
+                </p>
+                <div className="space-y-2 text-xs text-gray-300">
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span>Test different niches and ZIP codes instantly</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span>Preview lead quality with AI scoring</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span>Export results in CSV or JSON format</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span>No credits used for playground testing</span>
                   </div>
                 </div>
-
-                <div className="flex items-center space-x-3">
-                  <button
-                    onClick={handleGetCode}
-                    className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    <Copy className="h-4 w-4" />
-                    <span className="text-sm font-medium">Get code</span>
-                  </button>
-                  <button
-                    onClick={handleStartScraping}
-                    disabled={isLoading}
-                    className="flex items-center space-x-2 px-6 py-2 bg-teal-500 hover:bg-teal-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
-                  >
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        <span>Generating...</span>
-                      </>
-                    ) : (
-                      <span>Generate Leads</span>
-                    )}
-                  </button>
+                <div className="mt-3 pt-3 border-t border-gray-700">
+                  <p className="text-xs text-gray-400">
+                    💡 Tip: Try "plumbers, 29401" or select a Charleston persona below
+                  </p>
                 </div>
               </div>
+            )}
+          </button>
+        </h1>
+        <p className="text-gray-700">Test & Generate Leads in One Place</p>
+      </div>
+
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-xl border p-4">
+          <h3 className="text-sm font-semibold text-gray-700 mb-3">Quick Start with Charleston Personas:</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {CHARLESTON_PERSONAS.slice(0, 8).map((persona) => (
+              <button
+                key={persona.id}
+                onClick={() => handlePersonaSelect(persona.id)}
+                className={`p-2 rounded-lg border text-xs transition-all ${
+                  selectedPersona === persona.id
+                    ? 'border-teal-500 bg-teal-50 text-teal-700'
+                    : 'border-gray-200 hover:border-teal-300 hover:bg-gray-50'
+                }`}
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base">{persona.icon}</span>
+                  <span className="font-medium truncate">{persona.niche}</span>
+                  <span className="text-gray-500">{persona.zipCode}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-xl border p-6">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="flex-1 flex items-center space-x-2">
+              <MapPin className="h-5 w-5 text-teal-600" />
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                className="flex-1 text-gray-900 bg-gray-100 px-3 py-2 rounded-md outline-none focus:bg-white focus:ring-2 focus:ring-teal-500"
+                placeholder="plumbers, 29401"
+              />
             </div>
           </div>
 
-          {/* Results or Recent Generations */}
-          {!result && !isLoading ? (
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Generations</h2>
-              <div className="bg-white rounded-xl border">
-                <div className="divide-y">
-                  {recentRuns.map((run) => (
-                    <div key={run.id} className="p-6 hover:bg-gray-50 transition-colors">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-3 mb-2">
-                            {run.icon && <span className="text-xl">{run.icon}</span>}
-                            <span className="text-gray-900 font-medium">
-                              {run.query}
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
+                <FileText className="h-4 w-4 text-gray-600" />
+                <span className="text-sm text-gray-600">Format:</span>
+                <select
+                  value={format}
+                  onChange={(e) => setFormat(e.target.value)}
+                  className="text-sm font-medium text-gray-900 bg-transparent border rounded px-2 py-1 outline-none focus:ring-2 focus:ring-teal-500"
+                >
+                  <option value="preview">Preview</option>
+                  <option value="csv">CSV</option>
+                  <option value="json">JSON</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={handleGetCode}
+                className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <Copy className="h-4 w-4" />
+                <span className="text-sm font-medium">Get Code</span>
+              </button>
+              {result && (
+                <button
+                  onClick={handleExport}
+                  className="flex items-center space-x-2 px-4 py-2 border border-teal-500 text-teal-600 rounded-lg hover:bg-teal-50 transition-colors"
+                >
+                  <Download className="h-4 w-4" />
+                  <span className="text-sm font-medium">Export</span>
+                </button>
+              )}
+              <button
+                onClick={handleGenerateLeads}
+                disabled={isLoading || !user}
+                className="flex items-center space-x-2 px-6 py-2 bg-teal-500 hover:bg-teal-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Generating...</span>
+                  </>
+                ) : (
+                  <span>Generate Leads</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {result && result.leads && (
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-white rounded-xl border">
+            <div className="p-6 border-b">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-gray-900">
+                  Generated {result.count} Leads - {result.niche} in {result.zipCode}
+                </h3>
+                <div className="flex items-center gap-2">
+                  {result.leads[0]?.score?.eventContext && (
+                    <div className="flex items-center gap-1 text-sm text-teal-600">
+                      <Calendar className="h-4 w-4" />
+                      <span>{result.leads[0].score.eventContext}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6">
+              {format === 'preview' ? (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {result.leads.slice(0, 6).map((lead: any, index: number) => (
+                    <div key={index} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h4 className="font-semibold text-gray-900">{lead.name}</h4>
+                          <p className="text-sm text-gray-500">{lead.niche}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${
+                            lead.score?.finalScore >= 85 || lead.score >= 85 ? 'bg-green-100 text-green-800' :
+                            lead.score?.finalScore >= 60 || lead.score >= 60 ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-gray-100 text-gray-800'
+                          }`}>
+                            Score: {lead.score?.finalScore || lead.score || 0}
+                          </span>
+                          {lead.score?.intent && (
+                            <span className={`text-xs font-medium ${
+                              lead.score.intent === 'high' ? 'text-green-600' :
+                              lead.score.intent === 'medium' ? 'text-yellow-600' :
+                              'text-gray-600'
+                            }`}>
+                              {lead.score.intent} intent
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 text-sm">
+                        {lead.email && (
+                          <div className="flex items-center gap-2 text-gray-600">
+                            <Mail className="h-3.5 w-3.5" />
+                            <span className="truncate">{lead.email}</span>
+                          </div>
+                        )}
+                        {lead.phone && (
+                          <div className="flex items-center gap-2 text-gray-600">
+                            <Phone className="h-3.5 w-3.5" />
+                            <span>{lead.phone}</span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <MapPin className="h-3.5 w-3.5" />
+                          <span>{lead.zip_code || lead.zipCode}</span>
+                        </div>
+                        {lead.rating && (
+                          <div className="flex items-center gap-2 text-gray-600">
+                            <Star className="h-3.5 w-3.5" />
+                            <span>{lead.rating}★</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {lead.score?.scoringFactors && (
+                        <div className="mt-3 pt-3 border-t">
+                          <p className="text-xs text-gray-500">
+                            {lead.score.scoringFactors.slice(0, 2).join(' • ')}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <pre className="text-sm text-gray-700 whitespace-pre-wrap font-mono max-h-96 overflow-y-auto">
+                  {format === 'json'
+                    ? JSON.stringify(result.leads, null, 2)
+                    : `Name,Score,Email,Phone,ZIP,Niche\n${result.leads.map((l: any) =>
+                        `${l.name},${l.score?.finalScore || l.score || 0},${l.email || ''},${l.phone || ''},${l.zip_code || l.zipCode},${l.niche}`
+                      ).join('\n')}`
+                  }
+                </pre>
+              )}
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 mt-6">
+            <LocalSEOWidget
+              niche={result.niche}
+              zipCode={result.zipCode}
+              leadCount={result.count}
+            />
+            <LowcountryROICalculator
+              leadCount={result.count}
+              niche={result.niche}
+              zipCode={result.zipCode}
+            />
+          </div>
+        </div>
+      )}
+
+      {!result && !isLoading && (
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Generations</h2>
+          <div className="bg-white rounded-xl border">
+            {leadsLoading ? (
+              <div className="p-8 text-center">
+                <Loader2 className="h-6 w-6 animate-spin text-gray-400 mx-auto mb-2" />
+                <p className="text-sm text-gray-500">Loading recent generations...</p>
+              </div>
+            ) : recentLeads.length > 0 ? (
+              <div className="divide-y">
+                {recentLeads.slice(0, 5).map((lead) => (
+                  <div key={lead.id} className="p-6 hover:bg-gray-50 transition-colors">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <span className="text-gray-900 font-medium">
+                            {lead.niche}, {lead.zip_code}
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-6 text-sm">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-gray-500">Score</span>
+                            <span className="font-medium text-teal-600">
+                              {lead.score}
                             </span>
                           </div>
-                          <div className="flex items-center space-x-6 text-sm">
-                            <div className="flex items-center space-x-2">
-                              <span className="text-gray-500">Mode</span>
-                              <span className="font-medium flex items-center">
-                                {run.icon} {run.mode}
-                              </span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <span className="text-gray-500">Status</span>
-                              <span className="flex items-center">
-                                <span className="h-2 w-2 bg-green-500 rounded-full mr-1.5" />
-                                <span className="font-medium text-green-600">{run.status}</span>
-                              </span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <span className="text-gray-500">Started</span>
-                              <span className="font-medium">{run.date}</span>
-                              <span className="text-gray-400">{run.time}</span>
-                            </div>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-gray-500">Status</span>
+                            <span className="flex items-center">
+                              <span className="h-2 w-2 bg-green-500 rounded-full mr-1.5" />
+                              <span className="font-medium text-green-600">Success</span>
+                            </span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-gray-500">Generated</span>
+                            <span className="font-medium">
+                              {new Date(lead.created_at).toLocaleDateString()}
+                            </span>
+                            <span className="text-gray-400">
+                              {new Date(lead.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
                           </div>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ) : isLoading ? (
-            <div className="max-w-4xl mx-auto">
-              <div className="bg-white rounded-xl border p-8">
-                <div className="flex flex-col items-center justify-center">
-                  <Loader2 className="h-8 w-8 animate-spin text-teal-500 mb-4" />
-                  <p className="text-gray-600">Generating leads...</p>
-                </div>
-              </div>
-            </div>
-          ) : result ? (
-            <div className="max-w-4xl mx-auto">
-              <div className="bg-white rounded-xl border">
-                <div className="p-6 border-b">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-gray-900">Result</h3>
-                    <div className="flex items-center space-x-2">
-                      <button className="p-2 hover:bg-gray-100 rounded-lg">
-                        <Copy className="h-4 w-4 text-gray-600" />
-                      </button>
-                      <button className="p-2 hover:bg-gray-100 rounded-lg">
-                        <Download className="h-4 w-4 text-gray-600" />
-                      </button>
-                    </div>
                   </div>
-                </div>
-                <div className="p-6">
-                  <pre className="text-sm text-gray-700 whitespace-pre-wrap font-mono">
-                    {format === 'markdown' ? result.data.content : JSON.stringify(result.data, null, 2)}
-                  </pre>
-                </div>
+                ))}
               </div>
-            </div>
-          ) : null}
+            ) : (
+              <div className="p-8 text-center">
+                <MapPin className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500 mb-2">No recent generations yet</p>
+                <p className="text-sm text-gray-400">Generate your first leads to see them here</p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-
-      {/* Options Panel */}
-      {selectedEndpoint === 'search' ? (
-        <SearchOptionsPanel
-          isOpen={showOptions}
-          onClose={() => setShowOptions(false)}
-        />
-      ) : (
-        <OptionsPanel
-          isOpen={showOptions}
-          onClose={() => setShowOptions(false)}
-          endpoint={selectedEndpoint}
-        />
       )}
-
-      {/* Intercom Chat */}
-      <button className="fixed bottom-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full shadow-lg">
-        <MessageSquare className="h-6 w-6" />
-      </button>
     </div>
   )
 }
-
-function Users({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-    </svg>
-  )
-}
+*/

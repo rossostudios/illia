@@ -24,10 +24,10 @@ export function useRecentLeads() {
       setError(null)
       const { data, error: fetchError } = await supabase
         .from('illia_leads')
-        .select('name, score, created_at')
+        .select('*')
         .eq('user_email', user.email)
         .order('created_at', { ascending: false })
-        .limit(3)
+        .limit(5)
 
       if (fetchError) throw fetchError
 

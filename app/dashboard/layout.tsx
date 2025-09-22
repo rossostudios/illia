@@ -39,12 +39,12 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
       <DashboardSidebar isCollapsed={isSidebarCollapsed} onToggleCollapse={toggleSidebar} userEmail={user?.email} />
 
       {/* Main content area with responsive margin */}
-      <div className={`transition-all duration-300 ease-in-out ${
+      <div className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
         isSidebarCollapsed ? 'ml-16' : 'ml-64'
       }`}>
         {/* Top navigation bar */}
@@ -82,7 +82,7 @@ export default function DashboardLayout({
         </header>
 
         {/* Page content */}
-        <main className="p-4 md:p-8">
+        <main className="flex-1 p-4 md:p-8">
           {children}
         </main>
       </div>

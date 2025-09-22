@@ -1,6 +1,8 @@
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
+import SocialProof from '@/components/SocialProof'
+import Features from '@/components/Features'
 
 export default function Home() {
   return (
@@ -8,6 +10,8 @@ export default function Home() {
       <AnnouncementBar />
       <Navbar />
       <Hero />
+      <SocialProof />
+      <Features />
     </div>
   )
 }

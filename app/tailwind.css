@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
-/* Tailwind v4 Theme Configuration */
+/* Tailwind v4 Theme Configuration - Expat Services */
 @theme {
-  /* Brand Colors */
+  /* Tropical Theme Colors */
+
+  /* Trust Teal - Primary CTAs and accents */
   --color-teal-50: #f0fdfa;
   --color-teal-100: #ccfbf1;
   --color-teal-200: #99f6e4;
@@ -15,8 +17,30 @@
   --color-teal-900: #134e4a;
   --color-teal-950: #042f2e;
 
-  /* Primary color mapping */
+  /* Sunset Orange - Energy, highlights, badges */
+  --color-sunset-50: #fff7ed;
+  --color-sunset-100: #ffedd5;
+  --color-sunset-200: #fed7aa;
+  --color-sunset-300: #fdba74;
+  --color-sunset-400: #fb923c;
+  --color-sunset-500: #f97316;
+  --color-sunset-600: #ea580c;
+  --color-sunset-700: #c2410c;
+  --color-sunset-800: #9a3412;
+  --color-sunset-900: #7c2d12;
+
+  /* Warm Beige - Backgrounds and cards */
+  --color-warmth-50: #fef3c7;
+  --color-warmth-100: #fde68a;
+  --color-warmth-200: #fcd34d;
+  --color-warmth-300: #fbbf24;
+  --color-warmth-400: #f59e0b;
+  --color-warmth-500: #d97706;
+
+  /* Primary mappings */
   --color-primary: var(--color-teal-600);
+  --color-accent: var(--color-sunset-500);
+  --color-warm: var(--color-warmth-50);
 
   /* Custom spacing */
   --spacing-xs: 0.5rem;
