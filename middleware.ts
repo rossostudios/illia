@@ -12,8 +12,13 @@ export async function middleware(request: NextRequest) {
     (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   )
 
-  // Apply locale handling for non-API routes
-  if (pathnameIsMissingLocale && !pathname.startsWith('/api') && !pathname.startsWith('/_next')) {
+  // Exclude auth pages from i18n handling - they exist only at root level
+  const isAuthPage = pathname === '/login' || pathname === '/signup'
+  const isAuthCallback = pathname === '/auth/callback'
+  const isTestPage = pathname === '/test-tailwind'
+
+  // Apply locale handling for non-API routes, excluding auth pages
+  if (pathnameIsMissingLocale && !pathname.startsWith('/api') && !pathname.startsWith('/_next') && !isAuthPage && !isAuthCallback && !isTestPage) {
     return intlMiddleware(request)
   }
 
@@ -82,14 +87,15 @@ export async function middleware(request: NextRequest) {
   const dashboardPattern = new RegExp(`^/(${routing.locales.join('|')})?/?dashboard`)
   if (dashboardPattern.test(pathname)) {
     if (!session) {
-      return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
+      // Redirect to non-localized login page
+      return NextResponse.redirect(new URL('/login', request.url))
     }
   }
 
-  // Redirect authenticated users away from auth pages (with locale support)
-  const authPattern = new RegExp(`^/(${routing.locales.join('|')})?/?(login|signup)$`)
-  if (authPattern.test(pathname)) {
+  // Redirect authenticated users away from auth pages (auth pages don't have locale prefix)
+  if (pathname === '/login' || pathname === '/signup') {
     if (session) {
+      // Redirect to localized dashboard
       return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url))
     }
   }
