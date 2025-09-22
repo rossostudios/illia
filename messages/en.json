@@ -1,0 +1,153 @@
+{
+  "nav": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "docs": "Docs",
+    "signin": "Sign In",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "headline": "Turn Local Searches Into Your",
+    "headlineAccent": "Trusted Home Team",
+    "subtitle": "Automate your expat setup in Medellín or Florianópolis—find, match, and connect with vetted cleaners & cooks in seconds.",
+    "startFreeTrial": "Start Free Trial",
+    "watchDemo": "Watch Demo",
+    "noCard": "No card needed",
+    "twoMinQuiz": "2-min quiz",
+    "freeMatches": "100 free matches",
+    "sidebarExplore": "Explore",
+    "sidebarMatches": "My Matches",
+    "sidebarAnalytics": "Analytics",
+    "sidebarSettings": "Settings",
+    "demoTitle": "Weekly cleaner in El Poblado",
+    "viewAll": "View All Matches",
+    "view": "View"
+  },
+  "features": {
+    "title": "Everything You Need for Seamless Expat Living",
+    "subtitle": "Curated tools designed for expats to find and connect with reliable home help—fast & safe.",
+    "lightning": {
+      "title": "Lightning Matches",
+      "description": "Discover & match with vetted pros in seconds—AI-curated for your needs."
+    },
+    "smart": {
+      "title": "Smart Matching",
+      "description": "AI scores providers on fit (English level, rates, reviews)—no more guesswork."
+    },
+    "vetted": {
+      "title": "Vetted Profiles",
+      "description": "Rich details: Bios, rates, photos, & community reviews—all verified."
+    },
+    "insights": {
+      "title": "Match Insights",
+      "description": "Track your hires & savings with simple dashboards—see ROI in real-time."
+    },
+    "privacy": {
+      "title": "Privacy-First",
+      "description": "Secure & compliant—your data (and matches) protected like family."
+    },
+    "city": {
+      "title": "City-Savvy",
+      "description": "Tailored for Medellín & Florianópolis—local insights from expat networks."
+    }
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "explore": "Explore",
+    "matches": "Matches",
+    "serviceFinder": "Service Finder",
+    "directory": "Directory",
+    "profile": "Profile",
+    "settings": "Settings",
+    "apiKeys": "API Keys",
+    "usage": "Usage",
+    "logs": "Logs",
+    "playground": "Playground",
+    "help": "Help",
+    "signOut": "Sign Out",
+    "sidebar": {
+      "home": "Home",
+      "analytics": "Analytics",
+      "reports": "Reports",
+      "team": "Team"
+    },
+    "stats": {
+      "totalMatches": "Total Matches",
+      "activeServices": "Active Services",
+      "savedThisMonth": "Saved This Month",
+      "trustScore": "Trust Score"
+    }
+  },
+  "app": {
+    "quiz": {
+      "title": "Find Your Perfect Match",
+      "subtitle": "Answer a few questions to get personalized recommendations",
+      "start": "Start Quiz",
+      "next": "Next Question",
+      "previous": "Previous",
+      "submit": "Get Results",
+      "progress": "Progress"
+    },
+    "matches": {
+      "title": "Your Matches",
+      "subtitle": "Service providers matched to your needs",
+      "filter": "Filter",
+      "sort": "Sort by",
+      "contact": "Contact",
+      "viewProfile": "View Profile",
+      "noMatches": "No matches found",
+      "loadMore": "Load More"
+    },
+    "providers": {
+      "title": "Service Providers",
+      "verified": "Verified",
+      "rating": "Rating",
+      "reviews": "reviews",
+      "services": "Services",
+      "availability": "Availability",
+      "languages": "Languages",
+      "experience": "Experience",
+      "rate": "Rate",
+      "perMonth": "per month",
+      "perWeek": "per week",
+      "perService": "per service"
+    }
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "continueWith": "Continue with {provider}",
+    "or": "Or"
+  },
+  "appFooter": {
+    "copyright": "© 2025 Illia.club",
+    "version": "Version",
+    "status": "Status",
+    "allSystemsOperational": "All systems operational"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "open": "Open",
+    "yes": "Yes",
+    "no": "No"
+  }
+}

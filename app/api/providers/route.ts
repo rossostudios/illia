@@ -11,9 +11,9 @@ export async function GET(request: NextRequest) {
     const services = searchParams.get('services')?.split(',').filter(Boolean) || []
     const languages = searchParams.get('languages')?.split(',').filter(Boolean) || []
     const budgetMax = searchParams.get('budget_max')
-      ? parseInt(searchParams.get('budget_max')!)
+      ? parseInt(searchParams.get('budget_max')!, 10)
       : null
-    const limit = searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : 20
+    const limit = searchParams.get('limit') ? parseInt(searchParams.get('limit')!, 10) : 20
 
     // Build query
     let query = supabase
@@ -31,11 +31,19 @@ export async function GET(request: NextRequest) {
 
     // Filter by languages if provided
     if (languages.length > 0) {
-      query = query.overlaps('languages', languages)
+      // Map common language names to database codes
+      const langMap: Record<string, string> = {
+        english: 'en',
+        spanish: 'es',
+        portuguese: 'pt',
+      }
+      const mappedLanguages = languages.map((lang) => langMap[lang.toLowerCase()] || lang)
+      query = query.overlaps('languages', mappedLanguages)
     }
 
     // Filter by budget if provided
     if (budgetMax) {
+      // budgetMax comes as dollar amount * 100 (cents), convert to local currency
       query = query.lte('rate_monthly', budgetMax)
     }
 
@@ -50,7 +58,9 @@ export async function GET(request: NextRequest) {
     const formattedProviders = (providers || []).map((provider) => ({
       id: provider.id,
       name: provider.name,
-      bio: provider.bio || '',
+      bio:
+        provider.bio ||
+        `Professional ${provider.services?.join(' and ') || 'service provider'} in ${provider.city}.`,
       photo: provider.photo_url || `https://i.pravatar.cc/150?u=${provider.id}`,
       score: calculateScore(provider, { services, languages }),
       rate: formatRate(provider.rate_monthly, city),
@@ -104,20 +114,18 @@ function calculateScore(provider: any, criteria: any): number {
 }
 
 // Format rate based on city currency
-function formatRate(rateCents: number | null, city: string): string {
-  if (!rateCents) return 'Contact for rates'
+function formatRate(rate: number | null, city: string): string {
+  if (!rate) return 'Contact for rates'
 
+  // Assuming rate is stored in local currency units
   if (city === 'medellin') {
-    // Convert cents to COP (assuming 1 USD = 4000 COP for display)
-    const cop = rateCents * 40
-    return `${cop.toLocaleString()} COP/month`
+    // Format as COP
+    return `${rate.toLocaleString()} COP/month`
   } else if (city === 'florianopolis') {
-    // Convert cents to BRL (assuming 1 USD = 5 BRL for display)
-    const brl = rateCents * 0.05
-    return `R$${brl.toFixed(0)}/month`
+    // Format as BRL
+    return `R$${rate}/month`
   }
 
-  // Default to USD
-  const usd = rateCents / 100
-  return `$${usd}/month`
+  // Default to USD-like format
+  return `$${rate}/month`
 }

@@ -1,7 +1,22 @@
 import { type CookieOptions, createServerClient } from '@supabase/ssr'
 import { type NextRequest, NextResponse } from 'next/server'
+import createIntlMiddleware from 'next-intl/middleware'
+import { routing } from './i18n/routing'
+
+const intlMiddleware = createIntlMiddleware(routing)
 
 export async function middleware(request: NextRequest) {
+  // First handle i18n routing
+  const pathname = request.nextUrl.pathname
+  const pathnameIsMissingLocale = routing.locales.every(
+    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+  )
+
+  // Apply locale handling for non-API routes
+  if (pathnameIsMissingLocale && !pathname.startsWith('/api') && !pathname.startsWith('/_next')) {
+    return intlMiddleware(request)
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -58,17 +73,24 @@ export async function middleware(request: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession()
 
-  // Protected routes
-  if (request.nextUrl.pathname.startsWith('/dashboard')) {
+  // Extract locale from pathname
+  const locale =
+    routing.locales.find((loc) => pathname.startsWith(`/${loc}/`) || pathname === `/${loc}`) ||
+    routing.defaultLocale
+
+  // Protected routes (with locale support)
+  const dashboardPattern = new RegExp(`^/(${routing.locales.join('|')})?/?dashboard`)
+  if (dashboardPattern.test(pathname)) {
     if (!session) {
-      return NextResponse.redirect(new URL('/login', request.url))
+      return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
     }
   }
 
-  // Redirect authenticated users away from auth pages
-  if (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup') {
+  // Redirect authenticated users away from auth pages (with locale support)
+  const authPattern = new RegExp(`^/(${routing.locales.join('|')})?/?(login|signup)$`)
+  if (authPattern.test(pathname)) {
     if (session) {
-      return NextResponse.redirect(new URL('/dashboard', request.url))
+      return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url))
     }
   }
 
@@ -76,5 +98,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/login', '/signup'],
+  matcher: ['/', '/(en|es|pt)/:path*', '/((?!api|_next|_vercel|.*\\..*).*)'],
 }

@@ -16,7 +16,7 @@ import {
   X,
 } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { supabase } from '@/utils/supabase/client'
 
@@ -32,35 +32,52 @@ export default function DashboardSidebar({
 }: DashboardSidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
+  const params = useParams()
+  const locale = (params?.locale as string) || 'en'
   const [showExtractMenu, setShowExtractMenu] = useState(pathname.includes('/extract'))
   const [showWhatsNew, setShowWhatsNew] = useState(true)
   const [showUserDropdown, setShowUserDropdown] = useState(false)
   const handleLogout = async () => {
     await supabase.auth.signOut()
-    router.push('/login')
+    router.push(`/${locale}/login`)
   }
 
   const sidebarItems = [
-    { icon: Home, label: 'Dashboard', href: '/dashboard', subtitle: 'Your home base' },
-    { icon: Search, label: 'Explore', href: '/dashboard/explore', subtitle: 'Discover matches' },
-    { icon: Users, label: 'Directory', href: '/dashboard/directory', subtitle: 'Browse providers' },
-    { icon: Star, label: 'My Matches', href: '/dashboard/matches', subtitle: 'Reviews & intros' },
+    { icon: Home, label: 'Dashboard', href: `/${locale}/dashboard`, subtitle: 'Your home base' },
+    {
+      icon: Search,
+      label: 'Explore',
+      href: `/${locale}/dashboard/explore`,
+      subtitle: 'Discover matches',
+    },
+    {
+      icon: Users,
+      label: 'Directory',
+      href: `/${locale}/dashboard/directory`,
+      subtitle: 'Browse providers',
+    },
+    {
+      icon: Star,
+      label: 'My Matches',
+      href: `/${locale}/dashboard/matches`,
+      subtitle: 'Reviews & intros',
+    },
     {
       icon: MessageSquare,
       label: 'Community',
-      href: '/dashboard/community',
+      href: `/${locale}/dashboard/community`,
       subtitle: 'Expat forums',
     },
     {
       icon: CreditCard,
       label: 'Membership',
-      href: '/dashboard/membership',
+      href: `/${locale}/dashboard/membership`,
       subtitle: 'Tier & benefits',
     },
     {
       icon: Settings,
       label: 'Profile',
-      href: '/dashboard/profile',
+      href: `/${locale}/dashboard/profile`,
       subtitle: 'Account & settings',
     },
   ]
@@ -73,7 +90,7 @@ export default function DashboardSidebar({
     >
       {/* Logo */}
       <div className={`border-b ${isCollapsed ? 'p-2' : 'p-4'}`}>
-        <Link href="/dashboard" className="flex items-center space-x-2 group">
+        <Link href={`/${locale}/dashboard`} className="flex items-center space-x-2 group">
           <div className="flex flex-col">
             <span
               className={`font-bold text-teal-600 drop-shadow-sm transition-all group-hover:text-teal-700 group-hover:drop-shadow-md ${
@@ -212,7 +229,7 @@ export default function DashboardSidebar({
           {showUserDropdown && (
             <div className="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 rounded-lg shadow-lg">
               <Link
-                href="/dashboard/settings"
+                href={`/${locale}/dashboard/settings`}
                 className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                 onClick={() => setShowUserDropdown(false)}
               >

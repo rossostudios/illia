@@ -220,7 +220,7 @@ export async function POST(request: NextRequest) {
 }
 
 // GET endpoint to fetch existing matches
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = createClient()
 

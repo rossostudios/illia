@@ -2,8 +2,12 @@
 
 import { ArrowRight, CheckCircle, Play } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 
 export default function Hero() {
+  const t = useTranslations('hero')
+  const tCommon = useTranslations('common')
+
   return (
     <section className="relative bg-gradient-to-br from-gray-50 via-white to-green-50 pt-20 pb-24 overflow-hidden">
       {/* Background decoration */}
@@ -17,17 +21,14 @@ export default function Hero() {
         <div className="text-center mb-16">
           {/* Main Headline */}
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6">
-            Turn Local Searches Into Your
+            {t('headline')}
             <span className="block bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-              Trusted Home Team
+              {t('headlineAccent')}
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto">
-            Automate your expat setup in Medellín or Florianópolis—find, match, and connect with
-            vetted cleaners & cooks in seconds.
-          </p>
+          <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto">{t('subtitle')}</p>
 
           {/* Dual CTAs */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
@@ -35,7 +36,7 @@ export default function Hero() {
               href="/dashboard/explore"
               className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-green-500 to-green-600 rounded-xl shadow-xl hover:from-green-600 hover:to-green-700 transition-all transform hover:-translate-y-1 hover:shadow-2xl"
             >
-              Start Free Trial
+              {t('startFreeTrial')}
               <ArrowRight className="ml-2 w-5 h-5" />
             </Link>
             <button
@@ -43,7 +44,7 @@ export default function Hero() {
               className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-gray-700 bg-white border-2 border-gray-200 rounded-xl hover:border-green-500 hover:text-green-600 transition-all transform hover:-translate-y-1 hover:shadow-lg"
             >
               <Play className="mr-2 w-5 h-5" />
-              Watch Demo
+              {t('watchDemo')}
             </button>
           </div>
 
@@ -51,15 +52,15 @@ export default function Hero() {
           <div className="flex items-center justify-center gap-6 text-sm text-gray-600">
             <div className="flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-green-500" />
-              <span>No card needed</span>
+              <span>{t('noCard')}</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-green-500" />
-              <span>2-min quiz</span>
+              <span>{t('twoMinQuiz')}</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-green-500" />
-              <span>100 free matches</span>
+              <span>{t('freeMatches')}</span>
             </div>
           </div>
         </div>
@@ -72,7 +73,9 @@ export default function Hero() {
                 <div className="w-3 h-3 rounded-full bg-red-500"></div>
                 <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                 <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                <span className="ml-4 text-sm text-gray-600">Illia.club - Explore Matches</span>
+                <span className="ml-4 text-sm text-gray-600">
+                  Illia.club - {t('sidebarExplore')}
+                </span>
               </div>
             </div>
             <div className="flex">
@@ -80,24 +83,22 @@ export default function Hero() {
               <div className="w-64 bg-gray-50 border-r border-gray-200 p-4">
                 <div className="space-y-3">
                   <div className="bg-green-600 text-white rounded-lg px-4 py-2 font-medium">
-                    Explore
+                    {t('sidebarExplore')}
                   </div>
                   <div className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer">
-                    My Matches
+                    {t('sidebarMatches')}
                   </div>
                   <div className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer">
-                    Analytics
+                    {t('sidebarAnalytics')}
                   </div>
                   <div className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer">
-                    Settings
+                    {t('sidebarSettings')}
                   </div>
                 </div>
               </div>
               {/* Main Content */}
               <div className="flex-1 p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">
-                  Weekly cleaner in El Poblado
-                </h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-6">{t('demoTitle')}</h3>
                 <div className="space-y-3">
                   {[
                     {
@@ -138,7 +139,7 @@ export default function Hero() {
                           type="button"
                           className="text-green-600 hover:text-green-700 font-medium"
                         >
-                          View →
+                          {t('view')} →
                         </button>
                       </div>
                     </div>
@@ -148,7 +149,7 @@ export default function Hero() {
                   type="button"
                   className="mt-6 w-full bg-green-50 text-green-700 border border-green-200 rounded-lg py-3 font-medium hover:bg-green-100 transition-colors"
                 >
-                  View All Matches
+                  {t('viewAll')}
                 </button>
               </div>
             </div>

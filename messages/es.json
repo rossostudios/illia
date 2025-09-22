@@ -1,0 +1,153 @@
+{
+  "nav": {
+    "features": "Características",
+    "pricing": "Precios",
+    "docs": "Docs",
+    "signin": "Iniciar Sesión",
+    "getStarted": "Empezar"
+  },
+  "hero": {
+    "headline": "Convierte Búsquedas Locales en Tu",
+    "headlineAccent": "Equipo de Confianza",
+    "subtitle": "Automatiza tu configuración de expatriado en Medellín o Florianópolis—encuentra, empareja y conecta con limpiadores y cocineros verificados en segundos.",
+    "startFreeTrial": "Prueba Gratuita",
+    "watchDemo": "Ver Demo",
+    "noCard": "Sin tarjeta",
+    "twoMinQuiz": "Quiz de 2 min",
+    "freeMatches": "100 coincidencias gratis",
+    "sidebarExplore": "Explorar",
+    "sidebarMatches": "Mis Coincidencias",
+    "sidebarAnalytics": "Análisis",
+    "sidebarSettings": "Configuración",
+    "demoTitle": "Limpiador semanal en El Poblado",
+    "viewAll": "Ver Todas las Coincidencias",
+    "view": "Ver"
+  },
+  "features": {
+    "title": "Todo lo que Necesitas para una Vida de Expatriado sin Problemas",
+    "subtitle": "Herramientas seleccionadas para que los expatriados encuentren y se conecten con ayuda doméstica confiable—rápido y seguro.",
+    "lightning": {
+      "title": "Coincidencias Relámpago",
+      "description": "Descubre y empareja con profesionales verificados en segundos—curados por IA para tus necesidades."
+    },
+    "smart": {
+      "title": "Emparejamiento Inteligente",
+      "description": "La IA califica a los proveedores según el ajuste (nivel de inglés, tarifas, reseñas)—sin más conjeturas."
+    },
+    "vetted": {
+      "title": "Perfiles Verificados",
+      "description": "Detalles completos: Biografías, tarifas, fotos y reseñas de la comunidad—todo verificado."
+    },
+    "insights": {
+      "title": "Insights de Coincidencias",
+      "description": "Rastrea tus contrataciones y ahorros con paneles simples—ve el ROI en tiempo real."
+    },
+    "privacy": {
+      "title": "Privacidad Primero",
+      "description": "Seguro y conforme—tus datos (y coincidencias) protegidos como familia."
+    },
+    "city": {
+      "title": "Conocedor de la Ciudad",
+      "description": "Adaptado para Medellín y Florianópolis—información local de redes de expatriados."
+    }
+  },
+  "dashboard": {
+    "welcome": "Bienvenido de nuevo",
+    "explore": "Explorar",
+    "matches": "Coincidencias",
+    "serviceFinder": "Buscador de Servicios",
+    "directory": "Directorio",
+    "profile": "Perfil",
+    "settings": "Configuración",
+    "apiKeys": "Claves API",
+    "usage": "Uso",
+    "logs": "Registros",
+    "playground": "Área de Pruebas",
+    "help": "Ayuda",
+    "signOut": "Cerrar Sesión",
+    "sidebar": {
+      "home": "Inicio",
+      "analytics": "Análisis",
+      "reports": "Informes",
+      "team": "Equipo"
+    },
+    "stats": {
+      "totalMatches": "Coincidencias Totales",
+      "activeServices": "Servicios Activos",
+      "savedThisMonth": "Ahorrado Este Mes",
+      "trustScore": "Puntuación de Confianza"
+    }
+  },
+  "app": {
+    "quiz": {
+      "title": "Encuentra tu Pareja Perfecta",
+      "subtitle": "Responde algunas preguntas para obtener recomendaciones personalizadas",
+      "start": "Comenzar Cuestionario",
+      "next": "Siguiente Pregunta",
+      "previous": "Anterior",
+      "submit": "Obtener Resultados",
+      "progress": "Progreso"
+    },
+    "matches": {
+      "title": "Tus Coincidencias",
+      "subtitle": "Proveedores de servicios que coinciden con tus necesidades",
+      "filter": "Filtrar",
+      "sort": "Ordenar por",
+      "contact": "Contactar",
+      "viewProfile": "Ver Perfil",
+      "noMatches": "No se encontraron coincidencias",
+      "loadMore": "Cargar Más"
+    },
+    "providers": {
+      "title": "Proveedores de Servicios",
+      "verified": "Verificado",
+      "rating": "Calificación",
+      "reviews": "reseñas",
+      "services": "Servicios",
+      "availability": "Disponibilidad",
+      "languages": "Idiomas",
+      "experience": "Experiencia",
+      "rate": "Tarifa",
+      "perMonth": "por mes",
+      "perWeek": "por semana",
+      "perService": "por servicio"
+    }
+  },
+  "auth": {
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes una cuenta?",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "continueWith": "Continuar con {provider}",
+    "or": "O"
+  },
+  "appFooter": {
+    "copyright": "© 2025 Illia.club",
+    "version": "Versión",
+    "status": "Estado",
+    "allSystemsOperational": "Todos los sistemas operativos"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "close": "Cerrar",
+    "open": "Abrir",
+    "yes": "Sí",
+    "no": "No"
+  }
+}

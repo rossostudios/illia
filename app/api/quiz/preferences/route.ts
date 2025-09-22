@@ -21,10 +21,10 @@ export async function POST(request: NextRequest) {
     if (budget) {
       const budgetParts = budget.split('-')
       if (budgetParts[0] && budgetParts[0] !== '0') {
-        budgetMin = parseInt(budgetParts[0])
+        budgetMin = parseInt(budgetParts[0], 10)
       }
       if (budgetParts[1] && !budgetParts[1].includes('+')) {
-        budgetMax = parseInt(budgetParts[1])
+        budgetMax = parseInt(budgetParts[1], 10)
       }
     }
 
