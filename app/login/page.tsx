@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import { FaApple, FaGoogle, FaLinkedin } from 'react-icons/fa'
 import { ErrorMessage } from '@/components/ui/ErrorMessage'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
-import { useToast } from '@/hooks/useToast'
+import { ToastProvider, useToast } from '@/hooks/useToast'
 import { createClient } from '@/lib/supabase/client'
 
 const testimonials = [
@@ -38,9 +38,7 @@ const testimonials = [
   },
 ]
 
-export default function LoginPage() {
-  // Prevent static generation for this page
-  unstable_noStore()
+function LoginForm() {
   const router = useRouter()
   const { success, error: showError } = useToast()
   const [email, setEmail] = useState('')
@@ -320,6 +318,17 @@ export default function LoginPage() {
       {/* Footer - positioned absolutely */}
       <div className="absolute bottom-4 left-6 text-sm text-gray-500">© 2025 Illia.club</div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  // Prevent static generation for this page
+  unstable_noStore()
+
+  return (
+    <ToastProvider>
+      <LoginForm />
+    </ToastProvider>
   )
 }
 
