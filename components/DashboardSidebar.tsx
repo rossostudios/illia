@@ -2,6 +2,7 @@
 
 import {
   BarChart3,
+  Calendar,
   ChevronDown,
   CreditCard,
   Home,
@@ -69,6 +70,12 @@ export default function DashboardSidebar({
       subtitle: 'Reviews & intros',
     },
     {
+      icon: Calendar,
+      label: 'Bookings',
+      href: `/${locale}/dashboard/bookings`,
+      subtitle: 'Manage appointments',
+    },
+    {
       icon: Mail,
       label: 'Messages',
       href: `/${locale}/dashboard/messages`,
@@ -123,7 +130,7 @@ export default function DashboardSidebar({
       </div>
 
       {/* Navigation */}
-      <nav className={`space-y-1 flex-1 ${isCollapsed ? 'px-2' : 'px-3'}`}>
+      <nav className={`space-y-1 flex-1 pt-3 ${isCollapsed ? 'px-2' : 'px-3'}`}>
         {sidebarItems.map((item) => {
           const isActive = item.hasSubmenu ? pathname.includes(item.href) : pathname === item.href
 

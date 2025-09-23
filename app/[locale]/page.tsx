@@ -1,17 +1,28 @@
+import dynamic from 'next/dynamic'
 import AnnouncementBar from '@/components/AnnouncementBar'
-import Features from '@/components/Features'
-import Hero from '@/components/Hero'
 import Navbar from '@/components/Navbar'
 import SocialProof from '@/components/SocialProof'
+import FeaturesSkeleton from '@/components/skeletons/FeaturesSkeleton'
+import HeroSkeleton from '@/components/skeletons/HeroSkeleton'
+
+const AnimatedHero = dynamic(() => import('@/components/AnimatedHero'), {
+  loading: () => <HeroSkeleton />,
+  ssr: true,
+})
+
+const AnimatedFeatures = dynamic(() => import('@/components/AnimatedFeatures'), {
+  loading: () => <FeaturesSkeleton />,
+  ssr: true,
+})
 
 export default function Home() {
   return (
     <div className="min-h-screen">
       <AnnouncementBar />
       <Navbar />
-      <Hero />
+      <AnimatedHero />
       <SocialProof />
-      <Features />
+      <AnimatedFeatures />
     </div>
   )
 }

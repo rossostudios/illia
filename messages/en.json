@@ -7,9 +7,30 @@
     "getStarted": "Get Started"
   },
   "hero": {
-    "headline": "Turn Local Searches Into Your",
+    "headline": {
+      "find": "Find",
+      "trusted": "Trusted",
+      "serviceProviders": "Service Providers"
+    },
     "headlineAccent": "Trusted Home Team",
     "subtitle": "Automate your expat setup in Medellín or Florianópolis—find, match, and connect with vetted cleaners & cooks in seconds.",
+    "badge": "Trusted by thousands in your area",
+    "cta": {
+      "startExploring": "Start Exploring",
+      "learnMore": "Learn More"
+    },
+    "stats": {
+      "activeUsers": "Active Users",
+      "averageRating": "Average Rating",
+      "verifiedProviders": "Verified Providers",
+      "responseTime": "Response Time"
+    },
+    "floating": {
+      "verified": "Verified",
+      "backgroundChecked": "Background Checked",
+      "rating": "4.9 Rating",
+      "reviews": "From 2000+ Reviews"
+    },
     "startFreeTrial": "Start Free Trial",
     "watchDemo": "Watch Demo",
     "noCard": "No card needed",

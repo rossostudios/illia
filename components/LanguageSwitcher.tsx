@@ -26,11 +26,9 @@ export default function LanguageSwitcher() {
         className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500"
         aria-label="Change language"
       >
-        <Globe className="w-4 h-4" />
+        <span className="sm:hidden">{languages.find((lang) => lang.code === locale)?.flag}</span>
         <span className="hidden sm:inline">
-          {languages.find((lang) => lang.code === locale)?.flag}
-        </span>
-        <span className="hidden sm:inline">
+          {languages.find((lang) => lang.code === locale)?.flag}{' '}
           {languages.find((lang) => lang.code === locale)?.name}
         </span>
       </button>

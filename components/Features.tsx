@@ -53,9 +53,9 @@ export default function Features() {
             return (
               <div
                 key={index}
-                className="bg-white rounded-xl p-6 border border-gray-200 hover:border-green-500 hover:shadow-lg transition-all"
+                className="bg-white rounded-xl p-6 border border-gray-200 hover:border-teal-500 hover:shadow-lg transition-all"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg flex items-center justify-center mb-4">
                   <Icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">{t(feature.titleKey)}</h3>

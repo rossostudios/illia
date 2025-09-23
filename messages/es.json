@@ -7,9 +7,30 @@
     "getStarted": "Empezar"
   },
   "hero": {
-    "headline": "Convierte Búsquedas Locales en Tu",
+    "headline": {
+      "find": "Encuentra",
+      "trusted": "Confiables",
+      "serviceProviders": "Proveedores de Servicios"
+    },
     "headlineAccent": "Equipo de Confianza",
     "subtitle": "Automatiza tu configuración de expatriado en Medellín o Florianópolis—encuentra, empareja y conecta con limpiadores y cocineros verificados en segundos.",
+    "badge": "Confiado por miles en tu área",
+    "cta": {
+      "startExploring": "Comenzar a Explorar",
+      "learnMore": "Saber Más"
+    },
+    "stats": {
+      "activeUsers": "Usuarios Activos",
+      "averageRating": "Calificación Promedio",
+      "verifiedProviders": "Proveedores Verificados",
+      "responseTime": "Tiempo de Respuesta"
+    },
+    "floating": {
+      "verified": "Verificado",
+      "backgroundChecked": "Antecedentes Revisados",
+      "rating": "Calificación 4.9",
+      "reviews": "De 2000+ Reseñas"
+    },
     "startFreeTrial": "Prueba Gratuita",
     "watchDemo": "Ver Demo",
     "noCard": "Sin tarjeta",

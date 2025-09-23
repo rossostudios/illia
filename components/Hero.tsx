@@ -1,6 +1,7 @@
 'use client'
 
 import { ArrowRight, CheckCircle, Play } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 
@@ -12,8 +13,8 @@ export default function Hero() {
     <section className="relative bg-gradient-to-br from-gray-50 via-white to-green-50 pt-20 pb-24 overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute left-1/4 top-20 w-96 h-96 bg-gradient-to-r from-green-100 to-emerald-100 rounded-full opacity-30 blur-3xl animate-pulse" />
-        <div className="absolute right-1/4 bottom-20 w-96 h-96 bg-gradient-to-r from-teal-100 to-green-100 rounded-full opacity-30 blur-3xl animate-pulse" />
+        <div className="absolute left-1/4 top-20 w-96 h-96 bg-gradient-to-r from-teal-100 to-teal-200 rounded-full opacity-30 blur-3xl animate-pulse" />
+        <div className="absolute right-1/4 bottom-20 w-96 h-96 bg-gradient-to-r from-teal-100 to-cyan-100 rounded-full opacity-30 blur-3xl animate-pulse" />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -78,80 +79,15 @@ export default function Hero() {
                 </span>
               </div>
             </div>
-            <div className="flex">
-              {/* Sidebar */}
-              <div className="w-64 bg-gray-50 border-r border-gray-200 p-4">
-                <div className="space-y-3">
-                  <div className="bg-green-600 text-white rounded-lg px-4 py-2 font-medium">
-                    {t('sidebarExplore')}
-                  </div>
-                  <div className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer">
-                    {t('sidebarMatches')}
-                  </div>
-                  <div className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer">
-                    {t('sidebarAnalytics')}
-                  </div>
-                  <div className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer">
-                    {t('sidebarSettings')}
-                  </div>
-                </div>
-              </div>
-              {/* Main Content */}
-              <div className="flex-1 p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">{t('demoTitle')}</h3>
-                <div className="space-y-3">
-                  {[
-                    {
-                      name: 'Maria Rodriguez',
-                      service: 'Reliable cook, $200/mo',
-                      rating: 4.9,
-                      reviews: 47,
-                    },
-                    {
-                      name: 'Carlos Martinez',
-                      service: 'Weekly cleaner, $150/mo',
-                      rating: 4.8,
-                      reviews: 31,
-                    },
-                    {
-                      name: 'Ana Silva',
-                      service: 'Deep clean expert, $180/mo',
-                      rating: 4.7,
-                      reviews: 28,
-                    },
-                    { name: 'Luis Gomez', service: 'Meal prep, $220/mo', rating: 4.9, reviews: 42 },
-                  ].map((match) => (
-                    <div
-                      key={match.name}
-                      className="bg-white border border-gray-200 rounded-lg p-4 flex items-center justify-between hover:shadow-md transition-shadow"
-                    >
-                      <div>
-                        <h4 className="font-semibold text-gray-900">{match.name}</h4>
-                        <span className="text-sm text-gray-600">{match.service}</span>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1">
-                          <span className="text-yellow-500">★</span>
-                          <span className="font-medium text-gray-900">{match.rating}</span>
-                          <span className="text-sm text-gray-500">({match.reviews})</span>
-                        </div>
-                        <button
-                          type="button"
-                          className="text-green-600 hover:text-green-700 font-medium"
-                        >
-                          {t('view')} →
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  className="mt-6 w-full bg-green-50 text-green-700 border border-green-200 rounded-lg py-3 font-medium hover:bg-green-100 transition-colors"
-                >
-                  {t('viewAll')}
-                </button>
-              </div>
+            {/* Dashboard Screenshot */}
+            <div className="relative w-full h-[500px] bg-gray-100">
+              <Image
+                src="/illia.png"
+                alt="Illia Dashboard"
+                fill
+                className="object-cover object-top"
+                priority
+              />
             </div>
           </div>
 

@@ -104,7 +104,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         }`}
       >
         {/* Top navigation bar */}
-        <header className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 px-4 md:px-8 py-4 sticky top-0 z-10">
+        <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-800 px-4 md:px-8 py-4 sticky top-0 z-10">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center flex-1 gap-4">
               {/* Hamburger menu button - Minimum 44px touch target */}
@@ -118,7 +118,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </button>
 
               {/* Search bar */}
-              <div className="relative max-w-2xl flex-1">
+              <div className="relative max-w-4xl flex-1">
                 <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
                 <input
                   ref={searchInputRef}

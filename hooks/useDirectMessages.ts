@@ -105,9 +105,7 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
 
         // Update conversation unread count
         setConversations((prev) =>
-          prev.map((conv) =>
-            conv.id === conversationId ? { ...conv, unread_count: 0 } : conv
-          )
+          prev.map((conv) => (conv.id === conversationId ? { ...conv, unread_count: 0 } : conv))
         )
       } catch (error) {
         console.error('Error marking messages as read:', error)

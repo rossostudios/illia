@@ -7,9 +7,30 @@
     "getStarted": "Começar"
   },
   "hero": {
-    "headline": "Transforme Buscas Locais em Sua",
+    "headline": {
+      "find": "Encontre",
+      "trusted": "Confiáveis",
+      "serviceProviders": "Prestadores de Serviços"
+    },
     "headlineAccent": "Equipe de Confiança",
     "subtitle": "Automatize sua configuração de expatriado em Medellín ou Florianópolis—encontre, combine e conecte-se com faxineiros e cozinheiros verificados em segundos.",
+    "badge": "Confiado por milhares em sua área",
+    "cta": {
+      "startExploring": "Começar a Explorar",
+      "learnMore": "Saiba Mais"
+    },
+    "stats": {
+      "activeUsers": "Usuários Ativos",
+      "averageRating": "Avaliação Média",
+      "verifiedProviders": "Prestadores Verificados",
+      "responseTime": "Tempo de Resposta"
+    },
+    "floating": {
+      "verified": "Verificado",
+      "backgroundChecked": "Antecedentes Verificados",
+      "rating": "Avaliação 4.9",
+      "reviews": "De 2000+ Avaliações"
+    },
     "startFreeTrial": "Teste Grátis",
     "watchDemo": "Ver Demo",
     "noCard": "Sem cartão",
