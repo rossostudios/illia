@@ -190,8 +190,8 @@ export default function QuizPage() {
   const progress = (step / totalSteps) * 100
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-      <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="space-y-6">
+      <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-bold text-gray-900">Find Your Perfect Match</h1>
@@ -201,17 +201,17 @@ export default function QuizPage() {
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
-              className="bg-gradient-to-r from-purple-600 to-pink-600 h-2 rounded-full transition-all duration-300"
+              className="bg-gradient-to-r from-teal-600 to-teal-700 h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-xl p-10">
           {step === 1 && (
             <div className="space-y-6">
               <div className="text-center">
-                <FiMapPin className="w-12 h-12 mx-auto mb-4 text-purple-600" />
+                <FiMapPin className="w-12 h-12 mx-auto mb-4 text-teal-600" />
                 <h2 className="text-2xl font-bold mb-2">Where are you located?</h2>
                 <p className="text-gray-600">We'll match you with providers in your city</p>
               </div>
@@ -222,8 +222,8 @@ export default function QuizPage() {
                     onClick={() => updateData('city', city.value)}
                     className={`w-full p-4 rounded-xl border-2 transition-all ${
                       data.city === city.value
-                        ? 'border-purple-600 bg-purple-50'
-                        : 'border-gray-200 hover:border-purple-300'
+                        ? 'border-teal-600 bg-teal-50'
+                        : 'border-gray-200 hover:border-teal-300'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -232,7 +232,7 @@ export default function QuizPage() {
                         <span className="font-medium">{city.label}</span>
                       </div>
                       {data.city === city.value && (
-                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center">
+                        <div className="w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center">
                           <span className="text-white text-sm">✓</span>
                         </div>
                       )}
@@ -246,19 +246,19 @@ export default function QuizPage() {
           {step === 2 && (
             <div className="space-y-6">
               <div className="text-center">
-                <FiHome className="w-12 h-12 mx-auto mb-4 text-purple-600" />
+                <FiHome className="w-12 h-12 mx-auto mb-4 text-teal-600" />
                 <h2 className="text-2xl font-bold mb-2">What services do you need?</h2>
                 <p className="text-gray-600">Select all that apply</p>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {SERVICES.map((service) => (
                   <button
                     key={service.value}
                     onClick={() => toggleService(service.value)}
                     className={`p-4 rounded-xl border-2 transition-all ${
                       data.services.includes(service.value)
-                        ? 'border-purple-600 bg-purple-50'
-                        : 'border-gray-200 hover:border-purple-300'
+                        ? 'border-teal-600 bg-teal-50'
+                        : 'border-gray-200 hover:border-teal-300'
                     }`}
                   >
                     <div className="text-center">
@@ -274,7 +274,7 @@ export default function QuizPage() {
           {step === 3 && (
             <div className="space-y-6">
               <div className="text-center">
-                <FiGlobe className="w-12 h-12 mx-auto mb-4 text-purple-600" />
+                <FiGlobe className="w-12 h-12 mx-auto mb-4 text-teal-600" />
                 <h2 className="text-2xl font-bold mb-2">Language preferences?</h2>
                 <p className="text-gray-600">Select languages you're comfortable with</p>
               </div>
@@ -285,14 +285,14 @@ export default function QuizPage() {
                     onClick={() => toggleLanguage(lang.value)}
                     className={`w-full p-4 rounded-xl border-2 transition-all ${
                       data.languages.includes(lang.value)
-                        ? 'border-purple-600 bg-purple-50'
-                        : 'border-gray-200 hover:border-purple-300'
+                        ? 'border-teal-600 bg-teal-50'
+                        : 'border-gray-200 hover:border-teal-300'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{lang.label}</span>
                       {data.languages.includes(lang.value) && (
-                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center">
+                        <div className="w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center">
                           <span className="text-white text-sm">✓</span>
                         </div>
                       )}
@@ -306,7 +306,7 @@ export default function QuizPage() {
           {step === 4 && (
             <div className="space-y-6">
               <div className="text-center">
-                <FiDollarSign className="w-12 h-12 mx-auto mb-4 text-purple-600" />
+                <FiDollarSign className="w-12 h-12 mx-auto mb-4 text-teal-600" />
                 <h2 className="text-2xl font-bold mb-2">What's your budget?</h2>
                 <p className="text-gray-600">Monthly service budget</p>
               </div>
@@ -317,14 +317,14 @@ export default function QuizPage() {
                     onClick={() => updateData('budget', budget.value)}
                     className={`w-full p-4 rounded-xl border-2 transition-all ${
                       data.budget === budget.value
-                        ? 'border-purple-600 bg-purple-50'
-                        : 'border-gray-200 hover:border-purple-300'
+                        ? 'border-teal-600 bg-teal-50'
+                        : 'border-gray-200 hover:border-teal-300'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{budget.label}</span>
                       {data.budget === budget.value && (
-                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center">
+                        <div className="w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center">
                           <span className="text-white text-sm">✓</span>
                         </div>
                       )}
@@ -338,7 +338,7 @@ export default function QuizPage() {
           {step === 5 && (
             <div className="space-y-6">
               <div className="text-center">
-                <FiCalendar className="w-12 h-12 mx-auto mb-4 text-purple-600" />
+                <FiCalendar className="w-12 h-12 mx-auto mb-4 text-teal-600" />
                 <h2 className="text-2xl font-bold mb-2">How often do you need help?</h2>
                 <p className="text-gray-600">Service frequency</p>
               </div>
@@ -349,14 +349,14 @@ export default function QuizPage() {
                     onClick={() => updateData('frequency', freq.value)}
                     className={`w-full p-4 rounded-xl border-2 transition-all ${
                       data.frequency === freq.value
-                        ? 'border-purple-600 bg-purple-50'
-                        : 'border-gray-200 hover:border-purple-300'
+                        ? 'border-teal-600 bg-teal-50'
+                        : 'border-gray-200 hover:border-teal-300'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{freq.label}</span>
                       {data.frequency === freq.value && (
-                        <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center">
+                        <div className="w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center">
                           <span className="text-white text-sm">✓</span>
                         </div>
                       )}
@@ -370,7 +370,7 @@ export default function QuizPage() {
           {step === 6 && (
             <div className="space-y-6">
               <div className="text-center">
-                <FiUser className="w-12 h-12 mx-auto mb-4 text-purple-600" />
+                <FiUser className="w-12 h-12 mx-auto mb-4 text-teal-600" />
                 <h2 className="text-2xl font-bold mb-2">Any specific preferences?</h2>
                 <p className="text-gray-600">Tell us more about what you're looking for</p>
               </div>
@@ -387,7 +387,7 @@ export default function QuizPage() {
           {step === 7 && (
             <div className="space-y-6">
               <div className="text-center">
-                <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center">
+                <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-r from-teal-600 to-teal-700 rounded-full flex items-center justify-center">
                   <span className="text-white text-2xl">✨</span>
                 </div>
                 <h2 className="text-2xl font-bold mb-2">Almost there!</h2>
@@ -458,8 +458,8 @@ export default function QuizPage() {
                 disabled={!canContinue() || loading}
                 className={`ml-auto px-6 py-3 rounded-xl transition-all flex items-center space-x-2 ${
                   canContinue() && !loading
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:shadow-lg'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    ? 'bg-gradient-to-r from-teal-600 to-teal-700 text-white hover:shadow-lg'
+                    : 'bg-gray-200 text-gray-700 cursor-not-allowed'
                 }`}
               >
                 <span>Continue</span>
@@ -471,8 +471,8 @@ export default function QuizPage() {
                 disabled={!canContinue() || loading}
                 className={`ml-auto px-8 py-3 rounded-xl transition-all flex items-center space-x-2 ${
                   canContinue() && !loading
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:shadow-lg'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    ? 'bg-gradient-to-r from-teal-600 to-teal-700 text-white hover:shadow-lg'
+                    : 'bg-gray-200 text-gray-700 cursor-not-allowed'
                 }`}
               >
                 {loading && (

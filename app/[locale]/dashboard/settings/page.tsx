@@ -75,7 +75,7 @@ export default function SettingsPage() {
         {/* Search */}
         <div className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
             <input
               type="text"
               placeholder="Search"
@@ -139,7 +139,7 @@ export default function SettingsPage() {
                 </div>
                 <button
                   onClick={() => setShowWhatsNew(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-700 hover:text-gray-600"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -386,9 +386,9 @@ export default function SettingsPage() {
                         className="absolute right-3 top-2.5"
                       >
                         {showPassword ? (
-                          <EyeOff className="h-4 w-4 text-gray-400" />
+                          <EyeOff className="h-4 w-4 text-gray-700" />
                         ) : (
-                          <Eye className="h-4 w-4 text-gray-400" />
+                          <Eye className="h-4 w-4 text-gray-700" />
                         )}
                       </button>
                     </div>
@@ -437,7 +437,7 @@ export default function SettingsPage() {
                   setShowDeleteModal(false)
                   setDeleteConfirmation('')
                 }}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-700 hover:text-gray-600"
               >
                 <X className="h-5 w-5" />
               </button>

@@ -203,7 +203,7 @@ const leads = await response.json()`
             onMouseEnter={() => setShowInfoTooltip(true)}
             onMouseLeave={() => setShowInfoTooltip(false)}
           >
-            <Info className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+            <Info className="h-5 w-5 text-gray-700 hover:text-gray-600" />
             {showInfoTooltip && (
               <div className="absolute z-10 left-1/2 -translate-x-1/2 top-8 w-80 bg-gray-900 text-white text-sm rounded-lg p-4 shadow-xl">
                 <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-gray-900"></div>
@@ -230,7 +230,7 @@ const leads = await response.json()`
                   </div>
                 </div>
                 <div className="mt-3 pt-3 border-t border-gray-700">
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-gray-700">
                     💡 Tip: Try "plumbers, 29401" or select a Charleston persona below
                   </p>
                 </div>
@@ -458,7 +458,7 @@ const leads = await response.json()`
           <div className="bg-white rounded-xl border">
             {leadsLoading ? (
               <div className="p-8 text-center">
-                <Loader2 className="h-6 w-6 animate-spin text-gray-400 mx-auto mb-2" />
+                <Loader2 className="h-6 w-6 animate-spin text-gray-700 mx-auto mb-2" />
                 <p className="text-sm text-gray-500">Loading recent generations...</p>
               </div>
             ) : recentLeads.length > 0 ? (
@@ -491,7 +491,7 @@ const leads = await response.json()`
                             <span className="font-medium">
                               {new Date(lead.created_at).toLocaleDateString()}
                             </span>
-                            <span className="text-gray-400">
+                            <span className="text-gray-700">
                               {new Date(lead.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </span>
                           </div>
@@ -505,7 +505,7 @@ const leads = await response.json()`
               <div className="p-8 text-center">
                 <MapPin className="h-12 w-12 text-gray-300 mx-auto mb-3" />
                 <p className="text-gray-500 mb-2">No recent generations yet</p>
-                <p className="text-sm text-gray-400">Generate your first leads to see them here</p>
+                <p className="text-sm text-gray-700">Generate your first leads to see them here</p>
               </div>
             )}
           </div>

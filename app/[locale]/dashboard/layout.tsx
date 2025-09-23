@@ -58,6 +58,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="flex items-center space-x-4">
               {/* Hamburger menu button */}
               <button
+                type="button"
                 onClick={toggleSidebar}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 aria-label={isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
@@ -66,11 +67,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </button>
             </div>
             <div className="flex items-center space-x-2">
-              <button className="p-2 hover:bg-gray-100 rounded-lg" aria-label="Notifications">
+              <button type="button" className="p-2 hover:bg-gray-100 rounded-lg" aria-label="Notifications">
                 <Bell className="h-5 w-5 text-gray-600" />
                 <span className="sr-only">Notifications</span>
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg" aria-label="Help">
+              <button type="button" className="p-2 hover:bg-gray-100 rounded-lg" aria-label="Help">
                 <HelpCircle className="h-5 w-5 text-gray-600" />
               </button>
               <Link

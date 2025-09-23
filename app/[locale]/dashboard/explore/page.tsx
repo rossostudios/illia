@@ -2,6 +2,7 @@
 
 'use client'
 
+import { AnimatePresence, motion } from 'framer-motion'
 import {
   Check,
   ChevronLeft,
@@ -12,12 +13,16 @@ import {
   Info,
   Loader2,
   MapPin,
+  RefreshCw,
+  Search,
   Sparkles,
   Star,
+  Users,
   Utensils,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { ConnectedStepper } from '@/components/ConnectedStepper'
 
 const SERVICES = [
   { id: 'cleaning', label: 'House Cleaning', icon: Home, color: 'teal' },
@@ -28,47 +33,8 @@ const SERVICES = [
   { id: 'organization', label: 'Organization', icon: Home, color: 'sunset' },
 ]
 
-const MOCK_MATCHES = [
-  {
-    id: 1,
-    name: 'Maria Rodriguez',
-    bio: 'Professional cleaner with 10 years of experience. Specializes in eco-friendly products.',
-    photo: 'https://i.pravatar.cc/150?img=1',
-    score: 92,
-    rate: '$200/month',
-    location: 'El Poblado',
-    verified: true,
-    specialties: ['English speaker', 'Pet-friendly', 'Eco-friendly'],
-    availability: 'Mon-Fri mornings',
-  },
-  {
-    id: 2,
-    name: 'Carlos Martinez',
-    bio: 'Expert in Colombian cuisine and meal prep. Can accommodate dietary restrictions.',
-    photo: 'https://i.pravatar.cc/150?img=8',
-    score: 88,
-    rate: '$250/month',
-    location: 'Laureles',
-    verified: true,
-    specialties: ['Vegan options', 'Meal planning', 'Colombian cuisine'],
-    availability: 'Flexible schedule',
-  },
-  {
-    id: 3,
-    name: 'Ana Silva',
-    bio: 'Reliable house cleaner and organizer. Great with pets and children.',
-    photo: 'https://i.pravatar.cc/150?img=5',
-    score: 85,
-    rate: '$180/month',
-    location: 'Envigado',
-    verified: false,
-    specialties: ['Organization', 'Deep cleaning', 'Pet-friendly'],
-    availability: 'Weekends available',
-  },
-]
-
 export default function ExplorePage() {
-  const _router = useRouter()
+  const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [selectedCity, setSelectedCity] = useState('medellin')
   const [selectedServices, setSelectedServices] = useState<string[]>([])
@@ -78,6 +44,27 @@ export default function ExplorePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [matches, setMatches] = useState<any[]>([])
   const [showTooltip, setShowTooltip] = useState(false)
+  const [validationError, setValidationError] = useState<string | null>(null)
+  const [estimatedMatches, setEstimatedMatches] = useState(0)
+
+  const calculateEstimatedMatches = () => {
+    // Dynamic calculation based on selections
+    let baseMatches = selectedCity === 'medellin' ? 15 : 12
+
+    if (selectedServices.includes('cleaning')) baseMatches += 8
+    if (selectedServices.includes('cooking')) baseMatches += 6
+    if (selectedServices.includes('deep-clean')) baseMatches += 3
+    if (selectedServices.includes('meal-prep')) baseMatches += 4
+
+    if (extras.includes('English speaker')) baseMatches = Math.floor(baseMatches * 0.6)
+    if (extras.includes('Pet-friendly')) baseMatches = Math.floor(baseMatches * 0.8)
+
+    return Math.max(3, baseMatches) // Always show at least 3 matches
+  }
+
+  useEffect(() => {
+    setEstimatedMatches(calculateEstimatedMatches())
+  }, [selectedServices, selectedCity, extras])
 
   const handleServiceToggle = (serviceId: string) => {
     setSelectedServices((prev) =>
@@ -112,13 +99,13 @@ export default function ExplorePage() {
       if (data.success && data.providers) {
         setMatches(data.providers)
       } else {
-        // Fall back to mock data if no providers found
-        setMatches(MOCK_MATCHES)
+        // No providers found
+        setMatches([])
       }
     } catch (error) {
       console.error('Error fetching providers:', error)
-      // Fall back to mock data on error
-      setMatches(MOCK_MATCHES)
+      // Show empty state on error
+      setMatches([])
     } finally {
       setIsLoading(false)
     }
@@ -169,78 +156,70 @@ export default function ExplorePage() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="mb-8">
-          <div className="flex items-start gap-2">
-            <h1 className="text-4xl font-bold text-teal-600">Explore</h1>
-            <div className="relative">
-              <button
-                onMouseEnter={() => setShowTooltip(true)}
-                onMouseLeave={() => setShowTooltip(false)}
-                className="p-1 hover:bg-teal-50 rounded-full transition-colors"
-              >
-                <Info className="h-5 w-5 text-teal-500" />
-              </button>
-              {showTooltip && (
-                <div className="absolute left-0 top-8 w-64 p-3 bg-white rounded-lg shadow-lg border border-teal-100 z-10">
-                  <p className="text-sm text-gray-600">
-                    Our interactive tool lets you explore home help options. Answer a few questions
-                    for AI-matched recommendations—free previews, Premium for intros.
-                  </p>
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="flex items-start gap-2">
+                <h1 className="text-4xl font-bold text-teal-600">Explore</h1>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onMouseEnter={() => setShowTooltip(true)}
+                    onMouseLeave={() => setShowTooltip(false)}
+                    className="p-1 hover:bg-teal-50 rounded-full transition-colors"
+                    aria-label="More information about Explore"
+                  >
+                    <Info className="h-5 w-5 text-teal-500" />
+                  </button>
+                  {showTooltip && (
+                    <div className="absolute left-0 top-8 w-64 p-3 bg-white rounded-lg shadow-lg border border-teal-100 z-10">
+                      <p className="text-sm text-gray-700 font-medium">
+                        Our interactive tool lets you explore home help options. Answer a few
+                        questions for AI-matched recommendations—free previews, Premium for intros.
+                      </p>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
+              <p className="text-gray-700 mt-2">Discover & test matches for your expat setup</p>
             </div>
+            <button
+              type="button"
+              onClick={() => router.push('/en/dashboard/quiz')}
+              className="flex items-center gap-2 px-6 py-3 min-h-[44px] bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-lg font-medium hover:from-teal-700 hover:to-teal-800 focus:from-teal-700 focus:to-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all shadow-md"
+            >
+              <Sparkles className="h-4 w-4" />
+              Quick Quiz
+            </button>
           </div>
-          <p className="text-gray-600 mt-2">Discover & test matches for your expat setup</p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Wizard Card */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-md p-6">
-              {/* Progress Bar */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  {[1, 2, 3].map((step) => (
-                    <div key={step} className="flex items-center">
-                      <div
-                        className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
-                          currentStep >= step
-                            ? 'bg-teal-600 text-white'
-                            : 'bg-gray-200 text-gray-500'
-                        }`}
-                      >
-                        {currentStep > step ? (
-                          <Check className="h-5 w-5" />
-                        ) : (
-                          <span className="font-medium">{step}</span>
-                        )}
-                      </div>
-                      {step < 3 && (
-                        <div
-                          className={`h-1 w-20 lg:w-32 transition-colors ${
-                            currentStep > step ? 'bg-teal-600' : 'bg-gray-200'
-                          }`}
-                        />
-                      )}
-                    </div>
-                  ))}
-                </div>
-                <div className="text-center text-sm text-gray-600">
-                  {currentStep === 1 && 'Select Your City'}
-                  {currentStep === 2 && 'Choose Services'}
-                  {currentStep === 3 && 'Add Details'}
-                </div>
-              </div>
+            <div className="bg-white rounded-xl shadow-md p-8">
+              {/* Connected Stepper */}
+              <ConnectedStepper
+                currentStep={currentStep}
+                totalSteps={3}
+                labels={['Select City', 'Choose Services', 'Add Details']}
+              />
 
               {/* Step Content */}
               <div className="min-h-[300px]">
                 {/* Step 1: City Selection */}
                 {currentStep === 1 && (
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold mb-4">Where are you based?</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <button
+                    <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                      Where are you based?
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <motion.button
+                        type="button"
                         onClick={() => setSelectedCity('medellin')}
-                        className={`p-6 rounded-lg border-2 transition-all ${
+                        whileHover={{ y: -4, scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{ type: 'spring', stiffness: 300 }}
+                        className={`p-6 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                           selectedCity === 'medellin'
                             ? 'border-teal-500 bg-teal-50'
                             : 'border-gray-200 hover:border-gray-300'
@@ -248,11 +227,17 @@ export default function ExplorePage() {
                       >
                         <MapPin className="h-8 w-8 mb-2 text-teal-600 mx-auto" />
                         <h3 className="font-semibold text-lg">Medellín</h3>
-                        <p className="text-sm text-gray-600 mt-1">El Poblado, Laureles, Envigado</p>
-                      </button>
-                      <button
+                        <p className="text-sm text-gray-800 font-medium mt-1">
+                          El Poblado, Laureles, Envigado
+                        </p>
+                      </motion.button>
+                      <motion.button
+                        type="button"
                         onClick={() => setSelectedCity('florianopolis')}
-                        className={`p-6 rounded-lg border-2 transition-all ${
+                        whileHover={{ y: -4, scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{ type: 'spring', stiffness: 300 }}
+                        className={`p-6 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                           selectedCity === 'florianopolis'
                             ? 'border-teal-500 bg-teal-50'
                             : 'border-gray-200 hover:border-gray-300'
@@ -260,8 +245,10 @@ export default function ExplorePage() {
                       >
                         <Globe className="h-8 w-8 mb-2 text-teal-600 mx-auto" />
                         <h3 className="font-semibold text-lg">Florianópolis</h3>
-                        <p className="text-sm text-gray-600 mt-1">Lagoa, Campeche, Centro</p>
-                      </button>
+                        <p className="text-sm text-gray-800 font-medium mt-1">
+                          Lagoa, Campeche, Centro
+                        </p>
+                      </motion.button>
                     </div>
                   </div>
                 )}
@@ -269,16 +256,31 @@ export default function ExplorePage() {
                 {/* Step 2: Service Selection */}
                 {currentStep === 2 && (
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold mb-4">What services do you need?</h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                      What services do you need?
+                    </h2>
+                    {validationError && selectedServices.length === 0 && (
+                      <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <p className="text-sm text-red-700">
+                          Please select at least one service to see tailored matches (e.g., English
+                          speakers in your area)
+                        </p>
+                      </div>
+                    )}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                       {SERVICES.map((service) => {
                         const Icon = service.icon
                         const isSelected = selectedServices.includes(service.id)
                         return (
-                          <button
+                          <motion.button
+                            type="button"
                             key={service.id}
                             onClick={() => handleServiceToggle(service.id)}
-                            className={`p-4 rounded-lg border-2 transition-all ${
+                            whileHover={{ y: -3, scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            animate={isSelected ? { scale: 1.05 } : { scale: 1 }}
+                            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                            className={`p-4 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                               isSelected
                                 ? service.color === 'sunset'
                                   ? 'border-sunset-500 bg-sunset-50'
@@ -292,17 +294,17 @@ export default function ExplorePage() {
                                   ? service.color === 'sunset'
                                     ? 'text-sunset-600'
                                     : 'text-teal-600'
-                                  : 'text-gray-500'
+                                  : 'text-gray-800'
                               }`}
                             />
                             <p
                               className={`text-sm font-medium ${
-                                isSelected ? 'text-gray-900' : 'text-gray-600'
+                                isSelected ? 'text-gray-900' : 'text-gray-700'
                               }`}
                             >
                               {service.label}
                             </p>
-                          </button>
+                          </motion.button>
                         )
                       })}
                     </div>
@@ -312,22 +314,25 @@ export default function ExplorePage() {
                 {/* Step 3: Details */}
                 {currentStep === 3 && (
                   <div className="space-y-6">
-                    <h2 className="text-xl font-semibold mb-4">Customize your preferences</h2>
+                    <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                      Customize your preferences
+                    </h2>
 
                     {/* Frequency */}
                     <div>
                       <label className="text-sm font-medium text-gray-700 mb-2 block">
                         Service Frequency
                       </label>
-                      <div className="flex gap-3">
+                      <div className="flex flex-col sm:flex-row gap-3">
                         {['weekly', 'bi-weekly', 'monthly'].map((freq) => (
                           <button
+                            type="button"
                             key={freq}
                             onClick={() => setFrequency(freq)}
-                            className={`px-4 py-2 rounded-lg border-2 capitalize transition-all ${
+                            className={`px-4 py-2 min-h-[44px] rounded-lg border-2 capitalize transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                               frequency === freq
                                 ? 'border-teal-500 bg-teal-50 text-teal-700'
-                                : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                                : 'border-gray-200 text-gray-700 hover:border-gray-300'
                             }`}
                           >
                             {freq}
@@ -362,9 +367,10 @@ export default function ExplorePage() {
                         {['English speaker', 'Pet-friendly', 'Vegan cooking', 'Eco-friendly'].map(
                           (extra) => (
                             <button
+                              type="button"
                               key={extra}
                               onClick={() => handleExtraToggle(extra)}
-                              className={`px-3 py-1.5 rounded-full text-sm transition-all ${
+                              className={`px-4 py-2 min-h-[40px] rounded-full text-sm transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                                 extras.includes(extra)
                                   ? 'bg-teal-600 text-white'
                                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -383,11 +389,12 @@ export default function ExplorePage() {
               {/* Navigation Buttons */}
               <div className="flex justify-between mt-8 pt-6 border-t">
                 <button
+                  type="button"
                   onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
                   disabled={currentStep === 1}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                  className={`flex items-center gap-2 px-4 py-2 min-h-[44px] rounded-lg border transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                     currentStep === 1
-                      ? 'border-gray-200 text-gray-400 cursor-not-allowed'
+                      ? 'border-gray-200 text-gray-700 cursor-not-allowed'
                       : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                   }`}
                 >
@@ -396,26 +403,48 @@ export default function ExplorePage() {
                 </button>
 
                 {currentStep < 3 ? (
-                  <button
-                    onClick={() => setCurrentStep(currentStep + 1)}
-                    disabled={!canProceed()}
-                    className={`flex items-center gap-2 px-6 py-2 rounded-lg transition-colors ${
-                      canProceed()
-                        ? 'bg-teal-600 text-white hover:bg-teal-700'
-                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                    }`}
-                  >
-                    Next
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!canProceed() && currentStep === 2) {
+                          setValidationError('Please select at least one service')
+                          return
+                        }
+                        setValidationError(null)
+                        setCurrentStep(currentStep + 1)
+                      }}
+                      className={`flex items-center gap-2 px-6 py-3 min-h-[44px] rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                        canProceed()
+                          ? 'bg-teal-600 text-white hover:bg-teal-700'
+                          : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
+                      }`}
+                    >
+                      Next
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                    {currentStep === 2 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setValidationError(null)
+                          setCurrentStep(3)
+                        }}
+                        className="text-sm text-gray-800 hover:text-gray-800 underline focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded px-2 py-1"
+                      >
+                        Skip for now
+                      </button>
+                    )}
+                  </div>
                 ) : (
                   <button
+                    type="button"
                     onClick={handleFindMatches}
                     disabled={!canProceed() || isLoading}
-                    className={`flex items-center gap-2 px-6 py-2 rounded-lg transition-colors ${
+                    className={`flex items-center gap-2 px-6 py-3 min-h-[44px] rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                       canProceed() && !isLoading
                         ? 'bg-teal-600 text-white hover:bg-teal-700'
-                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                        : 'bg-gray-200 text-gray-700 cursor-not-allowed'
                     }`}
                   >
                     {isLoading ? (
@@ -442,30 +471,63 @@ export default function ExplorePage() {
                 <Heart className="h-5 w-5 text-sunset-500" />
                 Pro Tips
               </h3>
-              <p className="text-sm text-gray-600 mb-4">{getTips()}</p>
+              <p className="text-sm text-gray-700 font-medium mb-4">{getTips()}</p>
 
-              {getPreview() && (
-                <div className="mt-4 p-3 bg-teal-50 rounded-lg">
-                  <p className="text-sm font-medium text-teal-700">{getPreview()}</p>
-                </div>
-              )}
+              {/* Dynamic Match Preview */}
+              <AnimatePresence mode="wait">
+                {selectedServices.length > 0 && (
+                  <motion.div
+                    key="match-preview"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="mt-4 p-4 bg-gradient-to-r from-teal-50 to-sunset-50 rounded-lg border border-teal-200"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Users className="h-5 w-5 text-teal-600" />
+                        <span className="text-sm font-semibold text-gray-900">
+                          Available Matches
+                        </span>
+                      </div>
+                      <motion.span
+                        key={estimatedMatches}
+                        initial={{ scale: 0.5, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ type: 'spring', stiffness: 500 }}
+                        className="text-2xl font-bold text-teal-600"
+                      >
+                        {estimatedMatches}
+                      </motion.span>
+                    </div>
+                    <div className="text-xs text-gray-800">
+                      Based on {selectedServices.length} service
+                      {selectedServices.length > 1 ? 's' : ''} in{' '}
+                      {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}
+                      {extras.length > 0 &&
+                        ` with ${extras.length} preference${extras.length > 1 ? 's' : ''}`}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               <div className="mt-6 pt-6 border-t border-gray-100">
-                <p className="text-xs text-gray-500 mb-2">
+                <p className="text-xs text-gray-800 mb-2">
                   Popular in {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}:
                 </p>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">Cleaning + Cooking</span>
-                    <span className="text-teal-600 font-medium">68%</span>
+                    <span className="text-gray-700">Cleaning + Cooking</span>
+                    <span className="text-gray-800 font-semibold">68%</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">Weekly service</span>
-                    <span className="text-teal-600 font-medium">71%</span>
+                    <span className="text-gray-700">Weekly service</span>
+                    <span className="text-gray-800 font-semibold">71%</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">English speaker</span>
-                    <span className="text-teal-600 font-medium">45%</span>
+                    <span className="text-gray-700">English speaker</span>
+                    <span className="text-gray-800 font-semibold">45%</span>
                   </div>
                 </div>
               </div>
@@ -473,8 +535,60 @@ export default function ExplorePage() {
           </div>
         </div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="mt-8">
+            <div className="bg-white rounded-xl shadow-md p-12 max-w-2xl mx-auto">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="relative">
+                  <Loader2 className="h-12 w-12 text-teal-600 animate-spin" />
+                  <motion.div
+                    className="absolute inset-0"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <div className="h-12 w-12 rounded-full bg-teal-200 opacity-30" />
+                  </motion.div>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    Finding your perfect matches...
+                  </h3>
+                  <p className="text-gray-800">
+                    Analyzing {selectedServices.length} service
+                    {selectedServices.length > 1 ? 's' : ''} in{' '}
+                    {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}
+                  </p>
+                  <motion.div
+                    className="flex justify-center gap-1 pt-2"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <motion.span
+                      className="h-2 w-2 bg-teal-600 rounded-full"
+                      animate={{ y: [0, -8, 0] }}
+                      transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+                    />
+                    <motion.span
+                      className="h-2 w-2 bg-teal-600 rounded-full"
+                      animate={{ y: [0, -8, 0] }}
+                      transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
+                    />
+                    <motion.span
+                      className="h-2 w-2 bg-teal-600 rounded-full"
+                      animate={{ y: [0, -8, 0] }}
+                      transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
+                    />
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Results Section */}
-        {matches.length > 0 && (
+        {!isLoading && matches.length > 0 ? (
           <div className="mt-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Matches</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -495,7 +609,7 @@ export default function ExplorePage() {
                         <h3 className="font-semibold text-gray-900">{match.name}</h3>
                         {match.verified && <Check className="h-4 w-4 text-teal-600" />}
                       </div>
-                      <p className="text-sm text-gray-600">{match.location}</p>
+                      <p className="text-sm text-gray-700">{match.location}</p>
                       <div className="flex items-center gap-1 mt-1">
                         <Star className="h-4 w-4 text-sunset-500 fill-sunset-500" />
                         <span className="text-sm font-medium">{match.rate}</span>
@@ -509,10 +623,27 @@ export default function ExplorePage() {
                     </div>
                   </div>
 
-                  <p className="text-sm text-gray-600 mb-3">{match.bio}</p>
+                  <p className="text-sm text-gray-700 mb-3">{match.bio}</p>
+
+                  {/* Review Snippet */}
+                  {match.review && (
+                    <div className="p-3 bg-gray-50 rounded-lg mb-3 border-l-4 border-teal-500">
+                      <p className="text-sm text-gray-700 italic">"{match.review.text}"</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs text-gray-700 font-medium">
+                          — {match.review.author}
+                        </span>
+                        <div className="flex gap-0.5">
+                          {[...Array(match.review.rating)].map((_, i) => (
+                            <Star key={i} className="h-3 w-3 text-sunset-500 fill-sunset-500" />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="flex flex-wrap gap-1 mb-4">
-                    {match.specialties.slice(0, 3).map((specialty) => (
+                    {match.specialties.slice(0, 3).map((specialty: string) => (
                       <span
                         key={specialty}
                         className="px-2 py-1 bg-teal-50 text-teal-700 text-xs rounded-full"
@@ -522,7 +653,10 @@ export default function ExplorePage() {
                     ))}
                   </div>
 
-                  <button className="w-full py-2 text-teal-600 font-medium hover:bg-teal-50 rounded-lg transition-colors">
+                  <button
+                    type="button"
+                    className="w-full py-2 min-h-[44px] text-teal-600 font-medium hover:bg-teal-50 focus:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset rounded-lg transition-all"
+                  >
                     View Profile →
                   </button>
                 </div>
@@ -530,14 +664,87 @@ export default function ExplorePage() {
             </div>
 
             <div className="text-center mt-8">
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-gray-700 mb-4">
                 Want unlimited matches and direct intros?
               </p>
-              <button className="px-6 py-3 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors">
+              <button
+                type="button"
+                className="px-6 py-3 min-h-[48px] bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 focus:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all shadow-md hover:shadow-lg"
+              >
                 Upgrade to Premium
               </button>
             </div>
           </div>
+        ) : (
+          /* Empty State */
+          currentStep === 3 &&
+          !isLoading &&
+          matches.length === 0 && (
+            <div className="mt-8">
+              <div className="bg-white rounded-xl shadow-md p-8 md:p-12 max-w-4xl mx-auto">
+                <div className="flex flex-col items-center text-center space-y-6">
+                  <div className="relative">
+                    <Search className="h-16 w-16 text-gray-300" />
+                    <motion.div
+                      className="absolute -right-2 -top-2"
+                      animate={{ rotate: [0, 15, -15, 0] }}
+                      transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                    >
+                      <Sparkles className="h-6 w-6 text-sunset-400" />
+                    </motion.div>
+                  </div>
+
+                  <div className="space-y-3 max-w-3xl">
+                    <h3 className="text-2xl font-semibold text-gray-900">
+                      {selectedServices.length === 0
+                        ? 'Pick services to see matches'
+                        : 'Building your matches...'}
+                    </h3>
+                    <p className="text-gray-800 leading-relaxed text-base">
+                      {selectedServices.length === 0
+                        ? 'Select at least one service above to discover available home helpers in your area.'
+                        : `We're expanding our network in ${selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}. Try adjusting your preferences or check back soon for more options!`}
+                    </p>
+                  </div>
+
+                  {/* Suggestion Bubbles */}
+                  {selectedServices.length > 0 && (
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      <span className="inline-flex items-center px-3 py-1.5 bg-teal-50 text-teal-700 rounded-full text-sm font-medium">
+                        Try: Weekly cleaning only (15 matches)
+                      </span>
+                      <span className="inline-flex items-center px-3 py-1.5 bg-sunset-50 text-sunset-700 rounded-full text-sm font-medium">
+                        Remove: English speaker (+8 matches)
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCurrentStep(2)
+                        setSelectedServices([])
+                        setExtras([])
+                      }}
+                      className="flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-lg hover:from-teal-700 hover:to-teal-800 focus:from-teal-700 focus:to-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all shadow-md hover:shadow-lg"
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                      Adjust Preferences
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => router.push('/en/dashboard/quiz')}
+                      className="flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all"
+                    >
+                      <Sparkles className="h-4 w-4" />
+                      Take Full Quiz
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
         )}
       </div>
 

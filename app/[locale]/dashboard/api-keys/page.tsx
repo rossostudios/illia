@@ -115,7 +115,7 @@ export default function APIKeysPage() {
         {/* Search */}
         <div className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
             <input
               type="text"
               placeholder="Search"
@@ -179,7 +179,7 @@ export default function APIKeysPage() {
                 </div>
                 <button
                   onClick={() => setShowWhatsNew(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-700 hover:text-gray-600"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -318,7 +318,7 @@ export default function APIKeysPage() {
               <h3 className="text-lg font-semibold">Create API Key</h3>
               <button
                 onClick={() => setShowCreateModal(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-700 hover:text-gray-600"
               >
                 <X className="h-5 w-5" />
               </button>

@@ -100,7 +100,7 @@ export default function DashboardSidebar({
               {isCollapsed ? 'I' : 'Illia.club'}
             </span>
             {!isCollapsed && (
-              <span className="text-xs text-gray-500 mt-0.5">Your Expat Lifeline</span>
+              <span className="text-xs text-gray-700 mt-0.5">Your Expat Lifeline</span>
             )}
           </div>
         </Link>
@@ -110,11 +110,11 @@ export default function DashboardSidebar({
       {!isCollapsed && (
         <div className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
             <input
               type="text"
               placeholder="Find cleaners in El Poblado..."
-              className="w-full pl-9 pr-3 py-2 bg-warmth-50 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+              className="w-full pl-9 pr-3 py-2 bg-warmth-50 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-700 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
             />
             <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
           </div>
@@ -151,7 +151,7 @@ export default function DashboardSidebar({
                     <div className="flex flex-col">
                       <span>{item.label}</span>
                       {item.subtitle && (
-                        <span className="text-xs text-gray-500 mt-0.5">{item.subtitle}</span>
+                        <span className="text-xs text-gray-700 mt-0.5">{item.subtitle}</span>
                       )}
                     </div>
                   )}
@@ -171,7 +171,7 @@ export default function DashboardSidebar({
                       className={`block px-3 py-2 text-sm rounded-lg ${
                         pathname === subitem.href
                           ? 'text-teal-600 bg-teal-50'
-                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                          : 'text-gray-800 hover:text-gray-900 hover:bg-gray-50'
                       }`}
                     >
                       {subitem.label}
@@ -195,12 +195,12 @@ export default function DashboardSidebar({
               </div>
               <button
                 onClick={() => setShowWhatsNew(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-800"
               >
                 <X className="h-3 w-3" />
               </button>
             </div>
-            <p className="text-xs text-gray-600">New: Medellín cleaners added!</p>
+            <p className="text-xs text-gray-800">New: Medellín cleaners added!</p>
           </div>
         </div>
       )}
@@ -221,7 +221,7 @@ export default function DashboardSidebar({
               <span className="text-xs text-gray-700">{userEmail || 'Guest'}</span>
             </div>
             <ChevronDown
-              className={`h-3 w-3 text-gray-500 transition-transform ${showUserDropdown ? 'rotate-180' : ''}`}
+              className={`h-3 w-3 text-gray-700 transition-transform ${showUserDropdown ? 'rotate-180' : ''}`}
             />
           </button>
 

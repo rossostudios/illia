@@ -2,6 +2,7 @@
 
 'use client'
 
+import { AnimatePresence, motion } from 'framer-motion'
 import {
   Award,
   Check,
@@ -16,6 +17,7 @@ import {
   Home,
   MapPin,
   MessageSquare,
+  Phone,
   Search,
   Star,
   Users,
@@ -23,7 +25,7 @@ import {
   X,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 
 // Mock provider data
 const MOCK_PROVIDERS = [
@@ -192,6 +194,8 @@ const SERVICES = [
 
 export default function DirectoryPage() {
   const _router = useRouter()
+  const searchInputId = useId()
+  const sortSelectId = useId()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCity, setSelectedCity] = useState<'all' | 'medellin' | 'florianopolis'>('all')
   const [selectedServices, setSelectedServices] = useState<string[]>([])
@@ -203,9 +207,9 @@ export default function DirectoryPage() {
   const [selectedProvider, setSelectedProvider] = useState<any>(null)
   const [showTooltip, setShowTooltip] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid')
+  const [savedProviders, setSavedProviders] = useState<number[]>([])
 
-  const itemsPerPage = 6
+  const itemsPerPage = 9
 
   // Filter providers based on criteria
   const filteredProviders = useMemo(() => {
@@ -305,15 +309,11 @@ export default function DirectoryPage() {
     minRating > 0 ||
     selectedExtras.length > 0
 
-  // Detect screen size for responsive view
-  useEffect(() => {
-    const handleResize = () => {
-      setViewMode(window.innerWidth >= 1024 ? 'table' : 'grid')
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  const handleSaveProvider = (providerId: number) => {
+    setSavedProviders((prev) =>
+      prev.includes(providerId) ? prev.filter((id) => id !== providerId) : [...prev, providerId]
+    )
+  }
 
   return (
     <div className="min-h-screen bg-warmth-50/30">
@@ -324,15 +324,20 @@ export default function DirectoryPage() {
             <h1 className="text-3xl font-bold text-teal-600">Directory</h1>
             <div className="relative">
               <button
+                type="button"
                 onMouseEnter={() => setShowTooltip(true)}
                 onMouseLeave={() => setShowTooltip(false)}
                 className="p-1 hover:bg-teal-50 rounded-full transition-colors"
+                aria-label="More information about Directory"
               >
                 <Users className="h-5 w-5 text-teal-500" />
               </button>
               {showTooltip && (
-                <div className="absolute left-0 top-8 w-64 p-3 bg-white rounded-lg shadow-lg border border-teal-100 z-10">
-                  <p className="text-sm text-gray-600">
+                <div
+                  className="absolute left-0 top-8 w-64 p-3 bg-white rounded-lg shadow-lg border border-teal-100 z-10"
+                  role="tooltip"
+                >
+                  <p className="text-sm text-gray-700 font-medium">
                     Discover trusted cleaners, cooks, and more. Filters help narrow by
                     city/service—verified by our community.
                   </p>
@@ -340,7 +345,7 @@ export default function DirectoryPage() {
               )}
             </div>
           </div>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-700 mt-2 font-medium">
             Browse vetted home help providers in Medellín & Florianópolis
           </p>
         </div>
@@ -351,6 +356,7 @@ export default function DirectoryPage() {
           <div className="relative mb-4">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-teal-500" />
             <input
+              id={searchInputId}
               type="text"
               value={searchQuery}
               onChange={(e) => {
@@ -358,7 +364,8 @@ export default function DirectoryPage() {
                 setCurrentPage(1)
               }}
               placeholder="Search for cleaners in El Poblado..."
-              className="w-full pl-12 pr-4 py-3 rounded-full border border-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+              className="w-full pl-12 pr-4 py-3 rounded-full border border-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:border-teal-500 transition-all"
+              aria-label="Search for home help providers"
             />
           </div>
 
@@ -367,40 +374,43 @@ export default function DirectoryPage() {
             {/* City Tabs */}
             <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
               <button
+                type="button"
                 onClick={() => {
                   setSelectedCity('all')
                   setCurrentPage(1)
                 }}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                className={`px-3 py-1.5 min-h-[36px] rounded-md text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                   selectedCity === 'all'
                     ? 'bg-teal-600 text-white'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-200'
                 }`}
               >
                 All Cities
               </button>
               <button
+                type="button"
                 onClick={() => {
                   setSelectedCity('medellin')
                   setCurrentPage(1)
                 }}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                className={`px-3 py-1.5 min-h-[36px] rounded-md text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                   selectedCity === 'medellin'
                     ? 'bg-teal-600 text-white'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-200'
                 }`}
               >
                 Medellín
               </button>
               <button
+                type="button"
                 onClick={() => {
                   setSelectedCity('florianopolis')
                   setCurrentPage(1)
                 }}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                className={`px-3 py-1.5 min-h-[36px] rounded-md text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                   selectedCity === 'florianopolis'
                     ? 'bg-teal-600 text-white'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-200'
                 }`}
               >
                 Florianópolis
@@ -410,8 +420,11 @@ export default function DirectoryPage() {
             {/* Service Dropdown */}
             <div className="relative">
               <button
+                type="button"
                 onClick={() => setShowServiceDropdown(!showServiceDropdown)}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 min-h-[44px] border border-gray-300 rounded-lg hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all"
+                aria-label="Filter by services"
+                aria-expanded={showServiceDropdown}
               >
                 <Filter className="h-4 w-4" />
                 Services
@@ -439,9 +452,10 @@ export default function DirectoryPage() {
                             handleServiceToggle(service.id)
                             setCurrentPage(1)
                           }}
-                          className="text-teal-600"
+                          className="text-teal-600 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                          aria-label={`Filter by ${service.label}`}
                         />
-                        <Icon className="h-4 w-4 text-gray-500" />
+                        <Icon className="h-4 w-4 text-gray-800" aria-hidden="true" />
                         <span className="text-sm">{service.label}</span>
                       </label>
                     )
@@ -453,8 +467,11 @@ export default function DirectoryPage() {
             {/* Rating Dropdown */}
             <div className="relative">
               <button
+                type="button"
                 onClick={() => setShowRatingDropdown(!showRatingDropdown)}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:border-gray-400 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 min-h-[44px] border border-gray-300 rounded-lg hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all"
+                aria-label="Filter by rating"
+                aria-expanded={showRatingDropdown}
               >
                 <Star className="h-4 w-4" />
                 Rating
@@ -465,6 +482,7 @@ export default function DirectoryPage() {
                 <div className="absolute top-full mt-2 w-48 bg-white rounded-lg shadow-lg border p-3 z-30">
                   {[0, 4, 4.5, 4.8].map((rating) => (
                     <button
+                      type="button"
                       key={rating}
                       onClick={() => {
                         setMinRating(rating)
@@ -483,8 +501,11 @@ export default function DirectoryPage() {
             </div>
 
             {/* Price Range */}
-            <div className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg">
-              <DollarSign className="h-4 w-4 text-gray-500" />
+            <div
+              className="flex items-center gap-2 px-4 py-2 min-h-[44px] border border-gray-300 rounded-lg"
+              aria-label="Price range filter"
+            >
+              <DollarSign className="h-4 w-4 text-gray-800" aria-hidden="true" />
               <span className="text-sm">
                 ${priceRange[0]}-${priceRange[1]}/mo
               </span>
@@ -493,11 +514,12 @@ export default function DirectoryPage() {
             {/* Extras */}
             <div className="flex gap-2">
               <button
+                type="button"
                 onClick={() => {
                   handleExtraToggle('english')
                   setCurrentPage(1)
                 }}
-                className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                className={`px-3 py-2 min-h-[44px] rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                   selectedExtras.includes('english')
                     ? 'bg-sunset-100 text-sunset-700 border border-sunset-300'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -506,11 +528,12 @@ export default function DirectoryPage() {
                 English Speaker
               </button>
               <button
+                type="button"
                 onClick={() => {
                   handleExtraToggle('verified')
                   setCurrentPage(1)
                 }}
-                className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                className={`px-3 py-2 min-h-[44px] rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                   selectedExtras.includes('verified')
                     ? 'bg-teal-100 text-teal-700 border border-teal-300'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -520,11 +543,12 @@ export default function DirectoryPage() {
                 Verified Only
               </button>
               <button
+                type="button"
                 onClick={() => {
                   handleExtraToggle('eco')
                   setCurrentPage(1)
                 }}
-                className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                className={`px-3 py-2 min-h-[44px] rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                   selectedExtras.includes('eco')
                     ? 'bg-green-100 text-green-700 border border-green-300'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -537,8 +561,9 @@ export default function DirectoryPage() {
             {/* Clear Filters */}
             {hasActiveFilters && (
               <button
+                type="button"
                 onClick={clearFilters}
-                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 min-h-[44px] text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all"
               >
                 <X className="h-4 w-4 inline mr-1" />
                 Clear Filters
@@ -547,206 +572,230 @@ export default function DirectoryPage() {
           </div>
 
           {/* Results Count */}
-          <div className="mt-3 text-sm text-gray-600">
-            Showing {filteredProviders.length} provider{filteredProviders.length !== 1 ? 's' : ''}
+          <div className="mt-3 flex items-center justify-between">
+            <div className="text-sm text-gray-700 font-medium" role="status" aria-live="polite">
+              Showing <span className="font-bold text-teal-600">{filteredProviders.length}</span>{' '}
+              provider{filteredProviders.length !== 1 ? 's' : ''}
+              {hasActiveFilters && (
+                <span className="text-gray-800"> (filtered from {MOCK_PROVIDERS.length})</span>
+              )}
+            </div>
+            <div className="flex items-center gap-2 text-sm text-gray-800">
+              <label htmlFor={sortSelectId}>Sort by:</label>
+              <select
+                id={sortSelectId}
+                className="border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+              >
+                <option value="relevance">Relevance</option>
+                <option value="rating">Rating</option>
+                <option value="price">Price</option>
+                <option value="reviews">Reviews</option>
+              </select>
+            </div>
           </div>
         </div>
 
         {/* Listings Section */}
         {filteredProviders.length > 0 ? (
           <>
-            {/* Grid View (Mobile/Tablet) */}
-            {viewMode === 'grid' && (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                {paginatedProviders.map((provider, index) => (
-                  <div
-                    key={provider.id}
-                    className="bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition-shadow opacity-0 animate-[fadeIn_0.3s_ease-in-out_forwards]"
-                    style={{ animationDelay: `${index * 0.05}s` }}
-                  >
-                    {/* Provider Header */}
-                    <div className="flex items-start gap-3 mb-3">
-                      <img
-                        src={provider.photo}
-                        alt={provider.name}
-                        className="w-14 h-14 rounded-lg object-cover"
-                      />
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-semibold text-gray-900">{provider.name}</h3>
-                          {provider.verified && <Check className="h-4 w-4 text-teal-600" />}
+            {/* Responsive Card Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-8">
+              {paginatedProviders.map((provider, index) => (
+                <motion.div
+                  key={provider.id}
+                  className="bg-white rounded-xl shadow-md group cursor-pointer"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  whileHover={{
+                    y: -8,
+                    scale: 1.02,
+                    boxShadow:
+                      '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {/* Provider Image with Badges */}
+                  <div className="relative">
+                    <img
+                      src={provider.photo}
+                      alt={provider.name}
+                      className="w-full h-48 object-cover rounded-t-xl"
+                    />
+                    {/* Trust Badges */}
+                    <div className="absolute top-3 right-3 flex gap-2">
+                      {provider.verified && (
+                        <div
+                          className="bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-md"
+                          title="Verified"
+                        >
+                          <Check className="h-4 w-4 text-teal-600" />
                         </div>
-                        <p className="text-sm text-gray-600">{provider.location}</p>
-                        <div className="flex items-center gap-1 mt-1">
-                          <Star className="h-3 w-3 text-sunset-500 fill-sunset-500" />
-                          <span className="text-xs font-medium">{provider.rating}</span>
-                          <span className="text-xs text-gray-500">({provider.reviews})</span>
+                      )}
+                      {provider.languages.includes('English') && (
+                        <div
+                          className="bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-md"
+                          title="English Speaker"
+                        >
+                          <Globe className="h-4 w-4 text-sunset-600" />
+                        </div>
+                      )}
+                      {provider.specialties.some((s) => s.toLowerCase().includes('eco')) && (
+                        <div
+                          className="bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-md"
+                          title="Eco-Friendly"
+                        >
+                          <span className="text-sm">🌿</span>
+                        </div>
+                      )}
+                    </div>
+                    {/* Response Time Badge */}
+                    <div className="absolute bottom-3 left-3">
+                      <span className="bg-black/70 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {provider.responseTime}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-5">
+                    {/* Provider Header */}
+                    <div className="mb-3">
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="font-bold text-lg text-gray-900">{provider.name}</h3>
+                        <span className="text-lg font-bold text-teal-600">{provider.rate}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm text-gray-700 flex items-center gap-1">
+                          <MapPin className="h-3 w-3" />
+                          {provider.location}
+                        </p>
+                        <div
+                          className="flex items-center gap-1"
+                          aria-label={`Rating: ${provider.rating} out of 5 stars with ${provider.reviews} reviews`}
+                        >
+                          <Star
+                            className="h-4 w-4 text-sunset-500 fill-sunset-500"
+                            aria-hidden="true"
+                          />
+                          <span className="text-sm font-medium">{provider.rating}</span>
+                          <span className="text-xs text-gray-800">({provider.reviews})</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Bio */}
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{provider.bio}</p>
-
-                    {/* Service & Rate */}
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-medium text-gray-700">{provider.service}</span>
-                      <span className="text-sm font-bold text-teal-600">{provider.rate}</span>
+                    {/* Service */}
+                    <div className="mb-3">
+                      <span className="text-sm font-semibold text-gray-900">
+                        {provider.service}
+                      </span>
+                      <span className="text-sm text-gray-800 ml-2">• {provider.experience}</span>
                     </div>
 
+                    {/* Bio with Review Snippet */}
+                    <p className="text-sm text-gray-700 mb-3 line-clamp-2">{provider.bio}</p>
+
+                    {/* Mock Review Snippet */}
+                    {provider.reviews > 30 && (
+                      <div className="p-2 bg-gray-50 rounded-lg mb-3 border-l-3 border-teal-500">
+                        <p className="text-xs text-gray-700 italic line-clamp-1">
+                          "Excellent service, very reliable and professional!"
+                        </p>
+                        <p className="text-xs text-gray-800 mt-1">— Recent client</p>
+                      </div>
+                    )}
+
                     {/* Specialties */}
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {provider.specialties.slice(0, 2).map((specialty) => (
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {provider.specialties.slice(0, 3).map((specialty) => (
                         <span
                           key={specialty}
-                          className="px-2 py-0.5 bg-teal-50 text-teal-700 text-xs rounded-full"
+                          className="px-2 py-1 bg-teal-50 text-teal-700 text-xs rounded-full font-medium"
                         >
                           {specialty}
                         </span>
                       ))}
-                      {provider.languages.includes('English') && (
-                        <span className="px-2 py-0.5 bg-sunset-50 text-sunset-700 text-xs rounded-full">
-                          English
-                        </span>
-                      )}
                     </div>
 
-                    {/* View Profile Button */}
-                    <button
-                      onClick={() => setSelectedProvider(provider)}
-                      className="w-full py-2 text-teal-600 font-medium hover:bg-teal-50 rounded-lg transition-colors"
-                    >
-                      View Profile →
-                    </button>
+                    {/* Quick Action Buttons */}
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedProvider(provider)}
+                        className="flex-1 py-2.5 bg-teal-600 text-white font-medium hover:bg-teal-700 focus:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-lg transition-all"
+                        aria-label={`View full profile of ${provider.name}`}
+                      >
+                        <MessageSquare className="h-4 w-4 inline mr-1" />
+                        View Profile
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleSaveProvider(provider.id)}
+                        className={`px-4 py-2.5 border rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                          savedProviders.includes(provider.id)
+                            ? 'bg-sunset-50 text-sunset-700 border-sunset-300'
+                            : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                        }`}
+                        aria-label={
+                          savedProviders.includes(provider.id)
+                            ? 'Remove from saved'
+                            : 'Save provider'
+                        }
+                      >
+                        <Heart
+                          className={`h-4 w-4 ${savedProviders.includes(provider.id) ? 'fill-sunset-500' : ''}`}
+                        />
+                      </button>
+                    </div>
                   </div>
-                ))}
-              </div>
-            )}
-
-            {/* Table View (Desktop) */}
-            {viewMode === 'table' && (
-              <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-                <table className="w-full">
-                  <thead className="bg-gray-50 border-b">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Provider
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Service
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Location
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Rate
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Rating
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {paginatedProviders.map((provider) => (
-                      <tr key={provider.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <img
-                              src={provider.photo}
-                              alt={provider.name}
-                              className="w-10 h-10 rounded-lg object-cover mr-3"
-                            />
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <div className="text-sm font-medium text-gray-900">
-                                  {provider.name}
-                                </div>
-                                {provider.verified && <Check className="h-4 w-4 text-teal-600" />}
-                              </div>
-                              <div className="text-sm text-gray-500 truncate max-w-xs">
-                                {provider.bio}
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm text-gray-900">{provider.service}</span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{provider.location}</div>
-                          <div className="text-xs text-gray-500">
-                            {provider.city === 'medellin' ? 'Medellín' : 'Florianópolis'}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm font-semibold text-teal-600">
-                            {provider.rate}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center gap-1">
-                            <Star className="h-4 w-4 text-sunset-500 fill-sunset-500" />
-                            <span className="text-sm font-medium">{provider.rating}</span>
-                            <span className="text-sm text-gray-500">({provider.reviews})</span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <button
-                            onClick={() => setSelectedProvider(provider)}
-                            className="text-teal-600 hover:text-teal-700 font-medium text-sm"
-                          >
-                            View Profile →
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+                </motion.div>
+              ))}
+            </div>
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2">
+              <nav className="flex items-center justify-center gap-2" aria-label="Pagination">
                 <button
+                  type="button"
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
-                  className={`p-2 rounded-lg transition-colors ${
+                  className={`p-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                     currentPage === 1
-                      ? 'text-gray-400 cursor-not-allowed'
-                      : 'text-gray-600 hover:bg-gray-100'
+                      ? 'text-gray-700 cursor-not-allowed opacity-50'
+                      : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
-                  <ChevronLeft className="h-5 w-5" />
+                  <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+                  <span className="sr-only">Previous page</span>
                 </button>
                 {[...Array(totalPages)].map((_, i) => (
                   <button
+                    type="button"
                     key={i}
                     onClick={() => setCurrentPage(i + 1)}
-                    className={`px-3 py-1 rounded-lg transition-colors ${
+                    className={`px-3 py-1 min-h-[36px] rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                       currentPage === i + 1
                         ? 'bg-teal-600 text-white'
-                        : 'text-gray-600 hover:bg-gray-100'
+                        : 'text-gray-700 hover:bg-gray-100'
                     }`}
                   >
                     {i + 1}
                   </button>
                 ))}
                 <button
+                  type="button"
                   onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                   disabled={currentPage === totalPages}
-                  className={`p-2 rounded-lg transition-colors ${
+                  className={`p-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                     currentPage === totalPages
-                      ? 'text-gray-400 cursor-not-allowed'
-                      : 'text-gray-600 hover:bg-gray-100'
+                      ? 'text-gray-700 cursor-not-allowed opacity-50'
+                      : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
-                  <ChevronRight className="h-5 w-5" />
+                  <ChevronRight className="h-5 w-5" aria-hidden="true" />
+                  <span className="sr-only">Next page</span>
                 </button>
-              </div>
+              </nav>
             )}
           </>
         ) : (
@@ -756,7 +805,7 @@ export default function DirectoryPage() {
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
               No providers match your filters
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-700 mb-6 leading-relaxed">
               Try broadening your search—
               {selectedCity === 'medellin'
                 ? 'Medellín'
@@ -766,8 +815,9 @@ export default function DirectoryPage() {
               have 200+ cleaners!
             </p>
             <button
+              type="button"
               onClick={clearFilters}
-              className="px-6 py-3 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors"
+              className="px-6 py-3 min-h-[48px] bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 focus:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all"
             >
               Clear Filters & Search Again
             </button>
@@ -775,135 +825,232 @@ export default function DirectoryPage() {
         )}
 
         {/* Profile Modal */}
-        {selectedProvider && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="p-6">
-                {/* Modal Header */}
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex items-start gap-4">
-                    <img
-                      src={selectedProvider.photo}
-                      alt={selectedProvider.name}
-                      className="w-20 h-20 rounded-xl object-cover"
-                    />
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <h2 className="text-2xl font-bold text-gray-900">
-                          {selectedProvider.name}
-                        </h2>
-                        {selectedProvider.verified && (
-                          <div className="flex items-center gap-1 px-2 py-1 bg-teal-100 rounded-full">
-                            <Check className="h-3 w-3 text-teal-600" />
-                            <span className="text-xs text-teal-700 font-medium">Verified</span>
+        <AnimatePresence>
+          {selectedProvider && (
+            <motion.div
+              className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="provider-name"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedProvider(null)}
+            >
+              <motion.div
+                className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="p-8">
+                  {/* Modal Header */}
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="flex items-start gap-4">
+                      <img
+                        src={selectedProvider.photo}
+                        alt={selectedProvider.name}
+                        className="w-20 h-20 rounded-xl object-cover"
+                      />
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <h2 id="provider-name" className="text-2xl font-bold text-gray-900">
+                            {selectedProvider.name}
+                          </h2>
+                          {selectedProvider.verified && (
+                            <div className="flex items-center gap-1 px-2 py-1 bg-teal-100 rounded-full">
+                              <Check className="h-3 w-3 text-teal-600" />
+                              <span className="text-xs text-teal-700 font-medium">Verified</span>
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-gray-800 mb-2">
+                          <MapPin className="h-4 w-4 inline mr-1" />
+                          {selectedProvider.location},{' '}
+                          {selectedProvider.city === 'medellin' ? 'Medellín' : 'Florianópolis'}
+                        </p>
+                        <div className="flex items-center gap-4 text-sm">
+                          <div
+                            className="flex items-center gap-1"
+                            aria-label={`Rating: ${selectedProvider.rating} out of 5 stars with ${selectedProvider.reviews} reviews`}
+                          >
+                            <Star
+                              className="h-4 w-4 text-sunset-500 fill-sunset-500"
+                              aria-hidden="true"
+                            />
+                            <span className="font-semibold">{selectedProvider.rating}</span>
+                            <span className="text-gray-700">
+                              ({selectedProvider.reviews} reviews)
+                            </span>
                           </div>
-                        )}
-                      </div>
-                      <p className="text-gray-600 mb-2">
-                        <MapPin className="h-4 w-4 inline mr-1" />
-                        {selectedProvider.location},{' '}
-                        {selectedProvider.city === 'medellin' ? 'Medellín' : 'Florianópolis'}
-                      </p>
-                      <div className="flex items-center gap-4 text-sm">
-                        <div className="flex items-center gap-1">
-                          <Star className="h-4 w-4 text-sunset-500 fill-sunset-500" />
-                          <span className="font-semibold">{selectedProvider.rating}</span>
-                          <span className="text-gray-500">
-                            ({selectedProvider.reviews} reviews)
+                          <span className="font-bold text-teal-600 text-lg">
+                            {selectedProvider.rate}
                           </span>
                         </div>
-                        <span className="font-bold text-teal-600 text-lg">
-                          {selectedProvider.rate}
-                        </span>
                       </div>
                     </div>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedProvider(null)}
+                      className="p-2 hover:bg-gray-100 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                      aria-label="Close modal"
+                    >
+                      <X className="h-5 w-5 text-gray-700" />
+                    </button>
                   </div>
-                  <button
-                    onClick={() => setSelectedProvider(null)}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    <X className="h-5 w-5 text-gray-500" />
-                  </button>
-                </div>
 
-                {/* Service & Availability */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="bg-gray-50 rounded-lg p-3">
-                    <p className="text-xs text-gray-500 mb-1">Service</p>
-                    <p className="font-medium text-gray-900">{selectedProvider.service}</p>
+                  {/* Service & Availability */}
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <p className="text-xs text-gray-700 mb-1">Service</p>
+                      <p className="font-medium text-gray-900">{selectedProvider.service}</p>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <p className="text-xs text-gray-700 mb-1">Availability</p>
+                      <p className="font-medium text-gray-900">{selectedProvider.availability}</p>
+                    </div>
                   </div>
-                  <div className="bg-gray-50 rounded-lg p-3">
-                    <p className="text-xs text-gray-500 mb-1">Availability</p>
-                    <p className="font-medium text-gray-900">{selectedProvider.availability}</p>
-                  </div>
-                </div>
 
-                {/* Bio */}
-                <div className="mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">About</h3>
-                  <p className="text-gray-600">{selectedProvider.bio}</p>
-                </div>
+                  {/* Bio */}
+                  <div className="mb-6">
+                    <h3 className="font-semibold text-gray-900 mb-3 text-lg">About</h3>
+                    <p className="text-gray-700 leading-relaxed">{selectedProvider.bio}</p>
+                  </div>
 
-                {/* Details Grid */}
-                <div className="grid grid-cols-3 gap-3 mb-6">
-                  <div className="text-center p-3 bg-teal-50 rounded-lg">
-                    <Award className="h-5 w-5 text-teal-600 mx-auto mb-1" />
-                    <p className="text-xs text-gray-500">Experience</p>
-                    <p className="text-sm font-medium text-gray-900">
-                      {selectedProvider.experience}
-                    </p>
+                  {/* Details Grid */}
+                  <div className="grid grid-cols-3 gap-3 mb-6">
+                    <div className="text-center p-3 bg-teal-50 rounded-lg">
+                      <Award className="h-5 w-5 text-teal-600 mx-auto mb-1" />
+                      <p className="text-xs text-gray-800 font-medium">Experience</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        {selectedProvider.experience}
+                      </p>
+                    </div>
+                    <div className="text-center p-3 bg-sunset-50 rounded-lg">
+                      <Clock className="h-5 w-5 text-sunset-600 mx-auto mb-1" />
+                      <p className="text-xs text-gray-800 font-medium">Response Time</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        {selectedProvider.responseTime}
+                      </p>
+                    </div>
+                    <div className="text-center p-3 bg-warmth-50 rounded-lg">
+                      <Globe className="h-5 w-5 text-warmth-500 mx-auto mb-1" />
+                      <p className="text-xs text-gray-800 font-medium">Languages</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        {selectedProvider.languages.join(', ')}
+                      </p>
+                    </div>
                   </div>
-                  <div className="text-center p-3 bg-sunset-50 rounded-lg">
-                    <Clock className="h-5 w-5 text-sunset-600 mx-auto mb-1" />
-                    <p className="text-xs text-gray-500">Response Time</p>
-                    <p className="text-sm font-medium text-gray-900">
-                      {selectedProvider.responseTime}
-                    </p>
-                  </div>
-                  <div className="text-center p-3 bg-warmth-50 rounded-lg">
-                    <Globe className="h-5 w-5 text-warmth-500 mx-auto mb-1" />
-                    <p className="text-xs text-gray-500">Languages</p>
-                    <p className="text-sm font-medium text-gray-900">
-                      {selectedProvider.languages.join(', ')}
-                    </p>
-                  </div>
-                </div>
 
-                {/* Specialties */}
-                <div className="mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">Specialties</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedProvider.specialties.map((specialty: string) => (
-                      <span
-                        key={specialty}
-                        className="px-3 py-1.5 bg-teal-100 text-teal-700 rounded-full text-sm"
+                  {/* Specialties */}
+                  <div className="mb-6">
+                    <h3 className="font-semibold text-gray-900 mb-3 text-lg">Specialties</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedProvider.specialties.map((specialty: string) => (
+                        <motion.span
+                          key={specialty}
+                          className="px-4 py-2 bg-teal-100 text-teal-700 rounded-full text-sm font-medium"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.1 }}
+                        >
+                          {specialty}
+                        </motion.span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Mock Reviews Section */}
+                  {selectedProvider.reviews > 30 && (
+                    <div className="mb-6">
+                      <h3 className="font-semibold text-gray-900 mb-3 text-lg">Recent Reviews</h3>
+                      <div className="space-y-3">
+                        <div className="p-4 bg-gray-50 rounded-lg border-l-4 border-teal-500">
+                          <p className="text-gray-700 italic mb-2">
+                            "Maria is absolutely wonderful! She's punctual, thorough, and speaks
+                            excellent English. My apartment has never been cleaner."
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-800 font-medium">
+                              — Sarah M., 2 weeks ago
+                            </span>
+                            <div className="flex gap-0.5">
+                              {[...Array(5)].map((_, i) => (
+                                <Star key={i} className="h-4 w-4 text-sunset-500 fill-sunset-500" />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="p-4 bg-gray-50 rounded-lg border-l-4 border-teal-500">
+                          <p className="text-gray-700 italic mb-2">
+                            "Very reliable and trustworthy. I feel comfortable leaving her alone in
+                            my home."
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-800 font-medium">
+                              — Mike D., 1 month ago
+                            </span>
+                            <div className="flex gap-0.5">
+                              {[...Array(5)].map((_, i) => (
+                                <Star key={i} className="h-4 w-4 text-sunset-500 fill-sunset-500" />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* CTA Buttons */}
+                  <div className="space-y-3">
+                    <div className="flex gap-3">
+                      <button
+                        type="button"
+                        className="flex-1 py-3 min-h-[48px] bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 focus:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all"
                       >
-                        {specialty}
+                        <MessageSquare className="h-4 w-4 inline mr-2" />
+                        Request Introduction
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleSaveProvider(selectedProvider.id)}
+                        className={`px-6 py-3 min-h-[48px] border rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                          savedProviders.includes(selectedProvider.id)
+                            ? 'bg-sunset-50 text-sunset-700 border-sunset-300'
+                            : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        <Heart
+                          className={`h-4 w-4 inline mr-2 ${savedProviders.includes(selectedProvider.id) ? 'fill-sunset-500' : ''}`}
+                        />
+                        {savedProviders.includes(selectedProvider.id) ? 'Saved' : 'Save'}
+                      </button>
+                    </div>
+
+                    {/* WhatsApp Teaser */}
+                    <button
+                      type="button"
+                      className="w-full py-3 min-h-[48px] bg-green-50 text-green-700 border border-green-300 rounded-lg font-medium hover:bg-green-100 focus:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all flex items-center justify-center gap-2"
+                    >
+                      <Phone className="h-4 w-4" />
+                      <span>Chat on WhatsApp</span>
+                      <span className="text-xs bg-green-600 text-white px-2 py-0.5 rounded-full">
+                        Premium
                       </span>
-                    ))}
+                    </button>
                   </div>
-                </div>
 
-                {/* CTA Buttons */}
-                <div className="flex gap-3">
-                  <button className="flex-1 py-3 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors">
-                    <MessageSquare className="h-4 w-4 inline mr-2" />
-                    Request Introduction
-                  </button>
-                  <button className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-                    <Heart className="h-4 w-4 inline mr-2" />
-                    Save
-                  </button>
+                  {/* Premium Nudge */}
+                  <p className="text-xs text-center text-gray-800 mt-4">
+                    Upgrade to Premium to unlock direct contact and priority introductions
+                  </p>
                 </div>
-
-                {/* Premium Nudge */}
-                <p className="text-xs text-center text-gray-500 mt-4">
-                  Upgrade to Premium to unlock direct contact and priority introductions
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <style jsx>{`

@@ -63,7 +63,7 @@ export default function UsagePage() {
         {/* Search */}
         <div className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
             <input
               type="text"
               placeholder="Search"
@@ -127,7 +127,7 @@ export default function UsagePage() {
                 </div>
                 <button
                   onClick={() => setShowWhatsNew(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-700 hover:text-gray-600"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -200,7 +200,7 @@ export default function UsagePage() {
               >
                 <span className="flex items-center space-x-2">
                   <span className="text-lg">1</span>
-                  <span className="text-xs text-gray-400">/ 3 |</span>
+                  <span className="text-xs text-gray-700">/ 3 |</span>
                   <span>CURRENT CYCLE</span>
                 </span>
               </button>
@@ -214,7 +214,7 @@ export default function UsagePage() {
               >
                 <span className="flex items-center space-x-2">
                   <span className="text-lg">2</span>
-                  <span className="text-xs text-gray-400">/ 3 |</span>
+                  <span className="text-xs text-gray-700">/ 3 |</span>
                   <span>HISTORICAL LEADS</span>
                 </span>
               </button>
@@ -441,7 +441,7 @@ export default function UsagePage() {
                   >
                     <span className="flex items-center space-x-2">
                       <span className="text-lg">3</span>
-                      <span className="text-xs text-gray-400">/ 3 |</span>
+                      <span className="text-xs text-gray-700">/ 3 |</span>
                       <span>LEAD GENERATION TRENDS</span>
                     </span>
                   </button>

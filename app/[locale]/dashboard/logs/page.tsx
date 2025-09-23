@@ -175,7 +175,7 @@ export default function ActivityLogsPage() {
         {/* Search */}
         <div className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
             <input
               type="text"
               placeholder="Search"
@@ -239,7 +239,7 @@ export default function ActivityLogsPage() {
                 </div>
                 <button
                   onClick={() => setShowWhatsNew(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-700 hover:text-gray-600"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -311,7 +311,7 @@ export default function ActivityLogsPage() {
           <div className="flex items-center space-x-4 mb-6">
             {/* Search */}
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
               <input
                 type="text"
                 value={searchQuery}
@@ -332,7 +332,7 @@ export default function ActivityLogsPage() {
               >
                 <Filter className="h-4 w-4 text-gray-600" />
                 <span>{selectedEndpoint}</span>
-                <ChevronDown className="h-4 w-4 text-gray-400" />
+                <ChevronDown className="h-4 w-4 text-gray-700" />
               </button>
               {showEndpointDropdown && (
                 <div className="absolute z-10 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg">
@@ -372,7 +372,7 @@ export default function ActivityLogsPage() {
               >
                 <Calendar className="h-4 w-4 text-gray-600" />
                 <span>{dateRange}</span>
-                <ChevronDown className="h-4 w-4 text-gray-400" />
+                <ChevronDown className="h-4 w-4 text-gray-700" />
               </button>
               {showDateDropdown && (
                 <div className="absolute z-10 mt-2 right-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
@@ -380,7 +380,7 @@ export default function ActivityLogsPage() {
                     <p className="text-xs text-gray-500 px-2">Date Range</p>
                     <button
                       onClick={() => setShowDateDropdown(false)}
-                      className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+                      className="absolute top-2 right-2 text-gray-700 hover:text-gray-600"
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -420,7 +420,7 @@ export default function ActivityLogsPage() {
                   <h3 className="text-lg font-semibold">Date Range</h3>
                   <button
                     onClick={() => setShowCalendar(false)}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="text-gray-700 hover:text-gray-600"
                   >
                     <X className="h-5 w-5" />
                   </button>
@@ -430,7 +430,7 @@ export default function ActivityLogsPage() {
                   {/* September 2025 */}
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <button className="text-gray-400 hover:text-gray-600">
+                      <button className="text-gray-700 hover:text-gray-600">
                         <ChevronLeft className="h-4 w-4" />
                       </button>
                       <h4 className="font-medium">September 2025</h4>
@@ -464,7 +464,7 @@ export default function ActivityLogsPage() {
                     <div className="flex items-center justify-between mb-4">
                       <div />
                       <h4 className="font-medium">October 2025</h4>
-                      <button className="text-gray-400 hover:text-gray-600">
+                      <button className="text-gray-700 hover:text-gray-600">
                         <ChevronRight className="h-4 w-4" />
                       </button>
                     </div>
@@ -583,11 +583,11 @@ export default function ActivityLogsPage() {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           <div>
                             <div>{log.date}</div>
-                            <div className="text-xs text-gray-400">{log.time}</div>
+                            <div className="text-xs text-gray-700">{log.time}</div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          <button className="text-gray-400 hover:text-gray-600">
+                          <button className="text-gray-700 hover:text-gray-600">
                             <Download className="h-4 w-4" />
                           </button>
                         </td>
@@ -601,10 +601,10 @@ export default function ActivityLogsPage() {
               <div className="px-6 py-3 border-t flex items-center justify-between">
                 <div className="text-sm text-gray-500">Page 1</div>
                 <div className="flex items-center space-x-2">
-                  <button className="p-1 hover:bg-gray-100 rounded text-gray-400">
+                  <button className="p-1 hover:bg-gray-100 rounded text-gray-700">
                     <ChevronLeft className="h-4 w-4" />
                   </button>
-                  <button className="p-1 hover:bg-gray-100 rounded text-gray-400">
+                  <button className="p-1 hover:bg-gray-100 rounded text-gray-700">
                     <ChevronRight className="h-4 w-4" />
                   </button>
                 </div>

@@ -215,7 +215,7 @@ export default function MembershipPage() {
 
             <div className="mb-6">
               <div className="flex items-baseline">
-                <span className="text-4xl font-bold text-gray-400">$0</span>
+                <span className="text-4xl font-bold text-gray-700">$0</span>
                 <span className="text-gray-500 ml-2">/month</span>
               </div>
             </div>
@@ -223,7 +223,7 @@ export default function MembershipPage() {
             <ul className="space-y-3 mb-8">
               {PRICING_TIERS.explorer.features.map((feature, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                  <Check className="h-5 w-5 text-gray-700 mt-0.5 flex-shrink-0" />
                   <span className="text-gray-600 text-sm">{feature.text}</span>
                 </li>
               ))}
@@ -232,7 +232,7 @@ export default function MembershipPage() {
             <button
               disabled
               type="button"
-              className="w-full py-3 bg-gray-100 text-gray-400 rounded-lg font-medium cursor-not-allowed"
+              className="w-full py-3 bg-gray-100 text-gray-700 rounded-lg font-medium cursor-not-allowed"
             >
               Current Plan
             </button>

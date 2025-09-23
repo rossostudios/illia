@@ -18,7 +18,14 @@ export async function middleware(request: NextRequest) {
   const isTestPage = pathname === '/test-tailwind'
 
   // Apply locale handling for non-API routes, excluding auth pages
-  if (pathnameIsMissingLocale && !pathname.startsWith('/api') && !pathname.startsWith('/_next') && !isAuthPage && !isAuthCallback && !isTestPage) {
+  if (
+    pathnameIsMissingLocale &&
+    !pathname.startsWith('/api') &&
+    !pathname.startsWith('/_next') &&
+    !isAuthPage &&
+    !isAuthCallback &&
+    !isTestPage
+  ) {
     return intlMiddleware(request)
   }
 

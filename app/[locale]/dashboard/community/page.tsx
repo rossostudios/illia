@@ -402,7 +402,7 @@ export default function CommunityPage() {
                   </div>
 
                   {/* Reply Arrow */}
-                  <ChevronRight className="h-5 w-5 text-gray-400 mt-2" />
+                  <ChevronRight className="h-5 w-5 text-gray-700 mt-2" />
                 </div>
               </div>
             ))}

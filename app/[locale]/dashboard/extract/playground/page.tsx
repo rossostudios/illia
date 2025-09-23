@@ -122,7 +122,7 @@ export default function ExtractPlaygroundPage() {
         {/* Search */}
         <div className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
             <input
               type="text"
               placeholder="Search"
@@ -190,7 +190,7 @@ export default function ExtractPlaygroundPage() {
                 </div>
                 <button
                   onClick={() => setShowWhatsNew(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-700 hover:text-gray-600"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -284,7 +284,7 @@ export default function ExtractPlaygroundPage() {
               </div>
 
               <div className="flex items-center justify-between mt-4">
-                <button className="text-gray-400 hover:text-gray-600">
+                <button className="text-gray-700 hover:text-gray-600">
                   <ChevronLeft className="h-4 w-4" />
                 </button>
 
@@ -355,7 +355,7 @@ export default function ExtractPlaygroundPage() {
                 <div className="bg-white rounded-xl border p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-sm font-medium text-gray-700">Extract</h3>
-                    <button className="text-gray-400 hover:text-gray-600">
+                    <button className="text-gray-700 hover:text-gray-600">
                       <X className="h-4 w-4" />
                     </button>
                   </div>
@@ -379,7 +379,7 @@ export default function ExtractPlaygroundPage() {
 
                     <div className="flex items-center justify-between py-3 border-t">
                       <div className="flex items-center space-x-2">
-                        <Search className="h-4 w-4 text-gray-400" />
+                        <Search className="h-4 w-4 text-gray-700" />
                         <span className="text-sm font-medium text-gray-700">Enable ZIP search</span>
                       </div>
                       <button
@@ -398,7 +398,7 @@ export default function ExtractPlaygroundPage() {
 
                     <div className="flex items-center justify-between py-3 border-t">
                       <div className="flex items-center space-x-2">
-                        <Sparkles className="h-4 w-4 text-gray-400" />
+                        <Sparkles className="h-4 w-4 text-gray-700" />
                         <span className="text-sm font-medium text-gray-700">Lead Agent</span>
                       </div>
                       <button
@@ -421,7 +421,7 @@ export default function ExtractPlaygroundPage() {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-4">
                       <h3 className="text-sm font-medium text-gray-700">Format</h3>
-                      <button className="text-gray-400 hover:text-gray-600">
+                      <button className="text-gray-700 hover:text-gray-600">
                         <X className="h-4 w-4" />
                       </button>
                     </div>
@@ -453,21 +453,21 @@ export default function ExtractPlaygroundPage() {
                       {schemaFields.map((field) => (
                         <div key={field.id}>
                           <div className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg">
-                            <GripVertical className="h-4 w-4 text-gray-400" />
+                            <GripVertical className="h-4 w-4 text-gray-700" />
                             <span className="text-sm font-medium">business</span>
                             <select className="text-sm bg-white border rounded px-2 py-1 ml-auto">
                               <option>Object</option>
                             </select>
-                            <button className="text-gray-400 hover:text-gray-600">
+                            <button className="text-gray-700 hover:text-gray-600">
                               <Plus className="h-4 w-4" />
                             </button>
-                            <button className="text-gray-400 hover:text-gray-600">
+                            <button className="text-gray-700 hover:text-gray-600">
                               <Trash2 className="h-4 w-4" />
                             </button>
                           </div>
                           {field.children?.map((child) => (
                             <div key={child.id} className="flex items-center space-x-2 p-2 ml-8">
-                              <GripVertical className="h-4 w-4 text-gray-400" />
+                              <GripVertical className="h-4 w-4 text-gray-700" />
                               <span className="text-sm">{child.name}</span>
                               <select className="text-sm bg-white border rounded px-2 py-1 ml-auto">
                                 <option>{child.type}</option>
@@ -475,7 +475,7 @@ export default function ExtractPlaygroundPage() {
                               <button className="text-teal-500">
                                 <span className="text-lg">*</span>
                               </button>
-                              <button className="text-gray-400 hover:text-gray-600">
+                              <button className="text-gray-700 hover:text-gray-600">
                                 <Trash2 className="h-4 w-4" />
                               </button>
                             </div>
@@ -598,7 +598,7 @@ export default function ExtractPlaygroundPage() {
                         <span className="text-gray-500">Started</span>
                         <div className="text-right">
                           <div className="font-medium">{run.date}</div>
-                          <div className="text-gray-400 text-xs">{run.time}</div>
+                          <div className="text-gray-700 text-xs">{run.time}</div>
                         </div>
                       </div>
 

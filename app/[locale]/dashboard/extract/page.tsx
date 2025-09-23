@@ -82,7 +82,7 @@ export default function ExtractPage() {
         {/* Search */}
         <div className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
             <input
               type="text"
               placeholder="Search past leads..."
@@ -150,7 +150,7 @@ export default function ExtractPage() {
                 </div>
                 <button
                   onClick={() => setShowWhatsNew(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-700 hover:text-gray-600"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -366,7 +366,7 @@ export default function ExtractPage() {
               {extractLogs.length === 0 && (
                 <div className="mt-8 text-center py-8">
                   <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                    <FileText className="h-8 w-8 text-gray-400" />
+                    <FileText className="h-8 w-8 text-gray-700" />
                   </div>
                   <p className="text-sm text-gray-500">No extract logs yet</p>
                 </div>

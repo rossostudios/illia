@@ -454,7 +454,7 @@ export default function ProfilePage() {
                       Member since {new Date(MOCK_USER.joinDate).toLocaleDateString()}
                     </p>
                   </div>
-                  <CreditCard className="h-8 w-8 text-gray-400" />
+                  <CreditCard className="h-8 w-8 text-gray-700" />
                 </div>
 
                 {/* Usage Stats */}
