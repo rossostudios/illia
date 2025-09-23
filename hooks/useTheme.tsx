@@ -63,7 +63,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } else {
       applyTheme(theme)
     }
-  }, [theme, mounted, applyTheme, getSystemTheme])
+  }, [theme, mounted])
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme)
