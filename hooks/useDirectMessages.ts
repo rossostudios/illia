@@ -84,6 +84,38 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
     }
   }, [user, supabase])
 
+  // Mark messages as read - moved before fetchMessages to avoid initialization error
+  const markAsRead = useCallback(
+    async (conversationId: string) => {
+      if (!user) return
+
+      try {
+        await supabase.rpc('mark_messages_read', {
+          p_conversation_id: conversationId,
+          p_user_id: user.id,
+        })
+
+        // Update local state
+        setMessages((prev) =>
+          prev.map((msg) => ({
+            ...msg,
+            is_read: msg.receiver_id === user.id ? true : msg.is_read,
+          }))
+        )
+
+        // Update conversation unread count
+        setConversations((prev) =>
+          prev.map((conv) =>
+            conv.id === conversationId ? { ...conv, unread_count: 0 } : conv
+          )
+        )
+      } catch (error) {
+        console.error('Error marking messages as read:', error)
+      }
+    },
+    [user, supabase]
+  )
+
   // Fetch messages for a conversation
   const fetchMessages = useCallback(async () => {
     if (!options.conversationId && !options.otherUserId) return
@@ -185,38 +217,6 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
       }
     },
     [user, options.otherUserId, options.conversationId, supabase]
-  )
-
-  // Mark messages as read
-  const markAsRead = useCallback(
-    async (conversationId: string) => {
-      if (!user) return
-
-      try {
-        await supabase.rpc('mark_messages_read', {
-          p_conversation_id: conversationId,
-          p_user_id: user.id,
-        })
-
-        // Update local state
-        setMessages((prev) =>
-          prev.map((msg) => ({
-            ...msg,
-            is_read: msg.receiver_id === user.id ? true : msg.is_read,
-          }))
-        )
-
-        // Update conversation unread count
-        setConversations((prev) =>
-          prev.map((conv) =>
-            conv.conversation_id === conversationId ? { ...conv, unread_count: 0 } : conv
-          )
-        )
-      } catch (error) {
-        console.error('Error marking messages as read:', error)
-      }
-    },
-    [user, supabase]
   )
 
   // Delete a message
