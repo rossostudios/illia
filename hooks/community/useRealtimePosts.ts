@@ -262,7 +262,15 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
         supabase.removeChannel(channelRef.current)
       }
     }
-  }, [options.threadId])
+  }, [
+    options.threadId, // Fetch initial data
+    fetchPosts,
+    handlePostUpdate,
+    handleReactionUpdate,
+    supabase.channel,
+    supabase.realtime.setAuth,
+    supabase.removeChannel,
+  ])
 
   // Create a new post
   const createPost = async (body: string, parentPostId?: string) => {

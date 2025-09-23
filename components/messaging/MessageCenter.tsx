@@ -3,10 +3,6 @@
 import { formatDistanceToNow } from 'date-fns'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
-  Archive,
-  Bell,
-  BellOff,
-  Block,
   Check,
   CheckCheck,
   ChevronLeft,
@@ -86,7 +82,7 @@ export default function MessageCenter({
 
   useEffect(() => {
     scrollToBottom()
-  }, [messages])
+  }, [scrollToBottom])
 
   // Handle sending message
   const handleSendMessage = async () => {

@@ -54,7 +54,7 @@ export function usePresence(options: UsePresenceOptions) {
         .on('presence', { event: 'sync' }, () => {
           const state = channel.presenceState() as RealtimePresenceState<UserPresence>
           const users = Object.values(state)
-            .flatMap((presences) => presences)
+            .flat()
             .map((presence) => presence as UserPresence)
 
           setOnlineUsers(users)
@@ -121,7 +121,15 @@ export function usePresence(options: UsePresenceOptions) {
         supabase.removeChannel(channelRef.current)
       }
     }
-  }, [user, options.channel])
+  }, [
+    user,
+    options.channel,
+    options.onUserJoin,
+    options.onUserLeave,
+    supabase.channel,
+    supabase.realtime.setAuth,
+    supabase.removeChannel,
+  ])
 
   // Update user status
   const updateStatus = async (status: 'online' | 'away' | 'busy') => {

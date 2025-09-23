@@ -34,8 +34,24 @@ export async function POST(request: NextRequest) {
       .upsert({
         user_id: user.id,
         preferred_city: city as 'medellin' | 'florianopolis',
-        services_needed: services as ('cleaning' | 'cooking' | 'meal_prep' | 'childcare' | 'pet_care' | 'gardening' | 'handyman' | 'other')[],
-        languages_required: languages as ('english' | 'spanish' | 'portuguese' | 'french' | 'german' | 'italian')[],
+        services_needed: services as (
+          | 'cleaning'
+          | 'cooking'
+          | 'meal_prep'
+          | 'childcare'
+          | 'pet_care'
+          | 'gardening'
+          | 'handyman'
+          | 'other'
+        )[],
+        languages_required: languages as (
+          | 'english'
+          | 'spanish'
+          | 'portuguese'
+          | 'french'
+          | 'german'
+          | 'italian'
+        )[],
         budget_min: budgetMin,
         budget_max: budgetMax,
         schedule_preference: { frequency, preferences, budget },

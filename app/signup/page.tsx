@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { FaApple, FaGoogle, FaLinkedin } from 'react-icons/fa'
-import { supabase } from '@/utils/supabase/client'
+import { createClient } from '@/lib/supabase/client'
 
 const testimonials = [
   {
@@ -75,6 +75,7 @@ export default function SignupPage() {
     setError(null)
 
     try {
+      const supabase = createClient()
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -95,6 +96,7 @@ export default function SignupPage() {
   const handleSocialLogin = async (provider: 'google' | 'apple' | 'linkedin') => {
     try {
       // Note: Apple provider isn't directly supported by Supabase
+      const supabase = createClient()
       const { error } = await supabase.auth.signInWithOAuth({
         provider: provider === 'apple' ? 'google' : (provider as any),
         options: {

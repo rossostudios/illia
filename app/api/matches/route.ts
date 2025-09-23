@@ -1,8 +1,8 @@
 // use context7
 import { type NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
-import { createServiceClient } from '@/lib/supabase/server'
 import { createClient } from '@/lib/supabase/client'
+import { createServiceClient } from '@/lib/supabase/server'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

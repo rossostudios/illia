@@ -143,22 +143,26 @@ const MOCK_MATCHES = [
 const statusConfig = {
   pending: {
     label: 'Pending',
-    color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+    color:
+      'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 border-yellow-200 dark:border-yellow-700',
     icon: AlertCircle,
   },
   contacted: {
     label: 'Contacted',
-    color: 'bg-blue-100 text-blue-800 border-blue-200',
+    color:
+      'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-700',
     icon: MessageSquare,
   },
   hired: {
     label: 'Hired',
-    color: 'bg-teal-100 text-teal-800 border-teal-200',
+    color:
+      'bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300 border-teal-200 dark:border-teal-700',
     icon: CheckCircle,
   },
   archived: {
     label: 'Archived',
-    color: 'bg-gray-100 text-gray-800 border-gray-200',
+    color:
+      'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-600',
     icon: Archive,
   },
 }
@@ -220,15 +224,19 @@ export default function MyMatchesPage() {
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-teal-600">My Matches</h1>
-            <p className="text-gray-700 mt-1">Track and manage your provider introductions</p>
+            <h1 className="text-3xl font-bold tracking-tight text-teal-600 dark:text-teal-400">
+              My Matches
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
+              Track and manage your provider introductions
+            </p>
           </div>
           <button
             type="button"
             onClick={() => {
               window.location.href = '/en/dashboard/explore'
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-teal-600 dark:bg-teal-500 text-white rounded-lg hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors"
           >
             <Plus className="h-4 w-4" />
             Request New Match
@@ -237,37 +245,43 @@ export default function MyMatchesPage() {
 
         {/* Stats Cards */}
         <div className="grid gap-4 md:grid-cols-4">
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between space-y-0 pb-2">
-              <h3 className="text-sm font-medium text-gray-900">Total Matches</h3>
-              <User className="h-4 w-4 text-gray-700" />
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white">Total Matches</h3>
+              <User className="h-4 w-4 text-gray-600 dark:text-gray-400" />
             </div>
-            <div className="text-2xl font-bold">{MOCK_MATCHES.length}</div>
-            <p className="text-xs text-gray-700">All time</p>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
+              {MOCK_MATCHES.length}
+            </div>
+            <p className="text-xs text-gray-600 dark:text-gray-400">All time</p>
           </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between space-y-0 pb-2">
-              <h3 className="text-sm font-medium text-gray-900">Pending</h3>
-              <AlertCircle className="h-4 w-4 text-yellow-600" />
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white">Pending</h3>
+              <AlertCircle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
             </div>
-            <div className="text-2xl font-bold">{statusCounts.pending || 0}</div>
-            <p className="text-xs text-gray-700">Awaiting response</p>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
+              {statusCounts.pending || 0}
+            </div>
+            <p className="text-xs text-gray-600 dark:text-gray-400">Awaiting response</p>
           </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between space-y-0 pb-2">
-              <h3 className="text-sm font-medium text-gray-900">Active Hires</h3>
-              <CheckCircle className="h-4 w-4 text-teal-600" />
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white">Active Hires</h3>
+              <CheckCircle className="h-4 w-4 text-teal-600 dark:text-teal-400" />
             </div>
-            <div className="text-2xl font-bold">{statusCounts.hired || 0}</div>
-            <p className="text-xs text-gray-700">Currently working</p>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">
+              {statusCounts.hired || 0}
+            </div>
+            <p className="text-xs text-gray-600 dark:text-gray-400">Currently working</p>
           </div>
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between space-y-0 pb-2">
-              <h3 className="text-sm font-medium text-gray-900">Success Rate</h3>
-              <Star className="h-4 w-4 text-amber-600" />
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white">Success Rate</h3>
+              <Star className="h-4 w-4 text-amber-600 dark:text-amber-400" />
             </div>
-            <div className="text-2xl font-bold">75%</div>
-            <p className="text-xs text-gray-700">Hired vs total</p>
+            <div className="text-2xl font-bold text-gray-900 dark:text-white">75%</div>
+            <p className="text-xs text-gray-600 dark:text-gray-400">Hired vs total</p>
           </div>
         </div>
 
@@ -277,18 +291,18 @@ export default function MyMatchesPage() {
             <label htmlFor={searchInputId} className="sr-only">
               Search matches
             </label>
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-700" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500 dark:text-gray-400" />
             <input
               id={searchInputId}
               type="text"
               placeholder="Search by name or service..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:border-transparent"
             />
           </div>
           <div
-            className="flex gap-1 bg-gray-100 p-1 rounded-lg"
+            className="flex gap-1 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg"
             role="group"
             aria-label="Filter by status"
           >
@@ -301,8 +315,8 @@ export default function MyMatchesPage() {
                 className={cn(
                   'px-4 py-2 rounded-md text-sm font-medium transition-colors capitalize',
                   statusFilter === status
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-700 hover:text-gray-900'
+                    ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                 )}
               >
                 {status === 'all' ? 'All' : status}
@@ -313,14 +327,16 @@ export default function MyMatchesPage() {
       </div>
 
       {/* Matches List */}
-      <div className="bg-white rounded-lg border border-gray-200">
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
         {filteredMatches.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12">
-            <div className="rounded-full bg-gray-100 p-3 mb-4">
-              <User className="h-6 w-6 text-gray-700" />
+            <div className="rounded-full bg-gray-100 dark:bg-gray-700 p-3 mb-4">
+              <User className="h-6 w-6 text-gray-600 dark:text-gray-400" />
             </div>
-            <h3 className="text-lg font-semibold mb-1">No matches found</h3>
-            <p className="text-gray-700 text-center max-w-md">
+            <h3 className="text-lg font-semibold mb-1 text-gray-900 dark:text-white">
+              No matches found
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 text-center max-w-md">
               {searchQuery || statusFilter !== 'all'
                 ? 'Try adjusting your filters or search query'
                 : 'Request a match to get started with finding your perfect provider'}
@@ -329,47 +345,47 @@ export default function MyMatchesPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
                 <tr>
                   <th
                     scope="col"
-                    className="text-left px-6 py-3 text-xs font-medium text-gray-900 uppercase tracking-wider"
+                    className="text-left px-6 py-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider"
                   >
                     Provider
                   </th>
                   <th
                     scope="col"
-                    className="text-left px-6 py-3 text-xs font-medium text-gray-900 uppercase tracking-wider"
+                    className="text-left px-6 py-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider"
                   >
                     Service
                   </th>
                   <th
                     scope="col"
-                    className="text-left px-6 py-3 text-xs font-medium text-gray-900 uppercase tracking-wider"
+                    className="text-left px-6 py-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider"
                   >
                     Status
                   </th>
                   <th
                     scope="col"
-                    className="text-left px-6 py-3 text-xs font-medium text-gray-900 uppercase tracking-wider"
+                    className="text-left px-6 py-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider"
                   >
                     Timeline
                   </th>
                   <th
                     scope="col"
-                    className="text-left px-6 py-3 text-xs font-medium text-gray-900 uppercase tracking-wider"
+                    className="text-left px-6 py-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider"
                   >
                     Rate
                   </th>
                   <th
                     scope="col"
-                    className="text-right px-6 py-3 text-xs font-medium text-gray-900 uppercase tracking-wider"
+                    className="text-right px-6 py-3 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider"
                   >
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {filteredMatches.map((match) => {
                   const StatusIcon = statusConfig[match.status as keyof typeof statusConfig].icon
                   return (
@@ -378,31 +394,42 @@ export default function MyMatchesPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="cursor-pointer hover:bg-gray-50"
+                      className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                       onClick={() => setSelectedMatch(match)}
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-full bg-gray-200" aria-hidden="true" />
+                          <div
+                            className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700"
+                            aria-hidden="true"
+                          />
                           <div>
-                            <p className="font-medium text-gray-900">{match.provider.name}</p>
+                            <p className="font-medium text-gray-900 dark:text-white">
+                              {match.provider.name}
+                            </p>
                             <div className="flex items-center gap-1 text-sm">
                               <Star
                                 className="h-3 w-3 fill-amber-400 text-amber-400"
                                 aria-hidden="true"
                               />
-                              <span className="text-gray-900 font-medium">
+                              <span className="text-gray-700 dark:text-gray-300 font-medium">
                                 {match.provider.rating}
                               </span>
-                              <span className="text-gray-700">({match.provider.reviews})</span>
+                              <span className="text-gray-600 dark:text-gray-400">
+                                ({match.provider.reviews})
+                              </span>
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div>
-                          <p className="font-medium text-gray-900">{match.provider.service}</p>
-                          <p className="text-sm text-gray-700">{match.provider.location}</p>
+                          <p className="font-medium text-gray-900 dark:text-white">
+                            {match.provider.service}
+                          </p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {match.provider.location}
+                          </p>
                         </div>
                       </td>
                       <td className="px-6 py-4">
@@ -417,16 +444,22 @@ export default function MyMatchesPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex items-center gap-2 text-sm text-gray-700">
-                          <Clock className="h-3 w-3 text-gray-700" aria-hidden="true" />
-                          <span className="text-gray-900">
+                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                          <Clock
+                            className="h-3 w-3 text-gray-500 dark:text-gray-500"
+                            aria-hidden="true"
+                          />
+                          <span className="text-gray-700 dark:text-gray-300">
                             Intro {getTimeAgo(match.introRequested)}
                           </span>
                         </div>
                         {match.lastContact && (
-                          <div className="flex items-center gap-2 text-sm text-gray-800 mt-1">
-                            <MessageSquare className="h-3 w-3 text-gray-700" aria-hidden="true" />
-                            <span className="text-gray-900">
+                          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            <MessageSquare
+                              className="h-3 w-3 text-gray-500 dark:text-gray-500"
+                              aria-hidden="true"
+                            />
+                            <span className="text-gray-700 dark:text-gray-300">
                               Contact {getTimeAgo(match.lastContact)}
                             </span>
                           </div>
@@ -434,11 +467,14 @@ export default function MyMatchesPage() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-1">
-                          <DollarSign className="h-4 w-4 text-gray-900" aria-hidden="true" />
-                          <span className="font-medium text-gray-900">
+                          <DollarSign
+                            className="h-4 w-4 text-gray-600 dark:text-gray-400"
+                            aria-hidden="true"
+                          />
+                          <span className="font-medium text-gray-900 dark:text-white">
                             {match.provider.hourlyRate}
                           </span>
-                          <span className="text-sm text-gray-900">/hr</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-400">/hr</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-right">
@@ -450,10 +486,10 @@ export default function MyMatchesPage() {
                               setSelectedMatch(match)
                               setNoteDialogOpen(true)
                             }}
-                            className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-900 hover:text-black"
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                             aria-label="Add note"
                           >
-                            <FileText className="h-4 w-4 text-gray-700" />
+                            <FileText className="h-4 w-4" />
                           </button>
                           {match.status === 'hired' && (
                             <button
@@ -463,10 +499,10 @@ export default function MyMatchesPage() {
                                 setSelectedMatch(match)
                                 setRatingDialogOpen(true)
                               }}
-                              className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-900 hover:text-black"
+                              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                               aria-label="Rate provider"
                             >
-                              <Star className="h-4 w-4 text-gray-700" />
+                              <Star className="h-4 w-4" />
                             </button>
                           )}
                           <button
@@ -475,10 +511,10 @@ export default function MyMatchesPage() {
                               e.stopPropagation()
                               setSelectedMatch(match)
                             }}
-                            className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-900 hover:text-black"
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                             aria-label="View details"
                           >
-                            <ChevronRight className="h-4 w-4 text-gray-700" />
+                            <ChevronRight className="h-4 w-4" />
                           </button>
                         </div>
                       </td>
@@ -502,17 +538,17 @@ export default function MyMatchesPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+            className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto"
           >
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 id="modal-title" className="text-2xl font-bold">
+                <h2 id="modal-title" className="text-2xl font-bold text-gray-900 dark:text-white">
                   Match Details
                 </h2>
                 <button
                   type="button"
                   onClick={() => setSelectedMatch(null)}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-700 dark:text-gray-300"
                   aria-label="Close dialog"
                 >
                   <X className="h-5 w-5" />
@@ -522,29 +558,42 @@ export default function MyMatchesPage() {
               <div className="space-y-6">
                 {/* Provider Info */}
                 <div className="flex items-start gap-4">
-                  <div className="h-16 w-16 rounded-full bg-gray-200" aria-hidden="true" />
+                  <div
+                    className="h-16 w-16 rounded-full bg-gray-200 dark:bg-gray-700"
+                    aria-hidden="true"
+                  />
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                       {selectedMatch.provider.name}
                     </h3>
-                    <p className="text-gray-900">{selectedMatch.provider.service}</p>
+                    <p className="text-gray-700 dark:text-gray-300">
+                      {selectedMatch.provider.service}
+                    </p>
                     <div className="flex items-center gap-4 mt-2 text-sm">
                       <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3 text-gray-800" aria-hidden="true" />
-                        <span className="text-gray-900">{selectedMatch.provider.location}</span>
+                        <MapPin
+                          className="h-3 w-3 text-gray-500 dark:text-gray-500"
+                          aria-hidden="true"
+                        />
+                        <span className="text-gray-700 dark:text-gray-300">
+                          {selectedMatch.provider.location}
+                        </span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Star
                           className="h-3 w-3 fill-amber-400 text-amber-400"
                           aria-hidden="true"
                         />
-                        <span className="text-gray-900">
+                        <span className="text-gray-700 dark:text-gray-300">
                           {selectedMatch.provider.rating} ({selectedMatch.provider.reviews} reviews)
                         </span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <DollarSign className="h-3 w-3 text-gray-800" aria-hidden="true" />
-                        <span className="text-gray-900">
+                        <DollarSign
+                          className="h-3 w-3 text-gray-500 dark:text-gray-500"
+                          aria-hidden="true"
+                        />
+                        <span className="text-gray-700 dark:text-gray-300">
                           ${selectedMatch.provider.hourlyRate}/hr
                         </span>
                       </div>
@@ -562,7 +611,7 @@ export default function MyMatchesPage() {
 
                 {/* Timeline */}
                 <div>
-                  <h4 className="font-semibold mb-3">Timeline</h4>
+                  <h4 className="font-semibold mb-3 text-gray-900 dark:text-white">Timeline</h4>
                   <div className="space-y-3">
                     {selectedMatch.timeline.map((event, index) => (
                       <div key={index} className="flex items-start gap-3">
@@ -582,8 +631,10 @@ export default function MyMatchesPage() {
                           />
                         </div>
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900">{event.event}</p>
-                          <p className="text-xs text-gray-700">
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">
+                            {event.event}
+                          </p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">
                             {new Date(event.date).toLocaleString()}
                           </p>
                         </div>
@@ -595,12 +646,12 @@ export default function MyMatchesPage() {
                 {/* Notes */}
                 {selectedMatch.notes.length > 0 && (
                   <div>
-                    <h4 className="font-semibold mb-3">Notes</h4>
+                    <h4 className="font-semibold mb-3 text-gray-900 dark:text-white">Notes</h4>
                     <div className="space-y-2">
                       {selectedMatch.notes.map((note, index) => (
-                        <div key={index} className="bg-gray-50 rounded-lg p-3">
-                          <p className="text-sm text-gray-900">{note.content}</p>
-                          <p className="text-xs text-gray-700 mt-1">
+                        <div key={index} className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-3">
+                          <p className="text-sm text-gray-700 dark:text-gray-300">{note.content}</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                             {new Date(note.date).toLocaleString()}
                           </p>
                         </div>
@@ -611,9 +662,13 @@ export default function MyMatchesPage() {
 
                 {/* Archived Reason */}
                 {selectedMatch.status === 'archived' && 'archivedReason' in selectedMatch && (
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-sm font-medium text-gray-900">Archive Reason</p>
-                    <p className="text-sm text-gray-900 mt-1">{selectedMatch.archivedReason}</p>
+                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      Archive Reason
+                    </p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">
+                      {selectedMatch.archivedReason}
+                    </p>
                   </div>
                 )}
 
@@ -621,7 +676,7 @@ export default function MyMatchesPage() {
                 <div className="flex gap-3">
                   <button
                     type="button"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300"
                     onClick={() => setNoteDialogOpen(true)}
                   >
                     <FileText className="h-4 w-4" />
@@ -630,7 +685,7 @@ export default function MyMatchesPage() {
                   {selectedMatch.status === 'hired' && (
                     <button
                       type="button"
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-teal-600 dark:bg-teal-500 text-white rounded-lg hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors"
                       onClick={() => setRatingDialogOpen(true)}
                     >
                       <Star className="h-4 w-4" />
@@ -639,7 +694,7 @@ export default function MyMatchesPage() {
                   )}
                   <button
                     type="button"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300"
                   >
                     <Mail className="h-4 w-4" />
                     Contact
@@ -662,13 +717,16 @@ export default function MyMatchesPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-lg max-w-3xl w-full"
+            className="bg-white dark:bg-gray-800 rounded-lg max-w-3xl w-full"
           >
             <div className="p-8">
-              <h2 id="note-modal-title" className="text-2xl font-bold mb-3 text-teal-600">
+              <h2
+                id="note-modal-title"
+                className="text-2xl font-bold mb-3 text-teal-600 dark:text-teal-400"
+              >
                 Add Note
               </h2>
-              <p className="text-gray-800 text-base mb-6">
+              <p className="text-gray-600 dark:text-gray-400 text-base mb-6">
                 Add a note about your interaction with {selectedMatch?.provider.name}
               </p>
 
@@ -676,7 +734,7 @@ export default function MyMatchesPage() {
                 <div>
                   <label
                     htmlFor={noteTextareaId}
-                    className="block text-sm font-medium text-gray-900 mb-2"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                   >
                     Note
                   </label>
@@ -686,20 +744,20 @@ export default function MyMatchesPage() {
                     value={newNote}
                     onChange={(e) => setNewNote(e.target.value)}
                     rows={8}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-900"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:border-transparent"
                   />
                 </div>
                 <div className="flex gap-3">
                   <button
                     type="button"
-                    className="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                    className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
                     onClick={() => setNoteDialogOpen(false)}
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
-                    className="flex-1 px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium"
+                    className="flex-1 px-6 py-3 bg-teal-600 dark:bg-teal-500 text-white rounded-lg hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors font-medium"
                     onClick={() => {
                       setNewNote('')
                       setNoteDialogOpen(false)
@@ -725,19 +783,25 @@ export default function MyMatchesPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-lg max-w-2xl w-full"
+            className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full"
           >
             <div className="p-8">
-              <h2 id="rating-modal-title" className="text-2xl font-bold mb-3 text-teal-600">
+              <h2
+                id="rating-modal-title"
+                className="text-2xl font-bold mb-3 text-teal-600 dark:text-teal-400"
+              >
                 Rate Provider
               </h2>
-              <p className="text-gray-800 text-base mb-6">
+              <p className="text-gray-600 dark:text-gray-400 text-base mb-6">
                 How was your experience with {selectedMatch?.provider.name}?
               </p>
 
               <div className="space-y-6">
                 <div>
-                  <span id={ratingLabelId} className="block text-sm font-medium text-gray-900 mb-3">
+                  <span
+                    id={ratingLabelId}
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3"
+                  >
                     Rating
                   </span>
                   <div className="flex gap-2" role="group" aria-labelledby={ratingLabelId}>
@@ -753,7 +817,9 @@ export default function MyMatchesPage() {
                         <Star
                           className={cn(
                             'h-8 w-8 transition-colors',
-                            star <= rating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'
+                            star <= rating
+                              ? 'fill-amber-400 text-amber-400'
+                              : 'text-gray-300 dark:text-gray-600'
                           )}
                         />
                       </button>
@@ -763,7 +829,7 @@ export default function MyMatchesPage() {
                 <div>
                   <label
                     htmlFor={reviewTextareaId}
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                   >
                     Review (Optional)
                   </label>
@@ -771,20 +837,20 @@ export default function MyMatchesPage() {
                     id={reviewTextareaId}
                     placeholder="Share your experience..."
                     rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-900"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:border-transparent"
                   />
                 </div>
                 <div className="flex gap-3">
                   <button
                     type="button"
-                    className="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                    className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
                     onClick={() => setRatingDialogOpen(false)}
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
-                    className="flex-1 px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium"
+                    className="flex-1 px-6 py-3 bg-teal-600 dark:bg-teal-500 text-white rounded-lg hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors font-medium"
                     onClick={() => {
                       setRating(5)
                       setRatingDialogOpen(false)

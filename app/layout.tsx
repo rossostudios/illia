@@ -34,6 +34,15 @@ export const metadata: Metadata = {
     'cooks',
     'expat community',
   ],
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Illia.club',
+  },
+  formatDetection: {
+    telephone: false,
+  },
   openGraph: {
     title: 'Illia.club - Your Expat Lifeline in Latin America',
     description: 'Connect with trusted home services in Medellín and Florianópolis.',
@@ -70,6 +79,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+  },
+  themeColor: '#14b8a6',
 }
 
 export default function RootLayout({
@@ -79,7 +94,16 @@ export default function RootLayout({
 }>) {
   return (
     <html className={`${parkinsans.variable} ${poppins.variable}`}>
-      <body className="antialiased flex flex-col min-h-screen font-body">{children}</body>
+      <body className="antialiased flex flex-col min-h-screen font-body">
+        {/* Skip Navigation Link for Accessibility */}
+        <a
+          href="#main-content"
+          className="sr-only-focusable bg-teal-600 text-white px-4 py-2 rounded-md absolute top-4 left-4 z-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+        >
+          Skip to main content
+        </a>
+        {children}
+      </body>
     </html>
   )
 }

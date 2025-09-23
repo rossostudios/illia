@@ -38,7 +38,7 @@ export function useCredits() {
 
   useEffect(() => {
     fetchCredits()
-  }, [user])
+  }, [fetchCredits])
 
   return { credits, loading, error, refetch: fetchCredits }
 }

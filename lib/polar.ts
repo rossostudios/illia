@@ -106,7 +106,7 @@ export async function createCheckoutSession({
 /**
  * Get customer's active subscriptions
  */
-export async function getCustomerSubscriptions(customerEmail: string) {
+export async function getCustomerSubscriptions(_customerEmail: string) {
   try {
     const result = await polar.subscriptions.list({
       organizationId: POLAR_ORGANIZATION_ID,
@@ -143,7 +143,7 @@ export async function cancelSubscription(subscriptionId: string) {
  */
 export async function updateSubscription(
   subscriptionId: string,
-  updates: {
+  _updates: {
     productPriceId?: string
     metadata?: Record<string, any>
   }
@@ -212,7 +212,7 @@ export async function trackMeterUsage({
  * Get remaining meter credits for a customer
  */
 export async function getRemainingCredits(
-  customerId: string,
+  _customerId: string,
   subscriptionTier: 'explorer' | 'settler' | 'local'
 ) {
   try {

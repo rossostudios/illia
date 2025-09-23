@@ -1,15 +1,6 @@
 'use client'
 
-import {
-  Brain,
-  ChevronLeft,
-  FileText,
-  Globe,
-  MessageSquare,
-  ShoppingBag,
-  Users,
-  X,
-} from 'lucide-react'
+import { X } from 'lucide-react'
 import { useState } from 'react'
 
 interface OnboardingSurveyProps {
@@ -84,7 +75,7 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
     onComplete()
   }
 
-  const progressPercentage = (currentStep / totalSteps) * 100
+  const _progressPercentage = (currentStep / totalSteps) * 100
 
   if (!isOpen) return null
 
@@ -166,7 +157,6 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                             setFormData({ ...formData, otherUseCase: e.target.value })
                           }
                           className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
-                          autoFocus
                         />
                       )}
                     </div>
@@ -239,7 +229,6 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                             setFormData({ ...formData, otherSource: e.target.value })
                           }
                           className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
-                          autoFocus
                         />
                       )}
                     </div>

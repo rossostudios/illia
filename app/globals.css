@@ -1,16 +1,26 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+/* Configure dark mode variant for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* CSS Variables for Illia Brand */
+  /* Light mode colors - default */
   --background: #ffffff;
   --foreground: #171717;
   --font-parkinsans: "Parkinsans", sans-serif;
   --font-poppins: "Poppins", sans-serif;
 }
 
+/* Dark mode overrides - only change what's different */
+.dark {
+  --background: #0f0f0f;
+  --foreground: #fafafa;
+}
+
 /* Tailwind v4 Theme Configuration */
 @theme {
-  /* Illia Brand Colors - Direct color definitions */
+  /* Illia Brand Colors */
   --color-teal-50: #f0fdfa;
   --color-teal-100: #ccfbf1;
   --color-teal-200: #99f6e4;
@@ -22,9 +32,26 @@
   --color-teal-800: #115e59;
   --color-teal-900: #134e4a;
   --color-teal-950: #042f2e;
+
+  /* Gray Scale */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  --color-gray-950: #030712;
+
   /* Custom Colors */
-  --color-background: #ffffff;
-  --color-foreground: #171717;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #374151;
+  --color-text-muted: #4b5563;
 
   /* Brand Colors for utilities */
   --color-primary-50: #f0fdfa;
@@ -87,11 +114,11 @@
   --z-tooltip: 60;
 }
 
-/* Dark Mode Support */
+/* Auto dark mode based on system preference */
 @media (prefers-color-scheme: dark) {
-  @theme {
-    --color-background: #0a0a0a;
-    --color-foreground: #ededed;
+  :root:not(.light) {
+    --background: #0f0f0f;
+    --foreground: #fafafa;
   }
 }
 
@@ -103,6 +130,16 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Smooth transitions for theme switching */
+* {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 /* Headings with Parkinsans font */
@@ -153,13 +190,82 @@ th,
     scroll-behavior: smooth;
   }
 
-  /* Custom Focus Styles */
+  /* Enhanced Focus Styles for Accessibility */
+  .focus-ring {
+    &:focus {
+      outline: 2px solid var(--color-teal-500);
+      outline-offset: 2px;
+    }
+  }
+
   .focus-visible-ring {
     &:focus-visible {
+      outline: 2px solid var(--color-teal-500);
+      outline-offset: 2px;
+    }
+  }
+
+  /* Remove default focus for mouse users, keep for keyboard */
+  .focus-visible-only {
+    &:focus:not(:focus-visible) {
       outline: none;
-      ring: 2px;
-      ring-color: var(--color-teal-500);
-      ring-offset: 2px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-teal-500);
+      outline-offset: 2px;
+    }
+  }
+
+  /* Touch Target Helper (minimum 44x44px) */
+  .touch-target {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+
+  /* Screen Reader Only (but visible on focus) */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .sr-only-focusable {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+
+    &:focus,
+    &:active {
+      position: static;
+      width: auto;
+      height: auto;
+      padding: 0.5rem 1rem;
+      margin: 0;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
     }
   }
 
@@ -200,6 +306,20 @@ th,
     to {
       transform: rotate(360deg);
     }
+  }
+
+  /* Shimmer animation for skeletons */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
   }
 }
 

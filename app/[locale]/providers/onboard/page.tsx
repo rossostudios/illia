@@ -139,8 +139,24 @@ export default function ProviderOnboardPage() {
           bio: formData.bio,
           avatar_url,
           city: formData.city as 'medellin' | 'florianopolis',
-          languages: formData.languages as ('english' | 'spanish' | 'portuguese' | 'french' | 'german' | 'italian')[],
-          services: formData.services as ('cleaning' | 'cooking' | 'meal_prep' | 'childcare' | 'pet_care' | 'gardening' | 'handyman' | 'other')[],
+          languages: formData.languages as (
+            | 'english'
+            | 'spanish'
+            | 'portuguese'
+            | 'french'
+            | 'german'
+            | 'italian'
+          )[],
+          services: formData.services as (
+            | 'cleaning'
+            | 'cooking'
+            | 'meal_prep'
+            | 'childcare'
+            | 'pet_care'
+            | 'gardening'
+            | 'handyman'
+            | 'other'
+          )[],
           specialties: formData.specialties
             .split(',')
             .map((s) => s.trim())

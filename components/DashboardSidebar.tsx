@@ -1,13 +1,12 @@
 'use client'
 
 import {
+  BarChart3,
   ChevronDown,
   CreditCard,
-  Globe,
   Home,
   LogOut,
   Mail,
-  MessageSquare,
   Search,
   Settings,
   Sparkles,
@@ -18,7 +17,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDirectMessages } from '@/hooks/useDirectMessages'
 import { supabase } from '@/utils/supabase/client'
 
@@ -83,6 +82,12 @@ export default function DashboardSidebar({
       subtitle: 'Expat forums',
     },
     {
+      icon: BarChart3,
+      label: 'Analytics',
+      href: `/${locale}/dashboard/analytics`,
+      subtitle: 'Insights & reports',
+    },
+    {
       icon: CreditCard,
       label: 'Membership',
       href: `/${locale}/dashboard/membership`,
@@ -98,15 +103,17 @@ export default function DashboardSidebar({
 
   return (
     <div
-      className={`fixed inset-y-0 left-0 bg-white border-r flex flex-col transition-all duration-300 ease-in-out ${
+      className={`fixed inset-y-0 left-0 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col transition-all duration-300 ease-in-out ${
         isCollapsed ? 'w-16' : 'w-64'
       }`}
     >
       {/* Logo */}
-      <div className={`border-b flex items-center justify-center ${isCollapsed ? 'p-4' : 'p-6'}`}>
+      <div
+        className={`border-b border-gray-200 dark:border-gray-800 flex items-center justify-center ${isCollapsed ? 'p-4' : 'p-6'}`}
+      >
         <Link href={`/${locale}/dashboard`} className="block">
           <span
-            className={`font-bold text-black transition-all hover:opacity-80 ${
+            className={`font-bold text-gray-900 dark:text-white transition-all hover:opacity-80 ${
               isCollapsed ? 'text-xl' : 'text-2xl'
             }`}
           >
@@ -126,7 +133,7 @@ export default function DashboardSidebar({
                 href={item.href}
                 className={`flex items-center justify-between rounded-lg text-sm font-medium transition-colors ${
                   isCollapsed ? 'px-2 py-2' : 'px-3 py-2'
-                } ${isActive ? 'bg-teal-50 text-teal-600' : 'text-gray-700 hover:bg-gray-100'}`}
+                } ${isActive ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
                 onClick={(e) => {
                   if (item.hasSubmenu && !isCollapsed) {
                     e.preventDefault()
@@ -140,7 +147,7 @@ export default function DashboardSidebar({
                 >
                   <div className="relative">
                     <item.icon
-                      className={`${isCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${isActive ? 'text-teal-600' : ''}`}
+                      className={`${isCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${isActive ? 'text-teal-600 dark:text-teal-400' : ''}`}
                     />
                     {item.badge > 0 && (
                       <span className="absolute -top-1 -right-1 min-w-[16px] h-4 flex items-center justify-center bg-red-500 text-white text-xs font-bold rounded-full px-1">
@@ -159,7 +166,9 @@ export default function DashboardSidebar({
                         )}
                       </div>
                       {item.subtitle && (
-                        <span className="text-xs text-gray-700 mt-0.5">{item.subtitle}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                          {item.subtitle}
+                        </span>
                       )}
                     </div>
                   )}
@@ -178,8 +187,8 @@ export default function DashboardSidebar({
                       href={subitem.href}
                       className={`block px-3 py-2 text-sm rounded-lg ${
                         pathname === subitem.href
-                          ? 'text-teal-600 bg-teal-50'
-                          : 'text-gray-800 hover:text-gray-900 hover:bg-gray-50'
+                          ? 'text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/20'
+                          : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800'
                       }`}
                     >
                       {subitem.label}
@@ -195,50 +204,56 @@ export default function DashboardSidebar({
       {/* What's New */}
       {showWhatsNew && !isCollapsed && (
         <div className="px-4 pb-3">
-          <div className="bg-teal-50 rounded-lg p-3">
+          <div className="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-3">
             <div className="flex items-start justify-between mb-2">
               <div className="flex items-center space-x-2">
-                <Sparkles className="h-4 w-4 text-teal-600" />
-                <span className="text-xs font-semibold text-teal-600">What&apos;s New (5)</span>
+                <Sparkles className="h-4 w-4 text-teal-600 dark:text-teal-400" />
+                <span className="text-xs font-semibold text-teal-600 dark:text-teal-400">
+                  What&apos;s New (5)
+                </span>
               </div>
               <button
                 onClick={() => setShowWhatsNew(false)}
-                className="text-gray-400 hover:text-gray-800"
+                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
               >
                 <X className="h-3 w-3" />
               </button>
             </div>
-            <p className="text-xs text-gray-800">New: Medellín cleaners added!</p>
+            <p className="text-xs text-gray-700 dark:text-gray-300">
+              New: Medellín cleaners added!
+            </p>
           </div>
         </div>
       )}
 
       {/* User section */}
       {!isCollapsed && (
-        <div className="relative border-t bg-white">
+        <div className="relative border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
           <button
             onClick={() => setShowUserDropdown(!showUserDropdown)}
-            className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+            className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
           >
             <div className="flex items-center space-x-3">
-              <div className="h-6 w-6 bg-teal-100 rounded-full flex items-center justify-center">
-                <span className="text-xs font-medium text-teal-600">
+              <div className="h-6 w-6 bg-teal-100 dark:bg-teal-900/30 rounded-full flex items-center justify-center">
+                <span className="text-xs font-medium text-teal-600 dark:text-teal-400">
                   {userEmail ? userEmail.charAt(0).toUpperCase() : 'G'}
                 </span>
               </div>
-              <span className="text-xs text-gray-700">{userEmail || 'Guest'}</span>
+              <span className="text-xs text-gray-700 dark:text-gray-300">
+                {userEmail || 'Guest'}
+              </span>
             </div>
             <ChevronDown
-              className={`h-3 w-3 text-gray-700 transition-transform ${showUserDropdown ? 'rotate-180' : ''}`}
+              className={`h-3 w-3 text-gray-500 dark:text-gray-400 transition-transform ${showUserDropdown ? 'rotate-180' : ''}`}
             />
           </button>
 
           {/* Dropdown Menu */}
           {showUserDropdown && (
-            <div className="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 rounded-lg shadow-lg">
+            <div className="absolute bottom-full left-0 right-0 mb-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg">
               <Link
                 href={`/${locale}/dashboard/settings`}
-                className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                 onClick={() => setShowUserDropdown(false)}
               >
                 <User className="h-4 w-4" />
@@ -246,7 +261,7 @@ export default function DashboardSidebar({
               </Link>
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 border-t border-gray-100"
+                className="w-full flex items-center space-x-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 border-t border-gray-100 dark:border-gray-700"
               >
                 <LogOut className="h-4 w-4" />
                 <span>Sign Out</span>

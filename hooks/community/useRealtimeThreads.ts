@@ -58,7 +58,17 @@ export function useRealtimeThreads(options: UseRealtimeThreadsOptions = {}) {
         .order('created_at', { ascending: false })
 
       if (options.category && options.category !== 'all') {
-        query = query.eq('category', options.category as 'general' | 'housing' | 'services' | 'social' | 'visa' | 'safety' | 'recommendations')
+        query = query.eq(
+          'category',
+          options.category as
+            | 'general'
+            | 'housing'
+            | 'services'
+            | 'social'
+            | 'visa'
+            | 'safety'
+            | 'recommendations'
+        )
       }
 
       if (options.city && options.city !== 'all') {
@@ -217,7 +227,16 @@ export function useRealtimeThreads(options: UseRealtimeThreadsOptions = {}) {
         supabase.removeChannel(channelRef.current)
       }
     }
-  }, [options.category, options.city])
+  }, [
+    // Fetch initial data
+    fetchThreads,
+    handleRealtimeUpdate,
+    loading,
+    supabase.channel,
+    supabase.realtime.setAuth,
+    supabase.removeChannel,
+    threads.length,
+  ])
 
   // Increment view count
   const incrementViewCount = async (threadId: string) => {

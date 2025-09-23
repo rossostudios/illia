@@ -134,7 +134,7 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
     } finally {
       setLoading(false)
     }
-  }, [options.conversationId, options.otherUserId, user, supabase])
+  }, [options.conversationId, options.otherUserId, user, supabase, markAsRead])
 
   // Send a message
   const sendMessage = useCallback(
@@ -416,7 +416,14 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
         clearTimeout(typingTimeoutRef.current)
       }
     }
-  }, [user, options.otherUserId, supabase])
+  }, [
+    user,
+    options.otherUserId,
+    supabase,
+    options.onMessageRead,
+    options.onMessageReceived,
+    options.onTyping,
+  ])
 
   // Fetch data on mount or when options change
   useEffect(() => {

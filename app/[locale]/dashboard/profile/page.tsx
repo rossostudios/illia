@@ -157,24 +157,24 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-warmth-50/30">
+    <div className="min-h-screen bg-warmth-50/30 dark:bg-gray-900">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="mb-8">
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-2">
-              <h1 className="text-3xl font-bold text-teal-600">Your Profile</h1>
+              <h1 className="text-3xl font-bold text-teal-600 dark:text-teal-400">Your Profile</h1>
               <div className="relative">
                 <button
                   onMouseEnter={() => setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
-                  className="p-1 hover:bg-teal-50 rounded-full transition-colors"
+                  className="p-1 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-full transition-colors"
                 >
-                  <Info className="h-5 w-5 text-teal-500" />
+                  <Info className="h-5 w-5 text-teal-500 dark:text-teal-400" />
                 </button>
                 {showTooltip && (
-                  <div className="absolute left-0 top-8 w-64 p-3 bg-white rounded-lg shadow-lg border border-teal-100 z-10">
-                    <p className="text-sm text-gray-600">
+                  <div className="absolute left-0 top-8 w-64 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-teal-100 dark:border-teal-800 z-10">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       Update your details to get better matches—your info stays private unless
                       shared.
                     </p>
@@ -187,14 +187,14 @@ export default function ProfilePage() {
             <div className="relative">
               <button
                 onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
               >
                 <Globe className="h-4 w-4" />
                 <span>{LANGUAGES.find((l) => l.code === formData.language)?.label}</span>
                 <ChevronDown className="h-4 w-4" />
               </button>
               {showLanguageDropdown && (
-                <div className="absolute top-full right-0 mt-1 w-48 bg-white rounded-lg shadow-lg border z-10">
+                <div className="absolute top-full right-0 mt-1 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10">
                   {LANGUAGES.map((lang) => (
                     <button
                       key={lang.code}
@@ -203,8 +203,10 @@ export default function ProfilePage() {
                         setShowLanguageDropdown(false)
                         showSuccessToast(`Language changed to ${lang.label}`)
                       }}
-                      className={`w-full text-left px-4 py-2 hover:bg-gray-50 text-sm flex items-center gap-2 ${
-                        formData.language === lang.code ? 'bg-teal-50 text-teal-700' : ''
+                      className={`w-full text-left px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm flex items-center gap-2 ${
+                        formData.language === lang.code
+                          ? 'bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300'
+                          : 'text-gray-700 dark:text-gray-300'
                       }`}
                     >
                       <span>{lang.flag}</span>
@@ -215,11 +217,11 @@ export default function ProfilePage() {
               )}
             </div>
           </div>
-          <p className="text-gray-600 mt-2">Manage your account & preferences</p>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">Manage your account & preferences</p>
         </div>
 
         {/* Tabs Navigation */}
-        <div className="flex gap-1 mb-6 bg-white rounded-lg p-1 shadow-sm">
+        <div className="flex gap-1 mb-6 bg-white dark:bg-gray-800 rounded-lg p-1 shadow-sm dark:shadow-gray-900/30">
           {TABS.map((tab) => {
             const Icon = tab.icon
             return (
@@ -228,8 +230,8 @@ export default function ProfilePage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
                   activeTab === tab.id
-                    ? 'bg-teal-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                    ? 'bg-teal-600 dark:bg-teal-500 text-white shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
               >
                 <Icon className="h-4 w-4" />
@@ -240,11 +242,13 @@ export default function ProfilePage() {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-white rounded-xl shadow-md p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-900/30 p-6">
           {/* Personal Info Tab */}
           {activeTab === 'personal' && (
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Personal Information</h2>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                Personal Information
+              </h2>
 
               {/* Avatar Upload */}
               <div className="flex items-center gap-4">

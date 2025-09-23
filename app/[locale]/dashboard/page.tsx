@@ -116,8 +116,16 @@ export default function DashboardPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([])
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1)
+  const [recentSearches, setRecentSearches] = useState<string[]>([])
 
   useEffect(() => {
+    // Load recent searches from localStorage
+    const saved = localStorage.getItem('recentSearches')
+    if (saved) {
+      setRecentSearches(JSON.parse(saved))
+    }
+
     // Check if user is new and needs quiz
     if (user && !localStorage.getItem('welcomeQuizCompleted')) {
       setShowWelcomeQuiz(true)
@@ -141,17 +149,55 @@ export default function DashboardPage() {
       const filtered = SEARCH_SUGGESTIONS.filter((suggestion) =>
         suggestion.toLowerCase().includes(searchQuery.toLowerCase())
       )
-      setFilteredSuggestions(filtered.length > 0 ? filtered : SEARCH_SUGGESTIONS.slice(0, 3))
+      // Include recent searches in suggestions
+      const combined = [
+        ...new Set([
+          ...filtered,
+          ...recentSearches.filter((s) => s.toLowerCase().includes(searchQuery.toLowerCase())),
+        ]),
+      ].slice(0, 5)
+      setFilteredSuggestions(combined.length > 0 ? combined : SEARCH_SUGGESTIONS.slice(0, 3))
       setShowSuggestions(true)
+      setSelectedSuggestionIndex(-1)
+    } else if (searchQuery.length === 0 && recentSearches.length > 0) {
+      // Show recent searches when input is focused but empty
+      setFilteredSuggestions(recentSearches.slice(0, 5))
     } else {
       setShowSuggestions(false)
+      setSelectedSuggestionIndex(-1)
     }
-  }, [searchQuery])
+  }, [searchQuery, recentSearches])
 
   const handleSearch = (query?: string) => {
     const searchTerm = query || searchQuery
     if (searchTerm.trim()) {
+      // Save to recent searches
+      const updated = [searchTerm, ...recentSearches.filter((s) => s !== searchTerm)].slice(0, 10)
+      setRecentSearches(updated)
+      localStorage.setItem('recentSearches', JSON.stringify(updated))
+
       router.push(`/dashboard/explore?search=${encodeURIComponent(searchTerm)}`)
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setSelectedSuggestionIndex((prev) => (prev < filteredSuggestions.length - 1 ? prev + 1 : 0))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setSelectedSuggestionIndex((prev) => (prev > 0 ? prev - 1 : filteredSuggestions.length - 1))
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      if (selectedSuggestionIndex >= 0) {
+        handleSearch(filteredSuggestions[selectedSuggestionIndex])
+        setShowSuggestions(false)
+      } else {
+        handleSearch()
+      }
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false)
+      setSelectedSuggestionIndex(-1)
     }
   }
 
@@ -175,14 +221,14 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Hero Section with Fixed Search */}
-      <div className="bg-gradient-to-br from-warmth-50 via-white to-sunset-50 rounded-xl p-6 md:p-8">
+      <div className="bg-gradient-to-br from-teal-50/50 via-white to-blue-50/50 dark:from-gray-800/50 dark:via-gray-800 dark:to-gray-900/50 rounded-xl p-6 md:p-8 border border-gray-100 dark:border-gray-800">
         <div className="max-w-5xl mx-auto">
           {/* Hero Header */}
           <div className="text-center mb-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 animate-fade-in">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2 animate-fade-in">
               Welcome back, {user?.email?.split('@')[0] || 'Explorer'}!
             </h1>
-            <p className="text-base md:text-lg text-gray-800">
+            <p className="text-base md:text-lg text-gray-700 dark:text-gray-300">
               Ready to find your ideal home helper in{' '}
               {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}?
             </p>
@@ -191,18 +237,25 @@ export default function DashboardPage() {
           {/* Enhanced Search Bar */}
           <div className="relative max-w-3xl mx-auto mb-6">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-700 pointer-events-none" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-600 dark:text-gray-400 pointer-events-none" />
               <input
                 id={searchInputId}
                 ref={searchRef}
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                onFocus={() => searchQuery && setShowSuggestions(true)}
+                onKeyDown={handleKeyDown}
+                onFocus={() => setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 placeholder={`Search for cleaners, cooks, or home help in ${selectedCity === 'medellin' ? 'El Poblado' : 'Lagoa'}...`}
                 aria-label="Search for home services"
-                className="w-full pl-12 pr-24 py-4 bg-white rounded-full shadow-md border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:border-transparent text-gray-900 placeholder:text-gray-700 transition-all"
+                aria-autocomplete="list"
+                aria-controls="search-suggestions"
+                aria-expanded={showSuggestions}
+                aria-activedescendant={
+                  selectedSuggestionIndex >= 0 ? `suggestion-${selectedSuggestionIndex}` : undefined
+                }
+                className="w-full pl-12 pr-24 py-4 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:border-transparent text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-all"
               />
               {searchQuery && (
                 <button
@@ -212,7 +265,7 @@ export default function DashboardPage() {
                     setShowSuggestions(false)
                     searchRef.current?.focus()
                   }}
-                  className="absolute right-20 top-1/2 -translate-y-1/2 p-1.5 text-gray-700 hover:text-gray-800 transition-colors"
+                  className="absolute right-20 top-1/2 -translate-y-1/2 p-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
                   aria-label="Clear search"
                 >
                   <X className="h-4 w-4" />
@@ -221,32 +274,68 @@ export default function DashboardPage() {
               <button
                 type="button"
                 onClick={() => handleSearch()}
-                className="absolute right-2 top-1/2 -translate-y-1/2 px-5 py-2 bg-teal-600 text-white rounded-full hover:bg-teal-700 focus:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all font-medium"
+                className="absolute right-2 top-1/2 -translate-y-1/2 px-5 py-2 bg-teal-600 dark:bg-teal-500 text-white rounded-full hover:bg-teal-700 dark:hover:bg-teal-600 focus:bg-teal-700 dark:focus:bg-teal-600 focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all font-medium shadow-sm"
               >
                 Search
               </button>
             </div>
 
             {/* Search Suggestions Dropdown */}
-            {showSuggestions && (
-              <div className="absolute z-10 w-full mt-2 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            {showSuggestions && filteredSuggestions.length > 0 && (
+              <div
+                id="search-suggestions"
+                role="listbox"
+                className="absolute z-10 w-full mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
+              >
                 <div className="p-2">
-                  <p className="text-xs text-gray-700 px-3 py-1">Popular searches</p>
-                  {filteredSuggestions.map((suggestion, idx) => (
+                  <p className="text-xs text-gray-600 dark:text-gray-400 px-3 py-1">
+                    {searchQuery.length === 0 ? 'Recent searches' : 'Suggestions'}
+                  </p>
+                  {filteredSuggestions.map((suggestion, idx) => {
+                    const isSelected = idx === selectedSuggestionIndex
+                    const isRecent = recentSearches.includes(suggestion)
+
+                    return (
+                      <button
+                        type="button"
+                        key={idx}
+                        id={`suggestion-${idx}`}
+                        role="option"
+                        aria-selected={isSelected}
+                        onClick={() => {
+                          setSearchQuery(suggestion)
+                          setShowSuggestions(false)
+                          handleSearch(suggestion)
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-lg transition-all text-sm ${
+                          isSelected
+                            ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400'
+                            : 'hover:bg-teal-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400'
+                        } focus:bg-teal-50 dark:focus:bg-gray-700 focus:outline-none focus:text-teal-600 dark:focus:text-teal-400`}
+                      >
+                        <Search className="inline h-3 w-3 mr-2 text-gray-500 dark:text-gray-400" />
+                        {suggestion}
+                        {isRecent && (
+                          <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
+                            (recent)
+                          </span>
+                        )}
+                      </button>
+                    )
+                  })}
+                  {searchQuery.length === 0 && recentSearches.length > 0 && (
                     <button
                       type="button"
-                      key={idx}
                       onClick={() => {
-                        setSearchQuery(suggestion)
+                        setRecentSearches([])
+                        localStorage.removeItem('recentSearches')
                         setShowSuggestions(false)
-                        handleSearch(suggestion)
                       }}
-                      className="w-full text-left px-3 py-2 hover:bg-teal-50 focus:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset rounded-lg transition-all text-sm text-gray-700 hover:text-teal-600 focus:text-teal-600"
+                      className="w-full text-left px-3 py-2 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 mt-1 border-t border-gray-200 dark:border-gray-700"
                     >
-                      <Search className="inline h-3 w-3 mr-2 text-gray-700" />
-                      {suggestion}
+                      Clear recent searches
                     </button>
-                  ))}
+                  )}
                 </div>
               </div>
             )}
@@ -259,8 +348,8 @@ export default function DashboardPage() {
               onClick={() => setSelectedCity('medellin')}
               className={`px-4 py-2 rounded-lg font-medium transition-all focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none ${
                 selectedCity === 'medellin'
-                  ? 'bg-teal-600 text-white shadow-lg'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border'
+                  ? 'bg-teal-600 dark:bg-teal-600 text-white shadow-lg'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600'
               }`}
             >
               <MapPin className="inline h-4 w-4 mr-1" />
@@ -271,8 +360,8 @@ export default function DashboardPage() {
               onClick={() => setSelectedCity('florianopolis')}
               className={`px-4 py-2 rounded-lg font-medium transition-all focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none ${
                 selectedCity === 'florianopolis'
-                  ? 'bg-teal-600 text-white shadow-lg'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border'
+                  ? 'bg-teal-600 dark:bg-teal-600 text-white shadow-lg'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600'
               }`}
             >
               <MapPin className="inline h-4 w-4 mr-1" />
@@ -286,18 +375,20 @@ export default function DashboardPage() {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Quick Matches Section */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-            <div className="p-6 border-b">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900">Your Quick Matches</h2>
-                  <p className="text-sm text-gray-800 mt-1">
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    Your Quick Matches
+                  </h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                     AI-suggested providers based on your preferences
                   </p>
                 </div>
                 <Link
                   href="/dashboard/explore"
-                  className="text-sm text-teal-600 hover:text-teal-700 focus:text-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded font-medium transition-all"
+                  className="text-sm text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 focus:text-teal-700 dark:focus:text-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900 rounded font-medium transition-all"
                 >
                   View All →
                 </Link>
@@ -308,38 +399,46 @@ export default function DashboardPage() {
               {SAMPLE_PROVIDERS.map((provider) => (
                 <div
                   key={provider.id}
-                  className="border rounded-lg p-4 hover:shadow-lg hover:scale-[1.02] focus-within:shadow-lg focus-within:scale-[1.02] focus-within:ring-2 focus-within:ring-teal-500 focus-within:ring-offset-2 transition-all duration-200 cursor-pointer group"
+                  className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-lg hover:scale-[1.02] focus-within:shadow-lg focus-within:scale-[1.02] focus-within:ring-2 focus-within:ring-teal-500 dark:focus-within:ring-teal-400 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-800 transition-all duration-200 cursor-pointer group bg-white dark:bg-gray-800/50"
                 >
                   <div className="flex items-start gap-4">
                     <img
                       src={provider.photo}
                       alt={`${provider.name} - ${provider.service} provider in ${provider.location}`}
-                      className="w-16 h-16 rounded-full object-cover ring-2 ring-white group-hover:ring-teal-100"
+                      className="w-16 h-16 rounded-full object-cover ring-2 ring-white dark:ring-gray-700 group-hover:ring-teal-100 dark:group-hover:ring-teal-900"
                     />
                     <div className="flex-1">
                       <div className="flex items-start justify-between">
                         <div>
                           <div className="flex items-center gap-2">
-                            <h3 className="font-semibold text-gray-900">{provider.name}</h3>
-                            {provider.verified && <CheckCircle className="h-4 w-4 text-teal-600" />}
+                            <h3 className="font-semibold text-gray-900 dark:text-white">
+                              {provider.name}
+                            </h3>
+                            {provider.verified && (
+                              <CheckCircle className="h-4 w-4 text-teal-600 dark:text-teal-400" />
+                            )}
                           </div>
-                          <p className="text-sm text-gray-800">{provider.service}</p>
-                          <div className="flex items-center gap-4 mt-2 text-xs text-gray-800">
+                          <p className="text-sm text-gray-700 dark:text-gray-300">
+                            {provider.service}
+                          </p>
+                          <div className="flex items-center gap-4 mt-2 text-xs text-gray-600 dark:text-gray-400">
                             <span className="flex items-center gap-1">
-                              <MapPin className="h-3 w-3 text-gray-800" />
+                              <MapPin className="h-3 w-3 text-gray-500 dark:text-gray-400" />
                               {provider.location}
                             </span>
                             <span className="flex items-center gap-1">
                               <Star className="h-3 w-3 text-yellow-500" />
                               {provider.rating} ({provider.reviews})
                             </span>
-                            <span className="font-medium text-teal-600">{provider.rate}</span>
+                            <span className="font-medium text-teal-600 dark:text-teal-400">
+                              {provider.rate}
+                            </span>
                           </div>
                           <div className="flex gap-2 mt-2">
                             {provider.specialties.map((specialty, idx) => (
                               <span
                                 key={idx}
-                                className="text-xs bg-warmth-50 text-gray-700 px-2 py-1 rounded font-medium"
+                                className="text-xs bg-teal-50 dark:bg-teal-900/20 text-gray-700 dark:text-gray-300 px-2 py-1 rounded font-medium"
                               >
                                 {specialty}
                               </span>
@@ -347,10 +446,10 @@ export default function DashboardPage() {
                           </div>
                           {/* Why this match? */}
                           <details className="mt-3">
-                            <summary className="text-xs text-teal-600 cursor-pointer hover:text-teal-700 font-medium">
+                            <summary className="text-xs text-teal-600 dark:text-teal-400 cursor-pointer hover:text-teal-700 dark:hover:text-teal-300 font-medium">
                               Why this match? →
                             </summary>
-                            <div className="mt-2 p-2 bg-teal-50 rounded text-xs text-gray-700">
+                            <div className="mt-2 p-2 bg-teal-50 dark:bg-teal-900/20 rounded text-xs text-gray-700 dark:text-gray-300">
                               <span className="font-medium">High Match Score:</span>
                               <ul className="mt-1 space-y-0.5 ml-2">
                                 <li>
@@ -371,8 +470,8 @@ export default function DashboardPage() {
                           onClick={() => handleRequestIntro(provider.id)}
                           className={`px-4 py-2 rounded-lg font-medium transition-all focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none ${
                             membershipTier === 'premium' || matchesUsed < matchesLimit
-                              ? 'bg-teal-600 text-white hover:bg-teal-700'
-                              : 'bg-gray-100 text-gray-700 cursor-not-allowed'
+                              ? 'bg-teal-600 dark:bg-teal-500 text-white hover:bg-teal-700 dark:hover:bg-teal-600 shadow-sm'
+                              : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 cursor-not-allowed'
                           }`}
                           disabled={membershipTier === 'free' && matchesUsed >= matchesLimit}
                         >
@@ -390,17 +489,17 @@ export default function DashboardPage() {
 
               {/* Empty state for quiz */}
               {showWelcomeQuiz && (
-                <div className="text-center py-8 bg-gray-50 rounded-lg">
-                  <Sparkles className="h-12 w-12 text-teal-600 mx-auto mb-3" />
-                  <h3 className="font-semibold text-xl text-gray-900 mb-2">
+                <div className="text-center py-8 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <Sparkles className="h-12 w-12 text-teal-600 dark:text-teal-400 mx-auto mb-3" />
+                  <h3 className="font-semibold text-xl text-gray-900 dark:text-white mb-2">
                     Let's find your perfect match!
                   </h3>
-                  <p className="text-sm text-gray-800 mb-6">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
                     Take our 2-minute quiz to get personalized recommendations
                   </p>
                   <Link
                     href="/en/dashboard/quiz"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-lg font-medium hover:from-teal-700 hover:to-teal-800 focus:from-teal-700 focus:to-teal-800 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all shadow-lg hover:shadow-xl focus:shadow-xl transform hover:-translate-y-0.5 focus:-translate-y-0.5"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 dark:from-teal-500 dark:to-teal-600 text-white rounded-lg font-medium hover:from-teal-700 hover:to-teal-800 dark:hover:from-teal-600 dark:hover:to-teal-700 focus:from-teal-700 focus:to-teal-800 dark:focus:from-teal-600 dark:focus:to-teal-700 focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all shadow-lg hover:shadow-xl focus:shadow-xl transform hover:-translate-y-0.5 focus:-translate-y-0.5"
                   >
                     <Sparkles className="h-5 w-5" />
                     Take the Smart Match Quiz
@@ -415,14 +514,14 @@ export default function DashboardPage() {
         {/* Right Column */}
         <div className="space-y-6">
           {/* Membership Card */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900">Your Membership</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-white">Your Membership</h3>
               <span
                 className={`px-3 py-1 rounded-full text-xs font-medium ${
                   membershipTier === 'premium'
-                    ? 'bg-yellow-100 text-yellow-800'
-                    : 'bg-gray-100 text-gray-700'
+                    ? 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                 }`}
               >
                 {membershipTier === 'premium' ? 'Premium' : 'Free Tier'}
@@ -432,31 +531,31 @@ export default function DashboardPage() {
             <div className="space-y-3">
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-700 font-medium">Matches Used</span>
+                  <span className="text-gray-600 dark:text-gray-400 font-medium">Matches Used</span>
                   <span className="font-medium">
                     {matchesUsed}/{matchesLimit}
                   </span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                   <div
-                    className="bg-teal-600 h-2 rounded-full transition-all"
+                    className="bg-teal-600 dark:bg-teal-400 h-2 rounded-full transition-all"
                     style={{ width: `${(matchesUsed / matchesLimit) * 100}%` }}
                   />
                 </div>
               </div>
 
               {membershipTier === 'free' && (
-                <div className="pt-3 border-t">
-                  <p className="text-xs text-gray-700 mb-3 font-medium">
+                <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-3 font-medium">
                     Premium members hire 2x faster with unlimited intros
                   </p>
                   <Link
                     href="/dashboard/membership"
-                    className="block w-full text-center px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-lg hover:from-teal-700 hover:to-teal-800 focus:from-teal-700 focus:to-teal-800 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all shadow-md hover:shadow-lg focus:shadow-lg"
+                    className="block w-full text-center px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 dark:from-teal-500 dark:to-teal-600 text-white rounded-lg hover:from-teal-700 hover:to-teal-800 dark:hover:from-teal-600 dark:hover:to-teal-700 focus:from-teal-700 focus:to-teal-800 dark:focus:from-teal-600 dark:focus:to-teal-700 focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all shadow-md hover:shadow-lg focus:shadow-lg"
                   >
                     Start Free 7-Day Trial →
                   </Link>
-                  <p className="text-xs text-center text-gray-800 mt-2">
+                  <p className="text-xs text-center text-gray-600 dark:text-gray-400 mt-2">
                     Then $9/mo • Cancel anytime
                   </p>
                 </div>
@@ -465,12 +564,12 @@ export default function DashboardPage() {
           </div>
 
           {/* Community Highlights */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900">Community Buzz</h3>
+              <h3 className="font-semibold text-gray-900 dark:text-white">Community Buzz</h3>
               <Link
                 href="/dashboard/community"
-                className="text-sm text-teal-600 hover:text-teal-700 focus:text-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded transition-all"
+                className="text-sm text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 focus:text-teal-700 dark:focus:text-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800 rounded transition-all"
               >
                 View All
               </Link>
@@ -481,14 +580,14 @@ export default function DashboardPage() {
                 <Link
                   key={post.id}
                   href="/dashboard/community"
-                  className="block pb-3 border-b last:border-0 last:pb-0 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset -mx-2 px-2 py-2 rounded transition-all group"
+                  className="block pb-3 border-b border-gray-200 dark:border-gray-700 last:border-0 last:pb-0 hover:bg-gray-50 dark:hover:bg-gray-750 focus:bg-gray-50 dark:focus:bg-gray-750 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-inset -mx-2 px-2 py-2 rounded transition-all group"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900 mb-1 group-hover:text-teal-600">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white mb-1 group-hover:text-teal-600 dark:group-hover:text-teal-400">
                         {post.title}
                       </p>
-                      <div className="flex items-center gap-3 text-xs text-gray-800">
+                      <div className="flex items-center gap-3 text-xs text-gray-600 dark:text-gray-400">
                         <span>{post.author}</span>
                         <span>•</span>
                         <span>{post.replies} replies</span>
@@ -497,11 +596,11 @@ export default function DashboardPage() {
                       </div>
                     </div>
                     {post.trending ? (
-                      <span className="text-xs bg-sunset-100 text-sunset-700 px-2 py-0.5 rounded-full">
+                      <span className="text-xs bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 px-2 py-0.5 rounded-full">
                         Hot
                       </span>
                     ) : membershipTier === 'premium' ? (
-                      <span className="text-xs text-teal-600 bg-teal-50 px-2 py-0.5 rounded">
+                      <span className="text-xs text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/20 px-2 py-0.5 rounded">
                         Priority
                       </span>
                     ) : null}
@@ -510,13 +609,15 @@ export default function DashboardPage() {
               ))}
             </div>
 
-            <div className="mt-4 pt-4 border-t">
-              <div className="bg-warmth-50 rounded-lg p-3">
+            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-3">
                 <div className="flex items-start gap-2">
-                  <Award className="h-4 w-4 text-sunset-500 mt-0.5" />
+                  <Award className="h-4 w-4 text-teal-600 dark:text-teal-400 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Tip of the Day</p>
-                    <p className="text-xs text-gray-700 mt-1 font-medium">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      Tip of the Day
+                    </p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 font-medium">
                       In Colombia, always agree on payment terms upfront. Weekly payments are common
                       for domestic help.
                     </p>
@@ -527,14 +628,14 @@ export default function DashboardPage() {
           </div>
 
           {/* Active Users */}
-          <div className="bg-gradient-to-br from-teal-50 to-white rounded-xl border border-teal-200 p-4">
+          <div className="bg-gradient-to-br from-teal-50 to-white dark:from-teal-900/20 dark:to-gray-800 rounded-xl border border-teal-200 dark:border-teal-800 p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-900">Active Now</p>
-                <p className="text-2xl font-bold text-teal-600">152</p>
-                <p className="text-xs text-gray-800">expats online</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">Active Now</p>
+                <p className="text-2xl font-bold text-teal-600 dark:text-teal-400">152</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">expats online</p>
               </div>
-              <Users className="h-8 w-8 text-teal-600 opacity-50" />
+              <Users className="h-8 w-8 text-teal-600 dark:text-teal-400 opacity-50" />
             </div>
           </div>
         </div>

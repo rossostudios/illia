@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 
 export default function Hero() {
   const t = useTranslations('hero')
-  const tCommon = useTranslations('common')
+  const _tCommon = useTranslations('common')
 
   return (
     <section className="relative bg-gradient-to-br from-gray-50 via-white to-green-50 pt-20 pb-24 overflow-hidden">

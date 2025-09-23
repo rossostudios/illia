@@ -1,11 +1,15 @@
 'use client'
 
 import { Eye, EyeOff } from 'lucide-react'
+import { unstable_noStore } from 'next/cache'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { FaApple, FaGoogle, FaLinkedin } from 'react-icons/fa'
-import { supabase } from '@/utils/supabase/client'
+import { ErrorMessage } from '@/components/ui/ErrorMessage'
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
+import { useToast } from '@/hooks/useToast'
+import { createClient } from '@/lib/supabase/client'
 
 const testimonials = [
   {
@@ -35,13 +39,16 @@ const testimonials = [
 ]
 
 export default function LoginPage() {
+  // Prevent static generation for this page
+  unstable_noStore()
   const router = useRouter()
+  const { success, error: showError } = useToast()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | Error | null>(null)
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
 
   useEffect(() => {
@@ -57,15 +64,19 @@ export default function LoginPage() {
     setError(null)
 
     try {
+      const supabase = createClient()
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
       if (error) throw error
+
+      success('Welcome back!', 'You have successfully logged in.')
       router.push('/dashboard')
-    } catch (error: any) {
-      setError(error.message)
+    } catch (err: any) {
+      setError(err)
+      showError('Login failed', err.message)
     } finally {
       setLoading(false)
     }
@@ -74,6 +85,7 @@ export default function LoginPage() {
   const handleSocialLogin = async (provider: 'google' | 'apple' | 'linkedin') => {
     try {
       // Note: Apple provider isn't directly supported by Supabase
+      const supabase = createClient()
       const { error } = await supabase.auth.signInWithOAuth({
         provider: provider === 'apple' ? 'google' : (provider as any),
         options: {
@@ -81,13 +93,14 @@ export default function LoginPage() {
         },
       })
       if (error) throw error
-    } catch (error: any) {
-      setError(error.message)
+    } catch (err: any) {
+      setError(err)
+      showError('Social login failed', err.message)
     }
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       {/* Desktop: two columns, Mobile: stacked */}
       <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
         {/* Left Column - Auth Form */}
@@ -95,10 +108,10 @@ export default function LoginPage() {
           <div className="w-full max-w-[480px] space-y-6">
             {/* Header */}
             <div className="space-y-2 text-center lg:text-left">
-              <h1 className="text-2xl md:text-3xl font-semibold text-gray-900">
+              <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white">
                 Login to your account
               </h1>
-              <p className="text-gray-600">Enter your details to login.</p>
+              <p className="text-gray-600 dark:text-gray-400">Enter your details to login.</p>
             </div>
 
             {/* Social Login Buttons */}
@@ -107,7 +120,7 @@ export default function LoginPage() {
                 onClick={() => handleSocialLogin('apple')}
                 disabled={loading}
                 aria-label="Sign in with Apple"
-                className="flex items-center justify-center h-12 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center justify-center min-h-[44px] h-12 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-teal-500 dark:focus:ring-teal-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-gray-800"
               >
                 <FaApple className="text-xl" />
               </button>
@@ -115,7 +128,7 @@ export default function LoginPage() {
                 onClick={() => handleSocialLogin('google')}
                 disabled={loading}
                 aria-label="Sign in with Google"
-                className="flex items-center justify-center h-12 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center justify-center min-h-[44px] h-12 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-teal-500 dark:focus:ring-teal-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-gray-800"
               >
                 <FaGoogle className="text-xl text-red-500" />
               </button>
@@ -123,7 +136,7 @@ export default function LoginPage() {
                 onClick={() => handleSocialLogin('linkedin')}
                 disabled={loading}
                 aria-label="Sign in with LinkedIn"
-                className="flex items-center justify-center h-12 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center justify-center min-h-[44px] h-12 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-teal-500 dark:focus:ring-teal-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-gray-800"
               >
                 <FaLinkedin className="text-xl text-blue-600" />
               </button>
@@ -132,28 +145,25 @@ export default function LoginPage() {
             {/* OR Divider */}
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-gray-300" />
+                <span className="w-full border-t border-gray-300 dark:border-gray-700" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="bg-white px-4 text-gray-500">OR</span>
+                <span className="bg-white dark:bg-gray-900 px-4 text-gray-500 dark:text-gray-400">
+                  OR
+                </span>
               </div>
             </div>
 
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <div
-                  role="alert"
-                  aria-live="polite"
-                  className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm"
-                >
-                  {error}
-                </div>
-              )}
+              {error && <ErrorMessage error={error} variant="banner" />}
 
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >
                     Email Address
                     <span className="text-red-500 ml-0.5" aria-label="required">
                       *
@@ -169,7 +179,7 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     aria-invalid={error ? 'true' : 'false'}
                     aria-describedby={error ? 'email-error' : undefined}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:border-transparent transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                     placeholder="hello@example.com"
                   />
                 </div>
@@ -177,7 +187,7 @@ export default function LoginPage() {
                 <div>
                   <label
                     htmlFor="password"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                   >
                     Password
                     <span className="text-red-500 ml-0.5" aria-label="required">
@@ -195,14 +205,14 @@ export default function LoginPage() {
                       onChange={(e) => setPassword(e.target.value)}
                       aria-invalid={error ? 'true' : 'false'}
                       aria-describedby={error ? 'password-error' : undefined}
-                      className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-colors"
+                      className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:border-transparent transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                       placeholder="••••••••"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300"
                     >
                       {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
@@ -216,13 +226,13 @@ export default function LoginPage() {
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="h-4 w-4 text-gray-900 border-gray-300 rounded focus:ring-gray-900"
+                    className="h-4 w-4 text-teal-600 border-gray-300 dark:border-gray-600 rounded focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800"
                   />
-                  <span className="ml-2 text-sm text-gray-700">Remember me</span>
+                  <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Remember me</span>
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="text-sm text-gray-700 hover:text-gray-900 focus:outline-none focus:underline"
+                  className="text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none focus:underline"
                 >
                   Forgot password?
                 </Link>
@@ -231,14 +241,15 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-teal-600 dark:bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 dark:hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-teal-500 dark:focus:ring-teal-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm"
               >
+                {loading && <LoadingSpinner size="sm" color="white" />}
                 {loading ? 'Signing in...' : 'Sign in'}
               </button>
             </form>
 
             {/* Sign up link */}
-            <p className="text-center text-sm text-gray-600">
+            <p className="text-center text-sm text-gray-600 dark:text-gray-400">
               Don't have an account?{' '}
               <Link
                 href="/signup"
@@ -311,3 +322,6 @@ export default function LoginPage() {
     </div>
   )
 }
+
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic'

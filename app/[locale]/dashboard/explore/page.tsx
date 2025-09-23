@@ -64,7 +64,7 @@ export default function ExplorePage() {
 
   useEffect(() => {
     setEstimatedMatches(calculateEstimatedMatches())
-  }, [selectedServices, selectedCity, extras])
+  }, [calculateEstimatedMatches])
 
   const handleServiceToggle = (serviceId: string) => {
     setSelectedServices((prev) =>
@@ -143,7 +143,7 @@ export default function ExplorePage() {
     return null
   }
 
-  const getPreview = () => {
+  const _getPreview = () => {
     const serviceCount = selectedServices.length
     if (serviceCount === 0) return null
 
@@ -152,27 +152,27 @@ export default function ExplorePage() {
   }
 
   return (
-    <div className="min-h-screen bg-warmth-50/30">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="mb-8">
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-start gap-2">
-                <h1 className="text-4xl font-bold text-teal-600">Explore</h1>
+                <h1 className="text-4xl font-bold text-teal-600 dark:text-teal-400">Explore</h1>
                 <div className="relative">
                   <button
                     type="button"
                     onMouseEnter={() => setShowTooltip(true)}
                     onMouseLeave={() => setShowTooltip(false)}
-                    className="p-1 hover:bg-teal-50 rounded-full transition-colors"
+                    className="p-1 hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded-full transition-colors"
                     aria-label="More information about Explore"
                   >
-                    <Info className="h-5 w-5 text-teal-500" />
+                    <Info className="h-5 w-5 text-teal-500 dark:text-teal-400" />
                   </button>
                   {showTooltip && (
-                    <div className="absolute left-0 top-8 w-64 p-3 bg-white rounded-lg shadow-lg border border-teal-100 z-10">
-                      <p className="text-sm text-gray-700 font-medium">
+                    <div className="absolute left-0 top-8 w-64 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-teal-100 dark:border-teal-800 z-10">
+                      <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
                         Our interactive tool lets you explore home help options. Answer a few
                         questions for AI-matched recommendations—free previews, Premium for intros.
                       </p>
@@ -180,7 +180,9 @@ export default function ExplorePage() {
                   )}
                 </div>
               </div>
-              <p className="text-gray-700 mt-2">Discover & test matches for your expat setup</p>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
+                Discover & test matches for your expat setup
+              </p>
             </div>
             <button
               type="button"
@@ -196,7 +198,7 @@ export default function ExplorePage() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Wizard Card */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-md p-8">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8">
               {/* Connected Stepper */}
               <ConnectedStepper
                 currentStep={currentStep}
@@ -209,7 +211,7 @@ export default function ExplorePage() {
                 {/* Step 1: City Selection */}
                 {currentStep === 1 && (
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                       Where are you based?
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -221,13 +223,13 @@ export default function ExplorePage() {
                         transition={{ type: 'spring', stiffness: 300 }}
                         className={`p-6 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                           selectedCity === 'medellin'
-                            ? 'border-teal-500 bg-teal-50'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20'
+                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                         }`}
                       >
-                        <MapPin className="h-8 w-8 mb-2 text-teal-600 mx-auto" />
-                        <h3 className="font-semibold text-lg">Medellín</h3>
-                        <p className="text-sm text-gray-800 font-medium mt-1">
+                        <MapPin className="h-8 w-8 mb-2 text-teal-600 dark:text-teal-400 mx-auto" />
+                        <h3 className="font-semibold text-lg dark:text-white">Medellín</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 font-medium mt-1">
                           El Poblado, Laureles, Envigado
                         </p>
                       </motion.button>
@@ -239,13 +241,13 @@ export default function ExplorePage() {
                         transition={{ type: 'spring', stiffness: 300 }}
                         className={`p-6 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                           selectedCity === 'florianopolis'
-                            ? 'border-teal-500 bg-teal-50'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20'
+                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                         }`}
                       >
-                        <Globe className="h-8 w-8 mb-2 text-teal-600 mx-auto" />
-                        <h3 className="font-semibold text-lg">Florianópolis</h3>
-                        <p className="text-sm text-gray-800 font-medium mt-1">
+                        <Globe className="h-8 w-8 mb-2 text-teal-600 dark:text-teal-400 mx-auto" />
+                        <h3 className="font-semibold text-lg dark:text-white">Florianópolis</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 font-medium mt-1">
                           Lagoa, Campeche, Centro
                         </p>
                       </motion.button>
@@ -256,7 +258,7 @@ export default function ExplorePage() {
                 {/* Step 2: Service Selection */}
                 {currentStep === 2 && (
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                       What services do you need?
                     </h2>
                     {validationError && selectedServices.length === 0 && (
@@ -314,7 +316,7 @@ export default function ExplorePage() {
                 {/* Step 3: Details */}
                 {currentStep === 3 && (
                   <div className="space-y-6">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                       Customize your preferences
                     </h2>
 
@@ -466,12 +468,14 @@ export default function ExplorePage() {
 
           {/* Tips Panel (Desktop) */}
           <div className="hidden lg:block">
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-8">
-              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <Heart className="h-5 w-5 text-sunset-500" />
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 sticky top-8">
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                <Heart className="h-5 w-5 text-rose-500 dark:text-rose-400" />
                 Pro Tips
               </h3>
-              <p className="text-sm text-gray-700 font-medium mb-4">{getTips()}</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300 font-medium mb-4">
+                {getTips()}
+              </p>
 
               {/* Dynamic Match Preview */}
               <AnimatePresence mode="wait">
@@ -482,12 +486,12 @@ export default function ExplorePage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3 }}
-                    className="mt-4 p-4 bg-gradient-to-r from-teal-50 to-sunset-50 rounded-lg border border-teal-200"
+                    className="mt-4 p-4 bg-gradient-to-r from-teal-50 to-orange-50 dark:from-teal-900/20 dark:to-orange-900/20 rounded-lg border border-teal-200 dark:border-teal-800"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <Users className="h-5 w-5 text-teal-600" />
-                        <span className="text-sm font-semibold text-gray-900">
+                        <Users className="h-5 w-5 text-teal-600 dark:text-teal-400" />
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white">
                           Available Matches
                         </span>
                       </div>
@@ -496,12 +500,12 @@ export default function ExplorePage() {
                         initial={{ scale: 0.5, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ type: 'spring', stiffness: 500 }}
-                        className="text-2xl font-bold text-teal-600"
+                        className="text-2xl font-bold text-teal-600 dark:text-teal-400"
                       >
                         {estimatedMatches}
                       </motion.span>
                     </div>
-                    <div className="text-xs text-gray-800">
+                    <div className="text-xs text-gray-700 dark:text-gray-300">
                       Based on {selectedServices.length} service
                       {selectedServices.length > 1 ? 's' : ''} in{' '}
                       {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}
@@ -512,22 +516,22 @@ export default function ExplorePage() {
                 )}
               </AnimatePresence>
 
-              <div className="mt-6 pt-6 border-t border-gray-100">
-                <p className="text-xs text-gray-800 mb-2">
+              <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+                <p className="text-xs text-gray-700 dark:text-gray-300 mb-2">
                   Popular in {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}:
                 </p>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-700">Cleaning + Cooking</span>
-                    <span className="text-gray-800 font-semibold">68%</span>
+                    <span className="text-gray-600 dark:text-gray-400">Cleaning + Cooking</span>
+                    <span className="text-gray-700 dark:text-gray-300 font-semibold">68%</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-700">Weekly service</span>
-                    <span className="text-gray-800 font-semibold">71%</span>
+                    <span className="text-gray-600 dark:text-gray-400">Weekly service</span>
+                    <span className="text-gray-700 dark:text-gray-300 font-semibold">71%</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-700">English speaker</span>
-                    <span className="text-gray-800 font-semibold">45%</span>
+                    <span className="text-gray-600 dark:text-gray-400">English speaker</span>
+                    <span className="text-gray-700 dark:text-gray-300 font-semibold">45%</span>
                   </div>
                 </div>
               </div>
@@ -538,7 +542,7 @@ export default function ExplorePage() {
         {/* Loading State */}
         {isLoading && (
           <div className="mt-8">
-            <div className="bg-white rounded-xl shadow-md p-12 max-w-2xl mx-auto">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-12 max-w-2xl mx-auto">
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="relative">
                   <Loader2 className="h-12 w-12 text-teal-600 animate-spin" />
@@ -551,10 +555,10 @@ export default function ExplorePage() {
                   </motion.div>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                     Finding your perfect matches...
                   </h3>
-                  <p className="text-gray-800">
+                  <p className="text-gray-700 dark:text-gray-300">
                     Analyzing {selectedServices.length} service
                     {selectedServices.length > 1 ? 's' : ''} in{' '}
                     {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}
@@ -595,7 +599,7 @@ export default function ExplorePage() {
               {matches.map((match, index) => (
                 <div
                   key={match.id}
-                  className="bg-white rounded-xl shadow-md p-6 opacity-0 animate-[fadeIn_0.5s_ease-in-out_forwards]"
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 opacity-0 animate-[fadeIn_0.5s_ease-in-out_forwards]"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="flex items-start gap-4 mb-4">
@@ -606,10 +610,12 @@ export default function ExplorePage() {
                     />
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-gray-900">{match.name}</h3>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">
+                          {match.name}
+                        </h3>
                         {match.verified && <Check className="h-4 w-4 text-teal-600" />}
                       </div>
-                      <p className="text-sm text-gray-700">{match.location}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{match.location}</p>
                       <div className="flex items-center gap-1 mt-1">
                         <Star className="h-4 w-4 text-sunset-500 fill-sunset-500" />
                         <span className="text-sm font-medium">{match.rate}</span>
@@ -623,14 +629,16 @@ export default function ExplorePage() {
                     </div>
                   </div>
 
-                  <p className="text-sm text-gray-700 mb-3">{match.bio}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{match.bio}</p>
 
                   {/* Review Snippet */}
                   {match.review && (
-                    <div className="p-3 bg-gray-50 rounded-lg mb-3 border-l-4 border-teal-500">
-                      <p className="text-sm text-gray-700 italic">"{match.review.text}"</p>
+                    <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg mb-3 border-l-4 border-teal-500 dark:border-teal-400">
+                      <p className="text-sm text-gray-700 dark:text-gray-300 italic">
+                        "{match.review.text}"
+                      </p>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs text-gray-700 font-medium">
+                        <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
                           — {match.review.author}
                         </span>
                         <div className="flex gap-0.5">
@@ -646,7 +654,7 @@ export default function ExplorePage() {
                     {match.specialties.slice(0, 3).map((specialty: string) => (
                       <span
                         key={specialty}
-                        className="px-2 py-1 bg-teal-50 text-teal-700 text-xs rounded-full"
+                        className="px-2 py-1 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-xs rounded-full"
                       >
                         {specialty}
                       </span>

@@ -98,7 +98,15 @@ export function useTypingIndicator(options: UseTypingIndicatorOptions) {
         supabase.removeChannel(channelRef.current)
       }
     }
-  }, [user, options.channel])
+  }, [
+    user,
+    options.channel,
+    options.onTypingStart,
+    options.onTypingStop,
+    supabase.channel,
+    supabase.realtime.setAuth,
+    supabase.removeChannel,
+  ])
 
   // Broadcast typing start
   const startTyping = useCallback(async () => {
@@ -132,7 +140,7 @@ export function useTypingIndicator(options: UseTypingIndicatorOptions) {
     typingTimeoutRef.current = setTimeout(() => {
       stopTyping()
     }, 5000)
-  }, [user])
+  }, [user, stopTyping])
 
   // Broadcast typing stop
   const stopTyping = useCallback(async () => {

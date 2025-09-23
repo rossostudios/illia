@@ -6,20 +6,17 @@ import {
   Clock,
   Edit2,
   Eye,
-  Heart,
   Mail,
   MapPin,
   MessageSquare,
-  MoreVertical,
   Plus,
   Search,
   Send,
   Trash2,
-  TrendingUp,
   Users,
   X,
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import MessageCenter from '@/components/messaging/MessageCenter'
 import { QuickMessageButton } from '@/components/messaging/StartConversationButton'
 import { useSessionContext } from '@/components/SessionProvider'
@@ -169,25 +166,29 @@ export default function RealtimeCommunity() {
   }
 
   return (
-    <div className="min-h-screen bg-warmth-50/30">
+    <div className="min-h-screen bg-warmth-50/30 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <h1 className="text-3xl font-bold text-teal-600">Community</h1>
+              <h1 className="text-3xl font-bold text-teal-600 dark:text-teal-400">Community</h1>
               <div className="flex items-center gap-2 text-sm">
                 <div className="flex items-center gap-1">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  <span className="text-gray-600">{onlineUsers.length} online</span>
+                  <span className="text-gray-600 dark:text-gray-400">
+                    {onlineUsers.length} online
+                  </span>
                 </div>
-                {presenceConnected && <span className="text-xs text-green-600">● Connected</span>}
+                {presenceConnected && (
+                  <span className="text-xs text-green-600 dark:text-green-400">● Connected</span>
+                )}
               </div>
             </div>
             {user && (
               <button
                 onClick={() => setShowNewThreadModal(true)}
-                className="px-6 py-3 bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 transition-colors flex items-center gap-2"
+                className="px-6 py-3 bg-teal-600 dark:bg-teal-500 text-white rounded-lg font-medium hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors flex items-center gap-2"
               >
                 <Plus className="h-5 w-5" />
                 New Thread
@@ -197,16 +198,16 @@ export default function RealtimeCommunity() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-900/30 p-4 mb-6">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-teal-500" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-teal-500 dark:text-teal-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search threads..."
-                className="w-full pl-12 pr-4 py-3 rounded-full border border-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="w-full pl-12 pr-4 py-3 rounded-full border border-teal-300 dark:border-teal-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400"
               />
             </div>
 
@@ -214,7 +215,7 @@ export default function RealtimeCommunity() {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400"
               >
                 {CATEGORIES.map((cat) => (
                   <option key={cat.id} value={cat.id}>
@@ -226,7 +227,7 @@ export default function RealtimeCommunity() {
               <select
                 value={selectedCity}
                 onChange={(e) => setSelectedCity(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400"
               >
                 {CITIES.map((city) => (
                   <option key={city.id} value={city.id}>
@@ -240,25 +241,27 @@ export default function RealtimeCommunity() {
 
         {/* Online Users */}
         {onlineUsers.length > 0 && (
-          <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-900/30 p-4 mb-6">
             <div className="flex items-center gap-2 mb-2">
-              <Users className="h-4 w-4 text-teal-500" />
-              <span className="text-sm font-medium text-gray-700">Active Now</span>
+              <Users className="h-4 w-4 text-teal-500 dark:text-teal-400" />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Active Now
+              </span>
             </div>
             <div className="flex flex-wrap gap-2">
               {onlineUsers.map((u) => (
                 <div
                   key={u.user_id}
-                  className="flex items-center gap-1 px-2 py-1 bg-teal-50 rounded-full"
+                  className="flex items-center gap-1 px-2 py-1 bg-teal-50 dark:bg-teal-900/30 rounded-full"
                 >
                   {u.avatar_url ? (
                     <img src={u.avatar_url} alt={u.name || ''} className="w-5 h-5 rounded-full" />
                   ) : (
-                    <div className="w-5 h-5 rounded-full bg-teal-200 flex items-center justify-center text-xs">
+                    <div className="w-5 h-5 rounded-full bg-teal-200 dark:bg-teal-700 flex items-center justify-center text-xs text-gray-900 dark:text-white">
                       {(u.name || 'U')[0]}
                     </div>
                   )}
-                  <span className="text-xs text-gray-700">{u.name}</span>
+                  <span className="text-xs text-gray-700 dark:text-gray-300">{u.name}</span>
                 </div>
               ))}
             </div>
@@ -279,25 +282,27 @@ export default function RealtimeCommunity() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition-all cursor-pointer"
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-900/30 p-5 hover:shadow-lg dark:hover:shadow-gray-900/40 transition-all cursor-pointer"
                   onClick={() => handleThreadClick(thread)}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         {thread.is_pinned && (
-                          <span className="px-2 py-0.5 bg-teal-100 text-teal-700 text-xs rounded-full">
+                          <span className="px-2 py-0.5 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-xs rounded-full">
                             Pinned
                           </span>
                         )}
-                        <h3 className="font-semibold text-gray-900 hover:text-teal-600">
+                        <h3 className="font-semibold text-gray-900 dark:text-white hover:text-teal-600 dark:hover:text-teal-400">
                           {thread.title}
                         </h3>
                       </div>
 
-                      <p className="text-sm text-gray-600 mb-3 line-clamp-2">{thread.body}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                        {thread.body}
+                      </p>
 
-                      <div className="flex items-center gap-4 text-sm text-gray-500">
+                      <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                         <span className="flex items-center gap-1">
                           <MessageSquare className="h-4 w-4" />
                           {thread.posts_count} posts
@@ -318,7 +323,7 @@ export default function RealtimeCommunity() {
                         </span>
                       </div>
                     </div>
-                    <ChevronRight className="h-5 w-5 text-gray-400 mt-2" />
+                    <ChevronRight className="h-5 w-5 text-gray-400 dark:text-gray-500 mt-2" />
                   </div>
                 </motion.div>
               ))}
@@ -329,15 +334,15 @@ export default function RealtimeCommunity() {
         {/* Thread Detail Modal */}
         {selectedThread && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="bg-white dark:bg-gray-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
               {/* Modal Header */}
-              <div className="p-6 border-b">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                       {selectedThread.title}
                     </h2>
-                    <div className="flex items-center gap-3 text-sm text-gray-500">
+                    <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
                       <span>{selectedThread.category}</span>
                       {selectedThread.city_tag && (
                         <>
