@@ -1,19 +1,21 @@
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Parkinsans, Poppins } from 'next/font/google'
 import './globals.css'
 import type { Metadata } from 'next'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const parkinsans = Parkinsans({
+  variable: '--font-parkinsans',
   subsets: ['latin'],
   display: 'swap',
   preload: true,
+  weight: ['300', '400', '500', '600', '700', '800'],
 })
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const poppins = Poppins({
+  variable: '--font-poppins',
   subsets: ['latin'],
   display: 'swap',
   preload: true,
+  weight: ['300', '400', '500', '600', '700'],
 })
 
 export const metadata: Metadata = {
@@ -76,8 +78,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="antialiased flex flex-col min-h-screen">{children}</body>
+    <html className={`${parkinsans.variable} ${poppins.variable}`}>
+      <body className="antialiased flex flex-col min-h-screen font-body">{children}</body>
     </html>
   )
 }

@@ -4,6 +4,23 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useSession } from './useSession'
 
+// Map database tier values to expected hook tier types
+function mapDatabaseTierToHookTier(dbTier: string): 'basic' | 'pro' | 'enterprise' {
+  switch (dbTier.toLowerCase()) {
+    case 'basic':
+    case 'free':
+      return 'basic'
+    case 'pro':
+    case 'premium':
+      return 'pro'
+    case 'enterprise':
+    case 'admin':
+      return 'enterprise'
+    default:
+      return 'basic'
+  }
+}
+
 export function useTier() {
   const { user } = useSession()
   const supabase = createClient()
@@ -27,7 +44,9 @@ export function useTier() {
           .single()
 
         if (data) {
-          setTier(data.tier)
+          // Map database tier to expected tier type
+          const mappedTier = mapDatabaseTierToHookTier(data.tier)
+          setTier(mappedTier)
         }
       } catch (error) {
         console.error('Error fetching tier:', error)

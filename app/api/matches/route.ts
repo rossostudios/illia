@@ -2,6 +2,7 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 import { createServiceClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/client'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -108,7 +109,7 @@ export async function POST(request: NextRequest) {
     const aiMatches = JSON.parse(responseContent)
 
     // Save lead and matches to database if we have contact info
-    let userId = null
+    let userId: string | null = null
 
     if (email && name) {
       console.log('💾 Saving lead to database...')
@@ -144,7 +145,7 @@ export async function POST(request: NextRequest) {
 
         // Save matches to database
         const matchesToSave = aiMatches.matches.slice(0, 5).map((match: any) => ({
-          user_id: userId,
+          user_id: userId!,
           provider_id: match.id,
           score: Math.min(100, Math.max(0, match.score)),
           explanation: match.explanation,

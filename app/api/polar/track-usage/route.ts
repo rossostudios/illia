@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
         .eq('meter_type', meterType)
         .gte('created_at', new Date(new Date().setDate(1)).toISOString()) // Current month
 
-      const currentUsage = usage?.reduce((sum, record) => sum + record.quantity, 0) || 0
+      const currentUsage = usage?.reduce((sum, record) => sum + (record.quantity || 0), 0) || 0
       const limit = limits[meterType as keyof typeof limits]
 
       if (currentUsage + quantity > limit) {
@@ -93,7 +93,9 @@ export async function GET(_request: NextRequest) {
     // Group by meter type
     const usageSummary = usage?.reduce(
       (acc, record) => {
-        acc[record.meter_type] = (acc[record.meter_type] || 0) + record.quantity
+        if (record.meter_type && record.quantity !== null) {
+          acc[record.meter_type] = (acc[record.meter_type] || 0) + record.quantity
+        }
         return acc
       },
       {} as Record<string, number>

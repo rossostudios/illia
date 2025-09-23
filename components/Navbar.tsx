@@ -3,9 +3,12 @@
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import LanguageSwitcher from './LanguageSwitcher'
+import MessageButton from './messaging/MessageButton'
+import { useSessionContext } from './SessionProvider'
 
 export default function Navbar() {
   const t = useTranslations('nav')
+  const { user, loading } = useSessionContext()
 
   return (
     <nav className="border-b bg-white sticky top-0 z-50 shadow-sm">
@@ -56,18 +59,38 @@ export default function Navbar() {
 
           <div className="flex items-center space-x-4">
             <LanguageSwitcher />
-            <Link
-              href="/login"
-              className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-            >
-              {t('signin')}
-            </Link>
-            <Link
-              href="/dashboard/explore"
-              className="text-sm font-semibold bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-5 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-            >
-              {t('getStarted')}
-            </Link>
+            {!loading && user ? (
+              <>
+                <MessageButton showLabel={false} />
+                <Link
+                  href="/dashboard"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href="/dashboard/profile"
+                  className="text-sm font-semibold bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-5 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                >
+                  Profile
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+                >
+                  {t('signin')}
+                </Link>
+                <Link
+                  href="/dashboard/explore"
+                  className="text-sm font-semibold bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-5 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                >
+                  {t('getStarted')}
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

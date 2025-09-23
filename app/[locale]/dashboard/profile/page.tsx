@@ -16,6 +16,7 @@ import {
   LogOut,
   Mail,
   MapPin,
+  MessageSquare,
   Save,
   Shield,
   Trash2,

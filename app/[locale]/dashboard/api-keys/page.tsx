@@ -285,9 +285,9 @@ export default function APIKeysPage() {
                       className="p-2 hover:bg-teal-200 rounded-lg transition-colors"
                     >
                       {apiKey.visible ? (
-                        <EyeOff className="h-4 w-4 text-teal-600" title="Hide key" />
+                        <EyeOff className="h-4 w-4 text-teal-600" />
                       ) : (
-                        <Eye className="h-4 w-4 text-teal-600" title="Reveal key" />
+                        <Eye className="h-4 w-4 text-teal-600" />
                       )}
                     </button>
                     <button
@@ -297,7 +297,7 @@ export default function APIKeysPage() {
                       {copiedKeyId === apiKey.id ? (
                         <Check className="h-4 w-4 text-green-600" />
                       ) : (
-                        <Copy className="h-4 w-4 text-teal-600" title="Copy for integrations" />
+                        <Copy className="h-4 w-4 text-teal-600" />
                       )}
                     </button>
                   </div>

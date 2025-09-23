@@ -21,13 +21,13 @@ export const POST = Webhooks({
       await supabase
         .from('user_subscriptions')
         .upsert({
-          user_id: metadata.userId,
-          subscription_id: orderData.subscriptionId,
-          product_id: orderData.productId,
+          user_id: String(metadata.userId),
+          subscription_id: String(orderData.subscriptionId),
+          product_id: String(orderData.productId),
           status: 'active',
           current_period_start: new Date().toISOString(),
-          current_period_end: orderData.subscription?.currentPeriodEnd,
-          metadata: orderData,
+          current_period_end: orderData.subscription?.currentPeriodEnd?.toISOString() || null,
+          metadata: orderData as any,
           updated_at: new Date().toISOString(),
         })
         .select()
@@ -44,13 +44,13 @@ export const POST = Webhooks({
       await supabase
         .from('user_subscriptions')
         .upsert({
-          user_id: subMetadata.userId,
-          subscription_id: subscriptionData.id,
-          product_id: subscriptionData.productId,
-          status: subscriptionData.status,
-          current_period_start: subscriptionData.currentPeriodStart,
-          current_period_end: subscriptionData.currentPeriodEnd,
-          metadata: subscriptionData,
+          user_id: String(subMetadata.userId),
+          subscription_id: String(subscriptionData.id),
+          product_id: String(subscriptionData.productId),
+          status: String(subscriptionData.status),
+          current_period_start: subscriptionData.currentPeriodStart?.toISOString() || null,
+          current_period_end: subscriptionData.currentPeriodEnd?.toISOString() || null,
+          metadata: subscriptionData as any,
           updated_at: new Date().toISOString(),
         })
         .select()
@@ -65,11 +65,11 @@ export const POST = Webhooks({
     await supabase
       .from('user_subscriptions')
       .update({
-        status: updatedSub.status,
-        product_id: updatedSub.productId,
-        current_period_start: updatedSub.currentPeriodStart,
-        current_period_end: updatedSub.currentPeriodEnd,
-        metadata: updatedSub,
+        status: String(updatedSub.status),
+        product_id: String(updatedSub.productId),
+        current_period_start: updatedSub.currentPeriodStart?.toISOString() || null,
+        current_period_end: updatedSub.currentPeriodEnd?.toISOString() || null,
+        metadata: updatedSub as any,
         updated_at: new Date().toISOString(),
       })
       .eq('subscription_id', updatedSub.id)

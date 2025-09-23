@@ -20,6 +20,8 @@ type Match = {
   photo_url?: string
   match_score: number
   match_explanation: string
+  phone?: string | null
+  email?: string | null
 }
 
 type QuizData = {

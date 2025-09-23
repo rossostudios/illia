@@ -6,6 +6,7 @@ import {
   Globe,
   Home,
   LogOut,
+  Mail,
   MessageSquare,
   Search,
   Settings,
@@ -17,7 +18,8 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, usePathname, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useDirectMessages } from '@/hooks/useDirectMessages'
 import { supabase } from '@/utils/supabase/client'
 
 interface DashboardSidebarProps {
@@ -37,6 +39,11 @@ export default function DashboardSidebar({
   const [showExtractMenu, setShowExtractMenu] = useState(pathname.includes('/extract'))
   const [showWhatsNew, setShowWhatsNew] = useState(true)
   const [showUserDropdown, setShowUserDropdown] = useState(false)
+
+  // Get unread message count
+  const { conversations } = useDirectMessages()
+  const unreadCount = conversations.reduce((sum, conv) => sum + conv.unread_count, 0)
+
   const handleLogout = async () => {
     await supabase.auth.signOut()
     router.push(`/${locale}/login`)
@@ -63,7 +70,14 @@ export default function DashboardSidebar({
       subtitle: 'Reviews & intros',
     },
     {
-      icon: MessageSquare,
+      icon: Mail,
+      label: 'Messages',
+      href: `/${locale}/dashboard/messages`,
+      subtitle: 'Direct messages',
+      badge: unreadCount, // Shows actual unread count
+    },
+    {
+      icon: Users,
       label: 'Community',
       href: `/${locale}/dashboard/community`,
       subtitle: 'Expat forums',
@@ -89,37 +103,17 @@ export default function DashboardSidebar({
       }`}
     >
       {/* Logo */}
-      <div className={`border-b ${isCollapsed ? 'p-2' : 'p-4'}`}>
-        <Link href={`/${locale}/dashboard`} className="flex items-center space-x-2 group">
-          <div className="flex flex-col">
-            <span
-              className={`font-bold text-teal-600 drop-shadow-sm transition-all group-hover:text-teal-700 group-hover:drop-shadow-md ${
-                isCollapsed ? 'text-lg' : 'text-xl md:text-2xl'
-              }`}
-            >
-              {isCollapsed ? 'I' : 'Illia.club'}
-            </span>
-            {!isCollapsed && (
-              <span className="text-xs text-gray-700 mt-0.5">Your Expat Lifeline</span>
-            )}
-          </div>
+      <div className={`border-b flex items-center justify-center ${isCollapsed ? 'p-4' : 'p-6'}`}>
+        <Link href={`/${locale}/dashboard`} className="block">
+          <span
+            className={`font-bold text-black transition-all hover:opacity-80 ${
+              isCollapsed ? 'text-xl' : 'text-2xl'
+            }`}
+          >
+            {isCollapsed ? 'I' : 'Illia'}
+          </span>
         </Link>
       </div>
-
-      {/* Search */}
-      {!isCollapsed && (
-        <div className="p-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
-            <input
-              type="text"
-              placeholder="Find cleaners in El Poblado..."
-              className="w-full pl-9 pr-3 py-2 bg-warmth-50 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-700 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-            />
-            <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
-          </div>
-        </div>
-      )}
 
       {/* Navigation */}
       <nav className={`space-y-1 flex-1 ${isCollapsed ? 'px-2' : 'px-3'}`}>
@@ -144,12 +138,26 @@ export default function DashboardSidebar({
                 <div
                   className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'}`}
                 >
-                  <item.icon
-                    className={`${isCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${isActive ? 'text-teal-600' : ''}`}
-                  />
+                  <div className="relative">
+                    <item.icon
+                      className={`${isCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${isActive ? 'text-teal-600' : ''}`}
+                    />
+                    {item.badge > 0 && (
+                      <span className="absolute -top-1 -right-1 min-w-[16px] h-4 flex items-center justify-center bg-red-500 text-white text-xs font-bold rounded-full px-1">
+                        {item.badge > 99 ? '99+' : item.badge}
+                      </span>
+                    )}
+                  </div>
                   {!isCollapsed && (
-                    <div className="flex flex-col">
-                      <span>{item.label}</span>
+                    <div className="flex flex-col flex-1">
+                      <div className="flex items-center justify-between">
+                        <span>{item.label}</span>
+                        {item.badge > 0 && !isCollapsed && (
+                          <span className="ml-2 px-2 py-0.5 bg-red-500 text-white text-xs font-bold rounded-full">
+                            {item.badge > 99 ? '99+' : item.badge}
+                          </span>
+                        )}
+                      </div>
                       {item.subtitle && (
                         <span className="text-xs text-gray-700 mt-0.5">{item.subtitle}</span>
                       )}

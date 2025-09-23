@@ -33,13 +33,12 @@ export async function POST(request: NextRequest) {
       .from('user_preferences')
       .upsert({
         user_id: user.id,
-        city,
-        services,
-        languages,
+        preferred_city: city as 'medellin' | 'florianopolis',
+        services_needed: services as ('cleaning' | 'cooking' | 'meal_prep' | 'childcare' | 'pet_care' | 'gardening' | 'handyman' | 'other')[],
+        languages_required: languages as ('english' | 'spanish' | 'portuguese' | 'french' | 'german' | 'italian')[],
         budget_min: budgetMin,
         budget_max: budgetMax,
-        frequency,
-        preferences: { ...preferences, budget },
+        schedule_preference: { frequency, preferences, budget },
         updated_at: new Date().toISOString(),
       })
       .select()

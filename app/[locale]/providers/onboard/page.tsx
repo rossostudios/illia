@@ -138,9 +138,9 @@ export default function ProviderOnboardPage() {
           name: formData.name,
           bio: formData.bio,
           avatar_url,
-          city: formData.city,
-          languages: formData.languages,
-          services: formData.services,
+          city: formData.city as 'medellin' | 'florianopolis',
+          languages: formData.languages as ('english' | 'spanish' | 'portuguese' | 'french' | 'german' | 'italian')[],
+          services: formData.services as ('cleaning' | 'cooking' | 'meal_prep' | 'childcare' | 'pet_care' | 'gardening' | 'handyman' | 'other')[],
           specialties: formData.specialties
             .split(',')
             .map((s) => s.trim())
@@ -155,7 +155,7 @@ export default function ProviderOnboardPage() {
           whatsapp_number: formData.whatsapp_number,
           email: formData.email,
           phone: formData.phone,
-          status: 'pending',
+          status: 'pending' as 'pending' | 'verified' | 'suspended',
         })
         .select()
 
