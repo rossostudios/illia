@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import AppFooter from '@/components/AppFooter'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import Footer from '@/components/Footer'
 import PWAInstaller from '@/components/PWAInstaller'
 import { SessionProvider } from '@/components/SessionProvider'
@@ -18,14 +19,16 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     pathname?.includes('/providers')
 
   return (
-    <ThemeProvider>
-      <SessionProvider>
-        <ToastProvider>
-          <div className="flex-grow">{children}</div>
-          {isDashboard ? <AppFooter /> : <Footer />}
-          <PWAInstaller />
-        </ToastProvider>
-      </SessionProvider>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <SessionProvider>
+          <ToastProvider>
+            <div className="flex-grow">{children}</div>
+            {isDashboard ? <AppFooter /> : <Footer />}
+            <PWAInstaller />
+          </ToastProvider>
+        </SessionProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   )
 }
