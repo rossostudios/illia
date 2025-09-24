@@ -1,12 +1,13 @@
 'use client'
 
-import { Bookmark, MoreVertical, Star, Trash2, X } from 'lucide-react'
+import { Bookmark, MoreVertical, Trash2, X } from 'lucide-react'
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/Button'
-import { type SavedSearch, useSavedSearches } from '@/hooks/useSavedSearches'
-import { useToast } from '@/hooks/useToast'
+import { useConfirm } from '@/components/ui/ConfirmDialog'
+import { type SavedSearch, useSavedSearches } from '@/hooks/use-saved-searches'
 
-interface SavedSearchesPanelProps {
+type SavedSearchesPanelProps = {
   currentFilters: Record<string, unknown>
   onLoadSearch: (filters: Record<string, unknown>) => void
   onClose: () => void
@@ -19,15 +20,15 @@ export function SavedSearchesPanel({
   onClose,
   className = '',
 }: SavedSearchesPanelProps) {
-  const { savedSearches, loading, saveSearch, deleteSearch, setDefaultSearch } = useSavedSearches()
-  const { showToast } = useToast()
+  const { savedSearches, loading, saveSearch, deleteSearch } = useSavedSearches()
+  const { confirm } = useConfirm()
   const [showSaveDialog, setShowSaveDialog] = useState(false)
   const [saveName, setSaveName] = useState('')
   const [isSaving, setIsSaving] = useState(false)
 
   const handleSaveSearch = async () => {
     if (!saveName.trim()) {
-      showToast('Please enter a name for your search', 'error')
+      toast.error('Please enter a name for your search')
       return
     }
 
@@ -49,44 +50,43 @@ export function SavedSearchesPanel({
   }
 
   const handleDeleteSearch = async (searchId: string, searchName: string) => {
-    if (confirm(`Are you sure you want to delete "${searchName}"?`)) {
-      try {
-        await deleteSearch(searchId)
-      } catch (_error) {
-        // Error handling is done in the hook
-      }
-    }
-  }
-
-  const handleSetDefault = async (searchId: string) => {
-    try {
-      await setDefaultSearch(searchId)
-    } catch (_error) {
-      // Error handling is done in the hook
-    }
+    confirm({
+      title: 'Delete saved search?',
+      description: `Are you sure you want to delete "${searchName}"? This action cannot be undone.`,
+      type: 'danger',
+      confirmText: 'Delete',
+      onConfirm: async () => {
+        try {
+          await deleteSearch(searchId)
+          toast.success('Search deleted successfully')
+        } catch (_error) {
+          toast.error('Failed to delete search')
+        }
+      },
+    })
   }
 
   return (
     <div
-      className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 ${className}`}
+      className={`rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900 ${className}`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+      <div className="flex items-center justify-between border-gray-200 border-b p-4 dark:border-gray-700">
+        <h3 className="flex items-center gap-2 font-semibold text-gray-900 text-lg dark:text-white">
           <Bookmark className="h-5 w-5" />
           Saved Searches
         </h3>
         <div className="flex items-center gap-2">
           <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowSaveDialog(true)}
             className="text-sm"
+            onClick={() => setShowSaveDialog(true)}
+            size="sm"
+            variant="outline"
           >
-            <Bookmark className="h-4 w-4 mr-1" />
+            <Bookmark className="mr-1 h-4 w-4" />
             Save Current
           </Button>
-          <Button variant="ghost" size="sm" onClick={onClose} className="p-1">
+          <Button className="p-1" onClick={onClose} size="sm" variant="ghost">
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -94,35 +94,39 @@ export function SavedSearchesPanel({
 
       {/* Save Dialog */}
       {showSaveDialog && (
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="border-gray-200 border-b bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50">
+          <div className="mb-2 flex items-center gap-2">
             <input
-              type="text"
-              placeholder="Enter search name..."
-              value={saveName}
+              className="flex-1 rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 text-sm focus:border-transparent focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               onChange={(e) => setSaveName(e.target.value)}
-              className="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               onKeyDown={(e) => {
-                if (e.key === 'Enter') handleSaveSearch()
-                if (e.key === 'Escape') setShowSaveDialog(false)
+                if (e.key === 'Enter') {
+                  handleSaveSearch()
+                }
+                if (e.key === 'Escape') {
+                  setShowSaveDialog(false)
+                }
               }}
+              placeholder="Enter search name..."
+              type="text"
+              value={saveName}
             />
             <Button
-              variant="primary"
-              size="sm"
-              onClick={handleSaveSearch}
-              loading={isSaving}
               disabled={!saveName.trim()}
+              loading={isSaving}
+              onClick={handleSaveSearch}
+              size="sm"
+              variant="primary"
             >
               Save
             </Button>
             <Button
-              variant="ghost"
-              size="sm"
               onClick={() => {
                 setShowSaveDialog(false)
                 setSaveName('')
               }}
+              size="sm"
+              variant="ghost"
             >
               Cancel
             </Button>
@@ -144,25 +148,21 @@ export function SavedSearchesPanel({
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
             {savedSearches.map((search) => (
               <div
+                className="p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"
                 key={search.id}
-                className="p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
               >
                 <div className="flex items-start justify-between">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
+                  <div className="min-w-0 flex-1">
+                    <div className="mb-1 flex items-center gap-2">
                       <button
-                        type="button"
+                        className="truncate font-medium text-gray-900 text-sm hover:text-teal-600 dark:text-white dark:hover:text-teal-400"
                         onClick={() => handleLoadSearch(search)}
-                        className="text-sm font-medium text-gray-900 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 truncate"
                       >
                         {search.name}
                       </button>
-                      {search.is_default && (
-                        <Star className="h-4 w-4 text-yellow-500 flex-shrink-0" />
-                      )}
                     </div>
 
-                    <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-4 text-gray-500 text-xs dark:text-gray-400">
                       <span>
                         Used {search.search_count} {search.search_count === 1 ? 'time' : 'times'}
                       </span>
@@ -172,54 +172,39 @@ export function SavedSearchesPanel({
                     </div>
 
                     {/* Show some filter preview */}
-                    <div className="flex flex-wrap gap-1 mt-2">
+                    <div className="mt-2 flex flex-wrap gap-1">
                       {search.filters.location && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300">
+                        <span className="inline-flex items-center rounded bg-teal-100 px-2 py-0.5 text-teal-800 text-xs dark:bg-teal-900/30 dark:text-teal-300">
                           📍 {search.filters.location}
                         </span>
                       )}
                       {search.filters.services?.length > 0 && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+                        <span className="inline-flex items-center rounded bg-blue-100 px-2 py-0.5 text-blue-800 text-xs dark:bg-blue-900/30 dark:text-blue-300">
                           🛠️ {search.filters.services.length} service
                           {search.filters.services.length === 1 ? '' : 's'}
                         </span>
                       )}
                       {search.filters.minRating && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300">
+                        <span className="inline-flex items-center rounded bg-yellow-100 px-2 py-0.5 text-xs text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
                           ⭐ {search.filters.minRating}+ rating
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1 ml-2">
-                    {!search.is_default && (
-                      <button
-                        type="button"
-                        onClick={() => handleSetDefault(search.id)}
-                        className="p-1 text-gray-400 hover:text-yellow-500 transition-colors"
-                        title="Set as default"
-                      >
-                        <Star className="h-4 w-4" />
-                      </button>
-                    )}
-
-                    <div className="relative group">
-                      <button
-                        type="button"
-                        className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                      >
+                  <div className="ml-2 flex items-center gap-1">
+                    <div className="group relative">
+                      <button className="p-1 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300">
                         <MoreVertical className="h-4 w-4" />
                       </button>
 
-                      <div className="absolute right-0 top-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-10">
+                      <div className="pointer-events-none absolute top-full right-0 z-10 mt-1 rounded-md border border-gray-200 bg-white opacity-0 shadow-lg transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 dark:border-gray-700 dark:bg-gray-900">
                         <div className="py-1">
                           <button
-                            type="button"
+                            className="w-full px-3 py-2 text-left text-red-600 text-sm transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
                             onClick={() => handleDeleteSearch(search.id, search.name)}
-                            className="w-full px-3 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                           >
-                            <Trash2 className="h-4 w-4 inline mr-2" />
+                            <Trash2 className="mr-2 inline h-4 w-4" />
                             Delete
                           </button>
                         </div>

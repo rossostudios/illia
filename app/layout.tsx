@@ -1,6 +1,9 @@
 import { Parkinsans, Poppins } from 'next/font/google'
 import './globals.css'
 import type { Metadata } from 'next'
+import { ConfirmDialogProvider } from '@/components/ui/ConfirmDialog'
+import { SonnerToaster } from '@/components/ui/SonnerSetup'
+import { ThemeProvider } from '@/hooks/use-theme'
 
 const parkinsans = Parkinsans({
   variable: '--font-parkinsans',
@@ -84,10 +87,15 @@ export const metadata: Metadata = {
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#14b8a6' },
+    { media: '(prefers-color-scheme: dark)', color: '#0d9488' },
+  ],
+  colorScheme: 'light dark',
 }
-
-export const themeColor = '#14b8a6'
 
 export default function RootLayout({
   children,
@@ -96,15 +104,20 @@ export default function RootLayout({
 }>) {
   return (
     <html className={`${parkinsans.variable} ${poppins.variable}`}>
-      <body className="antialiased flex flex-col min-h-screen font-body">
+      <body className="flex min-h-screen flex-col font-body antialiased">
         {/* Skip Navigation Link for Accessibility */}
         <a
+          className="sr-only-focusable absolute top-4 left-4 z-50 rounded-md bg-teal-600 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
           href="#main-content"
-          className="sr-only-focusable bg-teal-600 text-white px-4 py-2 rounded-md absolute top-4 left-4 z-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
         >
           Skip to main content
         </a>
-        {children}
+        <ThemeProvider>
+          <ConfirmDialogProvider>
+            {children}
+            <SonnerToaster />
+          </ConfirmDialogProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

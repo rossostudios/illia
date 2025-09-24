@@ -5,9 +5,9 @@ import { Home, MessageSquare, Search, Star, User } from 'lucide-react'
 import Link from 'next/link'
 import { useParams, usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { useDirectMessages } from '@/hooks/useDirectMessages'
+import { useDirectMessages } from '@/hooks/use-direct-messages'
 
-interface NavItem {
+type NavItem = {
   icon: React.ComponentType<{ className?: string }>
   label: string
   href: string
@@ -85,16 +85,18 @@ export default function MobileBottomNav() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  if (!isMobile) return null
+  if (!isMobile) {
+    return null
+  }
 
   return (
     <motion.nav
-      initial={{ y: 0 }}
       animate={{ y: isVisible ? 0 : 100 }}
+      className="fixed right-0 bottom-0 left-0 z-40 border-gray-200 border-t bg-white md:hidden dark:border-gray-800 dark:bg-gray-900"
+      initial={{ y: 0 }}
       transition={{ duration: 0.3 }}
-      className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 md:hidden"
     >
-      <div className="grid grid-cols-5 h-16">
+      <div className="grid h-16 grid-cols-5">
         {navItems.map((item) => {
           const isActive =
             pathname === item.href ||
@@ -103,19 +105,19 @@ export default function MobileBottomNav() {
 
           return (
             <Link
-              key={item.label}
-              href={item.href}
               className={`relative flex flex-col items-center justify-center py-2 transition-colors ${
                 isActive
                   ? 'text-teal-600 dark:text-teal-400'
-                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                  : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
               }`}
+              href={item.href}
+              key={item.label}
             >
               {/* Active indicator */}
               {isActive && (
                 <motion.div
+                  className="-translate-x-1/2 absolute top-0 left-1/2 h-0.5 w-12 bg-teal-600 dark:bg-teal-400"
                   layoutId="bottomNavIndicator"
-                  className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-0.5 bg-teal-600 dark:bg-teal-400"
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}
@@ -125,13 +127,13 @@ export default function MobileBottomNav() {
 
                 {/* Badge */}
                 {item.badge && item.badge > 0 && (
-                  <span className="absolute -top-1 -right-1 min-w-[16px] h-4 flex items-center justify-center bg-red-500 text-white text-xs font-bold rounded-full px-1">
+                  <span className="-top-1 -right-1 absolute flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 font-bold text-white text-xs">
                     {item.badge > 99 ? '99+' : item.badge}
                   </span>
                 )}
               </div>
 
-              <span className="text-xs mt-1">{item.label}</span>
+              <span className="mt-1 text-xs">{item.label}</span>
             </Link>
           )
         })}

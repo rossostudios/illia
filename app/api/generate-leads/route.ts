@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
     const { niche, location, zipCode } = await req.json()
 
-    if (!niche || !location || !zipCode) {
+    if (!(niche && location && zipCode)) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
@@ -59,7 +59,6 @@ export async function POST(req: NextRequest) {
       .select()
 
     if (insertError) {
-      console.error('Error inserting leads:', insertError)
       return NextResponse.json({ error: 'Failed to save leads' }, { status: 500 })
     }
 
@@ -73,7 +72,6 @@ export async function POST(req: NextRequest) {
     })
 
     if (logError) {
-      console.error('Error logging action:', logError)
     }
 
     return NextResponse.json({
@@ -82,8 +80,7 @@ export async function POST(req: NextRequest) {
       count: mockLeads.length,
       tier,
     })
-  } catch (error) {
-    console.error('Error in generate-leads API:', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

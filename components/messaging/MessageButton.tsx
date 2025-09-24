@@ -3,10 +3,10 @@
 import { MessageSquare } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useSessionContext } from '@/components/SessionProvider'
-import { useDirectMessages } from '@/hooks/useDirectMessages'
+import { useDirectMessages } from '@/hooks/use-direct-messages'
 import MessageCenter from './MessageCenter'
 
-interface MessageButtonProps {
+type MessageButtonProps = {
   className?: string
   showLabel?: boolean
 }
@@ -26,28 +26,32 @@ export default function MessageButton({ className = '', showLabel = false }: Mes
 
   // Refresh conversations periodically
   useEffect(() => {
-    if (!user) return
+    if (!user) {
+      return
+    }
 
     const interval = setInterval(() => {
       refetchConversations()
-    }, 30000) // Refresh every 30 seconds
+    }, 30_000) // Refresh every 30 seconds
 
     return () => clearInterval(interval)
   }, [user, refetchConversations])
 
-  if (!user) return null
+  if (!user) {
+    return null
+  }
 
   return (
     <>
       <button
-        onClick={() => setIsMessageCenterOpen(true)}
-        className={`relative flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-teal-600 hover:bg-gray-50 rounded-lg transition-colors ${className}`}
         aria-label="Messages"
+        className={`relative flex items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-50 hover:text-teal-600 ${className}`}
+        onClick={() => setIsMessageCenterOpen(true)}
       >
         <div className="relative">
           <MessageSquare className="h-5 w-5" />
           {unreadCount > 0 && (
-            <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] flex items-center justify-center bg-red-500 text-white text-xs font-bold rounded-full px-1">
+            <span className="-top-2 -right-2 absolute flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-red-500 px-1 font-bold text-white text-xs">
               {unreadCount > 99 ? '99+' : unreadCount}
             </span>
           )}

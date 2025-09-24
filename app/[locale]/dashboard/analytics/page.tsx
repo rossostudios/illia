@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/Button'
 import { ErrorMessage } from '@/components/ui/ErrorMessage'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 import { Skeleton } from '@/components/ui/Skeleton'
-import { type DateRange, useAnalytics } from '@/hooks/useAnalytics'
+import { type DateRange, useAnalytics } from '@/hooks/use-analytics'
 import { exportAnalyticsToCSV, exportAnalyticsToPDF } from '@/utils/analyticsExport'
 
 export default function AnalyticsDashboardPage() {
@@ -23,9 +23,7 @@ export default function AnalyticsDashboardPage() {
 
   // Log any runtime errors
   useEffect(() => {
-    const handleError = (event: ErrorEvent) => {
-      console.error('Runtime error in analytics page:', event.error)
-    }
+    const handleError = (_event: ErrorEvent) => {}
 
     window.addEventListener('error', handleError)
     return () => window.removeEventListener('error', handleError)
@@ -56,8 +54,10 @@ export default function AnalyticsDashboardPage() {
     setDateRange({ start, end })
   }
 
-  const exportToPDF = async () => {
-    if (!data) return
+  const exportToPdf = async () => {
+    if (!data) {
+      return
+    }
 
     try {
       const dateRangeText = `${dateRange.start.toLocaleDateString()} - ${dateRange.end.toLocaleDateString()}`
@@ -67,26 +67,26 @@ export default function AnalyticsDashboardPage() {
         includeCharts: true,
         includeStats: true,
       })
-    } catch (error) {
-      console.error('Failed to export PDF:', error)
+    } catch (_error) {
       // You could show a toast notification here
     }
   }
 
-  const exportToCSV = () => {
-    if (!data) return
+  const exportToCsv = () => {
+    if (!data) {
+      return
+    }
 
     try {
       exportAnalyticsToCSV(data)
-    } catch (error) {
-      console.error('Failed to export CSV:', error)
+    } catch (_error) {
       // You could show a toast notification here
     }
   }
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
+      <div className="flex min-h-[400px] items-center justify-center">
         <LoadingSpinner size="lg" />
       </div>
     )
@@ -96,7 +96,7 @@ export default function AnalyticsDashboardPage() {
     return (
       <div className="p-6">
         <ErrorMessage error={error} />
-        <Button onClick={refetch} className="mt-4">
+        <Button className="mt-4" onClick={refetch}>
           Try Again
         </Button>
       </div>
@@ -105,11 +105,11 @@ export default function AnalyticsDashboardPage() {
 
   // Loading skeleton for metrics
   const renderMetricsSkeleton = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
       {Array.from({ length: 4 }).map((_, index) => (
-        <div key={index} className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+        <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900" key={index}>
           <div className="flex items-center">
-            <Skeleton className="w-12 h-12 rounded-lg" />
+            <Skeleton className="h-12 w-12 rounded-lg" />
             <div className="ml-4 space-y-2">
               <Skeleton className="h-4 w-20" />
               <Skeleton className="h-8 w-16" />
@@ -122,9 +122,9 @@ export default function AnalyticsDashboardPage() {
 
   // Loading skeleton for charts
   const renderChartSkeleton = () => (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-      <Skeleton className="h-6 w-48 mb-4" />
-      <Skeleton className="w-full h-48 sm:h-64" />
+    <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
+      <Skeleton className="mb-4 h-6 w-48" />
+      <Skeleton className="h-48 w-full sm:h-64" />
     </div>
   )
 
@@ -137,56 +137,58 @@ export default function AnalyticsDashboardPage() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-1">
+          <h1 className="font-bold text-2xl text-gray-900 dark:text-white">Analytics Dashboard</h1>
+          <p className="mt-1 text-gray-600 dark:text-gray-300">
             Track user engagement and platform performance
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row">
           {/* Date Range Selector */}
           <div className="flex flex-wrap gap-2">
             <Button
+              onClick={() => handleDateRangeChange('7d')}
+              size="sm"
               variant={
                 dateRange.start.getTime() ===
                 new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime()
                   ? 'primary'
                   : 'outline'
               }
-              size="sm"
-              onClick={() => handleDateRangeChange('7d')}
             >
               7 Days
             </Button>
             <Button
+              onClick={() => handleDateRangeChange('30d')}
+              size="sm"
               variant={
                 dateRange.start.getTime() ===
                 new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).getTime()
                   ? 'primary'
                   : 'outline'
               }
-              size="sm"
-              onClick={() => handleDateRangeChange('30d')}
             >
               30 Days
             </Button>
             <Button
+              onClick={() => handleDateRangeChange('90d')}
+              size="sm"
               variant={
                 dateRange.start.getTime() ===
                 new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).getTime()
                   ? 'primary'
                   : 'outline'
               }
-              size="sm"
-              onClick={() => handleDateRangeChange('90d')}
             >
               90 Days
             </Button>
             <Button
+              onClick={() => handleDateRangeChange('1y')}
+              size="sm"
               variant={
                 dateRange.start.getTime() ===
                 new Date(
@@ -197,8 +199,6 @@ export default function AnalyticsDashboardPage() {
                   ? 'primary'
                   : 'outline'
               }
-              size="sm"
-              onClick={() => handleDateRangeChange('1y')}
             >
               1 Year
             </Button>
@@ -206,12 +206,12 @@ export default function AnalyticsDashboardPage() {
 
           {/* Export Buttons */}
           <div className="flex flex-wrap gap-2">
-            <Button variant="outline" size="sm" onClick={exportToPDF}>
-              <FileText className="w-4 h-4 mr-2" />
+            <Button onClick={exportToPdf} size="sm" variant="outline">
+              <FileText className="mr-2 h-4 w-4" />
               PDF
             </Button>
-            <Button variant="outline" size="sm" onClick={exportToCSV}>
-              <Download className="w-4 h-4 mr-2" />
+            <Button onClick={exportToCsv} size="sm" variant="outline">
+              <Download className="mr-2 h-4 w-4" />
               CSV
             </Button>
           </div>
@@ -222,65 +222,65 @@ export default function AnalyticsDashboardPage() {
       {loading ? (
         renderMetricsSkeleton()
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
             <div className="flex items-center">
-              <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                <Search className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <div className="rounded-lg bg-blue-100 p-2 dark:bg-blue-900">
+                <Search className="h-6 w-6 text-blue-600 dark:text-blue-400" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="font-medium text-gray-600 text-sm dark:text-gray-400">
                   Total Searches
                 </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="font-bold text-2xl text-gray-900 dark:text-white">
                   {data.engagement.totalSearches.toLocaleString()}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+          <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
             <div className="flex items-center">
-              <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-                <Users className="w-6 h-6 text-green-600 dark:text-green-400" />
+              <div className="rounded-lg bg-green-100 p-2 dark:bg-green-900">
+                <Users className="h-6 w-6 text-green-600 dark:text-green-400" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="font-medium text-gray-600 text-sm dark:text-gray-400">
                   Total Matches
                 </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="font-bold text-2xl text-gray-900 dark:text-white">
                   {data.engagement.totalMatches.toLocaleString()}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+          <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
             <div className="flex items-center">
-              <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
-                <TrendingUp className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              <div className="rounded-lg bg-purple-100 p-2 dark:bg-purple-900">
+                <TrendingUp className="h-6 w-6 text-purple-600 dark:text-purple-400" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="font-medium text-gray-600 text-sm dark:text-gray-400">
                   Conversion Rate
                 </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="font-bold text-2xl text-gray-900 dark:text-white">
                   {data.engagement.conversionRate.toFixed(1)}%
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+          <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
             <div className="flex items-center">
-              <div className="p-2 bg-orange-100 dark:bg-orange-900 rounded-lg">
-                <Star className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+              <div className="rounded-lg bg-orange-100 p-2 dark:bg-orange-900">
+                <Star className="h-6 w-6 text-orange-600 dark:text-orange-400" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="font-medium text-gray-600 text-sm dark:text-gray-400">
                   Avg Provider Rating
                 </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="font-bold text-2xl text-gray-900 dark:text-white">
                   {data.providers.avgRating.toFixed(1)}
                 </p>
               </div>
@@ -291,15 +291,15 @@ export default function AnalyticsDashboardPage() {
 
       {/* Charts Section */}
       {loading ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {renderChartSkeleton()}
           {renderChartSkeleton()}
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* User Engagement Chart */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
+            <h3 className="mb-4 font-semibold text-gray-900 text-lg dark:text-white">
               User Engagement Trends
             </h3>
             <div data-chart-type="user-engagement">
@@ -308,8 +308,8 @@ export default function AnalyticsDashboardPage() {
           </div>
 
           {/* Popular Search Terms */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
+            <h3 className="mb-4 font-semibold text-gray-900 text-lg dark:text-white">
               Popular Search Terms
             </h3>
             <div data-chart-type="popular-search-terms">
@@ -318,22 +318,22 @@ export default function AnalyticsDashboardPage() {
           </div>
 
           {/* Provider Performance */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
+            <h3 className="mb-4 font-semibold text-gray-900 text-lg dark:text-white">
               Top Rated Providers
             </h3>
             <div className="space-y-3">
               {data.providers.topRatedProviders.slice(0, 5).map((provider, index) => (
-                <div key={provider.name} className="flex justify-between items-center">
+                <div className="flex items-center justify-between" key={provider.name}>
                   <div className="flex items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-300 mr-2">
+                    <span className="mr-2 text-gray-600 text-sm dark:text-gray-300">
                       {index + 1}.
                     </span>
-                    <span className="text-sm text-gray-900 dark:text-white">{provider.name}</span>
+                    <span className="text-gray-900 text-sm dark:text-white">{provider.name}</span>
                   </div>
                   <div className="flex items-center">
-                    <Star className="w-4 h-4 text-yellow-400 mr-1" />
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                    <Star className="mr-1 h-4 w-4 text-yellow-400" />
+                    <span className="font-medium text-gray-900 text-sm dark:text-white">
                       {provider.rating.toFixed(1)}
                     </span>
                   </div>
@@ -343,8 +343,8 @@ export default function AnalyticsDashboardPage() {
           </div>
 
           {/* Search Type Distribution */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
+            <h3 className="mb-4 font-semibold text-gray-900 text-lg dark:text-white">
               Search Type Distribution
             </h3>
             <div data-chart-type="search-type-distribution">
@@ -356,15 +356,15 @@ export default function AnalyticsDashboardPage() {
 
       {/* Additional Charts */}
       {loading ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {renderChartSkeleton()}
           {renderChartSkeleton()}
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Provider Performance Chart */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
+            <h3 className="mb-4 font-semibold text-gray-900 text-lg dark:text-white">
               Services Distribution
             </h3>
             <div data-chart-type="provider-performance">
@@ -373,12 +373,12 @@ export default function AnalyticsDashboardPage() {
           </div>
 
           {/* Provider Ratings Chart Placeholder */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
+            <h3 className="mb-4 font-semibold text-gray-900 text-lg dark:text-white">
               Provider Ratings Distribution
             </h3>
-            <div className="h-64 flex items-center justify-center text-gray-500">
-              <Star className="w-12 h-12 mr-3" />
+            <div className="flex h-64 items-center justify-center text-gray-500">
+              <Star className="mr-3 h-12 w-12" />
               <span>Coming soon</span>
             </div>
           </div>
@@ -387,13 +387,13 @@ export default function AnalyticsDashboardPage() {
 
       {/* Additional Stats */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {Array.from({ length: 3 }).map((_, index) => (
-            <div key={index} className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-              <Skeleton className="h-6 w-32 mb-4" />
+            <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900" key={index}>
+              <Skeleton className="mb-4 h-6 w-32" />
               <div className="space-y-2">
                 {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="flex justify-between">
+                  <div className="flex justify-between" key={i}>
                     <Skeleton className="h-4 w-24" />
                     <Skeleton className="h-4 w-12" />
                   </div>
@@ -403,27 +403,27 @@ export default function AnalyticsDashboardPage() {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
+            <h3 className="mb-4 font-semibold text-gray-900 text-lg dark:text-white">
               Provider Statistics
             </h3>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600 dark:text-gray-300">Total Providers</span>
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                <span className="text-gray-600 text-sm dark:text-gray-300">Total Providers</span>
+                <span className="font-medium text-gray-900 text-sm dark:text-white">
                   {data.providers.totalProviders}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600 dark:text-gray-300">Verified Providers</span>
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                <span className="text-gray-600 text-sm dark:text-gray-300">Verified Providers</span>
+                <span className="font-medium text-gray-900 text-sm dark:text-white">
                   {data.providers.verifiedProviders}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600 dark:text-gray-300">Verification Rate</span>
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                <span className="text-gray-600 text-sm dark:text-gray-300">Verification Rate</span>
+                <span className="font-medium text-gray-900 text-sm dark:text-white">
                   {data.providers.totalProviders > 0
                     ? (
                         (data.providers.verifiedProviders / data.providers.totalProviders) *
@@ -436,43 +436,43 @@ export default function AnalyticsDashboardPage() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
+            <h3 className="mb-4 font-semibold text-gray-900 text-lg dark:text-white">
               Lead Generation
             </h3>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600 dark:text-gray-300">Total Leads</span>
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                <span className="text-gray-600 text-sm dark:text-gray-300">Total Leads</span>
+                <span className="font-medium text-gray-900 text-sm dark:text-white">
                   {data.engagement.totalLeads}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600 dark:text-gray-300">Avg Search Time</span>
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                <span className="text-gray-600 text-sm dark:text-gray-300">Avg Search Time</span>
+                <span className="font-medium text-gray-900 text-sm dark:text-white">
                   {data.engagement.avgSearchTime.toFixed(2)}s
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600 dark:text-gray-300">Avg Results</span>
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                <span className="text-gray-600 text-sm dark:text-gray-300">Avg Results</span>
+                <span className="font-medium text-gray-900 text-sm dark:text-white">
                   {data.search.avgResultsPerSearch.toFixed(1)}
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
+            <h3 className="mb-4 font-semibold text-gray-900 text-lg dark:text-white">
               Provider Distribution
             </h3>
             <div className="space-y-2">
               {data.providers.providersByCity.map((city) => (
-                <div key={city.city} className="flex justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-300 capitalize">
+                <div className="flex justify-between" key={city.city}>
+                  <span className="text-gray-600 text-sm capitalize dark:text-gray-300">
                     {city.city}
                   </span>
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  <span className="font-medium text-gray-900 text-sm dark:text-white">
                     {city.count}
                   </span>
                 </div>

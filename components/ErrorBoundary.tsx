@@ -2,12 +2,12 @@
 
 import React, { type ErrorInfo, type ReactNode } from 'react'
 
-interface Props {
+type Props = {
   children: ReactNode
   fallback?: ReactNode
 }
 
-interface State {
+type State = {
   hasError: boolean
   error: Error | null
 }
@@ -22,9 +22,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
     return { hasError: true, error }
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo)
-  }
+  componentDidCatch(_error: Error, _errorInfo: ErrorInfo) {}
 
   render() {
     if (this.state.hasError) {
@@ -33,27 +31,27 @@ export class ErrorBoundary extends React.Component<Props, State> {
       }
 
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-          <div className="max-w-md w-full text-center">
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 dark:bg-gray-900">
+          <div className="w-full max-w-md text-center">
+            <h1 className="mb-4 font-semibold text-2xl text-gray-900 dark:text-white">
               Oops! Something went wrong
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="mb-6 text-gray-600 dark:text-gray-400">
               We're sorry for the inconvenience. Please try refreshing the page or contact support
               if the problem persists.
             </p>
             <button
+              className="rounded-lg bg-teal-600 px-4 py-2 text-white transition-colors hover:bg-teal-700"
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
             >
               Refresh Page
             </button>
             {process.env.NODE_ENV === 'development' && this.state.error && (
               <details className="mt-8 text-left">
-                <summary className="cursor-pointer text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                <summary className="cursor-pointer text-gray-500 text-sm hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
                   Error Details (Development Only)
                 </summary>
-                <pre className="mt-2 p-4 bg-gray-100 dark:bg-gray-800 rounded text-xs overflow-auto text-gray-900 dark:text-gray-100">
+                <pre className="mt-2 overflow-auto rounded bg-gray-100 p-4 text-gray-900 text-xs dark:bg-gray-900 dark:text-gray-100">
                   {this.state.error.stack}
                 </pre>
               </details>

@@ -5,7 +5,7 @@ import { DollarSign, Filter, Globe, MapPin, Star, X } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Button } from './Button'
 
-export interface FilterOptions {
+export type FilterOptions = {
   services: string[]
   priceRange: { min: number; max: number }
   priceType: 'monthly' | 'hourly' | 'both'
@@ -23,7 +23,7 @@ export interface FilterOptions {
   sortOrder: 'asc' | 'desc'
 }
 
-interface FilterPanelProps {
+type FilterPanelProps = {
   filters: FilterOptions
   onFiltersChange: (filters: FilterOptions) => void
   onReset?: () => void
@@ -145,17 +145,32 @@ export function FilterPanel({
   }
 
   const activeFilterCount = Object.entries(localFilters).filter(([key, value]) => {
-    if (key === 'sortBy' || key === 'sortOrder') return false
-    if (key === 'priceRange')
+    if (key === 'sortBy' || key === 'sortOrder') {
+      return false
+    }
+    if (key === 'priceRange') {
       return (
         value.min !== DEFAULT_FILTERS.priceRange.min || value.max !== DEFAULT_FILTERS.priceRange.max
       )
-    if (key === 'priceType') return value !== DEFAULT_FILTERS.priceType
-    if (key === 'rating') return value > 0
-    if (key === 'radius') return value !== DEFAULT_FILTERS.radius
-    if (key === 'verified') return value !== false
-    if (key === 'latitude' || key === 'longitude') return false // Don't count as active filters
-    if (Array.isArray(value)) return value.length > 0
+    }
+    if (key === 'priceType') {
+      return value !== DEFAULT_FILTERS.priceType
+    }
+    if (key === 'rating') {
+      return value > 0
+    }
+    if (key === 'radius') {
+      return value !== DEFAULT_FILTERS.radius
+    }
+    if (key === 'verified') {
+      return value !== false
+    }
+    if (key === 'latitude' || key === 'longitude') {
+      return false // Don't count as active filters
+    }
+    if (Array.isArray(value)) {
+      return value.length > 0
+    }
     return Boolean(value)
   }).length
 
@@ -164,13 +179,13 @@ export function FilterPanel({
       {/* Mobile Toggle Button */}
       {showMobileToggle && (
         <button
-          onClick={onToggle}
-          className="md:hidden fixed bottom-24 right-4 z-40 bg-teal-600 text-white p-3 rounded-full shadow-lg hover:bg-teal-700 transition-colors"
           aria-label="Toggle filters"
+          className="fixed right-4 bottom-24 z-40 rounded-full bg-teal-600 p-3 text-white shadow-lg transition-colors hover:bg-teal-700 md:hidden"
+          onClick={onToggle}
         >
           <Filter className="h-6 w-6" />
           {activeFilterCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+            <span className="-top-1 -right-1 absolute flex h-5 w-5 items-center justify-center rounded-full bg-red-500 font-bold text-white text-xs">
               {activeFilterCount}
             </span>
           )}
@@ -181,32 +196,32 @@ export function FilterPanel({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, x: -300 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -300 }}
             className={`${
               showMobileToggle
-                ? 'fixed inset-0 z-50 bg-white dark:bg-gray-900 overflow-y-auto md:relative md:inset-auto md:z-0'
+                ? 'fixed inset-0 z-50 overflow-y-auto bg-white md:relative md:inset-auto md:z-0 dark:bg-gray-900'
                 : 'w-full'
             }`}
+            exit={{ opacity: 0, x: -300 }}
+            initial={{ opacity: 0, x: -300 }}
           >
-            <div className="p-4 space-y-6">
+            <div className="space-y-6 p-4">
               {/* Header */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Filter className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Filters</h2>
+                  <h2 className="font-semibold text-gray-900 text-lg dark:text-white">Filters</h2>
                   {activeFilterCount > 0 && (
-                    <span className="bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300 text-xs font-medium px-2 py-0.5 rounded-full">
+                    <span className="rounded-full bg-teal-100 px-2 py-0.5 font-medium text-teal-700 text-xs dark:bg-teal-900 dark:text-teal-300">
                       {activeFilterCount}
                     </span>
                   )}
                 </div>
                 {showMobileToggle && (
                   <button
-                    onClick={onToggle}
-                    className="md:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
                     aria-label="Close filters"
+                    className="rounded-lg p-2 hover:bg-gray-100 md:hidden dark:hover:bg-gray-800"
+                    onClick={onToggle}
                   >
                     <X className="h-5 w-5 text-gray-500" />
                   </button>
@@ -215,16 +230,16 @@ export function FilterPanel({
 
               {/* Sort By */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
                   Sort By
                 </label>
                 <div className="space-y-2">
                   <select
-                    value={localFilters.sortBy}
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-transparent focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
                     onChange={(e) =>
                       handleFilterChange('sortBy', e.target.value as FilterOptions['sortBy'])
                     }
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    value={localFilters.sortBy}
                   >
                     <option value="relevance">Most Relevant</option>
                     <option value="price">Price</option>
@@ -237,12 +252,12 @@ export function FilterPanel({
                     localFilters.sortBy === 'distance') && (
                     <div className="flex gap-2">
                       <button
-                        onClick={() => handleFilterChange('sortOrder', 'asc')}
-                        className={`flex-1 px-3 py-1.5 rounded text-sm transition-colors ${
+                        className={`flex-1 rounded px-3 py-1.5 text-sm transition-colors ${
                           localFilters.sortOrder === 'asc'
-                            ? 'bg-teal-100 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                            ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700'
                         }`}
+                        onClick={() => handleFilterChange('sortOrder', 'asc')}
                       >
                         ↑{' '}
                         {localFilters.sortBy === 'price'
@@ -252,12 +267,12 @@ export function FilterPanel({
                             : 'Near'}
                       </button>
                       <button
-                        onClick={() => handleFilterChange('sortOrder', 'desc')}
-                        className={`flex-1 px-3 py-1.5 rounded text-sm transition-colors ${
+                        className={`flex-1 rounded px-3 py-1.5 text-sm transition-colors ${
                           localFilters.sortOrder === 'desc'
-                            ? 'bg-teal-100 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                            ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700'
                         }`}
+                        onClick={() => handleFilterChange('sortOrder', 'desc')}
                       >
                         ↓{' '}
                         {localFilters.sortBy === 'price'
@@ -273,27 +288,27 @@ export function FilterPanel({
 
               {/* Services */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
                   Services
                 </label>
-                <div className="space-y-2 max-h-48 overflow-y-auto">
+                <div className="max-h-48 space-y-2 overflow-y-auto">
                   {SERVICE_OPTIONS.map((service) => (
                     <label
+                      className="flex cursor-pointer items-center gap-2 rounded p-1 hover:bg-gray-50 dark:hover:bg-gray-800"
                       key={service}
-                      className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1 rounded"
                     >
                       <input
-                        type="checkbox"
                         checked={localFilters.services.includes(service)}
+                        className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                         onChange={(e) => {
                           const newServices = e.target.checked
                             ? [...localFilters.services, service]
                             : localFilters.services.filter((s) => s !== service)
                           handleFilterChange('services', newServices)
                         }}
-                        className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+                        type="checkbox"
                       />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">{service}</span>
+                      <span className="text-gray-700 text-sm dark:text-gray-300">{service}</span>
                     </label>
                   ))}
                 </div>
@@ -301,8 +316,8 @@ export function FilterPanel({
 
               {/* Price Type & Range */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  <DollarSign className="inline h-4 w-4 mr-1" />
+                <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
+                  <DollarSign className="mr-1 inline h-4 w-4" />
                   Price Range
                 </label>
                 <div className="space-y-3">
@@ -310,15 +325,15 @@ export function FilterPanel({
                   <div className="flex gap-2">
                     {['monthly', 'hourly', 'both'].map((type) => (
                       <button
+                        className={`flex-1 rounded-lg px-3 py-2 text-sm transition-colors ${
+                          localFilters.priceType === type
+                            ? 'border border-teal-300 bg-teal-100 text-teal-700 dark:border-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700'
+                        }`}
                         key={type}
                         onClick={() =>
                           handleFilterChange('priceType', type as FilterOptions['priceType'])
                         }
-                        className={`flex-1 px-3 py-2 rounded-lg text-sm transition-colors ${
-                          localFilters.priceType === type
-                            ? 'bg-teal-100 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300 border border-teal-300 dark:border-teal-700'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                        }`}
                       >
                         {type === 'monthly' ? 'Monthly' : type === 'hourly' ? 'Hourly' : 'Both'}
                       </button>
@@ -328,58 +343,58 @@ export function FilterPanel({
                   {/* Price Range Inputs */}
                   <div className="flex items-center gap-2">
                     <input
-                      type="number"
+                      className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
                       min="0"
-                      value={localFilters.priceRange.min}
                       onChange={(e) =>
                         handleFilterChange('priceRange', {
                           ...localFilters.priceRange,
                           min: Number(e.target.value),
                         })
                       }
-                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500"
                       placeholder="Min"
+                      type="number"
+                      value={localFilters.priceRange.min}
                     />
                     <span className="text-gray-500">-</span>
                     <input
-                      type="number"
+                      className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
                       min="0"
-                      value={localFilters.priceRange.max}
                       onChange={(e) =>
                         handleFilterChange('priceRange', {
                           ...localFilters.priceRange,
                           max: Number(e.target.value),
                         })
                       }
-                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500"
                       placeholder="Max"
+                      type="number"
+                      value={localFilters.priceRange.max}
                     />
                   </div>
                   <PriceRangeSlider
-                    min={0}
                     max={localFilters.priceType === 'hourly' ? 100 : 2000}
-                    value={[localFilters.priceRange.min, localFilters.priceRange.max]}
+                    min={0}
                     onChange={([min, max]) => handleFilterChange('priceRange', { min, max })}
+                    value={[localFilters.priceRange.min, localFilters.priceRange.max]}
                   />
                 </div>
               </div>
 
               {/* Rating */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  <Star className="inline h-4 w-4 mr-1" />
+                <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
+                  <Star className="mr-1 inline h-4 w-4" />
                   Minimum Rating
                 </label>
                 <div className="flex items-center gap-2">
                   {[0, 3, 3.5, 4, 4.5].map((rating) => (
                     <button
+                      className={`rounded-lg border px-3 py-1.5 transition-colors ${
+                        localFilters.rating === rating
+                          ? 'border-teal-500 bg-teal-50 text-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
+                          : 'border-gray-300 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500'
+                      }`}
                       key={rating}
                       onClick={() => handleFilterChange('rating', rating)}
-                      className={`px-3 py-1.5 rounded-lg border transition-colors ${
-                        localFilters.rating === rating
-                          ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300'
-                          : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
-                      }`}
                     >
                       {rating === 0 ? 'Any' : `${rating}+`}
                     </button>
@@ -389,39 +404,39 @@ export function FilterPanel({
 
               {/* Location & Radius */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  <MapPin className="inline h-4 w-4 mr-1" />
+                <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
+                  <MapPin className="mr-1 inline h-4 w-4" />
                   Location & Distance
                 </label>
                 <div className="space-y-3">
                   {/* Location Input */}
                   <input
-                    type="text"
-                    value={localFilters.location}
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
                     onChange={(e) => handleFilterChange('location', e.target.value)}
                     placeholder="Enter city or address"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500"
+                    type="text"
+                    value={localFilters.location}
                   />
 
                   {/* Radius Slider */}
                   <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="mb-2 flex items-center justify-between">
+                      <span className="text-gray-600 text-sm dark:text-gray-400">
                         Search radius
                       </span>
-                      <span className="text-sm font-medium text-teal-600 dark:text-teal-400">
+                      <span className="font-medium text-sm text-teal-600 dark:text-teal-400">
                         {localFilters.radius} km
                       </span>
                     </div>
                     <input
-                      type="range"
-                      min="1"
+                      className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 accent-teal-600 dark:bg-gray-700"
                       max="50"
-                      value={localFilters.radius}
+                      min="1"
                       onChange={(e) => handleFilterChange('radius', Number(e.target.value))}
-                      className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-teal-600"
+                      type="range"
+                      value={localFilters.radius}
                     />
-                    <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    <div className="mt-1 flex justify-between text-gray-500 text-xs dark:text-gray-400">
                       <span>1 km</span>
                       <span>50 km</span>
                     </div>
@@ -431,13 +446,18 @@ export function FilterPanel({
 
               {/* Languages */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  <Globe className="inline h-4 w-4 mr-1" />
+                <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
+                  <Globe className="mr-1 inline h-4 w-4" />
                   Languages
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {LANGUAGE_OPTIONS.map((language) => (
                     <button
+                      className={`rounded-lg border px-3 py-1.5 transition-colors ${
+                        localFilters.languages.includes(language)
+                          ? 'border-teal-500 bg-teal-50 text-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
+                          : 'border-gray-300 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500'
+                      }`}
                       key={language}
                       onClick={() => {
                         const newLanguages = localFilters.languages.includes(language)
@@ -445,11 +465,6 @@ export function FilterPanel({
                           : [...localFilters.languages, language]
                         handleFilterChange('languages', newLanguages)
                       }}
-                      className={`px-3 py-1.5 rounded-lg border transition-colors ${
-                        localFilters.languages.includes(language)
-                          ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300'
-                          : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
-                      }`}
                     >
                       {language}
                     </button>
@@ -459,65 +474,65 @@ export function FilterPanel({
 
               {/* Specialties */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
                   Specialties & Preferences
                 </label>
-                <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
+                <div className="grid max-h-32 grid-cols-2 gap-2 overflow-y-auto">
                   {SPECIALTY_OPTIONS.map((specialty) => (
                     <label
+                      className="flex cursor-pointer items-center gap-2 rounded p-1 hover:bg-gray-50 dark:hover:bg-gray-800"
                       key={specialty}
-                      className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1 rounded"
                     >
                       <input
-                        type="checkbox"
                         checked={localFilters.specialties.includes(specialty)}
+                        className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                         onChange={(e) => {
                           const newSpecialties = e.target.checked
                             ? [...localFilters.specialties, specialty]
                             : localFilters.specialties.filter((s) => s !== specialty)
                           handleFilterChange('specialties', newSpecialties)
                         }}
-                        className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+                        type="checkbox"
                       />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">{specialty}</span>
+                      <span className="text-gray-700 text-sm dark:text-gray-300">{specialty}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               {/* Verified Only */}
-              <label className="flex items-center gap-3 cursor-pointer p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+              <label className="flex cursor-pointer items-center gap-3 rounded-lg bg-gray-50 p-3 hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800">
                 <input
-                  type="checkbox"
                   checked={localFilters.verified}
+                  className="h-5 w-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                   onChange={(e) => handleFilterChange('verified', e.target.checked)}
-                  className="w-5 h-5 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+                  type="checkbox"
                 />
                 <div>
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  <span className="font-medium text-gray-900 text-sm dark:text-white">
                     Verified Providers Only
                   </span>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-gray-500 text-xs dark:text-gray-400">
                     Show only background-checked providers
                   </p>
                 </div>
               </label>
 
               {/* Actions */}
-              <div className="flex gap-2 pt-4 border-t dark:border-gray-700">
+              <div className="flex gap-2 border-t pt-4 dark:border-gray-700">
                 <Button
-                  variant="outline"
-                  onClick={handleReset}
                   className="flex-1"
                   disabled={activeFilterCount === 0}
+                  onClick={handleReset}
+                  variant="outline"
                 >
                   Reset
                 </Button>
                 <Button
-                  variant="primary"
-                  onClick={handleApply}
                   className="flex-1"
                   disabled={!hasChanges}
+                  onClick={handleApply}
+                  variant="primary"
                 >
                   Apply Filters
                   {resultCount !== undefined && ` (${resultCount})`}
@@ -570,29 +585,29 @@ function PriceRangeSlider({
 
   return (
     <div className="relative pt-1">
-      <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
+      <div className="relative h-2 rounded-full bg-gray-200 dark:bg-gray-700">
         <div
-          className="absolute h-2 bg-teal-500 rounded-full"
+          className="absolute h-2 rounded-full bg-teal-500"
           style={{
             left: `${percentage.min}%`,
             width: `${percentage.max - percentage.min}%`,
           }}
         />
         <input
-          type="range"
-          min={min}
+          className="absolute h-2 w-full cursor-pointer opacity-0"
           max={max}
-          value={localValue[0]}
+          min={min}
           onChange={(e) => handleChange(0, Number(e.target.value))}
-          className="absolute w-full h-2 opacity-0 cursor-pointer"
+          type="range"
+          value={localValue[0]}
         />
         <input
-          type="range"
-          min={min}
+          className="absolute h-2 w-full cursor-pointer opacity-0"
           max={max}
-          value={localValue[1]}
+          min={min}
           onChange={(e) => handleChange(1, Number(e.target.value))}
-          className="absolute w-full h-2 opacity-0 cursor-pointer"
+          type="range"
+          value={localValue[1]}
         />
       </div>
     </div>

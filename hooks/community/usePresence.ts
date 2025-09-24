@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useSessionContext } from '@/components/SessionProvider'
 import { createClient } from '@/lib/supabase/client'
 
-interface UserPresence {
+type UserPresence = {
   user_id: string
   name?: string
   avatar_url?: string
@@ -14,7 +14,7 @@ interface UserPresence {
   current_thread?: string
 }
 
-interface UsePresenceOptions {
+type UsePresenceOptions = {
   channel: string // e.g., 'thread:uuid', 'community:main'
   onUserJoin?: (user: UserPresence) => void
   onUserLeave?: (userId: string) => void
@@ -28,7 +28,9 @@ export function usePresence(options: UsePresenceOptions) {
   const supabase = createClient()
 
   useEffect(() => {
-    if (!user) return
+    if (!user) {
+      return
+    }
 
     const setupPresence = async () => {
       // Clean up existing channel
@@ -94,15 +96,13 @@ export function usePresence(options: UsePresenceOptions) {
                 ...userPresence,
                 online_at: new Date().toISOString(),
               })
-            }, 30000)
+            }, 30_000)
 
             // Store interval ID for cleanup
             channelRef.current = channel
-            ;(channelRef.current as any).presenceInterval = presenceInterval
+            ;(channelRef.current as string).presenceInterval = presenceInterval
           } else if (status === 'CHANNEL_ERROR') {
             setIsConnected(false)
-            // Silently handle if tables don't exist yet
-            console.warn('Presence channel not available')
           }
         })
 
@@ -114,7 +114,7 @@ export function usePresence(options: UsePresenceOptions) {
     // Cleanup on unmount or channel change
     return () => {
       if (channelRef.current) {
-        const interval = (channelRef.current as any).presenceInterval
+        const interval = (channelRef.current as string).presenceInterval
         if (interval) {
           clearInterval(interval)
         }
@@ -133,7 +133,9 @@ export function usePresence(options: UsePresenceOptions) {
 
   // Update user status
   const updateStatus = async (status: 'online' | 'away' | 'busy') => {
-    if (!channelRef.current || !user) return
+    if (!(channelRef.current && user)) {
+      return
+    }
 
     const userPresence: UserPresence = {
       user_id: user.id,

@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useState } from 'react'
 
-interface VirtualListProps<T> {
+type VirtualListProps<T> = {
   items: T[]
   height: number // Container height
   itemHeight: number | ((index: number) => number) // Item height (fixed or dynamic)
@@ -32,16 +32,12 @@ export function VirtualList<T>({
 
   // Calculate item positions
   const getItemHeight = useCallback(
-    (index: number) => {
-      return typeof itemHeight === 'function' ? itemHeight(index) : itemHeight
-    },
+    (index: number) => (typeof itemHeight === 'function' ? itemHeight(index) : itemHeight),
     [itemHeight]
   )
 
   // Calculate total height
-  const totalHeight = items.reduce((acc, _, index) => {
-    return acc + getItemHeight(index)
-  }, 0)
+  const totalHeight = items.reduce((acc, _, index) => acc + getItemHeight(index), 0)
 
   // Calculate visible range
   const getVisibleRange = useCallback(() => {
@@ -135,10 +131,10 @@ export function VirtualList<T>({
 
   return (
     <div
-      ref={scrollElementRef}
       className={`overflow-auto ${className}`}
-      style={{ height }}
       onScroll={handleScroll}
+      ref={scrollElementRef}
+      style={{ height }}
     >
       <div
         style={{
@@ -159,7 +155,9 @@ export function useVirtualList<T>(items: T[]) {
 
   const loadMore = useCallback(
     async (loadFn: () => Promise<T[]>) => {
-      if (isLoading) return
+      if (isLoading) {
+        return
+      }
 
       setIsLoading(true)
       try {

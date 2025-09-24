@@ -1,0 +1,303 @@
+/* Mobile-First Responsive Design System */
+
+/* Touch-optimized Interactive Elements */
+@media (max-width: 768px) {
+  /* Ensure all interactive elements meet 44x44px minimum touch target */
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"],
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    position: relative;
+  }
+
+  /* Improve tap area without changing visual size */
+  button::before,
+  a::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    bottom: -8px;
+    left: -8px;
+  }
+
+  /* Optimize form inputs for mobile */
+  input,
+  textarea,
+  select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    min-height: 48px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    -webkit-appearance: none; /* Remove iOS styling */
+  }
+
+  /* Smooth scrolling with momentum */
+  .scrollable {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    overscroll-behavior-y: contain;
+  }
+
+  /* Prevent horizontal overflow */
+  body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* Optimize images for mobile */
+  img {
+    max-width: 100%;
+    height: auto;
+    image-rendering: -webkit-optimize-contrast;
+  }
+
+  /* Better text readability */
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Optimize spacing for mobile */
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* Swipe-friendly cards and lists */
+  .card,
+  .list-item {
+    margin-bottom: 12px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+  }
+
+  .card:active,
+  .list-item:active {
+    transform: scale(0.98);
+  }
+
+  /* Mobile-optimized navigation */
+  .mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--background);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 1000;
+  }
+
+  /* Floating action button */
+  .fab {
+    position: fixed;
+    bottom: 80px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+
+  /* Pull-to-refresh indicator */
+  .pull-to-refresh {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Skeleton loading for better perceived performance */
+  .skeleton {
+    animation: skeleton-loading 1.5s infinite;
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.05) 25%,
+      rgba(0, 0, 0, 0.1) 50%,
+      rgba(0, 0, 0, 0.05) 75%
+    );
+    background-size: 200% 100%;
+  }
+
+  @keyframes skeleton-loading {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Optimize modals for mobile */
+  .modal {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 90vh;
+    border-radius: 16px 16px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Gesture hints */
+  .swipeable {
+    position: relative;
+  }
+
+  .swipeable::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+
+  /* Optimized tables for mobile */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  /* Better focus states for touch */
+  :focus-visible {
+    outline: 3px solid var(--color-teal-500);
+    outline-offset: 2px;
+  }
+
+  /* Disable hover effects on touch devices */
+  @media (hover: none) {
+    .hover\:bg-gray-100:hover {
+      background-color: transparent;
+    }
+  }
+
+  /* Optimize animations for performance */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms;
+      animation-iteration-count: 1;
+      transition-duration: 0.01ms;
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* Landscape mobile optimizations */
+@media (max-width: 768px) and (orientation: landscape) {
+  .mobile-nav {
+    padding: 8px 16px;
+  }
+
+  .modal {
+    max-height: 80vh;
+  }
+
+  .container {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 375px) {
+  body {
+    font-size: 15px;
+  }
+
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  button,
+  a {
+    font-size: 14px;
+  }
+}
+
+/* iOS-specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* Fix for iOS bounce scrolling */
+  body {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+  }
+
+  .main-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Fix for iOS safe areas */
+  .safe-area-padding {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Android-specific optimizations */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"],
+  input[type="month"] {
+    line-height: normal;
+  }
+}
+
+/* High DPI screen optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .border {
+    border-width: 0.5px;
+  }
+}
+
+/* Performance optimizations */
+.hardware-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.lazy-load {
+  content-visibility: auto;
+}

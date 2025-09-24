@@ -3,9 +3,9 @@
 import { Loader2, Search, Sparkles, TrendingUp, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import { type AISuggestion, useSearchSuggestions } from '@/hooks/useSearchSuggestions'
+import { type AISuggestion, useSearchSuggestions } from '@/hooks/use-search-suggestions'
 
-interface AISearchInputProps {
+type AiSearchInputProps = {
   value: string
   onChange: (value: string) => void
   onSubmit?: (query: string, aiSuggestion?: AISuggestion) => void
@@ -23,7 +23,7 @@ export function AISearchInput({
   className = '',
   showSuggestions = true,
   showAISuggestions = true,
-}: AISearchInputProps) {
+}: AiSearchInputProps) {
   const [_isFocused, setIsFocused] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [showDropdown, setShowDropdown] = useState(false)
@@ -69,7 +69,7 @@ export function AISearchInput({
   )
 
   // Handle AI suggestion application
-  const handleAISuggestionApply = useCallback(() => {
+  const handleAiSuggestionApply = useCallback(() => {
     if (aiSuggestion) {
       onSubmit?.(value, aiSuggestion)
     }
@@ -172,36 +172,37 @@ export function AISearchInput({
 
   return (
     <div className={`relative ${className}`}>
-      <form onSubmit={handleSubmit} className="relative">
+      <form className="relative" onSubmit={handleSubmit}>
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
             {aiLoading ? (
-              <Loader2 className="h-5 w-5 text-teal-500 animate-spin" />
+              <Loader2 className="h-5 w-5 animate-spin text-teal-500" />
             ) : (
               <Search className="h-5 w-5 text-gray-400" />
             )}
           </div>
 
           <input
+            className="w-full rounded-xl border border-gray-300 bg-white py-4 pr-12 pl-12 text-gray-900 placeholder-gray-500 shadow-sm focus:border-transparent focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:placeholder-gray-400"
+            onBlur={() => setIsFocused(false)}
+            onChange={handleInputChange}
+            onFocus={() => {
+              setIsFocused(true)
+              if (value) {
+                setShowDropdown(true)
+              }
+            }}
+            onKeyDown={handleKeyDown}
+            placeholder={placeholder}
             ref={inputRef}
             type="text"
             value={value}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            onFocus={() => {
-              setIsFocused(true)
-              if (value) setShowDropdown(true)
-            }}
-            onBlur={() => setIsFocused(false)}
-            placeholder={placeholder}
-            className="w-full pl-12 pr-12 py-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-teal-500 focus:border-transparent shadow-sm"
           />
 
           {value && (
             <button
-              type="button"
+              className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600"
               onClick={handleClear}
-              className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600"
             >
               <X className="h-5 w-5" />
             </button>
@@ -210,32 +211,31 @@ export function AISearchInput({
 
         {/* AI Suggestion Banner */}
         {showAISuggestions && aiSuggestion && value.length > 2 && (
-          <div className="mt-3 p-4 bg-gradient-to-r from-teal-50 to-blue-50 dark:from-teal-900/20 dark:to-blue-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
+          <div className="mt-3 rounded-lg border border-teal-200 bg-gradient-to-r from-teal-50 to-blue-50 p-4 dark:border-teal-800 dark:from-teal-900/20 dark:to-blue-900/20">
             <div className="flex items-start gap-3">
               <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-teal-100 dark:bg-teal-900/50 rounded-full flex items-center justify-center">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-100 dark:bg-teal-900/50">
                   <Sparkles className="h-4 w-4 text-teal-600 dark:text-teal-400" />
                 </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm font-medium text-teal-900 dark:text-teal-100">
+              <div className="min-w-0 flex-1">
+                <div className="mb-1 flex items-center gap-2">
+                  <span className="font-medium text-sm text-teal-900 dark:text-teal-100">
                     AI Search Assistant
                   </span>
-                  <div className="flex items-center gap-1 px-2 py-0.5 bg-teal-200 dark:bg-teal-800 text-teal-800 dark:text-teal-200 text-xs rounded-full">
+                  <div className="flex items-center gap-1 rounded-full bg-teal-200 px-2 py-0.5 text-teal-800 text-xs dark:bg-teal-800 dark:text-teal-200">
                     <TrendingUp className="h-3 w-3" />
                     {Math.round(aiSuggestion.confidence * 100)}% confident
                   </div>
                 </div>
-                <p className="text-sm text-teal-700 dark:text-teal-300 mb-2">
+                <p className="mb-2 text-sm text-teal-700 dark:text-teal-300">
                   {aiSuggestion.reasoning}
                 </p>
                 <div className="flex items-center gap-2">
                   <Button
-                    type="button"
+                    className="bg-teal-600 text-white hover:bg-teal-700"
+                    onClick={handleAiSuggestionApply}
                     size="sm"
-                    onClick={handleAISuggestionApply}
-                    className="bg-teal-600 hover:bg-teal-700 text-white"
                   >
                     Apply AI Filters
                   </Button>
@@ -243,10 +243,9 @@ export function AISearchInput({
                     <div className="flex gap-1 overflow-x-auto">
                       {aiSuggestion.alternativeQueries.slice(0, 2).map((query, index) => (
                         <button
+                          className="whitespace-nowrap rounded-full bg-teal-100 px-3 py-1 text-teal-700 text-xs transition-colors hover:bg-teal-200 dark:bg-teal-900/30 dark:text-teal-300 dark:hover:bg-teal-900/50"
                           key={index}
-                          type="button"
                           onClick={() => handleSuggestionSelect(query)}
-                          className="px-3 py-1 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-xs rounded-full hover:bg-teal-200 dark:hover:bg-teal-900/50 transition-colors whitespace-nowrap"
                         >
                           "{query}"
                         </button>
@@ -263,17 +262,16 @@ export function AISearchInput({
       {/* Suggestions Dropdown */}
       {showSuggestions && showDropdown && allSuggestions.length > 0 && (
         <div
+          className="absolute z-50 mt-2 max-h-80 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900"
           ref={dropdownRef}
-          className="absolute z-50 w-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-80 overflow-y-auto"
         >
           {allSuggestions.map((suggestion, index) => (
             <button
-              key={suggestion.id}
-              onClick={() => handleSuggestionSelect(suggestion.text)}
-              className={`w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 focus:bg-gray-50 dark:focus:bg-gray-700 focus:outline-none transition-colors ${
+              className={`w-full px-4 py-3 text-left transition-colors hover:bg-gray-50 focus:bg-gray-50 focus:outline-none dark:focus:bg-gray-700 dark:hover:bg-gray-800 ${
                 index === selectedIndex ? 'bg-teal-50 dark:bg-teal-900/20' : ''
               }`}
-              type="button"
+              key={suggestion.id}
+              onClick={() => handleSuggestionSelect(suggestion.text)}
             >
               <div className="flex items-center gap-3">
                 <div className="flex-shrink-0">
@@ -287,13 +285,13 @@ export function AISearchInput({
                     <Search className="h-4 w-4 text-gray-400" />
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                <div className="min-w-0 flex-1">
+                  <div className="truncate font-medium text-gray-900 text-sm dark:text-white">
                     {suggestion.text}
                   </div>
                   {suggestion.category && (
                     <div
-                      className={`text-xs mt-0.5 ${
+                      className={`mt-0.5 text-xs ${
                         suggestion.metadata?.ai
                           ? 'text-teal-600 dark:text-teal-400'
                           : 'text-gray-500 dark:text-gray-400'
@@ -305,7 +303,7 @@ export function AISearchInput({
                 </div>
                 {suggestion.confidence > 0.8 && (
                   <div className="flex-shrink-0">
-                    <div className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs rounded-full">
+                    <div className="rounded-full bg-green-100 px-2 py-0.5 text-green-700 text-xs dark:bg-green-900/30 dark:text-green-300">
                       High match
                     </div>
                   </div>

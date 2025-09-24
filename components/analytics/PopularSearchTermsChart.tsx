@@ -1,9 +1,9 @@
 'use client'
 
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import type { SearchAnalyticsData } from '@/hooks/useAnalytics'
+import type { SearchAnalyticsData } from '@/hooks/use-analytics'
 
-interface PopularSearchTermsChartProps {
+type PopularSearchTermsChartProps = {
   data: SearchAnalyticsData
   className?: string
 }
@@ -16,20 +16,20 @@ export function PopularSearchTermsChart({ data, className = '' }: PopularSearchT
   }))
 
   return (
-    <div className={`w-full h-48 sm:h-64 ${className}`}>
-      <ResponsiveContainer width="100%" height="100%">
+    <div className={`h-48 w-full sm:h-64 ${className}`}>
+      <ResponsiveContainer height="100%" width="100%">
         <BarChart
           data={chartData}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           layout="horizontal"
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
         >
-          <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-          <XAxis type="number" className="text-xs" tick={{ fontSize: 12 }} />
+          <CartesianGrid className="opacity-30" strokeDasharray="3 3" />
+          <XAxis className="text-xs" tick={{ fontSize: 12 }} type="number" />
           <YAxis
-            type="category"
-            dataKey="term"
             className="text-xs"
+            dataKey="term"
             tick={{ fontSize: 12 }}
+            type="category"
             width={100}
           />
           <Tooltip
@@ -37,11 +37,11 @@ export function PopularSearchTermsChart({ data, className = '' }: PopularSearchT
               if (active && payload && payload.length) {
                 const data = payload[0].payload
                 return (
-                  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-3">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                    <p className="font-medium text-gray-900 text-sm dark:text-white">
                       {data.fullTerm}
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                    <p className="text-gray-600 text-sm dark:text-gray-300">
                       {data.count} searches
                     </p>
                   </div>

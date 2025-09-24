@@ -1,4 +1,4 @@
-export interface AISearchSuggestion {
+export type AISearchSuggestion = {
   originalQuery: string
   interpretedIntent: string
   suggestedFilters: Record<string, any>
@@ -7,7 +7,7 @@ export interface AISearchSuggestion {
   confidence: number
 }
 
-export interface SemanticSearchResult {
+export type SemanticSearchResult = {
   query: string
   intent: 'location' | 'service' | 'budget' | 'quality' | 'special_requirements' | 'general'
   entities: {
@@ -50,8 +50,7 @@ export class AISearchService {
 
       const data = await response.json()
       return data.data
-    } catch (error) {
-      console.error('AI search analysis error:', error)
+    } catch (_error) {
       // Fallback to basic analysis
       return this.fallbackAnalysis(query)
     }
@@ -61,7 +60,9 @@ export class AISearchService {
    * Get autocomplete suggestions from server-side API
    */
   async getAutocompleteSuggestions(partialQuery: string): Promise<string[]> {
-    if (partialQuery.length < 2) return []
+    if (partialQuery.length < 2) {
+      return []
+    }
 
     try {
       const response = await fetch(
@@ -74,8 +75,8 @@ export class AISearchService {
 
       const data = await response.json()
       return data.data || []
-    } catch (error) {
-      console.error('AI autocomplete error:', error)
+    } catch (_error) {
+      // Error handled silently
     }
 
     // Fallback suggestions

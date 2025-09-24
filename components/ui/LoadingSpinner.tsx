@@ -1,4 +1,4 @@
-interface LoadingSpinnerProps {
+type LoadingSpinnerProps = {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   color?: 'primary' | 'white' | 'gray'
   className?: string
@@ -26,11 +26,11 @@ export function LoadingSpinner({
   return (
     <div className={`inline-flex items-center justify-center ${className}`} role="status">
       <svg
+        aria-hidden="true"
         className={`animate-spin ${sizeClasses[size]} ${colorClasses[color]}`}
-        xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
-        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
       >
         <circle
           className="opacity-25"
@@ -42,8 +42,8 @@ export function LoadingSpinner({
         />
         <path
           className="opacity-75"
-          fill="currentColor"
           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          fill="currentColor"
         />
       </svg>
       <span className="sr-only">Loading...</span>
@@ -51,22 +51,22 @@ export function LoadingSpinner({
   )
 }
 
-interface LoadingOverlayProps {
+type LoadingOverlayProps = {
   message?: string
 }
 
 export function LoadingOverlay({ message = 'Loading...' }: LoadingOverlayProps) {
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 flex flex-col items-center space-y-3 shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="flex flex-col items-center space-y-3 rounded-lg bg-white p-6 shadow-xl">
         <LoadingSpinner size="lg" />
-        <p className="text-sm font-medium text-gray-700">{message}</p>
+        <p className="font-medium text-gray-700 text-sm">{message}</p>
       </div>
     </div>
   )
 }
 
-interface InlineLoadingProps {
+type InlineLoadingProps = {
   text?: string
 }
 
@@ -74,7 +74,7 @@ export function InlineLoading({ text = 'Loading' }: InlineLoadingProps) {
   return (
     <div className="inline-flex items-center gap-2">
       <LoadingSpinner size="sm" />
-      <span className="text-sm text-gray-600">{text}</span>
+      <span className="text-gray-600 text-sm">{text}</span>
     </div>
   )
 }

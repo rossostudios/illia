@@ -165,39 +165,39 @@ export default function MembershipPage() {
     billingPeriod === 'monthly' ? PRICING_TIERS.local.monthlyPrice : PRICING_TIERS.local.annualPrice
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-warmth-50 dark:from-gray-900 to-white dark:to-gray-800">
-      <div className="max-w-6xl mx-auto px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-b from-warmth-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <div className="mx-auto max-w-6xl px-4 py-12">
         {/* Hero */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-teal-600 dark:text-teal-400 mb-3">
+        <div className="mb-12 text-center">
+          <h1 className="mb-3 font-bold text-4xl text-teal-600 dark:text-teal-400">
             Choose Your Plan
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+          <p className="mb-8 text-gray-600 text-lg dark:text-gray-400">
             Unlock unlimited matches & expat support—start free, cancel anytime
           </p>
 
           {/* Billing Toggle */}
-          <div className="inline-flex items-center gap-3 p-1 bg-gray-100 dark:bg-gray-700 rounded-full">
+          <div className="inline-flex items-center gap-3 rounded-full bg-gray-100 p-1 dark:bg-gray-700">
             <button
-              onClick={() => setBillingPeriod('monthly')}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`rounded-full px-6 py-2 font-medium text-sm transition-all ${
                 billingPeriod === 'monthly'
-                  ? 'bg-teal-600 dark:bg-teal-500 text-white shadow-md'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  ? 'bg-teal-600 text-white shadow-md dark:bg-teal-500'
+                  : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
               }`}
+              onClick={() => setBillingPeriod('monthly')}
             >
               Monthly
             </button>
             <button
-              onClick={() => setBillingPeriod('annual')}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
+              className={`flex items-center gap-2 rounded-full px-6 py-2 font-medium text-sm transition-all ${
                 billingPeriod === 'annual'
-                  ? 'bg-teal-600 dark:bg-teal-500 text-white shadow-md'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  ? 'bg-teal-600 text-white shadow-md dark:bg-teal-500'
+                  : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
               }`}
+              onClick={() => setBillingPeriod('annual')}
             >
               Annual
-              <span className="px-2 py-0.5 bg-sunset-500 text-white text-xs rounded-full">
+              <span className="rounded-full bg-sunset-500 px-2 py-0.5 text-white text-xs">
                 Save 20%
               </span>
             </button>
@@ -205,79 +205,78 @@ export default function MembershipPage() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid lg:grid-cols-3 gap-6 mb-16 max-w-6xl mx-auto">
+        <div className="mx-auto mb-16 grid max-w-6xl gap-6 lg:grid-cols-3">
           {/* Explorer Tier (Free) */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-900/30 p-6 border border-gray-200 dark:border-gray-700 relative opacity-0 animate-[fadeIn_0.5s_ease-in-out_forwards]">
+          <div className="relative animate-[fadeIn_0.5s_ease-in-out_forwards] rounded-xl border border-gray-200 bg-white p-6 opacity-0 shadow-md dark:border-gray-700 dark:bg-gray-900 dark:shadow-gray-900/30">
             <div className="mb-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+              <h2 className="mb-2 font-bold text-gray-900 text-xl dark:text-white">
                 {PRICING_TIERS.explorer.name}
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
+              <p className="text-gray-600 text-sm dark:text-gray-400">
                 {PRICING_TIERS.explorer.description}
               </p>
             </div>
 
             <div className="mb-6">
               <div className="flex items-baseline">
-                <span className="text-4xl font-bold text-gray-700 dark:text-gray-300">$0</span>
-                <span className="text-gray-500 dark:text-gray-400 ml-2">/month</span>
+                <span className="font-bold text-4xl text-gray-700 dark:text-gray-300">$0</span>
+                <span className="ml-2 text-gray-500 dark:text-gray-400">/month</span>
               </div>
             </div>
 
-            <ul className="space-y-3 mb-8">
+            <ul className="mb-8 space-y-3">
               {PRICING_TIERS.explorer.features.map((feature, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-gray-700 dark:text-gray-400 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-600 dark:text-gray-400 text-sm">{feature.text}</span>
+                <li className="flex items-start gap-3" key={index}>
+                  <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-gray-700 dark:text-gray-400" />
+                  <span className="text-gray-600 text-sm dark:text-gray-400">{feature.text}</span>
                 </li>
               ))}
             </ul>
 
             <button
+              className="w-full cursor-not-allowed rounded-lg bg-gray-100 py-3 font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300"
               disabled
-              type="button"
-              className="w-full py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium cursor-not-allowed"
             >
               Current Plan
             </button>
           </div>
 
           {/* Settler Tier */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 p-6 border-2 border-teal-500 dark:border-teal-400 relative opacity-0 animate-[fadeIn_0.5s_ease-in-out_forwards] animation-delay-100">
+          <div className="animation-delay-100 relative animate-[fadeIn_0.5s_ease-in-out_forwards] rounded-xl border-2 border-teal-500 bg-white p-6 opacity-0 shadow-lg dark:border-teal-400 dark:bg-gray-900 dark:shadow-gray-900/30">
             <div className="mb-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+              <h2 className="mb-2 font-bold text-gray-900 text-xl dark:text-white">
                 {PRICING_TIERS.settler.name}
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
+              <p className="text-gray-600 text-sm dark:text-gray-400">
                 {PRICING_TIERS.settler.description}
               </p>
             </div>
 
             <div className="mb-6">
               <div className="flex items-baseline">
-                <span className="text-4xl font-bold text-teal-600 dark:text-teal-400">
+                <span className="font-bold text-4xl text-teal-600 dark:text-teal-400">
                   ${settlerPrice}
                 </span>
-                <span className="text-gray-500 dark:text-gray-400 ml-2">
+                <span className="ml-2 text-gray-500 dark:text-gray-400">
                   /{billingPeriod === 'monthly' ? 'month' : 'year'}
                 </span>
               </div>
               {billingPeriod === 'annual' && (
-                <p className="text-sm text-green-600 dark:text-green-400 mt-1">
+                <p className="mt-1 text-green-600 text-sm dark:text-green-400">
                   Save ${PRICING_TIERS.settler.savings} per year
                 </p>
               )}
             </div>
 
-            <ul className="space-y-2 mb-6">
+            <ul className="mb-6 space-y-2">
               {PRICING_TIERS.settler.features.map((feature, index) => (
                 <li
-                  key={index}
                   className={`flex items-start gap-3 ${feature.header ? 'font-medium text-gray-900 dark:text-white' : ''}`}
+                  key={index}
                 >
                   {!feature.header && (
                     <Check
-                      className={`h-5 w-5 mt-0.5 flex-shrink-0 ${
+                      className={`mt-0.5 h-5 w-5 flex-shrink-0 ${
                         feature.highlight
                           ? 'text-teal-600 dark:text-teal-400'
                           : 'text-teal-500 dark:text-teal-400'
@@ -287,7 +286,7 @@ export default function MembershipPage() {
                   <span
                     className={`text-sm ${
                       feature.highlight
-                        ? 'text-gray-900 dark:text-white font-medium'
+                        ? 'font-medium text-gray-900 dark:text-white'
                         : 'text-gray-700 dark:text-gray-300'
                     }`}
                   >
@@ -298,8 +297,8 @@ export default function MembershipPage() {
             </ul>
 
             <PolarCheckoutButton
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-teal-600 py-3 font-medium text-white shadow-md transition-colors hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600"
               productType="settler"
-              className="w-full py-3 bg-teal-600 dark:bg-teal-500 text-white rounded-lg font-medium hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors shadow-md flex items-center justify-center gap-2"
             >
               <CreditCard className="h-5 w-5" />
               Get Settler
@@ -307,49 +306,49 @@ export default function MembershipPage() {
           </div>
 
           {/* Local Tier (Premium) */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 p-6 border-2 border-sunset-500 dark:border-sunset-400 relative opacity-0 animate-[fadeIn_0.5s_ease-in-out_forwards] animation-delay-200">
+          <div className="animation-delay-200 relative animate-[fadeIn_0.5s_ease-in-out_forwards] rounded-xl border-2 border-sunset-500 bg-white p-6 opacity-0 shadow-lg dark:border-sunset-400 dark:bg-gray-900 dark:shadow-gray-900/30">
             {/* Best Value Badge */}
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <span className="px-4 py-1 bg-gradient-to-r from-sunset-500 to-sunset-600 text-white text-sm font-medium rounded-full shadow-md flex items-center gap-1">
+            <div className="-top-4 -translate-x-1/2 absolute left-1/2 transform">
+              <span className="flex items-center gap-1 rounded-full bg-gradient-to-r from-sunset-500 to-sunset-600 px-4 py-1 font-medium text-sm text-white shadow-md">
                 <Sparkles className="h-4 w-4" />
                 Best Value
               </span>
             </div>
 
             <div className="mb-6">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+              <h2 className="mb-2 font-bold text-gray-900 text-xl dark:text-white">
                 {PRICING_TIERS.local.name}
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
+              <p className="text-gray-600 text-sm dark:text-gray-400">
                 {PRICING_TIERS.local.description}
               </p>
             </div>
 
             <div className="mb-6">
               <div className="flex items-baseline">
-                <span className="text-4xl font-bold text-sunset-600 dark:text-sunset-400">
+                <span className="font-bold text-4xl text-sunset-600 dark:text-sunset-400">
                   ${localPrice}
                 </span>
-                <span className="text-gray-500 dark:text-gray-400 ml-2">
+                <span className="ml-2 text-gray-500 dark:text-gray-400">
                   /{billingPeriod === 'monthly' ? 'month' : 'year'}
                 </span>
               </div>
               {billingPeriod === 'annual' && (
-                <p className="text-sm text-green-600 dark:text-green-400 mt-1">
+                <p className="mt-1 text-green-600 text-sm dark:text-green-400">
                   Save ${PRICING_TIERS.local.savings} per year
                 </p>
               )}
             </div>
 
-            <ul className="space-y-2 mb-6">
+            <ul className="mb-6 space-y-2">
               {PRICING_TIERS.local.features.map((feature, index) => (
                 <li
-                  key={index}
                   className={`flex items-start gap-3 ${feature.header ? 'font-medium text-gray-900 dark:text-white' : ''}`}
+                  key={index}
                 >
                   {!feature.header && (
                     <Check
-                      className={`h-5 w-5 mt-0.5 flex-shrink-0 ${
+                      className={`mt-0.5 h-5 w-5 flex-shrink-0 ${
                         feature.highlight
                           ? 'text-sunset-600 dark:text-sunset-400'
                           : 'text-sunset-500 dark:text-sunset-400'
@@ -359,7 +358,7 @@ export default function MembershipPage() {
                   <span
                     className={`text-sm ${
                       feature.highlight
-                        ? 'text-gray-900 dark:text-white font-medium'
+                        ? 'font-medium text-gray-900 dark:text-white'
                         : 'text-gray-700 dark:text-gray-300'
                     }`}
                   >
@@ -370,37 +369,37 @@ export default function MembershipPage() {
             </ul>
 
             <PolarCheckoutButton
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-sunset-500 py-3 font-medium text-white shadow-md transition-colors hover:bg-sunset-600 dark:bg-sunset-400 dark:hover:bg-sunset-500"
               productType="local"
-              className="w-full py-3 bg-sunset-500 dark:bg-sunset-400 text-white rounded-lg font-medium hover:bg-sunset-600 dark:hover:bg-sunset-500 transition-colors shadow-md flex items-center justify-center gap-2"
             >
               <CreditCard className="h-5 w-5" />
               Go Local
             </PolarCheckoutButton>
-            <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-3">
+            <p className="mt-3 text-center text-gray-500 text-xs dark:text-gray-400">
               7-day free trial • Cancel anytime
             </p>
           </div>
         </div>
 
         {/* Feature Comparison Table */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-900/30 overflow-hidden mb-16">
-          <div className="p-6 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Feature Comparison</h3>
+        <div className="mb-16 overflow-hidden rounded-xl bg-white shadow-md dark:bg-gray-900 dark:shadow-gray-900/30">
+          <div className="border-gray-200 border-b bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-900/50">
+            <h3 className="font-bold text-gray-900 text-xl dark:text-white">Feature Comparison</h3>
           </div>
           <div className="p-6">
             <table className="w-full">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 text-gray-700 dark:text-gray-300 font-medium">
+                  <th className="py-3 text-left font-medium text-gray-700 dark:text-gray-300">
                     Feature
                   </th>
-                  <th className="text-center py-3 text-gray-700 dark:text-gray-300 font-medium">
+                  <th className="py-3 text-center font-medium text-gray-700 dark:text-gray-300">
                     Explorer
                   </th>
-                  <th className="text-center py-3 text-gray-700 dark:text-gray-300 font-medium">
+                  <th className="py-3 text-center font-medium text-gray-700 dark:text-gray-300">
                     Settler
                   </th>
-                  <th className="text-center py-3 text-gray-700 dark:text-gray-300 font-medium">
+                  <th className="py-3 text-center font-medium text-gray-700 dark:text-gray-300">
                     <span className="inline-flex items-center gap-1">
                       Local
                       <Award className="h-4 w-4 text-sunset-500 dark:text-sunset-400" />
@@ -411,16 +410,16 @@ export default function MembershipPage() {
               <tbody>
                 {COMPARISON_FEATURES.map((row, index) => (
                   <tr
+                    className="border-gray-200 border-b last:border-0 dark:border-gray-700"
                     key={index}
-                    className="border-b border-gray-200 dark:border-gray-700 last:border-0"
                   >
                     <td className="py-4 text-gray-700 dark:text-gray-300">{row.feature}</td>
                     <td className="py-4 text-center">
                       {typeof row.explorer === 'boolean' ? (
                         row.explorer ? (
-                          <Check className="h-5 w-5 text-green-500 mx-auto" />
+                          <Check className="mx-auto h-5 w-5 text-green-500" />
                         ) : (
-                          <X className="h-5 w-5 text-gray-300 dark:text-gray-600 mx-auto" />
+                          <X className="mx-auto h-5 w-5 text-gray-300 dark:text-gray-600" />
                         )
                       ) : (
                         <span className="text-gray-600 dark:text-gray-400">{row.explorer}</span>
@@ -429,9 +428,9 @@ export default function MembershipPage() {
                     <td className="py-4 text-center">
                       {typeof row.settler === 'boolean' ? (
                         row.settler ? (
-                          <Check className="h-5 w-5 text-green-500 mx-auto" />
+                          <Check className="mx-auto h-5 w-5 text-green-500" />
                         ) : (
-                          <X className="h-5 w-5 text-gray-300 dark:text-gray-600 mx-auto" />
+                          <X className="mx-auto h-5 w-5 text-gray-300 dark:text-gray-600" />
                         )
                       ) : (
                         <span className="font-medium text-teal-600 dark:text-teal-400">
@@ -442,9 +441,9 @@ export default function MembershipPage() {
                     <td className="py-4 text-center">
                       {typeof row.local === 'boolean' ? (
                         row.local ? (
-                          <Check className="h-5 w-5 text-green-500 mx-auto" />
+                          <Check className="mx-auto h-5 w-5 text-green-500" />
                         ) : (
-                          <X className="h-5 w-5 text-gray-300 dark:text-gray-600 mx-auto" />
+                          <X className="mx-auto h-5 w-5 text-gray-300 dark:text-gray-600" />
                         )
                       ) : (
                         <span className="font-medium text-sunset-600 dark:text-sunset-400">
@@ -461,50 +460,50 @@ export default function MembershipPage() {
 
         {/* Testimonials */}
         <div className="mb-16">
-          <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
+          <h3 className="mb-8 text-center font-bold text-2xl text-gray-900 dark:text-white">
             What Expats Are Saying
           </h3>
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-900/30 p-8 relative">
-              <div className="flex items-start gap-4 mb-4">
+          <div className="mx-auto max-w-3xl">
+            <div className="relative rounded-xl bg-white p-8 shadow-md dark:bg-gray-900 dark:shadow-gray-900/30">
+              <div className="mb-4 flex items-start gap-4">
                 <img
-                  src={TESTIMONIALS[currentTestimonial].avatar}
                   alt={TESTIMONIALS[currentTestimonial].author}
-                  className="w-12 h-12 rounded-full object-cover"
+                  className="h-12 w-12 rounded-full object-cover"
+                  src={TESTIMONIALS[currentTestimonial].avatar}
                 />
                 <div>
-                  <div className="flex items-center gap-1 mb-1">
-                    {[...Array(TESTIMONIALS[currentTestimonial].rating)].map((_, i) => (
+                  <div className="mb-1 flex items-center gap-1">
+                    {[...new Array(TESTIMONIALS[currentTestimonial].rating)].map((_, i) => (
                       <Star
+                        className="h-4 w-4 fill-sunset-500 text-sunset-500 dark:fill-sunset-400 dark:text-sunset-400"
                         key={i}
-                        className="h-4 w-4 text-sunset-500 dark:text-sunset-400 fill-sunset-500 dark:fill-sunset-400"
                       />
                     ))}
                   </div>
                   <p className="font-medium text-gray-900 dark:text-white">
                     {TESTIMONIALS[currentTestimonial].author}
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    <MapPin className="h-3 w-3 inline mr-1" />
+                  <p className="text-gray-500 text-sm dark:text-gray-400">
+                    <MapPin className="mr-1 inline h-3 w-3" />
                     {TESTIMONIALS[currentTestimonial].location}
                   </p>
                 </div>
               </div>
-              <blockquote className="text-gray-700 dark:text-gray-300 text-lg italic">
+              <blockquote className="text-gray-700 text-lg italic dark:text-gray-300">
                 "{TESTIMONIALS[currentTestimonial].quote}"
               </blockquote>
 
               {/* Carousel Dots */}
-              <div className="flex justify-center gap-2 mt-6">
+              <div className="mt-6 flex justify-center gap-2">
                 {TESTIMONIALS.map((_, index) => (
                   <button
+                    className={`h-2 w-2 rounded-full transition-all ${
+                      currentTestimonial === index
+                        ? 'w-8 bg-teal-600 dark:bg-teal-400'
+                        : 'bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500'
+                    }`}
                     key={index}
                     onClick={() => setCurrentTestimonial(index)}
-                    className={`w-2 h-2 rounded-full transition-all ${
-                      currentTestimonial === index
-                        ? 'bg-teal-600 dark:bg-teal-400 w-8'
-                        : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
-                    }`}
                   />
                 ))}
               </div>
@@ -513,23 +512,23 @@ export default function MembershipPage() {
         </div>
 
         {/* FAQ */}
-        <div className="max-w-3xl mx-auto mb-16">
-          <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
+        <div className="mx-auto mb-16 max-w-3xl">
+          <h3 className="mb-8 text-center font-bold text-2xl text-gray-900 dark:text-white">
             Frequently Asked Questions
           </h3>
           <div className="space-y-4">
             {FAQS.map((faq, index) => (
               <div
+                className="rounded-lg bg-white shadow-md dark:bg-gray-900 dark:shadow-gray-900/30"
                 key={index}
-                className="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/30"
               >
                 <button
+                  className="flex w-full items-center justify-between px-6 py-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
                   onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                  className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   <span className="font-medium text-gray-900 dark:text-white">{faq.question}</span>
                   <ChevronDown
-                    className={`h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform ${
+                    className={`h-5 w-5 text-gray-500 transition-transform dark:text-gray-400 ${
                       expandedFaq === index ? 'rotate-180' : ''
                     }`}
                   />
@@ -545,8 +544,8 @@ export default function MembershipPage() {
         </div>
 
         {/* Trust Badges */}
-        <div className="text-center pb-8">
-          <div className="flex justify-center gap-8 mb-6">
+        <div className="pb-8 text-center">
+          <div className="mb-6 flex justify-center gap-8">
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
               <Shield className="h-5 w-5" />
               <span className="text-sm">Secure Payments</span>
@@ -563,7 +562,7 @@ export default function MembershipPage() {
 
           {/* Language Toggle */}
           <div className="flex justify-center">
-            <select className="text-sm border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400">
+            <select className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:ring-teal-400">
               <option value="en">English</option>
               <option value="es">Español</option>
               <option value="pt">Português</option>
@@ -573,9 +572,9 @@ export default function MembershipPage() {
 
         {/* Confetti Effect (Stub) */}
         {showConfetti && (
-          <div className="fixed inset-0 pointer-events-none z-50">
+          <div className="pointer-events-none fixed inset-0 z-50">
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-6xl animate-bounce">🎉</div>
+              <div className="animate-bounce text-6xl">🎉</div>
             </div>
           </div>
         )}

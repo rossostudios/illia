@@ -19,7 +19,7 @@ import {
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 
-export interface SearchResult {
+export type SearchResult = {
   id: string
   name: string
   bio: string
@@ -43,14 +43,14 @@ export interface SearchResult {
   relevance_score?: number
 }
 
-export interface SortOption {
+export type SortOption = {
   key: string
   label: string
   direction: 'asc' | 'desc'
   icon: React.ReactNode
 }
 
-interface ProviderLocation {
+type ProviderLocation = {
   id: string
   name: string
   latitude: number
@@ -63,7 +63,7 @@ interface ProviderLocation {
   specialties: string[]
 }
 
-interface EnhancedSearchResultsProps {
+type EnhancedSearchResultsProps = {
   results: SearchResult[]
   loading?: boolean
   onProviderClick: (provider: ProviderLocation) => void
@@ -143,9 +143,8 @@ export function EnhancedSearchResults({
 
       if (sortBy.direction === 'asc') {
         return aValue - bValue
-      } else {
-        return bValue - aValue
       }
+      return bValue - aValue
     })
 
     return filtered
@@ -204,17 +203,17 @@ export function EnhancedSearchResults({
   )
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-md ${className}`}>
+    <div className={`rounded-xl bg-white shadow-md dark:bg-gray-900 ${className}`}>
       {/* Header with controls */}
-      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-4">
+      <div className="border-gray-200 border-b p-6 dark:border-gray-700">
+        <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="font-semibold text-gray-900 text-lg dark:text-white">
               Results ({processedResults.length})
             </h3>
             {loading && (
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <div className="w-4 h-4 border-2 border-teal-500 border-t-transparent rounded-full animate-spin" />
+              <div className="flex items-center gap-2 text-gray-500 text-sm">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-teal-500 border-t-transparent" />
                 Searching...
               </div>
             )}
@@ -224,32 +223,32 @@ export function EnhancedSearchResults({
           <div className="flex items-center gap-2">
             <div className="flex rounded-lg border border-gray-200 dark:border-gray-600">
               <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 rounded-l-lg transition-colors ${
+                className={`rounded-l-lg p-2 transition-colors ${
                   viewMode === 'list'
-                    ? 'bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300'
+                    ? 'bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300'
                     : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                 }`}
+                onClick={() => setViewMode('list')}
               >
                 <List className="h-4 w-4" />
               </button>
               <button
-                onClick={() => setViewMode('grid')}
                 className={`p-2 transition-colors ${
                   viewMode === 'grid'
-                    ? 'bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300'
+                    ? 'bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300'
                     : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                 }`}
+                onClick={() => setViewMode('grid')}
               >
                 <Grid3X3 className="h-4 w-4" />
               </button>
               <button
-                onClick={() => setViewMode('compact')}
-                className={`p-2 rounded-r-lg transition-colors ${
+                className={`rounded-r-lg p-2 transition-colors ${
                   viewMode === 'compact'
-                    ? 'bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300'
+                    ? 'bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300'
                     : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                 }`}
+                onClick={() => setViewMode('compact')}
               >
                 <SlidersHorizontal className="h-4 w-4" />
               </button>
@@ -262,13 +261,15 @@ export function EnhancedSearchResults({
           {/* Sort dropdown */}
           <div className="relative">
             <select
-              value={`${sortBy.key}-${sortBy.direction}`}
+              className="rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-gray-900 text-sm focus:border-transparent focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               onChange={(e) => {
                 const [key, direction] = e.target.value.split('-') as [string, 'asc' | 'desc']
                 const option = SORT_OPTIONS.find((opt) => opt.key === key)
-                if (option) setSortBy({ ...option, direction })
+                if (option) {
+                  setSortBy({ ...option, direction })
+                }
               }}
-              className="px-3 py-2 pr-8 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              value={`${sortBy.key}-${sortBy.direction}`}
             >
               {SORT_OPTIONS.map((option) => (
                 <option key={`${option.key}-asc`} value={`${option.key}-asc`}>
@@ -281,54 +282,56 @@ export function EnhancedSearchResults({
                 </option>
               ))}
             </select>
-            <ArrowUpDown className="absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+            <ArrowUpDown className="pointer-events-none absolute top-2.5 right-2 h-4 w-4 text-gray-400" />
           </div>
 
           {/* Filters toggle */}
           <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowFilters(!showFilters)}
             className="flex items-center gap-2"
+            onClick={() => setShowFilters(!showFilters)}
+            size="sm"
+            variant="outline"
           >
             <Filter className="h-4 w-4" />
             Filters
             {(priceRange[0] > 0 || priceRange[1] < 1000 || minRating > 0) && (
-              <span className="w-2 h-2 bg-teal-500 rounded-full" />
+              <span className="h-2 w-2 rounded-full bg-teal-500" />
             )}
           </Button>
 
           {/* Comparison mode toggle */}
           <Button
-            variant={comparisonMode ? 'primary' : 'outline'}
-            size="sm"
+            className="flex items-center gap-2"
             onClick={() => {
               setComparisonMode(!comparisonMode)
-              if (!comparisonMode) setSelectedForComparison(new Set())
+              if (!comparisonMode) {
+                setSelectedForComparison(new Set())
+              }
             }}
-            className="flex items-center gap-2"
+            size="sm"
+            variant={comparisonMode ? 'primary' : 'outline'}
           >
             <Eye className="h-4 w-4" />
             Compare ({selectedForComparison.size})
           </Button>
 
           {/* Export button */}
-          <div className="relative group">
-            <Button variant="outline" size="sm" className="flex items-center gap-2">
+          <div className="group relative">
+            <Button className="flex items-center gap-2" size="sm" variant="outline">
               <Download className="h-4 w-4" />
               Export
             </Button>
-            <div className="absolute top-full mt-1 right-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto z-10">
+            <div className="pointer-events-none absolute top-full right-0 z-10 mt-1 rounded-lg border border-gray-200 bg-white opacity-0 shadow-lg transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 dark:border-gray-700 dark:bg-gray-900">
               <div className="py-1">
                 <button
+                  className="w-full px-4 py-2 text-left text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
                   onClick={() => exportResults('csv')}
-                  className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   Export as CSV
                 </button>
                 <button
+                  className="w-full px-4 py-2 text-left text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
                   onClick={() => exportResults('json')}
-                  className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   Export as JSON
                 </button>
@@ -339,34 +342,36 @@ export function EnhancedSearchResults({
 
         {/* Advanced filters */}
         {showFilters && (
-          <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="mt-4 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
                   Price Range: ${priceRange[0]} - ${priceRange[1]}
                 </label>
                 <input
-                  type="range"
-                  min="0"
-                  max="1000"
-                  step="50"
-                  value={priceRange[1]}
-                  onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value, 10)])}
                   className="w-full"
+                  max="1000"
+                  min="0"
+                  onChange={(e) =>
+                    setPriceRange([priceRange[0], Number.parseInt(e.target.value, 10)])
+                  }
+                  step="50"
+                  type="range"
+                  value={priceRange[1]}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
                   Minimum Rating: {minRating} stars
                 </label>
                 <input
-                  type="range"
-                  min="0"
-                  max="5"
-                  step="0.5"
-                  value={minRating}
-                  onChange={(e) => setMinRating(parseFloat(e.target.value))}
                   className="w-full"
+                  max="5"
+                  min="0"
+                  onChange={(e) => setMinRating(Number.parseFloat(e.target.value))}
+                  step="0.5"
+                  type="range"
+                  value={minRating}
                 />
               </div>
             </div>
@@ -376,13 +381,13 @@ export function EnhancedSearchResults({
 
       {/* Comparison mode header */}
       {comparisonMode && selectedForComparison.size > 0 && (
-        <div className="px-6 py-3 bg-teal-50 dark:bg-teal-900/20 border-b border-teal-200 dark:border-teal-800">
+        <div className="border-teal-200 border-b bg-teal-50 px-6 py-3 dark:border-teal-800 dark:bg-teal-900/20">
           <div className="flex items-center justify-between">
             <span className="text-sm text-teal-700 dark:text-teal-300">
               Comparing {selectedForComparison.size} providers
             </span>
-            <Button variant="outline" size="sm" onClick={() => setSelectedForComparison(new Set())}>
-              <X className="h-4 w-4 mr-1" />
+            <Button onClick={() => setSelectedForComparison(new Set())} size="sm" variant="outline">
+              <X className="mr-1 h-4 w-4" />
               Clear All
             </Button>
           </div>
@@ -392,20 +397,20 @@ export function EnhancedSearchResults({
       {/* Results */}
       <div className="p-6">
         {processedResults.length === 0 && !loading ? (
-          <div className="text-center py-12">
-            <MapPin className="h-16 w-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          <div className="py-12 text-center">
+            <MapPin className="mx-auto mb-4 h-16 w-16 text-gray-300 dark:text-gray-600" />
+            <h3 className="mb-2 font-medium text-gray-900 text-lg dark:text-white">
               No providers found
             </h3>
-            <p className="text-gray-500 dark:text-gray-400 mb-4">
+            <p className="mb-4 text-gray-500 dark:text-gray-400">
               Try adjusting your filters or search location
             </p>
             <Button
-              variant="outline"
               onClick={() => {
                 setPriceRange([0, 1000])
                 setMinRating(0)
               }}
+              variant="outline"
             >
               Clear Filters
             </Button>
@@ -414,7 +419,7 @@ export function EnhancedSearchResults({
           <div
             className={`space-y-4 ${
               viewMode === 'grid'
-                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
+                ? 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'
                 : viewMode === 'compact'
                   ? 'space-y-2'
                   : ''
@@ -422,11 +427,9 @@ export function EnhancedSearchResults({
           >
             {processedResults.slice(0, comparisonMode ? 50 : 20).map((result) => (
               <ResultCard
-                key={result.id}
-                result={result}
-                viewMode={viewMode}
                 comparisonMode={comparisonMode}
                 isSelectedForComparison={selectedForComparison.has(result.id)}
+                key={result.id}
                 onClick={() =>
                   onProviderClick({
                     id: result.id,
@@ -442,13 +445,15 @@ export function EnhancedSearchResults({
                   })
                 }
                 onComparisonToggle={() => handleComparisonToggle(result.id)}
+                result={result}
+                viewMode={viewMode}
               />
             ))}
           </div>
         )}
 
         {processedResults.length > (comparisonMode ? 50 : 20) && (
-          <div className="text-center mt-6">
+          <div className="mt-6 text-center">
             <Button variant="outline">
               Load More Results ({processedResults.length - (comparisonMode ? 50 : 20)} remaining)
             </Button>
@@ -459,7 +464,7 @@ export function EnhancedSearchResults({
   )
 }
 
-interface ResultCardProps {
+type ResultCardProps = {
   result: SearchResult
   viewMode: 'list' | 'grid' | 'compact'
   comparisonMode: boolean
@@ -484,16 +489,21 @@ const ResultCard = memo(function ResultCard({
 
   if (viewMode === 'compact') {
     return (
-      <div className={`${baseClasses} flex items-center justify-between p-3`} onClick={onClick}>
+      <div
+        className={`${baseClasses} flex items-center justify-between p-3`}
+        onClick={onClick}
+        role="button"
+        tabIndex={0}
+      >
         <div className="flex items-center gap-3">
           <img
-            src={result.photo_url}
             alt={result.name}
-            className="w-10 h-10 rounded-full object-cover"
+            className="h-10 w-10 rounded-full object-cover"
+            src={result.photo_url}
           />
           <div>
-            <h4 className="font-medium text-gray-900 dark:text-white text-sm">{result.name}</h4>
-            <div className="flex items-center gap-2 text-xs text-gray-500">
+            <h4 className="font-medium text-gray-900 text-sm dark:text-white">{result.name}</h4>
+            <div className="flex items-center gap-2 text-gray-500 text-xs">
               <span>⭐ {result.rating}</span>
               <span>${result.rate_monthly}/mo</span>
               <span>{result.neighborhood || result.city}</span>
@@ -503,15 +513,15 @@ const ResultCard = memo(function ResultCard({
 
         {comparisonMode && (
           <button
+            className={`flex h-5 w-5 items-center justify-center rounded border-2 transition-colors ${
+              isSelectedForComparison
+                ? 'border-teal-500 bg-teal-500 text-white'
+                : 'border-gray-300 hover:border-teal-400'
+            }`}
             onClick={(e) => {
               e.stopPropagation()
               onComparisonToggle()
             }}
-            className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-              isSelectedForComparison
-                ? 'bg-teal-500 border-teal-500 text-white'
-                : 'border-gray-300 hover:border-teal-400'
-            }`}
           >
             {isSelectedForComparison && <Check className="h-3 w-3" />}
           </button>
@@ -522,27 +532,27 @@ const ResultCard = memo(function ResultCard({
 
   if (viewMode === 'grid') {
     return (
-      <div className={`${baseClasses} p-4`} onClick={onClick}>
-        <div className="flex items-start gap-3 mb-3">
+      <div className={`${baseClasses} p-4`} onClick={onClick} role="button" tabIndex={0}>
+        <div className="mb-3 flex items-start gap-3">
           <img
-            src={result.photo_url}
             alt={result.name}
-            className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+            className="h-12 w-12 flex-shrink-0 rounded-full object-cover"
+            src={result.photo_url}
           />
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between mb-1">
-              <h4 className="font-medium text-gray-900 dark:text-white truncate">{result.name}</h4>
+          <div className="min-w-0 flex-1">
+            <div className="mb-1 flex items-start justify-between">
+              <h4 className="truncate font-medium text-gray-900 dark:text-white">{result.name}</h4>
               {comparisonMode && (
                 <button
+                  className={`ml-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
+                    isSelectedForComparison
+                      ? 'border-teal-500 bg-teal-500 text-white'
+                      : 'border-gray-300 hover:border-teal-400'
+                  }`}
                   onClick={(e) => {
                     e.stopPropagation()
                     onComparisonToggle()
                   }}
-                  className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors flex-shrink-0 ml-2 ${
-                    isSelectedForComparison
-                      ? 'bg-teal-500 border-teal-500 text-white'
-                      : 'border-gray-300 hover:border-teal-400'
-                  }`}
                 >
                   {isSelectedForComparison && <Check className="h-3 w-3" />}
                 </button>
@@ -550,7 +560,7 @@ const ResultCard = memo(function ResultCard({
             </div>
 
             {result.verified && (
-              <span className="inline-flex items-center px-2 py-0.5 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-xs rounded-full mb-2">
+              <span className="mb-2 inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-green-700 text-xs dark:bg-green-900 dark:text-green-300">
                 Verified
               </span>
             )}
@@ -558,7 +568,7 @@ const ResultCard = memo(function ResultCard({
         </div>
 
         <div className="space-y-2">
-          <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center gap-1 text-gray-600 text-sm dark:text-gray-400">
             <MapPin className="h-3 w-3" />
             <span className="truncate">{result.neighborhood || result.city}</span>
           </div>
@@ -574,8 +584,8 @@ const ResultCard = memo(function ResultCard({
           <div className="flex flex-wrap gap-1">
             {result.services?.slice(0, 2).map((service) => (
               <span
+                className="rounded bg-teal-100 px-2 py-0.5 text-teal-700 text-xs dark:bg-teal-900 dark:text-teal-300"
                 key={service}
-                className="px-2 py-0.5 bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300 text-xs rounded"
               >
                 {service}
               </span>
@@ -588,28 +598,28 @@ const ResultCard = memo(function ResultCard({
 
   // List view (default)
   return (
-    <div className={`${baseClasses} p-4`} onClick={onClick}>
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-start gap-3 flex-1">
+    <div className={`${baseClasses} p-4`} onClick={onClick} role="button" tabIndex={0}>
+      <div className="mb-3 flex items-start justify-between">
+        <div className="flex flex-1 items-start gap-3">
           <img
-            src={result.photo_url}
             alt={result.name}
-            className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+            className="h-12 w-12 flex-shrink-0 rounded-full object-cover"
+            src={result.photo_url}
           />
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between mb-1">
-              <h4 className="font-medium text-gray-900 dark:text-white truncate">{result.name}</h4>
+          <div className="min-w-0 flex-1">
+            <div className="mb-1 flex items-start justify-between">
+              <h4 className="truncate font-medium text-gray-900 dark:text-white">{result.name}</h4>
               {comparisonMode && (
                 <button
+                  className={`ml-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
+                    isSelectedForComparison
+                      ? 'border-teal-500 bg-teal-500 text-white'
+                      : 'border-gray-300 hover:border-teal-400'
+                  }`}
                   onClick={(e) => {
                     e.stopPropagation()
                     onComparisonToggle()
                   }}
-                  className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors flex-shrink-0 ml-2 ${
-                    isSelectedForComparison
-                      ? 'bg-teal-500 border-teal-500 text-white'
-                      : 'border-gray-300 hover:border-teal-400'
-                  }`}
                 >
                   {isSelectedForComparison && <Check className="h-3 w-3" />}
                 </button>
@@ -617,12 +627,12 @@ const ResultCard = memo(function ResultCard({
             </div>
 
             {result.bio && (
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">
+              <p className="mb-2 line-clamp-2 text-gray-600 text-sm dark:text-gray-400">
                 {result.bio}
               </p>
             )}
 
-            <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex items-center gap-4 text-gray-600 text-sm dark:text-gray-400">
               <div className="flex items-center gap-1">
                 <MapPin className="h-3 w-3" />
                 <span className="truncate">{result.neighborhood || result.city}</span>
@@ -633,7 +643,7 @@ const ResultCard = memo(function ResultCard({
         </div>
 
         {result.verified && (
-          <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-xs rounded-full flex-shrink-0 ml-2">
+          <span className="ml-2 flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-green-700 text-xs dark:bg-green-900 dark:text-green-300">
             Verified
           </span>
         )}
@@ -648,24 +658,24 @@ const ResultCard = memo(function ResultCard({
         </div>
 
         <div className="text-right">
-          <div className="font-medium text-teal-600 text-lg">
+          <div className="font-medium text-lg text-teal-600">
             ${result.rate_monthly}
-            <span className="text-sm text-gray-500">/mo</span>
+            <span className="text-gray-500 text-sm">/mo</span>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-1 mt-3">
+      <div className="mt-3 flex flex-wrap gap-1">
         {result.services?.slice(0, 3).map((service) => (
           <span
+            className="rounded bg-teal-100 px-2 py-0.5 text-teal-700 text-xs dark:bg-teal-900 dark:text-teal-300"
             key={service}
-            className="px-2 py-0.5 bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300 text-xs rounded"
           >
             {service}
           </span>
         ))}
         {result.specialties?.length > 0 && (
-          <span className="px-2 py-0.5 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 text-xs rounded">
+          <span className="rounded bg-purple-100 px-2 py-0.5 text-purple-700 text-xs dark:bg-purple-900 dark:text-purple-300">
             +{result.specialties.length} specialties
           </span>
         )}

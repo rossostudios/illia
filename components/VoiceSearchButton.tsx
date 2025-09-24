@@ -3,9 +3,9 @@
 import { AlertCircle, Mic, MicOff, Volume2 } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import { useVoiceSearch } from '@/hooks/useVoiceSearch'
+import { useVoiceSearch } from '@/hooks/use-voice-search'
 
-interface VoiceSearchButtonProps {
+type VoiceSearchButtonProps = {
   onResult?: (transcript: string, processedQuery: string) => void
   onError?: (error: string) => void
   className?: string
@@ -97,13 +97,14 @@ export function VoiceSearchButton({
   }, [])
 
   // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (transcriptTimeoutRef.current) {
         clearTimeout(transcriptTimeoutRef.current)
       }
-    }
-  }, [])
+    },
+    []
+  )
 
   const buttonSize = {
     sm: 'h-10 w-10',
@@ -120,10 +121,10 @@ export function VoiceSearchButton({
   if (!isSupported) {
     return (
       <Button
-        variant="ghost"
+        className={`${className} ${buttonSize[size]} cursor-not-allowed p-0 opacity-50`}
         disabled
-        className={`${className} ${buttonSize[size]} p-0 opacity-50 cursor-not-allowed`}
         title="Voice search not supported in this browser"
+        variant="ghost"
       >
         <MicOff className={`${iconSize[size]}`} />
       </Button>
@@ -134,19 +135,19 @@ export function VoiceSearchButton({
     <>
       <div className="relative">
         <Button
-          variant={variant}
-          onClick={handleClick}
-          className={`${className} ${buttonSize[size]} p-0 relative ${
-            isListening ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' : ''
+          className={`${className} ${buttonSize[size]} relative p-0 ${
+            isListening ? 'animate-pulse bg-red-500 text-white hover:bg-red-600' : ''
           }`}
+          onClick={handleClick}
           title={isListening ? 'Stop voice search' : 'Start voice search'}
+          variant={variant}
         >
           {isListening ? (
             <div className="relative">
               <Mic className={`${iconSize[size]} animate-pulse`} />
               {/* Recording indicator */}
-              <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-ping" />
-              <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+              <div className="-top-1 -right-1 absolute h-2 w-2 animate-ping rounded-full bg-red-500" />
+              <div className="-top-1 -right-1 absolute h-2 w-2 rounded-full bg-red-500" />
             </div>
           ) : (
             <Mic className={iconSize[size]} />
@@ -155,33 +156,32 @@ export function VoiceSearchButton({
 
         {/* Listening indicator */}
         {isListening && (
-          <div className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-            <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+          <div className="-top-2 -right-2 absolute flex h-4 w-4 items-center justify-center rounded-full bg-red-500">
+            <div className="h-2 w-2 animate-pulse rounded-full bg-white" />
           </div>
         )}
       </div>
 
       {/* Transcript Modal */}
       {showTranscriptModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="relative w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-gray-900">
             <button
-              type="button"
-              onClick={handleCloseTranscript}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              onClick={handleCloseTranscript}
             >
               <AlertCircle className="h-5 w-5" />
             </button>
 
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
                 <Volume2 className="h-5 w-5 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="font-semibold text-gray-900 text-lg dark:text-white">
                   Voice Search Complete
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-gray-600 text-sm dark:text-gray-400">
                   Confidence: {Math.round((confidence || 0) * 100)}%
                 </p>
               </div>
@@ -189,21 +189,21 @@ export function VoiceSearchButton({
 
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="mb-1 block font-medium text-gray-700 text-sm dark:text-gray-300">
                   You said:
                 </label>
-                <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
-                  <p className="text-gray-900 dark:text-white italic">"{lastTranscript}"</p>
+                <div className="rounded-lg bg-gray-50 p-3 dark:bg-gray-900/50">
+                  <p className="text-gray-900 italic dark:text-white">"{lastTranscript}"</p>
                 </div>
               </div>
 
               {lastProcessedQuery !== lastTranscript && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="mb-1 block font-medium text-gray-700 text-sm dark:text-gray-300">
                     Processed as:
                   </label>
-                  <div className="p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
-                    <p className="text-teal-900 dark:text-teal-100 font-medium">
+                  <div className="rounded-lg border border-teal-200 bg-teal-50 p-3 dark:border-teal-800 dark:bg-teal-900/20">
+                    <p className="font-medium text-teal-900 dark:text-teal-100">
                       "{lastProcessedQuery}"
                     </p>
                   </div>
@@ -211,18 +211,18 @@ export function VoiceSearchButton({
               )}
             </div>
 
-            <div className="flex gap-3 mt-6">
+            <div className="mt-6 flex gap-3">
               <Button
+                className="flex-1"
                 onClick={() => {
                   clearVoiceSearch()
                   handleCloseTranscript()
                 }}
                 variant="outline"
-                className="flex-1"
               >
                 Clear
               </Button>
-              <Button onClick={handleCloseTranscript} className="flex-1">
+              <Button className="flex-1" onClick={handleCloseTranscript}>
                 Continue
               </Button>
             </div>
@@ -232,7 +232,7 @@ export function VoiceSearchButton({
 
       {/* Error Toast */}
       {error && (
-        <div className="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg z-50 max-w-sm">
+        <div className="fixed right-4 bottom-4 z-50 max-w-sm rounded-lg bg-red-500 px-4 py-3 text-white shadow-lg">
           <div className="flex items-center gap-2">
             <AlertCircle className="h-5 w-5 flex-shrink-0" />
             <p className="text-sm">{error}</p>
@@ -244,7 +244,7 @@ export function VoiceSearchButton({
 }
 
 // Voice search input component that combines text and voice
-interface VoiceSearchInputProps {
+type VoiceSearchInputProps = {
   value: string
   onChange: (value: string) => void
   onVoiceResult?: (transcript: string, processedQuery: string) => void
@@ -273,18 +273,18 @@ export function VoiceSearchInput({
     <div className={`relative ${className}`}>
       <div className="flex gap-2">
         <input
-          type="text"
-          value={value}
+          className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:placeholder-gray-400"
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+          type="text"
+          value={value}
         />
         <VoiceSearchButton
-          onResult={handleVoiceResult}
+          className="flex-shrink-0"
           language={language}
+          onResult={handleVoiceResult}
           size="md"
           variant="outline"
-          className="flex-shrink-0"
         />
       </div>
     </div>

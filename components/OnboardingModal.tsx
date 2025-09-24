@@ -3,7 +3,7 @@
 import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-interface OnboardingModalProps {
+type OnboardingModalProps = {
   isOpen: boolean
   onClose: () => void
   onComplete: () => void
@@ -66,7 +66,9 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
     }
   }
 
-  if (!isOpen || !mounted) return null
+  if (!(isOpen && mounted)) {
+    return null
+  }
 
   const progressPercentage = (completedSteps.size / totalSteps) * 100
 
@@ -74,35 +76,34 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
-        onClick={onClose}
         aria-hidden="true"
-      />
+        className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+      / role="button" tabIndex={0}>
 
       {/* Modal - Responsive positioning */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6">
-        <div className="relative w-full max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto">
+        <div className="relative mx-auto w-full max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl">
           {/* Modal Content - Full height on mobile, constrained on desktop */}
-          <div className="bg-white rounded-2xl shadow-2xl max-h-[95vh] sm:max-h-[90vh] md:max-h-[85vh] overflow-hidden flex flex-col min-w-0">
+          <div className="flex max-h-[95vh] min-w-0 flex-col overflow-hidden rounded-2xl bg-white shadow-2xl sm:max-h-[90vh] md:max-h-[85vh]">
             {/* Header - Fixed */}
-            <div className="flex-shrink-0 px-6 py-5 sm:p-6 lg:px-8 border-b bg-white">
+            <div className="flex-shrink-0 border-b bg-white px-6 py-5 sm:p-6 lg:px-8">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900">
+                  <h2 className="font-semibold text-gray-900 text-xl sm:text-2xl lg:text-3xl">
                     Let&apos;s get you started
                   </h2>
-                  <p className="text-sm sm:text-base lg:text-lg text-gray-600 mt-1">
+                  <p className="mt-1 text-gray-600 text-sm sm:text-base lg:text-lg">
                     Complete these quick actions to earn bonus credits for your account.
                   </p>
                 </div>
-                <div className="flex items-center space-x-2 flex-shrink-0">
-                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                <div className="flex flex-shrink-0 items-center space-x-2">
+                  <span className="rounded-full bg-gray-100 px-2 py-1 text-gray-500 text-xs">
                     OPTIONAL
                   </span>
-                  <button
+                  <button aria-label="Close modal"
+                    className="rounded-lg p-1.5 transition-colors hover:bg-gray-100"
                     onClick={onClose}
-                    className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-                    aria-label="Close modal"
                   >
                     <X className="h-5 w-5 text-gray-500" />
                   </button>
@@ -111,17 +112,17 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
             </div>
 
             {/* Progress Bar - Fixed */}
-            <div className="flex-shrink-0 px-6 py-4 bg-gray-50">
+            <div className="flex-shrink-0 bg-gray-50 px-6 py-4">
               <div className="flex items-center justify-between">
-                <div className="flex-1 mr-4">
-                  <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div className="mr-4 flex-1">
+                  <div className="h-2 overflow-hidden rounded-full bg-gray-200">
                     <div
-                      className="h-full bg-teal-500 rounded-full transition-all duration-300 ease-out"
+                      className="h-full rounded-full bg-teal-500 transition-all duration-300 ease-out"
                       style={{ width: `${progressPercentage}%` }}
                     />
                   </div>
                 </div>
-                <span className="text-sm font-medium text-gray-700 flex-shrink-0">
+                <span className="flex-shrink-0 font-medium text-gray-700 text-sm">
                   STEP {completedSteps.size} OF {totalSteps}
                 </span>
               </div>
@@ -135,19 +136,19 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
 
                   return (
                     <div
-                      key={step.id}
-                      className={`border rounded-lg p-5 transition-all ${
+                      className={`rounded-lg border p-5 transition-all ${
                         isCompleted
-                          ? 'bg-gray-50 border-gray-200'
-                          : 'bg-white border-gray-300 hover:border-teal-400 hover:shadow-sm'
+                          ? 'border-gray-200 bg-gray-50'
+                          : 'border-gray-300 bg-white hover:border-teal-400 hover:shadow-sm'
                       }`}
+                      key={step.id}
                     >
                       <div className="flex items-start gap-6">
                         {/* Icon */}
-                        <div className="flex-shrink-0 text-2xl mt-0.5">{step.icon}</div>
+                        <div className="mt-0.5 flex-shrink-0 text-2xl">{step.icon}</div>
 
                         {/* Content */}
-                        <div className="flex-1 min-w-0">
+                        <div className="min-w-0 flex-1">
                           <h3
                             className={`font-medium text-base lg:text-lg ${
                               isCompleted ? 'text-gray-500' : 'text-gray-900'
@@ -155,26 +156,25 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
                           >
                             {step.title}
                           </h3>
-                          <p className="text-sm lg:text-base text-gray-600 mt-1">
+                          <p className="mt-1 text-gray-600 text-sm lg:text-base">
                             {step.description}
                           </p>
                         </div>
 
                         {/* Actions */}
-                        <div className="flex items-center gap-4 flex-shrink-0">
+                        <div className="flex flex-shrink-0 items-center gap-4">
                           {step.credits > 0 && (
-                            <span className="text-sm font-medium text-gray-700">
+                            <span className="font-medium text-gray-700 text-sm">
                               +{step.credits} credits
                             </span>
                           )}
                           {isCompleted ? (
-                            <span className="text-xs text-green-600 bg-green-50 px-2.5 py-1 rounded-full font-medium">
+                            <span className="rounded-full bg-green-50 px-2.5 py-1 font-medium text-green-600 text-xs">
                               CLAIMED
                             </span>
                           ) : step.id !== 1 ? (
-                            <button
+                            <button className="whitespace-nowrap font-medium text-sm text-teal-600 hover:text-teal-700"
                               onClick={() => handleStepComplete(step.id)}
-                              className="text-sm text-teal-600 hover:text-teal-700 font-medium whitespace-nowrap"
                             >
                               Complete →
                             </button>
@@ -186,18 +186,19 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
                 })}
 
                 {/* LinkedIn step (optional, not counted) */}
-                <div className="border border-gray-300 rounded-lg p-5 hover:border-teal-400 hover:shadow-sm transition-all bg-white">
+                <div className="rounded-lg border border-gray-300 bg-white p-5 transition-all hover:border-teal-400 hover:shadow-sm">
                   <div className="flex items-start gap-6">
-                    <div className="flex-shrink-0 text-2xl mt-0.5">💼</div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-base lg:text-lg text-gray-900">
+                    <div className="mt-0.5 flex-shrink-0 text-2xl">💼</div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-medium text-base text-gray-900 lg:text-lg">
                         Follow us on LinkedIn
                       </h3>
-                      <p className="text-sm lg:text-base text-gray-600 mt-1">
+                      <p className="mt-1 text-gray-600 text-sm lg:text-base">
                         Professional updates and insights
                       </p>
                     </div>
-                    <button className="text-sm text-teal-600 hover:text-teal-700 font-medium whitespace-nowrap flex-shrink-0">
+                    <button className="flex-shrink-0 whitespace-nowrap font-medium text-sm text-teal-600 hover:text-teal-700"
+                    >
                       Follow →
                     </button>
                   </div>
@@ -206,10 +207,9 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
             </div>
 
             {/* Footer - Fixed */}
-            <div className="flex-shrink-0 p-6 border-t bg-gray-50">
-              <button
+            <div className="flex-shrink-0 border-t bg-gray-50 p-6">
+              <button className="w-full transform rounded-lg bg-teal-600 px-6 py-3 font-medium text-white transition-all hover:scale-[1.02] hover:bg-teal-700 active:scale-[0.98]"
                 onClick={handleContinue}
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-3 px-6 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98]"
               >
                 Continue
               </button>

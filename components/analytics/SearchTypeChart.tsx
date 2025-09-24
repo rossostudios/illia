@@ -1,9 +1,9 @@
 'use client'
 
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
-import type { SearchAnalyticsData } from '@/hooks/useAnalytics'
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from '@/components/LazyChart'
+import type { SearchAnalyticsData } from '@/hooks/use-analytics'
 
-interface SearchTypeChartProps {
+type SearchTypeChartProps = {
   data: SearchAnalyticsData
   className?: string
 }
@@ -18,21 +18,21 @@ export function SearchTypeChart({ data, className = '' }: SearchTypeChartProps) 
   }))
 
   return (
-    <div className={`w-full h-48 sm:h-64 ${className}`}>
-      <ResponsiveContainer width="100%" height="100%">
+    <div className={`h-48 w-full sm:h-64 ${className}`}>
+      <ResponsiveContainer height="100%" width="100%">
         <PieChart>
           <Pie
-            data={chartData}
             cx="50%"
             cy="50%"
-            labelLine={false}
-            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-            outerRadius={80}
-            fill="#8884d8"
+            data={chartData}
             dataKey="value"
+            fill="#8884d8"
+            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            labelLine={false}
+            outerRadius={80}
           >
             {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color} />
+              <Cell fill={entry.color} key={`cell-${index}`} />
             ))}
           </Pie>
           <Tooltip
@@ -40,9 +40,9 @@ export function SearchTypeChart({ data, className = '' }: SearchTypeChartProps) 
               if (active && payload && payload.length) {
                 const data = payload[0]
                 return (
-                  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-3">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">{data.name}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                  <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                    <p className="font-medium text-gray-900 text-sm dark:text-white">{data.name}</p>
+                    <p className="text-gray-600 text-sm dark:text-gray-300">
                       {data.value} searches
                     </p>
                   </div>

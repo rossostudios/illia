@@ -1,11 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import OpenAI from 'openai'
+import OpenAi from 'openai'
 
-const openai = new OpenAI({
+const openai = new OpenAi({
   apiKey: process.env.OPENAI_API_KEY,
 })
 
-interface SemanticSearchResult {
+type SemanticSearchResult = {
   query: string
   intent: 'location' | 'service' | 'budget' | 'quality' | 'special_requirements' | 'general'
   entities: {
@@ -19,7 +19,7 @@ interface SemanticSearchResult {
   confidence: number
 }
 
-interface AISearchSuggestion {
+type AiSearchSuggestion = {
   originalQuery: string
   interpretedIntent: string
   suggestedFilters: Record<string, any>
@@ -28,7 +28,7 @@ interface AISearchSuggestion {
   confidence: number
 }
 
-async function analyzeQuery(query: string): Promise<AISearchSuggestion> {
+async function analyzeQuery(query: string): Promise<AiSearchSuggestion> {
   try {
     const semanticAnalysis = await performSemanticAnalysis(query)
 
@@ -40,8 +40,7 @@ async function analyzeQuery(query: string): Promise<AISearchSuggestion> {
       reasoning: generateReasoning(semanticAnalysis),
       confidence: semanticAnalysis.confidence,
     }
-  } catch (error) {
-    console.error('AI analysis error:', error)
+  } catch (_error) {
     // Fallback to basic analysis
     return fallbackAnalysis(query)
   }
@@ -109,7 +108,6 @@ Be specific and accurate in your analysis.`
     const result = JSON.parse(response) as SemanticSearchResult
     return result
   } catch (_parseError) {
-    console.error('Failed to parse AI response:', response)
     throw new Error('Invalid AI response format')
   }
 }
@@ -208,9 +206,9 @@ function generateReasoning(analysis: SemanticSearchResult): string {
   } else if (analysis.intent === 'service') {
     reasons.push(`Looking for ${analysis.entities.services?.join(' and ')} services`)
   } else if (analysis.intent === 'budget') {
-    reasons.push(`Budget-conscious search with price range focus`)
+    reasons.push('Budget-conscious search with price range focus')
   } else if (analysis.intent === 'quality') {
-    reasons.push(`Quality-focused search with high standards`)
+    reasons.push('Quality-focused search with high standards')
   }
 
   if (analysis.entities.languages?.includes('english')) {
@@ -224,7 +222,7 @@ function generateReasoning(analysis: SemanticSearchResult): string {
   return reasons.join('. ') || 'General search query analysis'
 }
 
-function fallbackAnalysis(query: string): AISearchSuggestion {
+function fallbackAnalysis(query: string): AiSearchSuggestion {
   const lowerQuery = query.toLowerCase()
 
   let intent = 'general'
@@ -307,9 +305,7 @@ export async function POST(request: NextRequest) {
       success: true,
       data: analysis,
     })
-  } catch (error) {
-    console.error('AI search analysis error:', error)
-
+  } catch (_error) {
     return NextResponse.json(
       {
         success: false,

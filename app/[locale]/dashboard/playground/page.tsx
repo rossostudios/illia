@@ -198,9 +198,9 @@ const leads = await response.json()`
         <h1 className="text-3xl font-bold text-teal-600 mb-2 flex items-center justify-center relative">
           <MapPin className="h-8 w-8 mr-2" />
           Lead Playground
-          <button
+          <button type="button"
             className="ml-2 relative"
-            onMouseEnter={() => setShowInfoTooltip(true)}
+            onMouseEnter={() = type="button"> setShowInfoTooltip(true)}
             onMouseLeave={() => setShowInfoTooltip(false)}
           >
             <Info className="h-5 w-5 text-gray-700 hover:text-gray-600" />
@@ -246,7 +246,7 @@ const leads = await response.json()`
           <h3 className="text-sm font-semibold text-gray-700 mb-3">Quick Start with Charleston Personas:</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {CHARLESTON_PERSONAS.slice(0, 8).map((persona) => (
-              <button
+              <button type="button"
                 key={persona.id}
                 onClick={() => handlePersonaSelect(persona.id)}
                 className={`p-2 rounded-lg border text-xs transition-all ${
@@ -305,26 +305,26 @@ const leads = await response.json()`
             </div>
 
             <div className="flex items-center space-x-3">
-              <button
+              <button type="button"
                 onClick={handleGetCode}
-                className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" type="button"
               >
                 <Copy className="h-4 w-4" />
                 <span className="text-sm font-medium">Get Code</span>
               </button>
               {result && (
-                <button
+                <button type="button"
                   onClick={handleExport}
-                  className="flex items-center space-x-2 px-4 py-2 border border-teal-500 text-teal-600 rounded-lg hover:bg-teal-50 transition-colors"
+                  className="flex items-center space-x-2 px-4 py-2 border border-teal-500 text-teal-600 rounded-lg hover:bg-teal-50 transition-colors" type="button"
                 >
                   <Download className="h-4 w-4" />
                   <span className="text-sm font-medium">Export</span>
                 </button>
               )}
-              <button
+              <button type="button"
                 onClick={handleGenerateLeads}
                 disabled={isLoading || !user}
-                className="flex items-center space-x-2 px-6 py-2 bg-teal-500 hover:bg-teal-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+                className="flex items-center space-x-2 px-6 py-2 bg-teal-500 hover:bg-teal-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50" type="button"
               >
                 {isLoading ? (
                   <>

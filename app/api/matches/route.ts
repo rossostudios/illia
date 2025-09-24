@@ -1,10 +1,10 @@
 // use context7
 import { type NextRequest, NextResponse } from 'next/server'
-import OpenAI from 'openai'
+import OpenAi from 'openai'
 import { createClient } from '@/lib/supabase/client'
 import { createServiceClient } from '@/lib/supabase/server'
 
-const openai = new OpenAI({
+const openai = new OpenAi({
   apiKey: process.env.OPENAI_API_KEY,
 })
 
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     const { city, services, budget, preferences, languages, frequency, name, email, phone } = body
 
     // Validate input
-    if (!city || !services || services.length === 0) {
+    if (!(city && services) || services.length === 0) {
       return NextResponse.json({ error: 'City and services are required' }, { status: 400 })
     }
 
@@ -33,7 +33,6 @@ export async function POST(request: NextRequest) {
       .overlaps('services', services)
 
     if (providersError) {
-      console.error('Error fetching providers:', providersError)
       return NextResponse.json({ error: 'Failed to fetch providers' }, { status: 500 })
     }
 
@@ -112,8 +111,6 @@ export async function POST(request: NextRequest) {
     let userId: string | null = null
 
     if (email && name) {
-      console.log('💾 Saving lead to database...')
-
       const { data: lead, error: leadError } = await supabase
         .from('leads')
         .upsert(
@@ -138,9 +135,7 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (leadError) {
-        console.error('❌ Lead save error:', leadError)
       } else {
-        console.log('✅ Lead saved')
         userId = lead?.id
 
         // Save matches to database
@@ -161,7 +156,6 @@ export async function POST(request: NextRequest) {
           .select()
 
         if (saveError) {
-          console.error('Error saving matches:', saveError)
         }
       }
     }
@@ -174,7 +168,6 @@ export async function POST(request: NextRequest) {
       .in('id', matchedProviderIds)
 
     if (fullProvidersError) {
-      console.error('Error fetching full providers:', fullProvidersError)
       return NextResponse.json({ error: 'Failed to fetch provider details' }, { status: 500 })
     }
 
@@ -188,9 +181,6 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Track API usage
-    console.log(`[Matches API] ${enrichedMatches.length} matches found for quiz user`)
-
     return NextResponse.json({
       success: true,
       matches: enrichedMatches,
@@ -199,8 +189,6 @@ export async function POST(request: NextRequest) {
       user_id: userId,
     })
   } catch (error: any) {
-    console.error('[Matches API Error]:', error)
-
     // Handle specific errors
     if (error.code === 'insufficient_quota') {
       return NextResponse.json(
@@ -246,7 +234,6 @@ export async function GET(_request: NextRequest) {
       .limit(10)
 
     if (matchesError) {
-      console.error('Error fetching matches:', matchesError)
       return NextResponse.json({ error: 'Failed to fetch matches' }, { status: 500 })
     }
 
@@ -254,8 +241,7 @@ export async function GET(_request: NextRequest) {
       success: true,
       matches: matches || [],
     })
-  } catch (error) {
-    console.error('[Matches GET Error]:', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'Failed to fetch matches' }, { status: 500 })
   }
 }

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
     "ignoreUnknown": false
   },
@@ -15,7 +15,15 @@
         "noNonNullAssertion": "warn",
         "useConst": "error",
         "useTemplate": "error",
-        "useNodejsImportProtocol": "off"
+        "useNodejsImportProtocol": "off",
+        "noMagicNumbers": "off",
+        "useNamingConvention": {
+          "level": "warn",
+          "options": {
+            "strictCase": false
+          }
+        },
+        "useFilenamingConvention": "off"
       },
       "suspicious": {
         "noExplicitAny": "warn",
@@ -23,7 +31,14 @@
       },
       "complexity": {
         "noBannedTypes": "error",
-        "noForEach": "off"
+        "noForEach": "off",
+        "noExcessiveCognitiveComplexity": "off"
+      },
+      "nursery": {
+        "noShadow": "off"
+      },
+      "performance": {
+        "noBarrelFile": "off"
       },
       "a11y": {
         "recommended": true
@@ -59,5 +74,38 @@
       "indentWidth": 2,
       "lineEnding": "lf"
     }
-  }
+  },
+  "extends": ["ultracite"],
+  "overrides": [
+    {
+      "includes": [
+        "utils/database.types.ts",
+        "types/database.types.ts",
+        "**/*.generated.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["hooks/**/*.ts", "hooks/**/*.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": {
+              "level": "error",
+              "options": {
+                "requireAscii": true,
+                "filenameCases": ["kebab-case"]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }

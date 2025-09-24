@@ -51,13 +51,25 @@ export default function ExplorePage() {
     // Dynamic calculation based on selections
     let baseMatches = selectedCity === 'medellin' ? 15 : 12
 
-    if (selectedServices.includes('cleaning')) baseMatches += 8
-    if (selectedServices.includes('cooking')) baseMatches += 6
-    if (selectedServices.includes('deep-clean')) baseMatches += 3
-    if (selectedServices.includes('meal-prep')) baseMatches += 4
+    if (selectedServices.includes('cleaning')) {
+      baseMatches += 8
+    }
+    if (selectedServices.includes('cooking')) {
+      baseMatches += 6
+    }
+    if (selectedServices.includes('deep-clean')) {
+      baseMatches += 3
+    }
+    if (selectedServices.includes('meal-prep')) {
+      baseMatches += 4
+    }
 
-    if (extras.includes('English speaker')) baseMatches = Math.floor(baseMatches * 0.6)
-    if (extras.includes('Pet-friendly')) baseMatches = Math.floor(baseMatches * 0.8)
+    if (extras.includes('English speaker')) {
+      baseMatches = Math.floor(baseMatches * 0.6)
+    }
+    if (extras.includes('Pet-friendly')) {
+      baseMatches = Math.floor(baseMatches * 0.8)
+    }
 
     return Math.max(3, baseMatches) // Always show at least 3 matches
   }
@@ -102,8 +114,7 @@ export default function ExplorePage() {
         // No providers found
         setMatches([])
       }
-    } catch (error) {
-      console.error('Error fetching providers:', error)
+    } catch (_error) {
       // Show empty state on error
       setMatches([])
     } finally {
@@ -145,7 +156,9 @@ export default function ExplorePage() {
 
   const _getPreview = () => {
     const serviceCount = selectedServices.length
-    if (serviceCount === 0) return null
+    if (serviceCount === 0) {
+      return null
+    }
 
     const cityName = selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'
     return `Based on ${serviceCount} service${serviceCount > 1 ? 's' : ''} in ${cityName}: ~12 matches available`
@@ -153,26 +166,25 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8">
         {/* Hero Section */}
         <div className="mb-8">
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-start gap-2">
-                <h1 className="text-4xl font-bold text-teal-600 dark:text-teal-400">Explore</h1>
+                <h1 className="font-bold text-4xl text-teal-600 dark:text-teal-400">Explore</h1>
                 <div className="relative">
                   <button
-                    type="button"
+                    aria-label="More information about Explore"
+                    className="rounded-full p-1 transition-colors hover:bg-teal-50 dark:hover:bg-teal-900/20"
                     onMouseEnter={() => setShowTooltip(true)}
                     onMouseLeave={() => setShowTooltip(false)}
-                    className="p-1 hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded-full transition-colors"
-                    aria-label="More information about Explore"
                   >
                     <Info className="h-5 w-5 text-teal-500 dark:text-teal-400" />
                   </button>
                   {showTooltip && (
-                    <div className="absolute left-0 top-8 w-64 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-teal-100 dark:border-teal-800 z-10">
-                      <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
+                    <div className="absolute top-8 left-0 z-10 w-64 rounded-lg border border-teal-100 bg-white p-3 shadow-lg dark:border-teal-800 dark:bg-gray-900">
+                      <p className="font-medium text-gray-700 text-sm dark:text-gray-300">
                         Our interactive tool lets you explore home help options. Answer a few
                         questions for AI-matched recommendations—free previews, Premium for intros.
                       </p>
@@ -180,14 +192,13 @@ export default function ExplorePage() {
                   )}
                 </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">
+              <p className="mt-2 text-gray-600 dark:text-gray-400">
                 Discover & test matches for your expat setup
               </p>
             </div>
             <button
-              type="button"
+              className="flex min-h-[44px] items-center gap-2 rounded-lg bg-gradient-to-r from-teal-600 to-teal-700 px-6 py-3 font-medium text-white shadow-md transition-all hover:from-teal-700 hover:to-teal-800 focus:from-teal-700 focus:to-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
               onClick={() => router.push('/en/dashboard/quiz')}
-              className="flex items-center gap-2 px-6 py-3 min-h-[44px] bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-lg font-medium hover:from-teal-700 hover:to-teal-800 focus:from-teal-700 focus:to-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all shadow-md"
             >
               <Sparkles className="h-4 w-4" />
               Quick Quiz
@@ -195,15 +206,15 @@ export default function ExplorePage() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid gap-8 lg:grid-cols-3">
           {/* Main Wizard Card */}
           <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8">
+            <div className="rounded-xl bg-white p-8 shadow-md dark:bg-gray-900">
               {/* Connected Stepper */}
               <ConnectedStepper
                 currentStep={currentStep}
-                totalSteps={3}
                 labels={['Select City', 'Choose Services', 'Add Details']}
+                totalSteps={3}
               />
 
               {/* Step Content */}
@@ -211,43 +222,41 @@ export default function ExplorePage() {
                 {/* Step 1: City Selection */}
                 {currentStep === 1 && (
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                    <h2 className="mb-4 font-semibold text-gray-900 text-xl dark:text-white">
                       Where are you based?
                     </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <motion.button
-                        type="button"
-                        onClick={() => setSelectedCity('medellin')}
-                        whileHover={{ y: -4, scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        transition={{ type: 'spring', stiffness: 300 }}
-                        className={`p-6 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                        className={`rounded-lg border-2 p-6 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                           selectedCity === 'medellin'
                             ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20'
-                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                            : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
                         }`}
+                        onClick={() => setSelectedCity('medellin')}
+                        transition={{ type: 'spring', stiffness: 300 }}
+                        whileHover={{ y: -4, scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                       >
-                        <MapPin className="h-8 w-8 mb-2 text-teal-600 dark:text-teal-400 mx-auto" />
+                        <MapPin className="mx-auto mb-2 h-8 w-8 text-teal-600 dark:text-teal-400" />
                         <h3 className="font-semibold text-lg dark:text-white">Medellín</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 font-medium mt-1">
+                        <p className="mt-1 font-medium text-gray-600 text-sm dark:text-gray-400">
                           El Poblado, Laureles, Envigado
                         </p>
                       </motion.button>
                       <motion.button
-                        type="button"
-                        onClick={() => setSelectedCity('florianopolis')}
-                        whileHover={{ y: -4, scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        transition={{ type: 'spring', stiffness: 300 }}
-                        className={`p-6 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                        className={`rounded-lg border-2 p-6 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                           selectedCity === 'florianopolis'
                             ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20'
-                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                            : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
                         }`}
+                        onClick={() => setSelectedCity('florianopolis')}
+                        transition={{ type: 'spring', stiffness: 300 }}
+                        whileHover={{ y: -4, scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                       >
-                        <Globe className="h-8 w-8 mb-2 text-teal-600 dark:text-teal-400 mx-auto" />
+                        <Globe className="mx-auto mb-2 h-8 w-8 text-teal-600 dark:text-teal-400" />
                         <h3 className="font-semibold text-lg dark:text-white">Florianópolis</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 font-medium mt-1">
+                        <p className="mt-1 font-medium text-gray-600 text-sm dark:text-gray-400">
                           Lagoa, Campeche, Centro
                         </p>
                       </motion.button>
@@ -258,40 +267,39 @@ export default function ExplorePage() {
                 {/* Step 2: Service Selection */}
                 {currentStep === 2 && (
                   <div className="space-y-4">
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                    <h2 className="mb-4 font-semibold text-gray-900 text-xl dark:text-white">
                       What services do you need?
                     </h2>
                     {validationError && selectedServices.length === 0 && (
-                      <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                        <p className="text-sm text-red-700">
+                      <div className="rounded-lg border border-red-200 bg-red-50 p-3">
+                        <p className="text-red-700 text-sm">
                           Please select at least one service to see tailored matches (e.g., English
                           speakers in your area)
                         </p>
                       </div>
                     )}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                       {SERVICES.map((service) => {
                         const Icon = service.icon
                         const isSelected = selectedServices.includes(service.id)
                         return (
                           <motion.button
-                            type="button"
-                            key={service.id}
-                            onClick={() => handleServiceToggle(service.id)}
-                            whileHover={{ y: -3, scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
                             animate={isSelected ? { scale: 1.05 } : { scale: 1 }}
-                            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                            className={`p-4 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                            className={`rounded-lg border-2 p-4 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                               isSelected
                                 ? service.color === 'sunset'
                                   ? 'border-sunset-500 bg-sunset-50'
                                   : 'border-teal-500 bg-teal-50'
                                 : 'border-gray-200 hover:border-gray-300'
                             }`}
+                            key={service.id}
+                            onClick={() => handleServiceToggle(service.id)}
+                            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                            whileHover={{ y: -3, scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                           >
                             <Icon
-                              className={`h-6 w-6 mb-2 mx-auto ${
+                              className={`mx-auto mb-2 h-6 w-6 ${
                                 isSelected
                                   ? service.color === 'sunset'
                                     ? 'text-sunset-600'
@@ -300,7 +308,7 @@ export default function ExplorePage() {
                               }`}
                             />
                             <p
-                              className={`text-sm font-medium ${
+                              className={`font-medium text-sm ${
                                 isSelected ? 'text-gray-900' : 'text-gray-700'
                               }`}
                             >
@@ -316,26 +324,25 @@ export default function ExplorePage() {
                 {/* Step 3: Details */}
                 {currentStep === 3 && (
                   <div className="space-y-6">
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                    <h2 className="mb-4 font-semibold text-gray-900 text-xl dark:text-white">
                       Customize your preferences
                     </h2>
 
                     {/* Frequency */}
                     <div>
-                      <label className="text-sm font-medium text-gray-700 mb-2 block">
+                      <label className="mb-2 block font-medium text-gray-700 text-sm">
                         Service Frequency
                       </label>
-                      <div className="flex flex-col sm:flex-row gap-3">
+                      <div className="flex flex-col gap-3 sm:flex-row">
                         {['weekly', 'bi-weekly', 'monthly'].map((freq) => (
                           <button
-                            type="button"
-                            key={freq}
-                            onClick={() => setFrequency(freq)}
-                            className={`px-4 py-2 min-h-[44px] rounded-lg border-2 capitalize transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                            className={`min-h-[44px] rounded-lg border-2 px-4 py-2 capitalize transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                               frequency === freq
                                 ? 'border-teal-500 bg-teal-50 text-teal-700'
                                 : 'border-gray-200 text-gray-700 hover:border-gray-300'
                             }`}
+                            key={freq}
+                            onClick={() => setFrequency(freq)}
                           >
                             {freq}
                           </button>
@@ -345,38 +352,39 @@ export default function ExplorePage() {
 
                     {/* Budget Range */}
                     <div>
-                      <label className="text-sm font-medium text-gray-700 mb-2 block">
+                      <label className="mb-2 block font-medium text-gray-700 text-sm">
                         Monthly Budget: ${budget[0]} - ${budget[1]}
                       </label>
                       <div className="px-3">
                         <input
-                          type="range"
-                          min="100"
+                          className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 accent-teal-600"
                           max="500"
+                          min="100"
+                          onChange={(e) =>
+                            setBudget([budget[0], Number.parseInt(e.target.value, 10)])
+                          }
+                          type="range"
                           value={budget[1]}
-                          onChange={(e) => setBudget([budget[0], parseInt(e.target.value, 10)])}
-                          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-teal-600"
                         />
                       </div>
                     </div>
 
                     {/* Extras */}
                     <div>
-                      <label className="text-sm font-medium text-gray-700 mb-2 block">
+                      <label className="mb-2 block font-medium text-gray-700 text-sm">
                         Special Requirements
                       </label>
                       <div className="flex flex-wrap gap-2">
                         {['English speaker', 'Pet-friendly', 'Vegan cooking', 'Eco-friendly'].map(
                           (extra) => (
                             <button
-                              type="button"
-                              key={extra}
-                              onClick={() => handleExtraToggle(extra)}
-                              className={`px-4 py-2 min-h-[40px] rounded-full text-sm transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                              className={`min-h-[40px] rounded-full px-4 py-2 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                                 extras.includes(extra)
                                   ? 'bg-teal-600 text-white'
                                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                               }`}
+                              key={extra}
+                              onClick={() => handleExtraToggle(extra)}
                             >
                               {extra}
                             </button>
@@ -389,16 +397,15 @@ export default function ExplorePage() {
               </div>
 
               {/* Navigation Buttons */}
-              <div className="flex justify-between mt-8 pt-6 border-t">
+              <div className="mt-8 flex justify-between border-t pt-6">
                 <button
-                  type="button"
-                  onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
-                  disabled={currentStep === 1}
-                  className={`flex items-center gap-2 px-4 py-2 min-h-[44px] rounded-lg border transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                  className={`flex min-h-[44px] items-center gap-2 rounded-lg border px-4 py-2 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                     currentStep === 1
-                      ? 'border-gray-200 text-gray-700 cursor-not-allowed'
+                      ? 'cursor-not-allowed border-gray-200 text-gray-700'
                       : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                   }`}
+                  disabled={currentStep === 1}
+                  onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
                 >
                   <ChevronLeft className="h-4 w-4" />
                   Back
@@ -407,7 +414,11 @@ export default function ExplorePage() {
                 {currentStep < 3 ? (
                   <div className="flex items-center gap-3">
                     <button
-                      type="button"
+                      className={`flex min-h-[44px] items-center gap-2 rounded-lg px-6 py-3 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                        canProceed()
+                          ? 'bg-teal-600 text-white hover:bg-teal-700'
+                          : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
+                      }`}
                       onClick={() => {
                         if (!canProceed() && currentStep === 2) {
                           setValidationError('Please select at least one service')
@@ -416,23 +427,17 @@ export default function ExplorePage() {
                         setValidationError(null)
                         setCurrentStep(currentStep + 1)
                       }}
-                      className={`flex items-center gap-2 px-6 py-3 min-h-[44px] rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
-                        canProceed()
-                          ? 'bg-teal-600 text-white hover:bg-teal-700'
-                          : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
-                      }`}
                     >
                       Next
                       <ChevronRight className="h-4 w-4" />
                     </button>
                     {currentStep === 2 && (
                       <button
-                        type="button"
+                        className="rounded px-2 py-1 text-gray-800 text-sm underline hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                         onClick={() => {
                           setValidationError(null)
                           setCurrentStep(3)
                         }}
-                        className="text-sm text-gray-800 hover:text-gray-800 underline focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded px-2 py-1"
                       >
                         Skip for now
                       </button>
@@ -440,14 +445,13 @@ export default function ExplorePage() {
                   </div>
                 ) : (
                   <button
-                    type="button"
-                    onClick={handleFindMatches}
-                    disabled={!canProceed() || isLoading}
-                    className={`flex items-center gap-2 px-6 py-3 min-h-[44px] rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                    className={`flex min-h-[44px] items-center gap-2 rounded-lg px-6 py-3 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                       canProceed() && !isLoading
                         ? 'bg-teal-600 text-white hover:bg-teal-700'
-                        : 'bg-gray-200 text-gray-700 cursor-not-allowed'
+                        : 'cursor-not-allowed bg-gray-200 text-gray-700'
                     }`}
+                    disabled={!canProceed() || isLoading}
+                    onClick={handleFindMatches}
                   >
                     {isLoading ? (
                       <>
@@ -468,12 +472,12 @@ export default function ExplorePage() {
 
           {/* Tips Panel (Desktop) */}
           <div className="hidden lg:block">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 sticky top-8">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+            <div className="sticky top-8 rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
+              <h3 className="mb-3 flex items-center gap-2 font-semibold text-gray-900 dark:text-white">
                 <Heart className="h-5 w-5 text-rose-500 dark:text-rose-400" />
                 Pro Tips
               </h3>
-              <p className="text-sm text-gray-700 dark:text-gray-300 font-medium mb-4">
+              <p className="mb-4 font-medium text-gray-700 text-sm dark:text-gray-300">
                 {getTips()}
               </p>
 
@@ -481,31 +485,31 @@ export default function ExplorePage() {
               <AnimatePresence mode="wait">
                 {selectedServices.length > 0 && (
                   <motion.div
-                    key="match-preview"
-                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 rounded-lg border border-teal-200 bg-gradient-to-r from-teal-50 to-orange-50 p-4 dark:border-teal-800 dark:from-teal-900/20 dark:to-orange-900/20"
                     exit={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    key="match-preview"
                     transition={{ duration: 0.3 }}
-                    className="mt-4 p-4 bg-gradient-to-r from-teal-50 to-orange-50 dark:from-teal-900/20 dark:to-orange-900/20 rounded-lg border border-teal-200 dark:border-teal-800"
                   >
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="mb-2 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Users className="h-5 w-5 text-teal-600 dark:text-teal-400" />
-                        <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                        <span className="font-semibold text-gray-900 text-sm dark:text-white">
                           Available Matches
                         </span>
                       </div>
                       <motion.span
-                        key={estimatedMatches}
-                        initial={{ scale: 0.5, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
+                        className="font-bold text-2xl text-teal-600 dark:text-teal-400"
+                        initial={{ scale: 0.5, opacity: 0 }}
+                        key={estimatedMatches}
                         transition={{ type: 'spring', stiffness: 500 }}
-                        className="text-2xl font-bold text-teal-600 dark:text-teal-400"
                       >
                         {estimatedMatches}
                       </motion.span>
                     </div>
-                    <div className="text-xs text-gray-700 dark:text-gray-300">
+                    <div className="text-gray-700 text-xs dark:text-gray-300">
                       Based on {selectedServices.length} service
                       {selectedServices.length > 1 ? 's' : ''} in{' '}
                       {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}
@@ -516,22 +520,22 @@ export default function ExplorePage() {
                 )}
               </AnimatePresence>
 
-              <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
-                <p className="text-xs text-gray-700 dark:text-gray-300 mb-2">
+              <div className="mt-6 border-gray-100 border-t pt-6 dark:border-gray-700">
+                <p className="mb-2 text-gray-700 text-xs dark:text-gray-300">
                   Popular in {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}:
                 </p>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600 dark:text-gray-400">Cleaning + Cooking</span>
-                    <span className="text-gray-700 dark:text-gray-300 font-semibold">68%</span>
+                    <span className="font-semibold text-gray-700 dark:text-gray-300">68%</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600 dark:text-gray-400">Weekly service</span>
-                    <span className="text-gray-700 dark:text-gray-300 font-semibold">71%</span>
+                    <span className="font-semibold text-gray-700 dark:text-gray-300">71%</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600 dark:text-gray-400">English speaker</span>
-                    <span className="text-gray-700 dark:text-gray-300 font-semibold">45%</span>
+                    <span className="font-semibold text-gray-700 dark:text-gray-300">45%</span>
                   </div>
                 </div>
               </div>
@@ -542,20 +546,20 @@ export default function ExplorePage() {
         {/* Loading State */}
         {isLoading && (
           <div className="mt-8">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-12 max-w-2xl mx-auto">
-              <div className="flex flex-col items-center text-center space-y-4">
+            <div className="mx-auto max-w-2xl rounded-xl bg-white p-12 shadow-md dark:bg-gray-900">
+              <div className="flex flex-col items-center space-y-4 text-center">
                 <div className="relative">
-                  <Loader2 className="h-12 w-12 text-teal-600 animate-spin" />
+                  <Loader2 className="h-12 w-12 animate-spin text-teal-600" />
                   <motion.div
-                    className="absolute inset-0"
                     animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    className="absolute inset-0"
+                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
                   >
                     <div className="h-12 w-12 rounded-full bg-teal-200 opacity-30" />
                   </motion.div>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <h3 className="font-semibold text-gray-900 text-xl dark:text-white">
                     Finding your perfect matches...
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300">
@@ -564,25 +568,25 @@ export default function ExplorePage() {
                     {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}
                   </p>
                   <motion.div
+                    animate={{ opacity: 1 }}
                     className="flex justify-center gap-1 pt-2"
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
                   >
                     <motion.span
-                      className="h-2 w-2 bg-teal-600 rounded-full"
                       animate={{ y: [0, -8, 0] }}
-                      transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+                      className="h-2 w-2 rounded-full bg-teal-600"
+                      transition={{ duration: 0.6, repeat: Number.POSITIVE_INFINITY, delay: 0 }}
                     />
                     <motion.span
-                      className="h-2 w-2 bg-teal-600 rounded-full"
                       animate={{ y: [0, -8, 0] }}
-                      transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
+                      className="h-2 w-2 rounded-full bg-teal-600"
+                      transition={{ duration: 0.6, repeat: Number.POSITIVE_INFINITY, delay: 0.2 }}
                     />
                     <motion.span
-                      className="h-2 w-2 bg-teal-600 rounded-full"
                       animate={{ y: [0, -8, 0] }}
-                      transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
+                      className="h-2 w-2 rounded-full bg-teal-600"
+                      transition={{ duration: 0.6, repeat: Number.POSITIVE_INFINITY, delay: 0.4 }}
                     />
                   </motion.div>
                 </div>
@@ -594,19 +598,19 @@ export default function ExplorePage() {
         {/* Results Section */}
         {!isLoading && matches.length > 0 ? (
           <div className="mt-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Matches</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <h2 className="mb-6 font-bold text-2xl text-gray-900">Your Matches</h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {matches.map((match, index) => (
                 <div
+                  className="animate-[fadeIn_0.5s_ease-in-out_forwards] rounded-xl bg-white p-6 opacity-0 shadow-md dark:bg-gray-900"
                   key={match.id}
-                  className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 opacity-0 animate-[fadeIn_0.5s_ease-in-out_forwards]"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="flex items-start gap-4 mb-4">
+                  <div className="mb-4 flex items-start gap-4">
                     <img
-                      src={match.photo}
                       alt={match.name}
-                      className="w-16 h-16 rounded-full object-cover"
+                      className="h-16 w-16 rounded-full object-cover"
+                      src={match.photo}
                     />
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
@@ -615,70 +619,64 @@ export default function ExplorePage() {
                         </h3>
                         {match.verified && <Check className="h-4 w-4 text-teal-600" />}
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{match.location}</p>
-                      <div className="flex items-center gap-1 mt-1">
-                        <Star className="h-4 w-4 text-sunset-500 fill-sunset-500" />
-                        <span className="text-sm font-medium">{match.rate}</span>
+                      <p className="text-gray-600 text-sm dark:text-gray-400">{match.location}</p>
+                      <div className="mt-1 flex items-center gap-1">
+                        <Star className="h-4 w-4 fill-sunset-500 text-sunset-500" />
+                        <span className="font-medium text-sm">{match.rate}</span>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="inline-flex items-center gap-1 px-2 py-1 bg-sunset-50 rounded-full">
-                        <span className="text-lg font-bold text-sunset-600">{match.score}</span>
-                        <span className="text-xs text-sunset-600">/100</span>
+                      <div className="inline-flex items-center gap-1 rounded-full bg-sunset-50 px-2 py-1">
+                        <span className="font-bold text-lg text-sunset-600">{match.score}</span>
+                        <span className="text-sunset-600 text-xs">/100</span>
                       </div>
                     </div>
                   </div>
 
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{match.bio}</p>
+                  <p className="mb-3 text-gray-600 text-sm dark:text-gray-400">{match.bio}</p>
 
                   {/* Review Snippet */}
                   {match.review && (
-                    <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg mb-3 border-l-4 border-teal-500 dark:border-teal-400">
-                      <p className="text-sm text-gray-700 dark:text-gray-300 italic">
+                    <div className="mb-3 rounded-lg border-teal-500 border-l-4 bg-gray-50 p-3 dark:border-teal-400 dark:bg-gray-900/50">
+                      <p className="text-gray-700 text-sm italic dark:text-gray-300">
                         "{match.review.text}"
                       </p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
+                      <div className="mt-1 flex items-center gap-2">
+                        <span className="font-medium text-gray-600 text-xs dark:text-gray-400">
                           — {match.review.author}
                         </span>
                         <div className="flex gap-0.5">
-                          {[...Array(match.review.rating)].map((_, i) => (
-                            <Star key={i} className="h-3 w-3 text-sunset-500 fill-sunset-500" />
+                          {[...new Array(match.review.rating)].map((_, i) => (
+                            <Star className="h-3 w-3 fill-sunset-500 text-sunset-500" key={i} />
                           ))}
                         </div>
                       </div>
                     </div>
                   )}
 
-                  <div className="flex flex-wrap gap-1 mb-4">
+                  <div className="mb-4 flex flex-wrap gap-1">
                     {match.specialties.slice(0, 3).map((specialty: string) => (
                       <span
+                        className="rounded-full bg-teal-50 px-2 py-1 text-teal-700 text-xs dark:bg-teal-900/30 dark:text-teal-300"
                         key={specialty}
-                        className="px-2 py-1 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-xs rounded-full"
                       >
                         {specialty}
                       </span>
                     ))}
                   </div>
 
-                  <button
-                    type="button"
-                    className="w-full py-2 min-h-[44px] text-teal-600 font-medium hover:bg-teal-50 focus:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset rounded-lg transition-all"
-                  >
+                  <button className="min-h-[44px] w-full rounded-lg py-2 font-medium text-teal-600 transition-all hover:bg-teal-50 focus:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset">
                     View Profile →
                   </button>
                 </div>
               ))}
             </div>
 
-            <div className="text-center mt-8">
-              <p className="text-sm text-gray-700 mb-4">
+            <div className="mt-8 text-center">
+              <p className="mb-4 text-gray-700 text-sm">
                 Want unlimited matches and direct intros?
               </p>
-              <button
-                type="button"
-                className="px-6 py-3 min-h-[48px] bg-teal-600 text-white rounded-lg font-medium hover:bg-teal-700 focus:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all shadow-md hover:shadow-lg"
-              >
+              <button className="min-h-[48px] rounded-lg bg-teal-600 px-6 py-3 font-medium text-white shadow-md transition-all hover:bg-teal-700 hover:shadow-lg focus:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
                 Upgrade to Premium
               </button>
             </div>
@@ -689,26 +687,26 @@ export default function ExplorePage() {
           !isLoading &&
           matches.length === 0 && (
             <div className="mt-8">
-              <div className="bg-white rounded-xl shadow-md p-8 md:p-12 max-w-4xl mx-auto">
-                <div className="flex flex-col items-center text-center space-y-6">
+              <div className="mx-auto max-w-4xl rounded-xl bg-white p-8 shadow-md md:p-12">
+                <div className="flex flex-col items-center space-y-6 text-center">
                   <div className="relative">
                     <Search className="h-16 w-16 text-gray-300" />
                     <motion.div
-                      className="absolute -right-2 -top-2"
                       animate={{ rotate: [0, 15, -15, 0] }}
-                      transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                      className="-right-2 -top-2 absolute"
+                      transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3 }}
                     >
                       <Sparkles className="h-6 w-6 text-sunset-400" />
                     </motion.div>
                   </div>
 
-                  <div className="space-y-3 max-w-3xl">
-                    <h3 className="text-2xl font-semibold text-gray-900">
+                  <div className="max-w-3xl space-y-3">
+                    <h3 className="font-semibold text-2xl text-gray-900">
                       {selectedServices.length === 0
                         ? 'Pick services to see matches'
                         : 'Building your matches...'}
                     </h3>
-                    <p className="text-gray-800 leading-relaxed text-base">
+                    <p className="text-base text-gray-800 leading-relaxed">
                       {selectedServices.length === 0
                         ? 'Select at least one service above to discover available home helpers in your area.'
                         : `We're expanding our network in ${selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}. Try adjusting your preferences or check back soon for more options!`}
@@ -717,33 +715,31 @@ export default function ExplorePage() {
 
                   {/* Suggestion Bubbles */}
                   {selectedServices.length > 0 && (
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      <span className="inline-flex items-center px-3 py-1.5 bg-teal-50 text-teal-700 rounded-full text-sm font-medium">
+                    <div className="flex flex-wrap justify-center gap-2">
+                      <span className="inline-flex items-center rounded-full bg-teal-50 px-3 py-1.5 font-medium text-sm text-teal-700">
                         Try: Weekly cleaning only (15 matches)
                       </span>
-                      <span className="inline-flex items-center px-3 py-1.5 bg-sunset-50 text-sunset-700 rounded-full text-sm font-medium">
+                      <span className="inline-flex items-center rounded-full bg-sunset-50 px-3 py-1.5 font-medium text-sm text-sunset-700">
                         Remove: English speaker (+8 matches)
                       </span>
                     </div>
                   )}
 
-                  <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                  <div className="flex flex-col justify-center gap-3 pt-2 sm:flex-row">
                     <button
-                      type="button"
+                      className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-teal-600 to-teal-700 px-6 py-3 text-white shadow-md transition-all hover:from-teal-700 hover:to-teal-800 hover:shadow-lg focus:from-teal-700 focus:to-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                       onClick={() => {
                         setCurrentStep(2)
                         setSelectedServices([])
                         setExtras([])
                       }}
-                      className="flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-lg hover:from-teal-700 hover:to-teal-800 focus:from-teal-700 focus:to-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all shadow-md hover:shadow-lg"
                     >
                       <RefreshCw className="h-4 w-4" />
                       Adjust Preferences
                     </button>
                     <button
-                      type="button"
+                      className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg border border-gray-300 px-6 py-3 text-gray-700 transition-all hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                       onClick={() => router.push('/en/dashboard/quiz')}
-                      className="flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all"
                     >
                       <Sparkles className="h-4 w-4" />
                       Take Full Quiz

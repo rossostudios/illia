@@ -11,9 +11,9 @@ export async function GET(request: NextRequest) {
     const services = searchParams.get('services')?.split(',').filter(Boolean) || []
     const languages = searchParams.get('languages')?.split(',').filter(Boolean) || []
     const budgetMax = searchParams.get('budget_max')
-      ? parseInt(searchParams.get('budget_max')!, 10)
+      ? Number.parseInt(searchParams.get('budget_max')!, 10)
       : null
-    const limit = searchParams.get('limit') ? parseInt(searchParams.get('limit')!, 10) : 20
+    const limit = searchParams.get('limit') ? Number.parseInt(searchParams.get('limit')!, 10) : 20
 
     // Build query
     let query = supabase
@@ -50,7 +50,6 @@ export async function GET(request: NextRequest) {
     const { data: providers, error } = await query
 
     if (error) {
-      console.error('Error fetching providers:', error)
       return NextResponse.json({ error: 'Failed to fetch providers' }, { status: 500 })
     }
 
@@ -65,7 +64,7 @@ export async function GET(request: NextRequest) {
       score: calculateScore(provider, { services, languages }),
       rate: formatRate(provider.rate_monthly, city),
       location: provider.neighborhood || city,
-      verified: provider.verified || false,
+      verified: provider.verified,
       specialties: provider.specialties || [],
       availability: provider.availability || 'Flexible',
       email: provider.email,
@@ -80,8 +79,7 @@ export async function GET(request: NextRequest) {
       providers: formattedProviders,
       total: formattedProviders.length,
     })
-  } catch (error) {
-    console.error('Providers API error:', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'Failed to fetch providers' }, { status: 500 })
   }
 }
@@ -103,7 +101,9 @@ function calculateScore(provider: any, criteria: any): number {
   }
 
   // Verified bonus
-  if (provider.verified) score += 5
+  if (provider.verified) {
+    score += 5
+  }
 
   // Rating bonus
   if (provider.rating) {
@@ -115,13 +115,16 @@ function calculateScore(provider: any, criteria: any): number {
 
 // Format rate based on city currency
 function formatRate(rate: number | null, city: string): string {
-  if (!rate) return 'Contact for rates'
+  if (!rate) {
+    return 'Contact for rates'
+  }
 
   // Assuming rate is stored in local currency units
   if (city === 'medellin') {
     // Format as COP
     return `${rate.toLocaleString()} COP/month`
-  } else if (city === 'florianopolis') {
+  }
+  if (city === 'florianopolis') {
     // Format as BRL
     return `R$${rate}/month`
   }

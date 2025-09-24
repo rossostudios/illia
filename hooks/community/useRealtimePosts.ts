@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useSessionContext } from '@/components/SessionProvider'
 import { createClient } from '@/lib/supabase/client'
 
-export interface Post {
+export type Post = {
   id: string
   thread_id: string
   user_id: string
@@ -27,7 +27,7 @@ export interface Post {
   }[]
 }
 
-interface UseRealtimePostsOptions {
+type UseRealtimePostsOptions = {
   threadId: string
   onPostAdded?: (post: Post) => void
   onPostUpdated?: (post: Post) => void
@@ -45,7 +45,9 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
 
   // Fetch initial posts
   const fetchPosts = async () => {
-    if (!options.threadId) return
+    if (!options.threadId) {
+      return
+    }
 
     try {
       setLoading(true)
@@ -62,7 +64,9 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
         .eq('thread_id', options.threadId)
         .order('created_at', { ascending: true })
 
-      if (error) throw error
+      if (error) {
+        throw error
+      }
 
       // Fetch reactions for posts
       if (data && data.length > 0) {
@@ -106,7 +110,6 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
         setPosts(data || [])
       }
     } catch (err) {
-      console.error('Error fetching posts:', err)
       setError(err as Error)
     } finally {
       setLoading(false)
@@ -203,7 +206,9 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
   }
 
   useEffect(() => {
-    if (!options.threadId) return
+    if (!options.threadId) {
+      return
+    }
 
     // Fetch initial data
     fetchPosts()
@@ -248,7 +253,6 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
         )
         .subscribe((status) => {
           if (status === 'SUBSCRIBED') {
-            console.log('Subscribed to thread posts')
           }
         })
 
@@ -274,18 +278,18 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
 
   // Create a new post
   const createPost = async (body: string, parentPostId?: string) => {
-    if (!user) throw new Error('User not authenticated')
-
-    try {
-      const { data, error } = await supabase
-        .from('thread_posts')
-        .insert({
-          thread_id: options.threadId,
-          user_id: user.id,
-          body,
-          parent_post_id: parentPostId,
-        })
-        .select(`
+    if (!user) {
+      throw new Error('User not authenticated')
+    }
+    const { data, error } = await supabase
+      .from('thread_posts')
+      .insert({
+        thread_id: options.threadId,
+        user_id: user.id,
+        body,
+        parent_post_id: parentPostId,
+      })
+      .select(`
           *,
           author:users!user_id (
             name,
@@ -293,86 +297,78 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
             tier
           )
         `)
-        .single()
+      .single()
 
-      if (error) throw error
-      return data
-    } catch (err) {
-      console.error('Error creating post:', err)
-      throw err
+    if (error) {
+      throw error
     }
+    return data
   }
 
   // Update a post
   const updatePost = async (postId: string, body: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('thread_posts')
-        .update({
-          body,
-          edited_at: new Date().toISOString(),
-        })
-        .eq('id', postId)
-        .eq('user_id', user?.id) // Ensure user owns the post
-        .select()
-        .single()
+    const { data, error } = await supabase
+      .from('thread_posts')
+      .update({
+        body,
+        edited_at: new Date().toISOString(),
+      })
+      .eq('id', postId)
+      .eq('user_id', user?.id) // Ensure user owns the post
+      .select()
+      .single()
 
-      if (error) throw error
-      return data
-    } catch (err) {
-      console.error('Error updating post:', err)
-      throw err
+    if (error) {
+      throw error
     }
+    return data
   }
 
   // Delete a post
   const deletePost = async (postId: string) => {
-    try {
-      const { error } = await supabase
-        .from('thread_posts')
-        .delete()
-        .eq('id', postId)
-        .eq('user_id', user?.id) // Ensure user owns the post
+    const { error } = await supabase
+      .from('thread_posts')
+      .delete()
+      .eq('id', postId)
+      .eq('user_id', user?.id) // Ensure user owns the post
 
-      if (error) throw error
-    } catch (err) {
-      console.error('Error deleting post:', err)
-      throw err
+    if (error) {
+      throw error
     }
   }
 
   // Add or remove reaction
   const toggleReaction = async (postId: string, reaction: string) => {
-    if (!user) throw new Error('User not authenticated')
+    if (!user) {
+      throw new Error('User not authenticated')
+    }
+    // Check if reaction exists
+    const { data: existing } = await supabase
+      .from('thread_reactions')
+      .select('*')
+      .eq('post_id', postId)
+      .eq('user_id', user.id)
+      .eq('reaction', reaction)
+      .single()
 
-    try {
-      // Check if reaction exists
-      const { data: existing } = await supabase
-        .from('thread_reactions')
-        .select('*')
-        .eq('post_id', postId)
-        .eq('user_id', user.id)
-        .eq('reaction', reaction)
-        .single()
+    if (existing) {
+      // Remove reaction
+      const { error } = await supabase.from('thread_reactions').delete().eq('id', existing.id)
 
-      if (existing) {
-        // Remove reaction
-        const { error } = await supabase.from('thread_reactions').delete().eq('id', existing.id)
-
-        if (error) throw error
-      } else {
-        // Add reaction
-        const { error } = await supabase.from('thread_reactions').insert({
-          post_id: postId,
-          user_id: user.id,
-          reaction,
-        })
-
-        if (error) throw error
+      if (error) {
+        throw error
       }
-    } catch (err) {
-      console.error('Error toggling reaction:', err)
-      throw err
+    } else {
+      // Add reaction
+      const { error } = await supabase.from('thread_reactions').insert({
+        post_id: postId,
+        user_id: user.id,
+        reaction,
+      })
+
+      if (error) {
+        throw error
+      }
     }
   }
 

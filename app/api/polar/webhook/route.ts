@@ -6,9 +6,7 @@ export const POST = Webhooks({
   webhookSecret: process.env.POLAR_WEBHOOK_SECRET!,
 
   // General payload handler
-  onPayload: async (payload) => {
-    console.log('Received webhook event:', payload.type)
-  },
+  onPayload: async (_payload) => {},
 
   // Handle successful order payment
   onOrderPaid: async (payload) => {
@@ -106,11 +104,7 @@ export const POST = Webhooks({
   },
 
   // Handle checkout events if needed
-  onCheckoutCreated: async (payload) => {
-    console.log('Checkout created:', payload.data)
-  },
+  onCheckoutCreated: async (_payload) => {},
 
-  onCheckoutUpdated: async (payload) => {
-    console.log('Checkout updated:', payload.data)
-  },
+  onCheckoutUpdated: async (_payload) => {},
 })

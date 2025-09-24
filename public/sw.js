@@ -4,26 +4,22 @@ const urlsToCache = ['/', '/offline.html', '/manifest.json', '/globals.css']
 
 // Install event - cache assets
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache)
-    })
-  )
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache)))
   self.skipWaiting()
 })
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
+    caches.keys().then((cacheNames) =>
+      Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
             return caches.delete(cacheName)
           }
         })
       )
-    })
+    )
   )
   self.clients.claim()
 })
@@ -31,7 +27,9 @@ self.addEventListener('activate', (event) => {
 // Fetch event - serve from cache when possible
 self.addEventListener('fetch', (event) => {
   // Skip non-GET requests
-  if (event.request.method !== 'GET') return
+  if (event.request.method !== 'GET') {
+    return
+  }
 
   // Handle API calls differently
   if (event.request.url.includes('/api/')) {
@@ -96,11 +94,7 @@ self.addEventListener('sync', (event) => {
   }
 })
 
-async function syncMessages() {
-  // Sync offline messages when back online
-  // This would sync with your backend
-  console.log('Syncing messages...')
-}
+async function syncMessages() {}
 
 // Push notifications
 self.addEventListener('push', (event) => {

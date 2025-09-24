@@ -40,25 +40,25 @@ export default function Features() {
   ]
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+    <section className="bg-gradient-to-b from-white to-gray-50 py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('title')}</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">{t('subtitle')}</p>
+        <div className="mb-12 text-center">
+          <h2 className="mb-4 font-bold text-3xl text-gray-900">{t('title')}</h2>
+          <p className="mx-auto max-w-3xl text-gray-600 text-lg">{t('subtitle')}</p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => {
             const Icon = feature.icon
             return (
               <div
+                className="rounded-xl border border-gray-200 bg-white p-6 transition-all hover:border-teal-500 hover:shadow-lg"
                 key={index}
-                className="bg-white rounded-xl p-6 border border-gray-200 hover:border-teal-500 hover:shadow-lg transition-all"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg flex items-center justify-center mb-4">
-                  <Icon className="w-6 h-6 text-white" />
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-teal-500 to-teal-600">
+                  <Icon className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{t(feature.titleKey)}</h3>
+                <h3 className="mb-2 font-semibold text-gray-900 text-xl">{t(feature.titleKey)}</h3>
                 <p className="text-gray-600">{t(feature.descriptionKey)}</p>
               </div>
             )

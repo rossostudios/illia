@@ -66,8 +66,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true, meterType, quantity })
-  } catch (error) {
-    console.error('Usage tracking error:', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'Failed to track usage' }, { status: 500 })
   }
 }
@@ -129,8 +128,7 @@ export async function GET(_request: NextRequest) {
           }
         : null,
     })
-  } catch (error) {
-    console.error('Usage fetch error:', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'Failed to fetch usage' }, { status: 500 })
   }
 }

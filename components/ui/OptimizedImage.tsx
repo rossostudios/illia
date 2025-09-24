@@ -11,7 +11,7 @@ interface OptimizedImageProps extends Omit<ImageProps, 'onLoad' | 'placeholder'>
 
 // Generate blur placeholder (you'd typically generate these at build time)
 const shimmer = (w: number, h: number) => `
-  <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="icon">
     <defs>
       <linearGradient id="g">
         <stop stop-color="#f3f4f6" offset="20%" />
@@ -53,7 +53,9 @@ export function OptimizedImage({
 
   // Intersection Observer for lazy loading
   useEffect(() => {
-    if (!lazy || !imageRef.current) return
+    if (!(lazy && imageRef.current)) {
+      return
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -89,26 +91,24 @@ export function OptimizedImage({
 
   return (
     <div
-      ref={imageRef}
       className={`relative overflow-hidden ${aspectRatioClasses[aspectRatio]} ${className}`}
+      ref={imageRef}
     >
       {isInView ? (
         <>
           <Image
             {...props}
-            src={imageSrc}
             alt={alt}
-            fill={!props.width && !props.height}
-            className={`
-              object-cover transition-opacity duration-300
-              ${isLoading ? 'opacity-0' : 'opacity-100'}
+            blurDataURL={dataUrl(700, 475)}
+            className={`object-cover transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}
               ${props.className || ''}
             `}
-            onLoad={handleLoad}
+            fill={!(props.width || props.height)}
             onError={handleError}
+            onLoad={handleLoad}
             placeholder="blur"
-            blurDataURL={dataUrl(700, 475)}
             sizes={props.sizes || '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'}
+            src={imageSrc}
           />
           {isLoading && <div className="absolute inset-0 animate-pulse bg-gray-200" />}
         </>
@@ -131,7 +131,9 @@ export function ProgressiveImage({
   const [isHighQualityLoaded, setIsHighQualityLoaded] = useState(false)
 
   useEffect(() => {
-    if (!lowQualitySrc) return
+    if (!lowQualitySrc) {
+      return
+    }
 
     const img = new window.Image()
     img.src = src as string
@@ -145,12 +147,10 @@ export function ProgressiveImage({
     <div className={`relative ${className}`}>
       <OptimizedImage
         {...props}
-        src={currentSrc}
         alt={alt}
-        className={`
-          transition-all duration-500
-          ${!isHighQualityLoaded && lowQualitySrc ? 'blur-sm scale-105' : ''}
+        className={`transition-all duration-500 ${!isHighQualityLoaded && lowQualitySrc ? 'scale-105 blur-sm' : ''}
         `}
+        src={currentSrc}
       />
     </div>
   )

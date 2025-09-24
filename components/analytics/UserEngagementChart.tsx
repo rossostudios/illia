@@ -9,23 +9,23 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from 'recharts'
-import type { UserEngagementMetrics } from '@/hooks/useAnalytics'
+} from '@/components/LazyChart'
+import type { UserEngagementMetrics } from '@/hooks/use-analytics'
 
-interface UserEngagementChartProps {
+type UserEngagementChartProps = {
   data: UserEngagementMetrics
   className?: string
 }
 
 export function UserEngagementChart({ data, className = '' }: UserEngagementChartProps) {
   // Validate data before processing
-  if (!data || !data.searchesByDate || !Array.isArray(data.searchesByDate)) {
+  if (!(data?.searchesByDate && Array.isArray(data.searchesByDate))) {
     return (
       <div
-        className={`w-full h-48 sm:h-64 ${className} flex items-center justify-center text-gray-500`}
+        className={`h-48 w-full sm:h-64 ${className} flex items-center justify-center text-gray-500`}
       >
         <div className="text-center">
-          <div className="text-lg font-medium">No data available</div>
+          <div className="font-medium text-lg">No data available</div>
           <div className="text-sm">Chart data is missing or invalid</div>
         </div>
       </div>
@@ -47,8 +47,7 @@ export function UserEngagementChart({ data, className = '' }: UserEngagementChar
         matches: matchItem?.count || 0,
         leads: leadItem?.count || 0,
       }
-    } catch (error) {
-      console.warn('Error processing chart data:', searchItem, error)
+    } catch (_error) {
       return {
         date: 'Invalid Date',
         searches: 0,
@@ -82,8 +81,7 @@ export function UserEngagementChart({ data, className = '' }: UserEngagementChar
           matches: matchItem?.count || 0,
           leads: leadItem?.count || 0,
         }
-      } catch (error) {
-        console.warn('Error processing date:', date, error)
+      } catch (_error) {
         return {
           date: 'Invalid Date',
           searches: 0,
@@ -100,10 +98,10 @@ export function UserEngagementChart({ data, className = '' }: UserEngagementChar
   ) {
     return (
       <div
-        className={`w-full h-48 sm:h-64 ${className} flex items-center justify-center text-gray-500`}
+        className={`h-48 w-full sm:h-64 ${className} flex items-center justify-center text-gray-500`}
       >
         <div className="text-center">
-          <div className="text-lg font-medium">No data to display</div>
+          <div className="font-medium text-lg">No data to display</div>
           <div className="text-sm">No engagement data found for the selected period</div>
         </div>
       </div>
@@ -111,11 +109,11 @@ export function UserEngagementChart({ data, className = '' }: UserEngagementChar
   }
 
   return (
-    <div className={`w-full h-48 sm:h-64 ${className}`}>
-      <ResponsiveContainer width="100%" height="100%">
+    <div className={`h-48 w-full sm:h-64 ${className}`}>
+      <ResponsiveContainer height="100%" width="100%">
         <LineChart data={completeChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-          <XAxis dataKey="date" className="text-xs" tick={{ fontSize: 12 }} />
+          <CartesianGrid className="opacity-30" strokeDasharray="3 3" />
+          <XAxis className="text-xs" dataKey="date" tick={{ fontSize: 12 }} />
           <YAxis className="text-xs" tick={{ fontSize: 12 }} />
           <Tooltip
             contentStyle={{
@@ -126,31 +124,31 @@ export function UserEngagementChart({ data, className = '' }: UserEngagementChar
           />
           <Legend />
           <Line
-            type="monotone"
+            activeDot={{ r: 6 }}
             dataKey="searches"
+            dot={{ r: 4 }}
+            name="Searches"
             stroke="#3b82f6"
             strokeWidth={2}
-            name="Searches"
-            dot={{ r: 4 }}
-            activeDot={{ r: 6 }}
+            type="monotone"
           />
           <Line
-            type="monotone"
+            activeDot={{ r: 6 }}
             dataKey="matches"
+            dot={{ r: 4 }}
+            name="Matches"
             stroke="#10b981"
             strokeWidth={2}
-            name="Matches"
-            dot={{ r: 4 }}
-            activeDot={{ r: 6 }}
+            type="monotone"
           />
           <Line
-            type="monotone"
+            activeDot={{ r: 6 }}
             dataKey="leads"
+            dot={{ r: 4 }}
+            name="Leads"
             stroke="#f59e0b"
             strokeWidth={2}
-            name="Leads"
-            dot={{ r: 4 }}
-            activeDot={{ r: 6 }}
+            type="monotone"
           />
         </LineChart>
       </ResponsiveContainer>

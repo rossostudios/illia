@@ -4,7 +4,7 @@ import { motion, useAnimation, useMotionValue, useTransform } from 'framer-motio
 import { Check, X } from 'lucide-react'
 import { useState } from 'react'
 
-interface SwipeableCardProps {
+type SwipeableCardProps = {
   children: React.ReactNode
   onSwipeLeft?: () => void
   onSwipeRight?: () => void
@@ -35,20 +35,18 @@ export function SwipeableCard({
     const offset = info.offset.x
     const velocity = info.velocity.x
 
-    if (!disabled) {
-      if (offset > threshold || velocity > 500) {
-        // Swiped right
-        controls.start({ x: 300, opacity: 0 })
-        onSwipeRight?.()
-      } else if (offset < -threshold || velocity < -500) {
-        // Swiped left
-        controls.start({ x: -300, opacity: 0 })
-        onSwipeLeft?.()
-      } else {
-        // Return to center
-        controls.start({ x: 0, rotate: 0 })
-      }
+    if (disabled) {
+      controls.start({ x: 0, rotate: 0 })
+    } else if (offset > threshold || velocity > 500) {
+      // Swiped right
+      controls.start({ x: 300, opacity: 0 })
+      onSwipeRight?.()
+    } else if (offset < -threshold || velocity < -500) {
+      // Swiped left
+      controls.start({ x: -300, opacity: 0 })
+      onSwipeLeft?.()
     } else {
+      // Return to center
       controls.start({ x: 0, rotate: 0 })
     }
   }
@@ -57,39 +55,39 @@ export function SwipeableCard({
     <div className="relative">
       {/* Swipe indicators */}
       <motion.div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        className="pointer-events-none absolute inset-0 flex items-center justify-center"
         style={{ opacity: opacityLeft }}
       >
-        <div className="bg-red-500 text-white rounded-full p-4 shadow-lg">
+        <div className="rounded-full bg-red-500 p-4 text-white shadow-lg">
           <X className="h-8 w-8" />
         </div>
       </motion.div>
 
       <motion.div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        className="pointer-events-none absolute inset-0 flex items-center justify-center"
         style={{ opacity: opacityRight }}
       >
-        <div className="bg-green-500 text-white rounded-full p-4 shadow-lg">
+        <div className="rounded-full bg-green-500 p-4 text-white shadow-lg">
           <Check className="h-8 w-8" />
         </div>
       </motion.div>
 
       {/* Card */}
       <motion.div
+        animate={controls}
+        className={`cursor-grab active:cursor-grabbing ${
+          isDragging ? 'select-none' : ''
+        } ${className}`}
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={0.7}
-        onDragStart={() => setIsDragging(true)}
         onDragEnd={handleDragEnd}
-        animate={controls}
+        onDragStart={() => setIsDragging(true)}
         style={{
           x: motionValue,
           rotate: rotateValue,
           scale,
         }}
-        className={`cursor-grab active:cursor-grabbing ${
-          isDragging ? 'select-none' : ''
-        } ${className}`}
       >
         {children}
       </motion.div>
@@ -98,7 +96,7 @@ export function SwipeableCard({
 }
 
 // Swipeable card stack for multiple cards
-interface SwipeableStackProps {
+type SwipeableStackProps = {
   cards: React.ReactNode[]
   onSwipeLeft?: (index: number) => void
   onSwipeRight?: (index: number) => void
@@ -143,18 +141,20 @@ export function SwipeableStack({
         const isCurrent = index === currentIndex
         const offset = index - currentIndex
 
-        if (!isVisible || swipedCards.includes(index)) return null
+        if (!isVisible || swipedCards.includes(index)) {
+          return null
+        }
 
         return (
           <motion.div
-            key={index}
-            initial={{ scale: 1 - offset * 0.05, y: offset * 10 }}
             animate={{
               scale: 1 - offset * 0.05,
               y: offset * 10,
               opacity: offset < 3 ? 1 : 0,
             }}
             className="absolute inset-0"
+            initial={{ scale: 1 - offset * 0.05, y: offset * 10 }}
+            key={index}
             style={{
               zIndex: cards.length - index,
             }}
@@ -171,7 +171,7 @@ export function SwipeableStack({
       })}
 
       {currentIndex >= cards.length && (
-        <div className="flex items-center justify-center h-full">
+        <div className="flex h-full items-center justify-center">
           <p className="text-gray-500 dark:text-gray-400">No more cards</p>
         </div>
       )}

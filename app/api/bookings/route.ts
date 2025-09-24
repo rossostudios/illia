@@ -63,7 +63,6 @@ export async function GET(request: NextRequest) {
     const { data: bookings, error } = await query
 
     if (error) {
-      console.error('Error fetching bookings:', error)
       return NextResponse.json({ error: 'Failed to fetch bookings' }, { status: 500 })
     }
 
@@ -72,8 +71,7 @@ export async function GET(request: NextRequest) {
       bookings: bookings || [],
       isProvider: !!provider,
     })
-  } catch (error) {
-    console.error('[Bookings GET Error]:', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -109,7 +107,7 @@ export async function POST(request: NextRequest) {
     } = body
 
     // Validate required fields
-    if (!provider_id || !service_type || !booking_date || !start_time || !end_time) {
+    if (!(provider_id && service_type && booking_date && start_time && end_time)) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
@@ -149,7 +147,6 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (bookingError) {
-      console.error('Error creating booking:', bookingError)
       return NextResponse.json({ error: 'Failed to create booking' }, { status: 500 })
     }
 
@@ -164,7 +161,6 @@ export async function POST(request: NextRequest) {
       )
 
       if (recurringError) {
-        console.error('Error creating recurring bookings:', recurringError)
         // Don't fail the main booking if recurring creation fails
       } else {
         booking.recurring_bookings = recurringBookings
@@ -185,8 +181,7 @@ export async function POST(request: NextRequest) {
       booking,
       message: 'Booking created successfully',
     })
-  } catch (error) {
-    console.error('[Bookings POST Error]:', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -233,7 +228,7 @@ export async function PUT(request: NextRequest) {
     const isOwner = existingBooking.user_id === user.id
     const isProvider = provider?.id === existingBooking.provider_id
 
-    if (!isOwner && !isProvider) {
+    if (!(isOwner || isProvider)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
@@ -244,7 +239,9 @@ export async function PUT(request: NextRequest) {
       // Users can update these fields
       const userFields = ['special_instructions', 'location_details']
       userFields.forEach((field) => {
-        if (field in updates) allowedUpdates[field] = updates[field]
+        if (field in updates) {
+          allowedUpdates[field] = updates[field]
+        }
       })
     }
 
@@ -273,7 +270,6 @@ export async function PUT(request: NextRequest) {
       .single()
 
     if (updateError) {
-      console.error('Error updating booking:', updateError)
       return NextResponse.json({ error: 'Failed to update booking' }, { status: 500 })
     }
 
@@ -282,8 +278,7 @@ export async function PUT(request: NextRequest) {
       booking: updatedBooking,
       message: 'Booking updated successfully',
     })
-  } catch (error) {
-    console.error('[Bookings PUT Error]:', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -352,7 +347,6 @@ export async function DELETE(request: NextRequest) {
       .eq('id', id)
 
     if (updateError) {
-      console.error('Error cancelling booking:', updateError)
       return NextResponse.json({ error: 'Failed to cancel booking' }, { status: 500 })
     }
 
@@ -368,8 +362,7 @@ export async function DELETE(request: NextRequest) {
       message: 'Booking cancelled successfully',
       cancellation_fee: cancellationFee || 0,
     })
-  } catch (error) {
-    console.error('[Bookings DELETE Error]:', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

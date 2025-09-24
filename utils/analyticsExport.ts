@@ -1,9 +1,9 @@
 import html2canvas from 'html2canvas'
-import jsPDF from 'jspdf'
+import jsPdf from 'jspdf'
 import Papa from 'papaparse'
-import type { AnalyticsData } from '@/hooks/useAnalytics'
+import type { AnalyticsData } from '@/hooks/use-analytics'
 
-export interface PDFExportOptions {
+export type PDFExportOptions = {
   title?: string
   includeCharts?: boolean
   includeStats?: boolean
@@ -21,7 +21,7 @@ export async function exportAnalyticsToPDF(
     dateRange = 'Last 30 days',
   } = options
 
-  const pdf = new jsPDF('p', 'mm', 'a4')
+  const pdf = new jsPdf('p', 'mm', 'a4')
   const pageWidth = pdf.internal.pageSize.getWidth()
   const pageHeight = pdf.internal.pageSize.getHeight()
   let yPosition = 20
@@ -149,8 +149,8 @@ export async function exportAnalyticsToPDF(
 
           pdf.addImage(imgData, 'PNG', 20, yPosition, imgWidth, imgHeight)
           yPosition += imgHeight + 15
-        } catch (error) {
-          console.warn('Failed to capture chart:', error)
+        } catch (_error) {
+          // Error handled silently
         }
       }
     }

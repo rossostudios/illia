@@ -39,9 +39,9 @@ export function Skeleton({
 
   return (
     <div
+      aria-hidden="true"
       className={`${baseClasses} ${animationClasses[animation]} ${variantClasses[variant]} ${className}`}
       style={computedStyle}
-      aria-hidden="true"
       {...props}
     />
   )
@@ -53,10 +53,10 @@ export function SkeletonText({ lines = 3 }: { lines?: number }) {
     <div className="space-y-2">
       {Array.from({ length: lines }).map((_, index) => (
         <Skeleton
+          height="1em"
           key={index}
           variant="text"
           width={index === lines - 1 ? '80%' : '100%'}
-          height="1em"
         />
       ))}
     </div>
@@ -65,19 +65,19 @@ export function SkeletonText({ lines = 3 }: { lines?: number }) {
 
 export function SkeletonCard() {
   return (
-    <div className="border rounded-lg p-4 space-y-3">
+    <div className="space-y-3 rounded-lg border p-4">
       <div className="flex items-start gap-4">
-        <Skeleton variant="circular" width={48} height={48} />
+        <Skeleton height={48} variant="circular" width={48} />
         <div className="flex-1 space-y-2">
-          <Skeleton variant="text" width="40%" height="1.25em" />
+          <Skeleton height="1.25em" variant="text" width="40%" />
           <Skeleton variant="text" width="60%" />
-          <div className="flex items-center gap-4 mt-2">
+          <div className="mt-2 flex items-center gap-4">
             <Skeleton variant="text" width={80} />
             <Skeleton variant="text" width={60} />
             <Skeleton variant="text" width={70} />
           </div>
         </div>
-        <Skeleton variant="rounded" width={100} height={36} />
+        <Skeleton height={36} variant="rounded" width={100} />
       </div>
     </div>
   )

@@ -14,14 +14,14 @@ import {
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
-function FAQItem({ faq }: { faq: { q: string; a: string; expanded?: string } }) {
+function FaqItem({ faq }: { faq: { q: string; a: string; expanded?: string } }) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="border-2 border-gray-200 rounded-lg overflow-hidden hover:border-teal-300 transition-colors">
+    <div className="overflow-hidden rounded-lg border-2 border-gray-200 transition-colors hover:border-teal-300">
       <button
+        className="w-full bg-white px-6 py-4 text-left transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-6 py-4 text-left bg-white hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset"
       >
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-gray-900">{faq.q}</h3>
@@ -33,11 +33,11 @@ function FAQItem({ faq }: { faq: { q: string; a: string; expanded?: string } }) 
         </div>
       </button>
       {isOpen && (
-        <div className="px-6 py-4 bg-gradient-to-b from-gray-50 to-white border-t border-gray-200">
-          <p className="text-gray-700 mb-3">{faq.a}</p>
+        <div className="border-gray-200 border-t bg-gradient-to-b from-gray-50 to-white px-6 py-4">
+          <p className="mb-3 text-gray-700">{faq.a}</p>
           {faq.expanded && (
-            <div className="mt-3 p-4 bg-teal-50 rounded-lg border-l-4 border-teal-400">
-              <p className="text-sm text-gray-700">{faq.expanded}</p>
+            <div className="mt-3 rounded-lg border-teal-400 border-l-4 bg-teal-50 p-4">
+              <p className="text-gray-700 text-sm">{faq.expanded}</p>
             </div>
           )}
         </div>
@@ -316,7 +316,9 @@ const leads = await response.json();`,
   }
 
   const filteredSections = sections.filter((section) => {
-    if (!searchQuery) return true
+    if (!searchQuery) {
+      return true
+    }
     const query = searchQuery.toLowerCase()
     return (
       section.title.toLowerCase().includes(query) ||
@@ -329,9 +331,9 @@ const leads = await response.json();`,
     <div className="min-h-screen bg-gray-50">
       {/* Mobile TOC Toggle */}
       <button
-        onClick={() => setIsTocOpen(!isTocOpen)}
-        className="lg:hidden fixed top-20 left-4 z-50 p-3 bg-white rounded-lg shadow-lg border border-gray-200 hover:bg-gray-50"
         aria-label="Toggle table of contents"
+        className="fixed top-20 left-4 z-50 rounded-lg border border-gray-200 bg-white p-3 shadow-lg hover:bg-gray-50 lg:hidden"
+        onClick={() => setIsTocOpen(!isTocOpen)}
       >
         {isTocOpen ? (
           <X className="h-5 w-5 text-gray-700" />
@@ -342,21 +344,21 @@ const leads = await response.json();`,
 
       {/* TOC Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-72 bg-white border-r border-gray-200 shadow-xl z-40 transform transition-transform duration-300 ${
+        className={`fixed top-0 left-0 z-40 h-full w-72 transform border-gray-200 border-r bg-white shadow-xl transition-transform duration-300 ${
           isTocOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 overflow-y-auto`}
+        } overflow-y-auto lg:translate-x-0`}
       >
-        <div className="p-6 sticky top-0 bg-white border-b border-gray-200">
-          <h2 className="text-lg font-bold text-gray-800 mb-4">Documentation</h2>
+        <div className="sticky top-0 border-gray-200 border-b bg-white p-6">
+          <h2 className="mb-4 font-bold text-gray-800 text-lg">Documentation</h2>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+            <Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 transform text-gray-500" />
             <input
-              type="text"
-              placeholder="Search docs..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-gray-800 placeholder-gray-500"
               aria-label="Search documentation"
+              className="w-full rounded-lg border border-gray-300 py-2 pr-3 pl-10 text-gray-800 placeholder-gray-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search docs..."
+              type="text"
+              value={searchQuery}
             />
           </div>
         </div>
@@ -365,12 +367,12 @@ const leads = await response.json();`,
             {tocItems.map((item) => (
               <li key={item.id}>
                 <button
-                  onClick={() => scrollToSection(item.id)}
-                  className={`w-full text-left px-4 py-2.5 rounded-lg transition-all duration-200 flex items-center space-x-3 ${
+                  className={`flex w-full items-center space-x-3 rounded-lg px-4 py-2.5 text-left transition-all duration-200 ${
                     activeSection === item.id
-                      ? 'bg-teal-50 text-teal-700 font-semibold border-l-4 border-teal-500 pl-3'
+                      ? 'border-teal-500 border-l-4 bg-teal-50 pl-3 font-semibold text-teal-700'
                       : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                   }`}
+                  onClick={() => scrollToSection(item.id)}
                 >
                   <span className="text-lg">{item.icon}</span>
                   <span className="text-sm">{item.title}</span>
@@ -379,10 +381,10 @@ const leads = await response.json();`,
             ))}
           </ul>
         </nav>
-        <div className="p-4 border-t border-gray-200">
+        <div className="border-gray-200 border-t p-4">
           <a
+            className="block w-full rounded-lg bg-teal-600 px-4 py-2 text-center font-medium text-sm text-white transition-colors hover:bg-teal-700"
             href="/dashboard"
-            className="block w-full text-center bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors text-sm font-medium"
           >
             Back to Dashboard
           </a>
@@ -390,11 +392,11 @@ const leads = await response.json();`,
       </aside>
 
       {/* Main Content */}
-      <div className="lg:ml-72 px-4 sm:px-6 lg:px-8 py-12">
-        <div className="max-w-4xl mx-auto">
+      <div className="px-4 py-12 sm:px-6 lg:ml-72 lg:px-8">
+        <div className="mx-auto max-w-4xl">
           {/* Header */}
           <header className="mb-12 text-center">
-            <h1 className="text-4xl font-bold text-teal-600 mb-4">
+            <h1 className="mb-4 font-bold text-4xl text-teal-600">
               Illia Docs: Your Lowcountry Lead Guide
             </h1>
             <p className="text-gray-700 text-lg">
@@ -405,25 +407,25 @@ const leads = await response.json();`,
           {/* Sections */}
           {filteredSections.map((section) => (
             <section
-              key={section.id}
+              className="mb-12 scroll-mt-20 rounded-xl bg-white p-8 shadow-md"
               id={section.id}
+              key={section.id}
               ref={(el) => {
                 sectionRefs.current[section.id] = el
               }}
-              className="mb-12 bg-white rounded-xl shadow-md p-8 scroll-mt-20"
             >
-              <h2 className="text-2xl font-semibold text-gray-900 mb-2 flex items-center">
+              <h2 className="mb-2 flex items-center font-semibold text-2xl text-gray-900">
                 {section.title}
-                <ChevronRight className="h-5 w-5 ml-2 text-teal-500" />
+                <ChevronRight className="ml-2 h-5 w-5 text-teal-500" />
               </h2>
-              {section.subtitle && <p className="text-gray-700 mb-6 italic">{section.subtitle}</p>}
+              {section.subtitle && <p className="mb-6 text-gray-700 italic">{section.subtitle}</p>}
 
               {/* Regular content */}
               {section.content && (
-                <ul className="space-y-3 text-gray-800 mb-6">
+                <ul className="mb-6 space-y-3 text-gray-800">
                   {section.content.map((item, j) => (
-                    <li key={j} className="flex items-start">
-                      <Check className="h-5 w-5 text-teal-500 mr-3 flex-shrink-0 mt-0.5" />
+                    <li className="flex items-start" key={j}>
+                      <Check className="mt-0.5 mr-3 h-5 w-5 flex-shrink-0 text-teal-500" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -432,11 +434,11 @@ const leads = await response.json();`,
 
               {/* Expanded content */}
               {section.expanded && (
-                <div className="mt-6 p-4 bg-teal-50 rounded-lg border border-teal-200">
-                  <h3 className="font-semibold text-gray-900 mb-2">{section.expanded.title}</h3>
-                  <p className="text-gray-700 mb-3">{section.expanded.content}</p>
-                  <div className="bg-gray-200 rounded p-8 text-center text-gray-600">
-                    <Image className="h-12 w-12 mx-auto mb-2 text-gray-400" />
+                <div className="mt-6 rounded-lg border border-teal-200 bg-teal-50 p-4">
+                  <h3 className="mb-2 font-semibold text-gray-900">{section.expanded.title}</h3>
+                  <p className="mb-3 text-gray-700">{section.expanded.content}</p>
+                  <div className="rounded bg-gray-200 p-8 text-center text-gray-600">
+                    <Image className="mx-auto mb-2 h-12 w-12 text-gray-400" />
                     <span className="text-sm">{section.expanded.placeholder}</span>
                   </div>
                 </div>
@@ -445,28 +447,28 @@ const leads = await response.json();`,
               {/* Steps */}
               {section.steps && (
                 <>
-                  <div className="grid md:grid-cols-3 gap-6 mb-6">
+                  <div className="mb-6 grid gap-6 md:grid-cols-3">
                     {section.steps.map((step, j) => (
                       <div
+                        className="rounded-xl border-2 border-teal-100 bg-gradient-to-b from-teal-50 to-white p-6 text-center transition-shadow hover:shadow-lg"
                         key={j}
-                        className="text-center p-6 border-2 border-teal-100 rounded-xl bg-gradient-to-b from-teal-50 to-white hover:shadow-lg transition-shadow"
                       >
-                        <div className="w-14 h-14 bg-gradient-to-br from-teal-100 to-teal-200 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
-                          <span className="text-2xl font-bold text-teal-700">{step.number}</span>
+                        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-teal-100 to-teal-200 shadow-md">
+                          <span className="font-bold text-2xl text-teal-700">{step.number}</span>
                         </div>
-                        <h3 className="font-bold text-gray-900 mb-2">{step.icon}</h3>
-                        <p className="text-sm text-gray-700 mb-3">{step.description}</p>
-                        <p className="text-xs text-gray-600 italic">{step.details}</p>
+                        <h3 className="mb-2 font-bold text-gray-900">{step.icon}</h3>
+                        <p className="mb-3 text-gray-700 text-sm">{step.description}</p>
+                        <p className="text-gray-600 text-xs italic">{step.details}</p>
                       </div>
                     ))}
                   </div>
                   {section.codeExample && (
-                    <div className="mt-6 bg-gray-900 rounded-lg p-4 overflow-x-auto">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-gray-400">JavaScript</span>
+                    <div className="mt-6 overflow-x-auto rounded-lg bg-gray-900 p-4">
+                      <div className="mb-2 flex items-center justify-between">
+                        <span className="text-gray-400 text-xs">JavaScript</span>
                         <Code className="h-4 w-4 text-gray-400" />
                       </div>
-                      <pre className="text-sm text-gray-300">
+                      <pre className="text-gray-300 text-sm">
                         <code>{section.codeExample}</code>
                       </pre>
                     </div>
@@ -476,28 +478,28 @@ const leads = await response.json();`,
 
               {/* Pricing Tiers */}
               {section.tiers && (
-                <div className="grid md:grid-cols-4 gap-4">
+                <div className="grid gap-4 md:grid-cols-4">
                   {section.tiers.map((tier, j) => (
                     <div
-                      key={j}
-                      className={`border-2 rounded-xl p-6 text-center ${
+                      className={`rounded-xl border-2 p-6 text-center ${
                         tier.popular
-                          ? 'border-teal-500 bg-gradient-to-b from-teal-50 to-white shadow-lg scale-105'
+                          ? 'scale-105 border-teal-500 bg-gradient-to-b from-teal-50 to-white shadow-lg'
                           : 'border-gray-200 bg-white'
                       }`}
+                      key={j}
                     >
                       {tier.popular && (
-                        <span className="inline-block px-3 py-1 bg-teal-500 text-white text-xs rounded-full mb-3 font-semibold">
+                        <span className="mb-3 inline-block rounded-full bg-teal-500 px-3 py-1 font-semibold text-white text-xs">
                           Most Popular
                         </span>
                       )}
-                      <h3 className="font-bold text-lg text-gray-900 mb-2">{tier.name}</h3>
-                      <p className="text-3xl font-bold text-teal-600 mb-4">{tier.price}</p>
-                      <p className="text-sm text-gray-700 mb-4 font-medium">{tier.credits}</p>
-                      <ul className="space-y-2 text-sm text-gray-700">
+                      <h3 className="mb-2 font-bold text-gray-900 text-lg">{tier.name}</h3>
+                      <p className="mb-4 font-bold text-3xl text-teal-600">{tier.price}</p>
+                      <p className="mb-4 font-medium text-gray-700 text-sm">{tier.credits}</p>
+                      <ul className="space-y-2 text-gray-700 text-sm">
                         {tier.features.map((f, k) => (
-                          <li key={k} className="flex items-center justify-center">
-                            <Check className="h-4 w-4 text-teal-500 mr-2 flex-shrink-0" />
+                          <li className="flex items-center justify-center" key={k}>
+                            <Check className="mr-2 h-4 w-4 flex-shrink-0 text-teal-500" />
                             <span>{f}</span>
                           </li>
                         ))}
@@ -511,16 +513,16 @@ const leads = await response.json();`,
               {section.guide && (
                 <ul className="space-y-6">
                   {section.guide.map((step, j) => (
-                    <li key={j} className="flex items-start">
-                      <div className="w-10 h-10 bg-gradient-to-br from-teal-100 to-teal-200 rounded-full flex items-center justify-center mr-4 flex-shrink-0 shadow">
-                        <span className="text-sm font-bold text-teal-700">{j + 1}</span>
+                    <li className="flex items-start" key={j}>
+                      <div className="mr-4 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-100 to-teal-200 shadow">
+                        <span className="font-bold text-sm text-teal-700">{j + 1}</span>
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-bold text-gray-900 mb-1">{step.step}</h3>
-                        <p className="text-gray-700 mb-3">{step.description}</p>
-                        <div className="bg-gray-100 rounded-lg p-6 text-center">
-                          <FileText className="h-8 w-8 mx-auto mb-2 text-gray-400" />
-                          <span className="text-sm text-gray-600">{step.screenshot}</span>
+                        <h3 className="mb-1 font-bold text-gray-900">{step.step}</h3>
+                        <p className="mb-3 text-gray-700">{step.description}</p>
+                        <div className="rounded-lg bg-gray-100 p-6 text-center">
+                          <FileText className="mx-auto mb-2 h-8 w-8 text-gray-400" />
+                          <span className="text-gray-600 text-sm">{step.screenshot}</span>
                         </div>
                       </div>
                     </li>
@@ -536,8 +538,8 @@ const leads = await response.json();`,
                       <tr className="bg-gray-100">
                         {section.table.headers.map((header, idx) => (
                           <th
-                            key={idx}
                             className="border border-gray-300 px-4 py-2 text-left font-semibold text-gray-800"
+                            key={idx}
                           >
                             {header}
                           </th>
@@ -546,11 +548,11 @@ const leads = await response.json();`,
                     </thead>
                     <tbody>
                       {section.table.rows.map((row, idx) => (
-                        <tr key={idx} className="hover:bg-gray-50">
+                        <tr className="hover:bg-gray-50" key={idx}>
                           {row.map((cell, cellIdx) => (
                             <td
-                              key={cellIdx}
                               className="border border-gray-300 px-4 py-2 text-gray-700"
+                              key={cellIdx}
                             >
                               {cell}
                             </td>
@@ -566,7 +568,7 @@ const leads = await response.json();`,
               {section.faq && (
                 <div className="space-y-4">
                   {section.faq.map((faq, j) => (
-                    <FAQItem key={j} faq={faq} />
+                    <FaqItem faq={faq} key={j} />
                   ))}
                 </div>
               )}
@@ -574,21 +576,21 @@ const leads = await response.json();`,
           ))}
 
           {/* Support CTA */}
-          <div className="text-center mt-12 p-8 bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl shadow-lg border-2 border-teal-200">
-            <h2 className="text-2xl font-bold text-teal-700 mb-4">Need Help?</h2>
-            <p className="text-gray-700 mb-6 text-lg">
+          <div className="mt-12 rounded-xl border-2 border-teal-200 bg-gradient-to-br from-teal-50 to-teal-100 p-8 text-center shadow-lg">
+            <h2 className="mb-4 font-bold text-2xl text-teal-700">Need Help?</h2>
+            <p className="mb-6 text-gray-700 text-lg">
               Questions on credits, integrations, or Charleston tips?
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <a
+                className="rounded-lg bg-teal-600 px-8 py-3 font-medium text-white shadow-md transition-colors hover:bg-teal-700"
                 href="mailto:hello@illia-leads.com"
-                className="bg-teal-600 text-white px-8 py-3 rounded-lg hover:bg-teal-700 transition-colors font-medium shadow-md"
               >
                 Email Support
               </a>
               <a
+                className="rounded-lg border-2 border-teal-600 bg-white px-8 py-3 font-medium text-teal-600 transition-colors hover:bg-gray-50"
                 href="/dashboard"
-                className="bg-white text-teal-600 px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium border-2 border-teal-600"
               >
                 Back to Dashboard →
               </a>
@@ -600,9 +602,9 @@ const leads = await response.json();`,
       {/* Scroll to top button */}
       {showScrollTop && (
         <button
-          onClick={scrollToTop}
-          className="fixed bottom-8 right-8 p-3 bg-teal-600 text-white rounded-full shadow-lg hover:bg-teal-700 transition-all duration-300 transform hover:scale-110"
           aria-label="Scroll to top"
+          className="fixed right-8 bottom-8 transform rounded-full bg-teal-600 p-3 text-white shadow-lg transition-all duration-300 hover:scale-110 hover:bg-teal-700"
+          onClick={scrollToTop}
         >
           <ArrowUp className="h-5 w-5" />
         </button>

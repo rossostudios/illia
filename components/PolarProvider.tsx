@@ -3,7 +3,7 @@
 import { PolarProvider as BasePolarProvider } from '@polar-sh/nextjs'
 import type { ReactNode } from 'react'
 
-interface PolarProviderProps {
+type PolarProviderProps = {
   children: ReactNode
 }
 

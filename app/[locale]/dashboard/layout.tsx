@@ -5,9 +5,10 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import DashboardSidebar from '@/components/DashboardSidebar'
-import MobileBottomNav from '@/components/MobileBottomNav'
+import MobileBottomNavEnhanced from '@/components/MobileBottomNavEnhanced'
+import Breadcrumbs from '@/components/ui/Breadcrumbs'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
-import { useSession } from '@/hooks/useSession'
+import { useSession } from '@/hooks/use-session'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
@@ -73,23 +74,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     searchTimeoutRef.current = setTimeout(() => {
       // TODO: Implement actual search logic here
       if (value.trim()) {
-        console.log('Searching for:', value)
         // This is where you'd trigger search API calls or filter data
       }
     }, 300) // 300ms debounce delay
   }, [])
 
   // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (searchTimeoutRef.current) {
         clearTimeout(searchTimeoutRef.current)
       }
-    }
-  }, [])
+    },
+    []
+  )
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Sidebar */}
       <DashboardSidebar
         isCollapsed={isSidebarCollapsed}
@@ -99,71 +100,77 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main content area with responsive margin */}
       <div
-        className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
+        className={`flex flex-1 flex-col transition-all duration-300 ease-in-out ${
           isSidebarCollapsed ? 'ml-16' : 'ml-64'
         }`}
       >
         {/* Top navigation bar */}
-        <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-800 px-4 md:px-8 py-4 sticky top-0 z-10">
+        <header className="sticky top-0 z-10 border-gray-200 border-b bg-white px-4 py-4 md:px-8 dark:border-gray-800 dark:bg-gray-900">
           <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center flex-1 gap-4">
+            <div className="flex flex-1 items-center gap-4">
               {/* Hamburger menu button - Minimum 44px touch target */}
               <button
-                type="button"
-                onClick={toggleSidebar}
-                className="min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-[#161616]"
                 aria-label={isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-teal-400 dark:focus:ring-offset-[#161616] dark:hover:bg-gray-800/50"
+                onClick={toggleSidebar}
               >
                 <Menu className="h-5 w-5 text-gray-600 dark:text-gray-400" />
               </button>
 
               {/* Search bar */}
               <div className="relative max-w-4xl flex-1">
-                <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                <Search className="pointer-events-none absolute top-2.5 left-3 h-4 w-4 text-gray-400" />
                 <input
-                  ref={searchInputRef}
-                  type="search"
-                  value={searchQuery}
+                  aria-describedby="search-hint"
+                  aria-label="Search"
+                  autoComplete="off"
+                  className={`w-full rounded-lg border py-2 pr-10 pl-10 text-gray-900 text-sm transition-all placeholder:text-gray-500 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:text-gray-100 dark:focus:border-teal-400 dark:focus:ring-teal-400 dark:placeholder:text-gray-400 ${
+                    isSearchFocused
+                      ? 'border-teal-500 bg-white dark:border-teal-400 dark:bg-gray-900'
+                      : 'border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900/50'
+                  }`}
+                  onBlur={() => setIsSearchFocused(false)}
                   onChange={(e) => handleSearch(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setIsSearchFocused(false)}
                   placeholder="Search providers, services, or locations..."
-                  className={`w-full pl-10 pr-10 py-2 border rounded-lg text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:border-teal-500 dark:focus:border-teal-400 transition-all ${
-                    isSearchFocused
-                      ? 'bg-white dark:bg-gray-800 border-teal-500 dark:border-teal-400'
-                      : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700'
-                  }`}
-                  aria-label="Search"
-                  aria-describedby="search-hint"
-                  autoComplete="off"
+                  ref={searchInputRef}
                   spellCheck="false"
+                  type="search"
+                  value={searchQuery}
                 />
                 {!searchQuery && (
                   <kbd
-                    id="search-hint"
-                    className="absolute right-2 top-2 text-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5 text-gray-500 dark:text-gray-400 pointer-events-none"
                     aria-label="Press Command K to focus search"
+                    className="pointer-events-none absolute top-2 right-2 rounded border border-gray-200 bg-white px-1.5 py-0.5 text-gray-500 text-xs dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400"
+                    id="search-hint"
                   >
                     ⌘K
                   </kbd>
                 )}
                 {searchQuery && (
                   <button
-                    type="button"
+                    aria-label="Clear search"
+                    className="-translate-y-1/2 absolute top-1/2 right-2 flex min-h-[44px] min-w-[44px] items-center justify-center rounded bg-gray-100 text-gray-500 transition-colors hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:bg-gray-700 dark:text-gray-400 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-700"
                     onClick={() => {
                       setSearchQuery('')
                       searchInputRef.current?.focus()
                     }}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 min-w-[44px] min-h-[44px] flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded text-gray-500 dark:text-gray-400 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
-                    aria-label="Clear search"
                   >
                     <span className="sr-only">Clear</span>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg
+                      aria-label="icon"
+                      className="h-4 w-4"
+                      fill="none"
+                      role="img"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <title>Icon</title>
                       <path
+                        d="M6 18L18 6M6 6l12 12"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
                       />
                     </svg>
                   </button>
@@ -173,41 +180,44 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="flex items-center space-x-2">
               <ThemeToggle />
               <button
-                type="button"
-                className="min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
                 aria-label="Notifications"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
               >
                 <Bell className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                 <span className="sr-only">Notifications</span>
               </button>
               <button
-                type="button"
-                className="min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
                 aria-label="Help"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
               >
                 <HelpCircle className="h-5 w-5 text-gray-600 dark:text-gray-400" />
               </button>
               <Link
+                className="px-2 font-medium text-gray-800 text-sm hover:text-teal-600 hover:underline dark:text-gray-200 dark:hover:text-teal-400"
                 href={`/${locale}/docs`}
-                className="text-gray-800 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:underline text-sm font-medium px-2"
               >
                 Docs
               </Link>
-              <button className="bg-teal-500 dark:bg-teal-600 hover:bg-teal-600 dark:hover:bg-teal-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors shadow-sm">
+              <button className="rounded-lg bg-teal-500 px-4 py-1.5 font-medium text-sm text-white shadow-sm transition-colors hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700">
                 Upgrade
               </button>
             </div>
           </div>
         </header>
 
+        {/* Breadcrumbs */}
+        <div className="border-gray-200 border-b bg-gray-50 px-4 py-2 md:px-8 dark:border-gray-800 dark:bg-gray-900/50">
+          <Breadcrumbs />
+        </div>
+
         {/* Page content - Add padding for mobile bottom nav */}
-        <main id="main-content" className="flex-1 p-4 md:p-8 pb-20 md:pb-8">
+        <main className="flex-1 p-4 pb-20 md:p-8 md:pb-8" id="main-content">
           {children}
         </main>
       </div>
 
-      {/* Mobile Bottom Navigation */}
-      <MobileBottomNav />
+      {/* Enhanced Mobile Bottom Navigation */}
+      <MobileBottomNavEnhanced />
     </div>
   )
 }

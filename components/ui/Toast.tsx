@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info'
 
-export interface ToastProps {
+export type ToastProps = {
   id: string
   type: ToastType
   title: string
@@ -53,24 +53,23 @@ export function Toast({ id, type, title, message, duration = 5000, onClose }: To
 
   return (
     <motion.div
-      layout
-      initial={{ opacity: 0, y: 50, scale: 0.3 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
-      className={`flex items-start gap-3 w-full max-w-sm p-4 rounded-lg border shadow-lg ${colors[type]} pointer-events-auto`}
-      role="alert"
       aria-live="polite"
+      className={`flex w-full max-w-sm items-start gap-3 rounded-lg border p-4 shadow-lg ${colors[type]} pointer-events-auto`}
+      exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+      initial={{ opacity: 0, y: 50, scale: 0.3 }}
+      layout
+      role="alert"
     >
-      <Icon className={`h-5 w-5 flex-shrink-0 mt-0.5 ${iconColors[type]}`} aria-hidden="true" />
+      <Icon aria-hidden="true" className={`mt-0.5 h-5 w-5 flex-shrink-0 ${iconColors[type]}`} />
       <div className="flex-1">
-        <p className="text-sm font-medium">{title}</p>
+        <p className="font-medium text-sm">{title}</p>
         {message && <p className="mt-1 text-sm opacity-90">{message}</p>}
       </div>
       <button
-        type="button"
-        onClick={() => onClose(id)}
-        className="flex-shrink-0 inline-flex rounded-md p-1.5 hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 transition-colors"
         aria-label="Close notification"
+        className="inline-flex flex-shrink-0 rounded-md p-1.5 transition-colors hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-white/5"
+        onClick={() => onClose(id)}
       >
         <X className="h-4 w-4" />
       </button>
@@ -78,7 +77,7 @@ export function Toast({ id, type, title, message, duration = 5000, onClose }: To
   )
 }
 
-interface ToastContainerProps {
+type ToastContainerProps = {
   toasts: ToastProps[]
   onClose: (id: string) => void
 }
@@ -86,9 +85,9 @@ interface ToastContainerProps {
 export function ToastContainer({ toasts, onClose }: ToastContainerProps) {
   return (
     <div
-      className="fixed bottom-0 right-0 z-50 p-4 sm:p-6 pointer-events-none"
-      aria-live="polite"
       aria-atomic="true"
+      aria-live="polite"
+      className="pointer-events-none fixed right-0 bottom-0 z-50 p-4 sm:p-6"
     >
       <AnimatePresence mode="sync">
         <div className="flex flex-col gap-2">

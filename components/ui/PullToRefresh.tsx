@@ -4,7 +4,7 @@ import { motion, useAnimation, useMotionValue, useTransform } from 'framer-motio
 import { RefreshCw } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
-interface PullToRefreshProps {
+type PullToRefreshProps = {
   onRefresh: () => Promise<void>
   children: React.ReactNode
   threshold?: number
@@ -42,7 +42,9 @@ export function PullToRefresh({
       }
 
       const handleTouchMove = (e: TouchEvent) => {
-        if (!isPulling || isRefreshing) return
+        if (!isPulling || isRefreshing) {
+          return
+        }
 
         currentY.current = e.touches[0].clientY
         const diff = currentY.current - startY.current
@@ -55,7 +57,9 @@ export function PullToRefresh({
       }
 
       const handleTouchEnd = async () => {
-        if (!isPulling || isRefreshing) return
+        if (!isPulling || isRefreshing) {
+          return
+        }
 
         setIsPulling(false)
         const pullDistance = y.get()
@@ -91,26 +95,28 @@ export function PullToRefresh({
 
   return (
     <div
-      ref={containerRef}
       className="relative h-full overflow-auto overscroll-y-contain"
+      ref={containerRef}
       style={{ WebkitOverflowScrolling: 'touch' }}
     >
       {/* Pull indicator */}
       <motion.div
-        className="absolute top-0 left-0 right-0 flex justify-center pointer-events-none z-10"
+        className="pointer-events-none absolute top-0 right-0 left-0 z-10 flex justify-center"
         style={{ y }}
       >
         <motion.div
-          className="mt-4 bg-white rounded-full shadow-lg p-3"
+          className="mt-4 rounded-full bg-white p-3 shadow-lg"
           style={{
             scale: spinnerScale,
             opacity: pullProgress,
           }}
         >
           <motion.div
-            style={{ rotate: isRefreshing ? undefined : spinnerRotate }}
             animate={isRefreshing ? { rotate: 360 } : {}}
-            transition={isRefreshing ? { duration: 1, repeat: Infinity, ease: 'linear' } : {}}
+            style={{ rotate: isRefreshing ? undefined : spinnerRotate }}
+            transition={
+              isRefreshing ? { duration: 1, repeat: Number.POSITIVE_INFINITY, ease: 'linear' } : {}
+            }
           >
             <RefreshCw
               className={`h-5 w-5 ${pullProgress.get() >= 1 ? 'text-teal-600' : 'text-gray-400'}`}
@@ -120,7 +126,7 @@ export function PullToRefresh({
       </motion.div>
 
       {/* Content */}
-      <motion.div ref={contentRef} animate={controls} style={{ y }} className="min-h-full">
+      <motion.div animate={controls} className="min-h-full" ref={contentRef} style={{ y }}>
         {children}
       </motion.div>
     </div>
@@ -132,7 +138,9 @@ export function usePullToRefresh() {
   const [isRefreshing, setIsRefreshing] = useState(false)
 
   const refresh = async (callback: () => Promise<void>) => {
-    if (isRefreshing) return
+    if (isRefreshing) {
+      return
+    }
 
     setIsRefreshing(true)
     try {

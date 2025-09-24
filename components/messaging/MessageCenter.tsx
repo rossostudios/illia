@@ -22,9 +22,9 @@ import {
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useSessionContext } from '@/components/SessionProvider'
-import { useDirectMessages } from '@/hooks/useDirectMessages'
+import { useDirectMessages } from '@/hooks/use-direct-messages'
 
-interface MessageCenterProps {
+type MessageCenterProps = {
   isOpen: boolean
   onClose: () => void
   initialConversationId?: string
@@ -86,27 +86,31 @@ export default function MessageCenter({
 
   // Handle sending message
   const handleSendMessage = async () => {
-    if (!messageText.trim() || !selectedOtherUserId) return
+    if (!(messageText.trim() && selectedOtherUserId)) {
+      return
+    }
 
     try {
       await sendMessage(messageText)
       setMessageText('')
       inputRef.current?.focus()
-    } catch (error) {
-      console.error('Failed to send message:', error)
+    } catch (_error) {
+      // Error handled silently
     }
   }
 
   // Handle editing message
   const handleEditMessage = async () => {
-    if (!editText.trim() || !editingMessageId) return
+    if (!(editText.trim() && editingMessageId)) {
+      return
+    }
 
     try {
       await editMessage(editingMessageId, editText)
       setEditingMessageId(null)
       setEditText('')
-    } catch (error) {
-      console.error('Failed to edit message:', error)
+    } catch (_error) {
+      // Error handled silently
     }
   }
 
@@ -131,25 +135,27 @@ export default function MessageCenter({
   // Calculate total unread messages
   const totalUnread = conversations.reduce((sum, conv) => sum + conv.unread_count, 0)
 
-  if (!isOpen) return null
+  if (!isOpen) {
+    return null
+  }
 
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
         className={`fixed ${
-          fullScreen ? 'inset-0' : 'bottom-4 right-4 w-96 h-[600px] rounded-xl shadow-2xl'
-        } bg-white z-50 flex flex-col overflow-hidden border border-gray-200`}
+          fullScreen ? 'inset-0' : 'right-4 bottom-4 h-[600px] w-96 rounded-xl shadow-2xl'
+        } z-50 flex flex-col overflow-hidden border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900`}
+        exit={{ opacity: 0 }}
+        initial={{ opacity: 0 }}
       >
         {/* Header */}
-        <div className="bg-teal-600 text-white p-4 flex items-center justify-between">
+        <div className="flex items-center justify-between bg-teal-600 p-4 text-white">
           <div className="flex items-center gap-3">
             {selectedConversation && !fullScreen && (
               <button
+                className="rounded-lg p-1 transition-colors hover:bg-teal-700 md:hidden"
                 onClick={() => setShowConversationList(true)}
-                className="p-1 hover:bg-teal-700 rounded-lg transition-colors md:hidden"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -157,10 +163,10 @@ export default function MessageCenter({
             <MessageSquare className="h-6 w-6" />
             <div>
               <h2 className="font-semibold">Messages</h2>
-              {totalUnread > 0 && <p className="text-xs text-teal-100">{totalUnread} unread</p>}
+              {totalUnread > 0 && <p className="text-teal-100 text-xs">{totalUnread} unread</p>}
             </div>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-teal-700 rounded-lg transition-colors">
+          <button className="rounded-lg p-2 transition-colors hover:bg-teal-700" onClick={onClose}>
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -169,19 +175,19 @@ export default function MessageCenter({
           {/* Conversation List */}
           <div
             className={`${fullScreen ? 'w-80' : 'w-full'} ${
-              !showConversationList && !fullScreen ? 'hidden' : ''
-            } border-r bg-gray-50 flex flex-col`}
+              showConversationList || fullScreen ? '' : 'hidden'
+            } flex flex-col border-r bg-gray-50`}
           >
             {/* Search */}
-            <div className="p-3 border-b bg-white">
+            <div className="border-b bg-white p-3 dark:border-gray-700 dark:bg-gray-900">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-gray-400" />
                 <input
-                  type="text"
-                  value={searchQuery}
+                  className="w-full rounded-lg border border-gray-200 py-2 pr-4 pl-10 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search conversations..."
-                  className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  type="text"
+                  value={searchQuery}
                 />
               </div>
             </div>
@@ -190,58 +196,58 @@ export default function MessageCenter({
             <div className="flex-1 overflow-y-auto">
               {loading ? (
                 <div className="flex justify-center py-8">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-teal-600" />
+                  <div className="h-6 w-6 animate-spin rounded-full border-teal-600 border-b-2" />
                 </div>
               ) : filteredConversations.length === 0 ? (
-                <div className="text-center py-8 px-4">
-                  <Users className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-sm text-gray-500">No conversations yet</p>
-                  <p className="text-xs text-gray-400 mt-1">
+                <div className="px-4 py-8 text-center">
+                  <Users className="mx-auto mb-3 h-12 w-12 text-gray-300" />
+                  <p className="text-gray-500 text-sm">No conversations yet</p>
+                  <p className="mt-1 text-gray-400 text-xs">
                     Start a conversation from any provider profile
                   </p>
                 </div>
               ) : (
                 filteredConversations.map((conv) => (
                   <button
-                    key={conv.conversation_id}
-                    onClick={() => selectConversation(conv)}
-                    className={`w-full p-3 flex items-start gap-3 hover:bg-white transition-colors border-b ${
+                    className={`flex w-full items-start gap-3 border-b p-3 transition-colors hover:bg-white dark:border-gray-700 dark:hover:bg-gray-800 ${
                       selectedConversation === conv.conversation_id
-                        ? 'bg-white border-l-2 border-l-teal-600'
+                        ? 'border-l-2 border-l-teal-600 bg-white dark:bg-gray-800'
                         : ''
                     }`}
+                    key={conv.conversation_id}
+                    onClick={() => selectConversation(conv)}
                   >
-                    <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0">
-                      <span className="text-sm font-medium text-teal-700">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-teal-100">
+                      <span className="font-medium text-sm text-teal-700">
                         {conv.other_user_name?.[0]?.toUpperCase() || '?'}
                       </span>
                     </div>
-                    <div className="flex-1 text-left min-w-0">
+                    <div className="min-w-0 flex-1 text-left">
                       <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="font-medium text-sm text-gray-900 truncate">
+                        <div className="flex min-w-0 items-center gap-2">
+                          <span className="truncate font-medium text-gray-900 text-sm">
                             {conv.other_user_name}
                           </span>
                           {conv.is_provider && (
-                            <ShieldCheck className="h-3 w-3 text-teal-600 flex-shrink-0" />
+                            <ShieldCheck className="h-3 w-3 flex-shrink-0 text-teal-600" />
                           )}
                           {conv.other_user_tier !== 'free' && (
-                            <Star className="h-3 w-3 text-yellow-500 flex-shrink-0" />
+                            <Star className="h-3 w-3 flex-shrink-0 text-yellow-500" />
                           )}
                         </div>
                         {conv.last_message_at && (
-                          <span className="text-xs text-gray-400 flex-shrink-0">
+                          <span className="flex-shrink-0 text-gray-400 text-xs">
                             {formatDistanceToNow(new Date(conv.last_message_at), {
                               addSuffix: false,
                             })}
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-600 truncate mt-1">
+                      <p className="mt-1 truncate text-gray-600 text-xs">
                         {conv.last_message_preview || 'No messages yet'}
                       </p>
                       {conv.unread_count > 0 && (
-                        <span className="inline-block mt-1 px-2 py-0.5 bg-teal-600 text-white text-xs rounded-full">
+                        <span className="mt-1 inline-block rounded-full bg-teal-600 px-2 py-0.5 text-white text-xs">
                           {conv.unread_count}
                         </span>
                       )}
@@ -254,12 +260,12 @@ export default function MessageCenter({
 
           {/* Message Thread */}
           {selectedConversation || selectedOtherUserId ? (
-            <div className="flex-1 flex flex-col">
+            <div className="flex flex-1 flex-col">
               {/* Chat Header */}
-              <div className="p-4 border-b bg-white flex items-center justify-between">
+              <div className="flex items-center justify-between border-b bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center">
-                    <span className="text-sm font-medium text-teal-700">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-100">
+                    <span className="font-medium text-sm text-teal-700">
                       {currentConversation?.other_user_name?.[0]?.toUpperCase() || '?'}
                     </span>
                   </div>
@@ -273,26 +279,26 @@ export default function MessageCenter({
                       )}
                     </div>
                     {typingUsers.length > 0 && (
-                      <p className="text-xs text-gray-500 italic">typing...</p>
+                      <p className="text-gray-500 text-xs italic">typing...</p>
                     )}
                   </div>
                 </div>
-                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                <button className="rounded-lg p-2 transition-colors hover:bg-gray-100">
                   <MoreVertical className="h-4 w-4 text-gray-500" />
                 </button>
               </div>
 
               {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-3">
+              <div className="flex-1 space-y-3 overflow-y-auto p-4">
                 {loading ? (
                   <div className="flex justify-center py-8">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-teal-600" />
+                    <div className="h-6 w-6 animate-spin rounded-full border-teal-600 border-b-2" />
                   </div>
                 ) : messages.length === 0 ? (
-                  <div className="text-center py-8">
-                    <MessageSquare className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                    <p className="text-sm text-gray-500">No messages yet</p>
-                    <p className="text-xs text-gray-400 mt-1">
+                  <div className="py-8 text-center">
+                    <MessageSquare className="mx-auto mb-3 h-12 w-12 text-gray-300" />
+                    <p className="text-gray-500 text-sm">No messages yet</p>
+                    <p className="mt-1 text-gray-400 text-xs">
                       Send a message to start the conversation
                     </p>
                   </div>
@@ -308,8 +314,8 @@ export default function MessageCenter({
                       return (
                         <div key={message.id}>
                           {showDate && (
-                            <div className="text-center my-4">
-                              <span className="text-xs text-gray-400 bg-gray-100 px-3 py-1 rounded-full">
+                            <div className="my-4 text-center">
+                              <span className="rounded-full bg-gray-100 px-3 py-1 text-gray-400 text-xs">
                                 {new Date(message.created_at).toLocaleDateString()}
                               </span>
                             </div>
@@ -318,29 +324,29 @@ export default function MessageCenter({
                             <div
                               className={`max-w-[70%] ${
                                 isOwn ? 'bg-teal-600 text-white' : 'bg-gray-100 text-gray-900'
-                              } rounded-lg px-4 py-2 relative group`}
+                              } group relative rounded-lg px-4 py-2`}
                             >
                               {editingMessageId === message.id ? (
                                 <div className="space-y-2">
                                   <textarea
-                                    value={editText}
+                                    className="w-full rounded border bg-white px-2 py-1 text-gray-900 text-sm dark:border-gray-600 dark:bg-gray-800 dark:text-white"
                                     onChange={(e) => setEditText(e.target.value)}
-                                    className="w-full px-2 py-1 text-sm bg-white text-gray-900 rounded border"
                                     rows={2}
+                                    value={editText}
                                   />
                                   <div className="flex gap-2">
                                     <button
+                                      className="rounded bg-white px-2 py-1 text-teal-600 text-xs dark:bg-gray-800 dark:text-teal-400"
                                       onClick={handleEditMessage}
-                                      className="px-2 py-1 bg-white text-teal-600 rounded text-xs"
                                     >
                                       Save
                                     </button>
                                     <button
+                                      className="rounded bg-gray-200 px-2 py-1 text-gray-700 text-xs"
                                       onClick={() => {
                                         setEditingMessageId(null)
                                         setEditText('')
                                       }}
-                                      className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs"
                                     >
                                       Cancel
                                     </button>
@@ -348,14 +354,14 @@ export default function MessageCenter({
                                 </div>
                               ) : (
                                 <>
-                                  <p className="text-sm whitespace-pre-wrap break-words">
+                                  <p className="whitespace-pre-wrap break-words text-sm">
                                     {message.deleted_at ? (
                                       <span className="italic opacity-75">Message deleted</span>
                                     ) : (
                                       message.message
                                     )}
                                   </p>
-                                  <div className="flex items-center justify-between gap-2 mt-1">
+                                  <div className="mt-1 flex items-center justify-between gap-2">
                                     <span
                                       className={`text-xs ${
                                         isOwn ? 'text-teal-100' : 'text-gray-400'
@@ -380,19 +386,19 @@ export default function MessageCenter({
                                     )}
                                   </div>
                                   {isOwn && !message.deleted_at && (
-                                    <div className="absolute -left-20 top-0 hidden group-hover:flex gap-1">
+                                    <div className="-left-20 absolute top-0 hidden gap-1 group-hover:flex">
                                       <button
+                                        className="rounded bg-white p-1 shadow hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700"
                                         onClick={() => {
                                           setEditingMessageId(message.id)
                                           setEditText(message.message)
                                         }}
-                                        className="p-1 bg-white rounded shadow hover:bg-gray-100"
                                       >
                                         <Edit2 className="h-3 w-3 text-gray-500" />
                                       </button>
                                       <button
+                                        className="rounded bg-white p-1 shadow hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700"
                                         onClick={() => deleteMessage(message.id)}
-                                        className="p-1 bg-white rounded shadow hover:bg-gray-100"
                                       >
                                         <Trash2 className="h-3 w-3 text-red-500" />
                                       </button>
@@ -407,11 +413,11 @@ export default function MessageCenter({
                     })}
                     {typingUsers.length > 0 && (
                       <div className="flex justify-start">
-                        <div className="bg-gray-100 rounded-lg px-4 py-2">
+                        <div className="rounded-lg bg-gray-100 px-4 py-2">
                           <div className="flex gap-1">
-                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100" />
-                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200" />
+                            <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400" />
+                            <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400 delay-100" />
+                            <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400 delay-200" />
                           </div>
                         </div>
                       </div>
@@ -422,20 +428,19 @@ export default function MessageCenter({
               </div>
 
               {/* Message Input */}
-              <div className="p-4 border-t bg-white">
+              <div className="border-t bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
                 <div className="flex items-end gap-2">
-                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                  <button className="rounded-lg p-2 transition-colors hover:bg-gray-100">
                     <Paperclip className="h-5 w-5 text-gray-500" />
                   </button>
-                  <div className="flex-1 relative">
+                  <div className="relative flex-1">
                     <textarea
-                      ref={inputRef}
-                      value={messageText}
+                      className="w-full resize-none rounded-lg border border-gray-200 px-4 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      onBlur={() => sendTypingIndicator(false)}
                       onChange={(e) => {
                         setMessageText(e.target.value)
                         sendTypingIndicator(true)
                       }}
-                      onBlur={() => sendTypingIndicator(false)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
                           e.preventDefault()
@@ -443,18 +448,19 @@ export default function MessageCenter({
                         }
                       }}
                       placeholder="Type a message..."
-                      className="w-full px-4 py-2 pr-10 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
+                      ref={inputRef}
                       rows={1}
                       style={{ maxHeight: '120px' }}
+                      value={messageText}
                     />
-                    <button className="absolute right-2 bottom-2 p-1 hover:bg-gray-100 rounded">
+                    <button className="absolute right-2 bottom-2 rounded p-1 hover:bg-gray-100">
                       <Smile className="h-4 w-4 text-gray-500" />
                     </button>
                   </div>
                   <button
-                    onClick={handleSendMessage}
+                    className="rounded-lg bg-teal-600 p-2 text-white transition-colors hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
                     disabled={!messageText.trim() || sending}
-                    className="p-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleSendMessage}
                   >
                     <Send className="h-5 w-5" />
                   </button>
@@ -462,13 +468,12 @@ export default function MessageCenter({
               </div>
             </div>
           ) : (
-            !loading &&
-            !showConversationList && (
-              <div className="flex-1 flex items-center justify-center">
+            !(loading || showConversationList) && (
+              <div className="flex flex-1 items-center justify-center">
                 <div className="text-center">
-                  <MessageSquare className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Select a conversation</h3>
-                  <p className="text-sm text-gray-500">Choose a conversation to start messaging</p>
+                  <MessageSquare className="mx-auto mb-4 h-16 w-16 text-gray-300" />
+                  <h3 className="mb-2 font-medium text-gray-900 text-lg">Select a conversation</h3>
+                  <p className="text-gray-500 text-sm">Choose a conversation to start messaging</p>
                 </div>
               </div>
             )

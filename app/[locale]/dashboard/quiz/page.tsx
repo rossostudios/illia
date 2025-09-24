@@ -133,7 +133,9 @@ export default function QuizPage() {
   const [error, setError] = useState('')
 
   const handleSubmit = async () => {
-    if (!canContinue()) return
+    if (!canContinue()) {
+      return
+    }
 
     setLoading(true)
     setError('')
@@ -178,7 +180,6 @@ export default function QuizPage() {
 
       router.push('/matches')
     } catch (error) {
-      console.error('Error:', error)
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to save preferences. Please try again.'
       setError(errorMessage)
@@ -191,40 +192,40 @@ export default function QuizPage() {
 
   return (
     <div className="space-y-6">
-      <div className="max-w-4xl mx-auto">
+      <div className="mx-auto max-w-4xl">
         <div className="mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold text-gray-900">Find Your Perfect Match</h1>
-            <span className="text-sm text-gray-500">
+          <div className="mb-4 flex items-center justify-between">
+            <h1 className="font-bold text-2xl text-gray-900">Find Your Perfect Match</h1>
+            <span className="text-gray-500 text-sm">
               Step {step} of {totalSteps}
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="h-2 w-full rounded-full bg-gray-200">
             <div
-              className="bg-gradient-to-r from-teal-600 to-teal-700 h-2 rounded-full transition-all duration-300"
+              className="h-2 rounded-full bg-gradient-to-r from-teal-600 to-teal-700 transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-10">
+        <div className="rounded-2xl bg-white p-10 shadow-xl">
           {step === 1 && (
             <div className="space-y-6">
               <div className="text-center">
-                <FiMapPin className="w-12 h-12 mx-auto mb-4 text-teal-600" />
-                <h2 className="text-2xl font-bold mb-2">Where are you located?</h2>
+                <FiMapPin className="mx-auto mb-4 h-12 w-12 text-teal-600" />
+                <h2 className="mb-2 font-bold text-2xl">Where are you located?</h2>
                 <p className="text-gray-600">We'll match you with providers in your city</p>
               </div>
               <div className="space-y-3">
                 {CITIES.map((city) => (
                   <button
-                    key={city.value}
-                    onClick={() => updateData('city', city.value)}
-                    className={`w-full p-4 rounded-xl border-2 transition-all ${
+                    className={`w-full rounded-xl border-2 p-4 transition-all ${
                       data.city === city.value
                         ? 'border-teal-600 bg-teal-50'
                         : 'border-gray-200 hover:border-teal-300'
                     }`}
+                    key={city.value}
+                    onClick={() => updateData('city', city.value)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
@@ -232,8 +233,8 @@ export default function QuizPage() {
                         <span className="font-medium">{city.label}</span>
                       </div>
                       {data.city === city.value && (
-                        <div className="w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center">
-                          <span className="text-white text-sm">✓</span>
+                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-600">
+                          <span className="text-sm text-white">✓</span>
                         </div>
                       )}
                     </div>
@@ -246,24 +247,24 @@ export default function QuizPage() {
           {step === 2 && (
             <div className="space-y-6">
               <div className="text-center">
-                <FiHome className="w-12 h-12 mx-auto mb-4 text-teal-600" />
-                <h2 className="text-2xl font-bold mb-2">What services do you need?</h2>
+                <FiHome className="mx-auto mb-4 h-12 w-12 text-teal-600" />
+                <h2 className="mb-2 font-bold text-2xl">What services do you need?</h2>
                 <p className="text-gray-600">Select all that apply</p>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
                 {SERVICES.map((service) => (
                   <button
-                    key={service.value}
-                    onClick={() => toggleService(service.value)}
-                    className={`p-4 rounded-xl border-2 transition-all ${
+                    className={`rounded-xl border-2 p-4 transition-all ${
                       data.services.includes(service.value)
                         ? 'border-teal-600 bg-teal-50'
                         : 'border-gray-200 hover:border-teal-300'
                     }`}
+                    key={service.value}
+                    onClick={() => toggleService(service.value)}
                   >
                     <div className="text-center">
-                      <span className="text-2xl mb-2 block">{service.icon}</span>
-                      <span className="text-sm font-medium">{service.label}</span>
+                      <span className="mb-2 block text-2xl">{service.icon}</span>
+                      <span className="font-medium text-sm">{service.label}</span>
                     </div>
                   </button>
                 ))}
@@ -274,26 +275,26 @@ export default function QuizPage() {
           {step === 3 && (
             <div className="space-y-6">
               <div className="text-center">
-                <FiGlobe className="w-12 h-12 mx-auto mb-4 text-teal-600" />
-                <h2 className="text-2xl font-bold mb-2">Language preferences?</h2>
+                <FiGlobe className="mx-auto mb-4 h-12 w-12 text-teal-600" />
+                <h2 className="mb-2 font-bold text-2xl">Language preferences?</h2>
                 <p className="text-gray-600">Select languages you're comfortable with</p>
               </div>
               <div className="space-y-3">
                 {LANGUAGES.map((lang) => (
                   <button
-                    key={lang.value}
-                    onClick={() => toggleLanguage(lang.value)}
-                    className={`w-full p-4 rounded-xl border-2 transition-all ${
+                    className={`w-full rounded-xl border-2 p-4 transition-all ${
                       data.languages.includes(lang.value)
                         ? 'border-teal-600 bg-teal-50'
                         : 'border-gray-200 hover:border-teal-300'
                     }`}
+                    key={lang.value}
+                    onClick={() => toggleLanguage(lang.value)}
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{lang.label}</span>
                       {data.languages.includes(lang.value) && (
-                        <div className="w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center">
-                          <span className="text-white text-sm">✓</span>
+                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-600">
+                          <span className="text-sm text-white">✓</span>
                         </div>
                       )}
                     </div>
@@ -306,26 +307,26 @@ export default function QuizPage() {
           {step === 4 && (
             <div className="space-y-6">
               <div className="text-center">
-                <FiDollarSign className="w-12 h-12 mx-auto mb-4 text-teal-600" />
-                <h2 className="text-2xl font-bold mb-2">What's your budget?</h2>
+                <FiDollarSign className="mx-auto mb-4 h-12 w-12 text-teal-600" />
+                <h2 className="mb-2 font-bold text-2xl">What's your budget?</h2>
                 <p className="text-gray-600">Monthly service budget</p>
               </div>
               <div className="space-y-3">
                 {(BUDGETS[data.city as keyof typeof BUDGETS] || BUDGETS.medellin).map((budget) => (
                   <button
-                    key={budget.value}
-                    onClick={() => updateData('budget', budget.value)}
-                    className={`w-full p-4 rounded-xl border-2 transition-all ${
+                    className={`w-full rounded-xl border-2 p-4 transition-all ${
                       data.budget === budget.value
                         ? 'border-teal-600 bg-teal-50'
                         : 'border-gray-200 hover:border-teal-300'
                     }`}
+                    key={budget.value}
+                    onClick={() => updateData('budget', budget.value)}
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{budget.label}</span>
                       {data.budget === budget.value && (
-                        <div className="w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center">
-                          <span className="text-white text-sm">✓</span>
+                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-600">
+                          <span className="text-sm text-white">✓</span>
                         </div>
                       )}
                     </div>
@@ -338,26 +339,26 @@ export default function QuizPage() {
           {step === 5 && (
             <div className="space-y-6">
               <div className="text-center">
-                <FiCalendar className="w-12 h-12 mx-auto mb-4 text-teal-600" />
-                <h2 className="text-2xl font-bold mb-2">How often do you need help?</h2>
+                <FiCalendar className="mx-auto mb-4 h-12 w-12 text-teal-600" />
+                <h2 className="mb-2 font-bold text-2xl">How often do you need help?</h2>
                 <p className="text-gray-600">Service frequency</p>
               </div>
               <div className="space-y-3">
                 {FREQUENCIES.map((freq) => (
                   <button
-                    key={freq.value}
-                    onClick={() => updateData('frequency', freq.value)}
-                    className={`w-full p-4 rounded-xl border-2 transition-all ${
+                    className={`w-full rounded-xl border-2 p-4 transition-all ${
                       data.frequency === freq.value
                         ? 'border-teal-600 bg-teal-50'
                         : 'border-gray-200 hover:border-teal-300'
                     }`}
+                    key={freq.value}
+                    onClick={() => updateData('frequency', freq.value)}
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{freq.label}</span>
                       {data.frequency === freq.value && (
-                        <div className="w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center">
-                          <span className="text-white text-sm">✓</span>
+                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-600">
+                          <span className="text-sm text-white">✓</span>
                         </div>
                       )}
                     </div>
@@ -370,16 +371,16 @@ export default function QuizPage() {
           {step === 6 && (
             <div className="space-y-6">
               <div className="text-center">
-                <FiUser className="w-12 h-12 mx-auto mb-4 text-teal-600" />
-                <h2 className="text-2xl font-bold mb-2">Any specific preferences?</h2>
+                <FiUser className="mx-auto mb-4 h-12 w-12 text-teal-600" />
+                <h2 className="mb-2 font-bold text-2xl">Any specific preferences?</h2>
                 <p className="text-gray-600">Tell us more about what you're looking for</p>
               </div>
               <textarea
-                value={data.preferences}
+                className="w-full resize-none rounded-xl border-2 border-gray-200 p-4 focus:border-purple-600 focus:outline-none"
                 onChange={(e) => updateData('preferences', e.target.value)}
                 placeholder="E.g., I need someone pet-friendly, available on weekends, experience with eco-friendly products..."
-                className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-purple-600 focus:outline-none resize-none"
                 rows={6}
+                value={data.preferences}
               />
             </div>
           )}
@@ -387,62 +388,62 @@ export default function QuizPage() {
           {step === 7 && (
             <div className="space-y-6">
               <div className="text-center">
-                <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-r from-teal-600 to-teal-700 rounded-full flex items-center justify-center">
-                  <span className="text-white text-2xl">✨</span>
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-teal-600 to-teal-700">
+                  <span className="text-2xl text-white">✨</span>
                 </div>
-                <h2 className="text-2xl font-bold mb-2">Almost there!</h2>
+                <h2 className="mb-2 font-bold text-2xl">Almost there!</h2>
                 <p className="text-gray-600">We'll email you your matches</p>
               </div>
               <div className="space-y-4">
                 <input
-                  type="text"
-                  placeholder="Your name"
-                  value={data.name || ''}
+                  className="w-full rounded-xl border-2 border-gray-200 p-4 focus:border-purple-600 focus:outline-none"
                   onChange={(e) => updateData('name', e.target.value)}
-                  className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-purple-600 focus:outline-none"
+                  placeholder="Your name"
+                  type="text"
+                  value={data.name || ''}
                 />
                 <input
-                  type="email"
-                  placeholder="Email address"
-                  value={data.email || ''}
+                  className="w-full rounded-xl border-2 border-gray-200 p-4 focus:border-purple-600 focus:outline-none"
                   onChange={(e) => updateData('email', e.target.value)}
-                  className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-purple-600 focus:outline-none"
+                  placeholder="Email address"
+                  type="email"
+                  value={data.email || ''}
                 />
                 <input
-                  type="tel"
-                  placeholder="WhatsApp number (optional)"
-                  value={data.phone || ''}
+                  className="w-full rounded-xl border-2 border-gray-200 p-4 focus:border-purple-600 focus:outline-none"
                   onChange={(e) => updateData('phone', e.target.value)}
-                  className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-purple-600 focus:outline-none"
+                  placeholder="WhatsApp number (optional)"
+                  type="tel"
+                  value={data.phone || ''}
                 />
               </div>
             </div>
           )}
 
           {error && (
-            <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+            <div className="mt-6 rounded-xl border border-red-200 bg-red-50 p-4">
               <div className="flex items-center space-x-2">
                 <span className="text-red-600 text-sm">⚠️</span>
                 <p className="text-red-600 text-sm">{error}</p>
               </div>
               <button
+                className="mt-2 text-red-600 text-xs transition-colors hover:text-red-800"
                 onClick={() => setError('')}
-                className="mt-2 text-red-600 text-xs hover:text-red-800 transition-colors"
               >
                 Dismiss
               </button>
             </div>
           )}
 
-          <div className="flex justify-between mt-8">
+          <div className="mt-8 flex justify-between">
             {step > 1 && (
               <button
+                className="flex items-center space-x-2 rounded-xl border-2 border-gray-200 px-6 py-3 transition-all hover:border-gray-300 disabled:opacity-50"
+                disabled={loading}
                 onClick={() => {
                   setStep(step - 1)
                   setError('')
                 }}
-                disabled={loading}
-                className="px-6 py-3 rounded-xl border-2 border-gray-200 hover:border-gray-300 transition-all flex items-center space-x-2 disabled:opacity-50"
               >
                 <FiChevronLeft />
                 <span>Back</span>
@@ -451,32 +452,32 @@ export default function QuizPage() {
 
             {step < totalSteps ? (
               <button
+                className={`ml-auto flex items-center space-x-2 rounded-xl px-6 py-3 transition-all ${
+                  canContinue() && !loading
+                    ? 'bg-gradient-to-r from-teal-600 to-teal-700 text-white hover:shadow-lg'
+                    : 'cursor-not-allowed bg-gray-200 text-gray-700'
+                }`}
+                disabled={!canContinue() || loading}
                 onClick={() => {
                   setStep(step + 1)
                   setError('')
                 }}
-                disabled={!canContinue() || loading}
-                className={`ml-auto px-6 py-3 rounded-xl transition-all flex items-center space-x-2 ${
-                  canContinue() && !loading
-                    ? 'bg-gradient-to-r from-teal-600 to-teal-700 text-white hover:shadow-lg'
-                    : 'bg-gray-200 text-gray-700 cursor-not-allowed'
-                }`}
               >
                 <span>Continue</span>
                 <FiChevronRight />
               </button>
             ) : (
               <button
-                onClick={handleSubmit}
-                disabled={!canContinue() || loading}
-                className={`ml-auto px-8 py-3 rounded-xl transition-all flex items-center space-x-2 ${
+                className={`ml-auto flex items-center space-x-2 rounded-xl px-8 py-3 transition-all ${
                   canContinue() && !loading
                     ? 'bg-gradient-to-r from-teal-600 to-teal-700 text-white hover:shadow-lg'
-                    : 'bg-gray-200 text-gray-700 cursor-not-allowed'
+                    : 'cursor-not-allowed bg-gray-200 text-gray-700'
                 }`}
+                disabled={!canContinue() || loading}
+                onClick={handleSubmit}
               >
                 {loading && (
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
                 )}
                 <span>{loading ? 'Finding matches...' : 'Get My Matches'}</span>
               </button>
@@ -484,7 +485,7 @@ export default function QuizPage() {
           </div>
         </div>
 
-        <div className="text-center mt-8 text-gray-500 text-sm">
+        <div className="mt-8 text-center text-gray-500 text-sm">
           <p>🔒 Your information is secure and never shared without permission</p>
         </div>
       </div>

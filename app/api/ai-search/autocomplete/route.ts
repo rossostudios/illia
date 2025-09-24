@@ -1,12 +1,14 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import OpenAI from 'openai'
+import OpenAi from 'openai'
 
-const openai = new OpenAI({
+const openai = new OpenAi({
   apiKey: process.env.OPENAI_API_KEY,
 })
 
 async function generateAutocompleteSuggestions(partialQuery: string): Promise<string[]> {
-  if (partialQuery.length < 2) return []
+  if (partialQuery.length < 2) {
+    return []
+  }
 
   try {
     // Use AI to generate completions
@@ -40,8 +42,8 @@ async function generateAutocompleteSuggestions(partialQuery: string): Promise<st
           .slice(0, 5)
       }
     }
-  } catch (error) {
-    console.error('AI autocomplete error:', error)
+  } catch (_error) {
+    // Error handled silently
   }
 
   // Fallback suggestions
@@ -73,9 +75,7 @@ export async function GET(request: NextRequest) {
       success: true,
       data: suggestions,
     })
-  } catch (error) {
-    console.error('AI autocomplete error:', error)
-
+  } catch (_error) {
     // Return fallback suggestions
     const query = new URL(request.url).searchParams.get('q') || ''
     return NextResponse.json(

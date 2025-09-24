@@ -2,14 +2,19 @@
   "name": "Illia.club - Expat Services",
   "short_name": "Illia",
   "description": "Connect with trusted home services in Latin America",
-  "start_url": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
   "background_color": "#ffffff",
   "theme_color": "#14b8a6",
-  "orientation": "portrait",
-  "categories": ["lifestyle", "utilities"],
+  "orientation": "any",
+  "categories": ["lifestyle", "utilities", "business"],
   "lang": "en",
   "dir": "ltr",
+  "edge_side_panel": {
+    "preferred_width": 480
+  },
   "icons": [
     {
       "src": "/icons/icon-72x72.png",

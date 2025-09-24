@@ -10,10 +10,10 @@ import { SavedSearchesPanel } from '@/components/SavedSearchesPanel'
 import { Button } from '@/components/ui/Button'
 import { type FilterOptions, FilterPanel } from '@/components/ui/FilterPanel'
 import { VoiceSearchButton } from '@/components/VoiceSearchButton'
-import { useAdvancedSearch } from '@/hooks/useAdvancedSearch'
-import { useSearchSuggestions } from '@/hooks/useSearchSuggestions'
+import { useAdvancedSearch } from '@/hooks/use-advanced-search'
+import { useSearchSuggestions } from '@/hooks/use-search-suggestions'
 
-interface MapSearchViewProps {
+type MapSearchViewProps = {
   initialFilters?: Partial<FilterOptions>
   onResultsChange?: (results: any[]) => void
   className?: string
@@ -46,22 +46,24 @@ export function MapSearchView({
   })
 
   // Convert search results to provider locations for map
-  const providerLocations: ProviderLocation[] = useMemo(() => {
-    return results
-      .map((result) => ({
-        id: result.id,
-        name: result.name,
-        latitude: result.latitude || 0,
-        longitude: result.longitude || 0,
-        address: result.address || '',
-        services: result.services || [],
-        rating: result.rating || 0,
-        price: result.rate_monthly || 0,
-        verified: result.verified || false,
-        specialties: result.specialties || [],
-      }))
-      .filter((provider) => provider.latitude && provider.longitude)
-  }, [results])
+  const providerLocations: ProviderLocation[] = useMemo(
+    () =>
+      results
+        .map((result) => ({
+          id: result.id,
+          name: result.name,
+          latitude: result.latitude || 0,
+          longitude: result.longitude || 0,
+          address: result.address || '',
+          services: result.services || [],
+          rating: result.rating || 0,
+          price: result.rate_monthly || 0,
+          verified: result.verified,
+          specialties: result.specialties || [],
+        }))
+        .filter((provider) => provider.latitude && provider.longitude),
+    [results]
+  )
 
   // Handle location selection from autocomplete
   const handleLocationSelect = useCallback(
@@ -77,10 +79,7 @@ export function MapSearchView({
   )
 
   // Handle provider click on map
-  const handleProviderClick = useCallback((provider: ProviderLocation) => {
-    // Could scroll to provider in list view or show details modal
-    console.log('Provider clicked:', provider)
-  }, [])
+  const handleProviderClick = useCallback((_provider: ProviderLocation) => {}, [])
 
   // Handle map location change
   const handleMapLocationChange = useCallback(
@@ -125,7 +124,8 @@ export function MapSearchView({
     // Default centers based on major cities
     if (filters.city === 'medellin') {
       return [6.2442, -75.5812] // Medellín center
-    } else if (filters.city === 'florianopolis') {
+    }
+    if (filters.city === 'florianopolis') {
       return [-27.5954, -48.548] // Florianópolis center
     }
     return [-27.5954, -48.548] // Default to Florianópolis
@@ -134,15 +134,15 @@ export function MapSearchView({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Search Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+      <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
         {/* AI-Powered Search */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
             🔍 Smart Search
           </label>
           <div className="relative">
             <AISearchInput
-              value={filters.query || ''}
+              className="w-full"
               onChange={(value) => updateFilters({ query: value })}
               onSubmit={(query, aiSuggestion) => {
                 updateFilters({ query })
@@ -151,16 +151,16 @@ export function MapSearchView({
                 }
               }}
               placeholder="Describe what you're looking for (e.g., 'English speaking cleaner in Medellín')"
-              className="w-full"
+              value={filters.query || ''}
             />
-            <div className="absolute right-3 top-3 z-10">
+            <div className="absolute top-3 right-3 z-10">
               <VoiceSearchButton
+                language="en-US"
                 onResult={(_transcript, processedQuery) => {
                   updateFilters({ query: processedQuery })
                 }}
-                language="en-US"
-                size="md"
                 showTranscript={true}
+                size="md"
               />
             </div>
           </div>
@@ -168,16 +168,16 @@ export function MapSearchView({
 
         {/* Location Search */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            <MapPin className="inline h-4 w-4 mr-1" />
+          <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
+            <MapPin className="mr-1 inline h-4 w-4" />
             Specific Location (Optional)
           </label>
           <LocationAutocomplete
-            value={filters.location || ''}
+            className="w-full"
             onChange={(value) => updateFilters({ location: value })}
             onLocationSelect={handleLocationSelect}
             placeholder="Enter city, address, or location..."
-            className="w-full"
+            value={filters.location || ''}
           />
         </div>
 
@@ -185,19 +185,19 @@ export function MapSearchView({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Button
-              variant={viewMode === 'list' ? 'primary' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('list')}
               className="flex items-center gap-2"
+              onClick={() => setViewMode('list')}
+              size="sm"
+              variant={viewMode === 'list' ? 'primary' : 'outline'}
             >
               <List className="h-4 w-4" />
               List
             </Button>
             <Button
-              variant={viewMode === 'map' ? 'primary' : 'outline'}
-              size="sm"
-              onClick={() => setViewMode('map')}
               className="flex items-center gap-2"
+              onClick={() => setViewMode('map')}
+              size="sm"
+              variant={viewMode === 'map' ? 'primary' : 'outline'}
             >
               <Map className="h-4 w-4" />
               Map
@@ -205,25 +205,25 @@ export function MapSearchView({
           </div>
 
           <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowSavedSearches(!showSavedSearches)}
             className="flex items-center gap-2"
+            onClick={() => setShowSavedSearches(!showSavedSearches)}
+            size="sm"
+            variant="outline"
           >
             <Bookmark className="h-4 w-4" />
             Saved Searches
           </Button>
 
           <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowFilters(!showFilters)}
             className="flex items-center gap-2"
+            onClick={() => setShowFilters(!showFilters)}
+            size="sm"
+            variant="outline"
           >
             <Filter className="h-4 w-4" />
             Filters
             {Object.keys(filters).length > 0 && (
-              <span className="ml-1 px-1.5 py-0.5 bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300 text-xs rounded-full">
+              <span className="ml-1 rounded-full bg-teal-100 px-1.5 py-0.5 text-teal-700 text-xs dark:bg-teal-900 dark:text-teal-300">
                 {Object.keys(filters).length}
               </span>
             )}
@@ -232,23 +232,23 @@ export function MapSearchView({
 
         {/* AI Suggestions */}
         {aiSuggestion && (
-          <div className="mt-4 p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
+          <div className="mt-4 rounded-lg border border-teal-200 bg-teal-50 p-4 dark:border-teal-800 dark:bg-teal-900/20">
             <div className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-teal-500 rounded-full mt-2 flex-shrink-0" />
+              <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-teal-500" />
               <div>
-                <p className="text-sm font-medium text-teal-900 dark:text-teal-100">
+                <p className="font-medium text-sm text-teal-900 dark:text-teal-100">
                   AI Suggestion
                 </p>
-                <p className="text-sm text-teal-700 dark:text-teal-300 mt-1">
+                <p className="mt-1 text-sm text-teal-700 dark:text-teal-300">
                   {aiSuggestion.reasoning}
                 </p>
                 {aiSuggestion.alternativeQueries.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-2">
                     {aiSuggestion.alternativeQueries.slice(0, 3).map((query, index) => (
                       <button
+                        className="rounded-full bg-teal-100 px-3 py-1 text-teal-700 text-xs transition-colors hover:bg-teal-200 dark:bg-teal-900 dark:text-teal-300 dark:hover:bg-teal-800"
                         key={index}
                         onClick={() => setQuery(query)}
-                        className="px-3 py-1 bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300 text-xs rounded-full hover:bg-teal-200 dark:hover:bg-teal-800 transition-colors"
                       >
                         "{query}"
                       </button>
@@ -263,23 +263,23 @@ export function MapSearchView({
 
       {/* Filter Panel */}
       {showFilters && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Filters</h3>
+        <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="font-semibold text-gray-900 text-lg dark:text-white">Filters</h3>
             <div className="flex items-center gap-2">
               <Button
-                variant="outline"
-                size="sm"
+                className="text-sm"
                 onClick={() => {
                   setShowFilters(false)
                   setShowSavedSearches(true)
                 }}
-                className="text-sm"
+                size="sm"
+                variant="outline"
               >
-                <Bookmark className="h-4 w-4 mr-1" />
+                <Bookmark className="mr-1 h-4 w-4" />
                 Saved Searches
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => setShowFilters(false)}>
+              <Button onClick={() => setShowFilters(false)} size="sm" variant="ghost">
                 <X className="h-4 w-4" />
               </Button>
             </div>
@@ -289,8 +289,8 @@ export function MapSearchView({
             filters={filters}
             onFiltersChange={handleFiltersChange}
             onReset={clearFilters}
-            showMobileToggle={false}
             resultCount={results.length}
+            showMobileToggle={false}
           />
         </div>
       )}
@@ -298,31 +298,31 @@ export function MapSearchView({
       {/* Saved Searches Panel */}
       {showSavedSearches && (
         <SavedSearchesPanel
-          currentFilters={filters}
-          onLoadSearch={handleLoadSavedSearch}
-          onClose={() => setShowSavedSearches(false)}
           className="absolute top-4 right-4 z-30 w-96 max-w-[calc(100vw-2rem)]"
+          currentFilters={filters}
+          onClose={() => setShowSavedSearches(false)}
+          onLoadSearch={handleLoadSavedSearch}
         />
       )}
 
       {/* Results View */}
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid gap-6 lg:grid-cols-3">
         {/* Map View */}
         {(viewMode === 'map' || viewMode === 'list') && (
           <div className={viewMode === 'map' ? 'lg:col-span-3' : 'lg:col-span-2'}>
             <MapView
-              providers={providerLocations}
               center={mapCenter}
-              zoom={filters.radius ? Math.max(8, 15 - Math.log2(filters.radius)) : 12}
+              className="h-[500px] lg:h-[600px]"
+              onLocationChange={handleMapLocationChange}
+              onProviderClick={handleProviderClick}
+              providers={providerLocations}
               radius={filters.radius}
               radiusCenter={
                 selectedLocation
                   ? [selectedLocation.latitude, selectedLocation.longitude]
                   : undefined
               }
-              onProviderClick={handleProviderClick}
-              onLocationChange={handleMapLocationChange}
-              className="h-[500px] lg:h-[600px]"
+              zoom={filters.radius ? Math.max(8, 15 - Math.log2(filters.radius)) : 12}
             />
           </div>
         )}
@@ -331,9 +331,9 @@ export function MapSearchView({
         {viewMode === 'list' && (
           <div className="lg:col-span-1">
             <EnhancedSearchResults
-              results={results}
               loading={loading}
               onProviderClick={handleProviderClick}
+              results={results}
             />
           </div>
         )}

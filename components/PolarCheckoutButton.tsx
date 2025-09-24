@@ -2,9 +2,9 @@
 
 import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
-import { usePolar } from '@/hooks/usePolar'
+import { usePolar } from '@/hooks/use-polar'
 
-interface PolarCheckoutButtonProps {
+type PolarCheckoutButtonProps = {
   productType: 'explorer' | 'settler' | 'local'
   className?: string
   children: React.ReactNode
@@ -28,8 +28,7 @@ export default function PolarCheckoutButton({
 
       // Redirect to the appropriate checkout route
       window.location.href = checkoutUrl
-    } catch (error) {
-      console.error('Checkout error:', error)
+    } catch (_error) {
       alert('Failed to start checkout. Please try again.')
     } finally {
       setLoading(false)
@@ -38,14 +37,13 @@ export default function PolarCheckoutButton({
 
   return (
     <button
-      type="button"
-      onClick={handleCheckout}
+      className={`${className} ${loading ? 'cursor-not-allowed opacity-50' : ''}`}
       disabled={loading}
-      className={`${className} ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+      onClick={handleCheckout}
     >
       {loading ? (
         <span className="flex items-center justify-center">
-          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Processing...
         </span>
       ) : (

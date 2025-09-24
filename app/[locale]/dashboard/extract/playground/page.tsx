@@ -41,7 +41,7 @@ export default function ExtractPlaygroundPage() {
   const [enableWebSearch, setEnableWebSearch] = useState(false)
   const [illiaAgent, setIlliaAgent] = useState(false)
   const [isExtracting, setIsExtracting] = useState(false)
-  const [extractedData, setExtractedData] = useState<any>(null)
+  const [extractedData, setExtractedData] = useState<Record<string, unknown> | null>(null)
   const [schemaFields, _setSchemaFields] = useState([
     {
       id: '1',
@@ -110,37 +110,37 @@ export default function ExtractPlaygroundPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 w-56 bg-white border-r">
+      <div className="fixed inset-y-0 left-0 w-56 border-r bg-white">
         {/* Logo */}
-        <div className="p-4 border-b">
-          <Link href="/dashboard" className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-orange-600">IL</span>
-            <span className="text-xl font-semibold">Illia</span>
+        <div className="border-b p-4">
+          <Link className="flex items-center space-x-2" href="/dashboard">
+            <span className="font-bold text-2xl text-orange-600">IL</span>
+            <span className="font-semibold text-xl">Illia</span>
           </Link>
         </div>
 
         {/* Search */}
         <div className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
+            <Search className="absolute top-2.5 left-3 h-4 w-4 text-gray-700" />
             <input
-              type="text"
+              className="w-full rounded-lg border border-gray-300 bg-gray-200 py-2 pr-3 pl-9 text-gray-900 text-sm placeholder:text-gray-500 focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500"
               placeholder="Search"
-              className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+              type="text"
             />
-            <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
+            <kbd className="absolute top-2 right-2 rounded border bg-white px-1 text-xs">⌘K</kbd>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="px-3 space-y-1">
+        <nav className="space-y-1 px-3">
           {sidebarItems.map((item) => (
             <div key={item.label}>
               <Link
-                href={item.href}
-                className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center justify-between rounded-lg px-3 py-2 font-medium text-sm transition-colors ${
                   item.active ? 'bg-teal-50 text-teal-600' : 'text-gray-700 hover:bg-gray-100'
                 }`}
+                href={item.href}
                 onClick={(e) => {
                   if (item.hasSubmenu) {
                     e.preventDefault()
@@ -159,16 +159,16 @@ export default function ExtractPlaygroundPage() {
                 )}
               </Link>
               {item.hasSubmenu && item.isOpen && (
-                <div className="ml-7 mt-1 space-y-1">
+                <div className="mt-1 ml-7 space-y-1">
                   {item.submenu?.map((subitem) => (
                     <Link
-                      key={subitem.label}
-                      href={subitem.href}
-                      className={`block px-3 py-2 text-sm rounded-lg ${
+                      className={`block rounded-lg px-3 py-2 text-sm ${
                         subitem.active
-                          ? 'text-teal-600 bg-teal-50'
-                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                          ? 'bg-teal-50 text-teal-600'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       }`}
+                      href={subitem.href}
+                      key={subitem.label}
                     >
                       {subitem.label}
                     </Link>
@@ -181,28 +181,28 @@ export default function ExtractPlaygroundPage() {
 
         {/* What's New */}
         {showWhatsNew && (
-          <div className="absolute bottom-4 left-4 right-4">
-            <div className="bg-teal-50 rounded-lg p-3">
-              <div className="flex items-start justify-between mb-2">
+          <div className="absolute right-4 bottom-4 left-4">
+            <div className="rounded-lg bg-teal-50 p-3">
+              <div className="mb-2 flex items-start justify-between">
                 <div className="flex items-center space-x-2">
                   <Sparkles className="h-4 w-4 text-teal-600" />
-                  <span className="text-xs font-semibold text-teal-600">What&apos;s New (5)</span>
+                  <span className="font-semibold text-teal-600 text-xs">What&apos;s New (5)</span>
                 </div>
                 <button
-                  onClick={() => setShowWhatsNew(false)}
                   className="text-gray-700 hover:text-gray-600"
+                  onClick={() => setShowWhatsNew(false)}
                 >
                   <X className="h-3 w-3" />
                 </button>
               </div>
-              <p className="text-xs text-gray-600">View our latest update</p>
+              <p className="text-gray-600 text-xs">View our latest update</p>
             </div>
 
             {/* User email */}
-            <div className="mt-4 px-3 py-2 text-xs text-gray-500">samlee@content-mobbin.com</div>
+            <div className="mt-4 px-3 py-2 text-gray-500 text-xs">samlee@content-mobbin.com</div>
 
             {/* Collapse button */}
-            <button className="flex items-center space-x-2 mt-2 text-xs text-gray-600 hover:text-gray-900">
+            <button className="mt-2 flex items-center space-x-2 text-gray-600 text-xs hover:text-gray-900">
               <ChevronLeft className="h-3 w-3" />
               <span>Collapse</span>
             </button>
@@ -213,29 +213,29 @@ export default function ExtractPlaygroundPage() {
       {/* Main content */}
       <div className="ml-56">
         {/* Header */}
-        <header className="bg-white border-b px-8 py-4">
+        <header className="border-b bg-white px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-orange-100 text-orange-700 px-3 py-1 rounded-lg">
+              <div className="flex items-center space-x-2 rounded-lg bg-orange-100 px-3 py-1 text-orange-700">
                 <Users className="h-4 w-4" />
-                <span className="text-sm font-medium">Personal Team</span>
+                <span className="font-medium text-sm">Personal Team</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
+              <button className="rounded-lg p-2 hover:bg-gray-100" type="button">
                 <Bell className="h-5 w-5 text-gray-600" />
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
+              <button className="rounded-lg p-2 hover:bg-gray-100" type="button">
                 <HelpCircle className="h-5 w-5 text-gray-600" />
               </button>
               <Link
+                className="flex items-center space-x-2 rounded-lg px-3 py-1.5 hover:bg-gray-100"
                 href="/docs"
-                className="flex items-center space-x-2 px-3 py-1.5 hover:bg-gray-100 rounded-lg"
               >
                 <FileCode className="h-4 w-4" />
-                <span className="text-sm font-medium">Docs</span>
+                <span className="font-medium text-sm">Docs</span>
               </Link>
-              <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors">
+              <button className="rounded-lg bg-orange-500 px-4 py-1.5 font-medium text-sm text-white transition-colors hover:bg-orange-600">
                 Upgrade
               </button>
             </div>
@@ -246,8 +246,8 @@ export default function ExtractPlaygroundPage() {
         <div className="p-8">
           {/* Title */}
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-teal-600 mb-2 flex items-center justify-center">
-              <Play className="h-8 w-8 mr-2" />
+            <h1 className="mb-2 flex items-center justify-center font-bold text-3xl text-teal-600">
+              <Play className="mr-2 h-8 w-8" />
               Lead Extract Playground
             </h1>
             <p className="text-gray-700">
@@ -256,76 +256,77 @@ export default function ExtractPlaygroundPage() {
           </div>
 
           {/* Main Interface */}
-          <div className="max-w-7xl mx-auto">
+          <div className="mx-auto max-w-7xl">
             {/* Lead Query Input and Controls */}
-            <div className="bg-white rounded-xl border p-4 mb-6">
+            <div className="mb-6 rounded-xl border bg-white p-4">
               <div className="space-y-3">
-                <label className="text-xs font-medium text-gray-700">Lead Query</label>
+                <label className="font-medium text-gray-700 text-xs">Lead Query</label>
                 <div className="flex items-center space-x-3">
                   <input
+                    className="flex-1 rounded-lg border border-gray-300 bg-gray-200 px-3 py-2 text-gray-900 text-sm placeholder:text-gray-600 focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    onChange={(e) => setUrl(e.target.value)}
+                    placeholder="Enter lead query (e.g., plumbers 29401)"
                     type="text"
                     value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    className="flex-1 px-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-600 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                    placeholder="Enter lead query (e.g., plumbers 29401)"
                   />
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <span className="text-sm text-gray-500">+</span>
+                  <span className="text-gray-500 text-sm">+</span>
                   <input
+                    className="flex-1 px-3 py-2 text-gray-500 text-sm outline-none hover:text-teal-600"
+                    onChange={(e) => setAdditionalUrl(e.target.value)}
+                    placeholder="Add another ZIP or niche"
                     type="text"
                     value={additionalUrl}
-                    onChange={(e) => setAdditionalUrl(e.target.value)}
-                    className="flex-1 px-3 py-2 text-sm text-gray-500 outline-none hover:text-teal-600"
-                    placeholder="Add another ZIP or niche"
                   />
                 </div>
               </div>
 
-              <div className="flex items-center justify-between mt-4">
-                <button className="text-gray-700 hover:text-gray-600">
+              <div className="mt-4 flex items-center justify-between">
+                <button className="text-gray-700 hover:text-gray-600" type="button">
                   <ChevronLeft className="h-4 w-4" />
                 </button>
 
                 <div className="flex items-center space-x-3">
-                  <div className="flex border rounded-lg overflow-hidden">
+                  <div className="flex overflow-hidden rounded-lg border">
                     <button
-                      onClick={() => setActiveTab('options')}
-                      className={`px-4 py-2 text-sm font-medium flex items-center space-x-2 transition-colors ${
+                      className={`flex items-center space-x-2 px-4 py-2 font-medium text-sm transition-colors ${
                         activeTab === 'options'
                           ? 'bg-gray-100 text-gray-900'
                           : 'text-gray-600 hover:text-gray-900'
                       }`}
+                      onClick={() => setActiveTab('options')}
                     >
                       <Settings className="h-4 w-4" />
                       <span>Options</span>
                       {activeTab === 'options' && (
-                        <span className="h-2 w-2 bg-teal-500 rounded-full" />
+                        <span className="h-2 w-2 rounded-full bg-teal-500" />
                       )}
                     </button>
                     <button
-                      onClick={() => setActiveTab('schema')}
-                      className={`px-4 py-2 text-sm font-medium flex items-center space-x-2 transition-colors ${
+                      className={`flex items-center space-x-2 px-4 py-2 font-medium text-sm transition-colors ${
                         activeTab === 'schema'
                           ? 'bg-gray-100 text-gray-900'
                           : 'text-gray-600 hover:text-gray-900'
                       }`}
+                      onClick={() => setActiveTab('schema')}
                     >
                       <FileText className="h-4 w-4" />
                       <span>Schema</span>
                       {activeTab === 'schema' && (
-                        <span className="h-2 w-2 bg-teal-500 rounded-full" />
+                        <span className="h-2 w-2 rounded-full bg-teal-500" />
                       )}
                     </button>
                   </div>
 
-                  <button className="flex items-center space-x-2 px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors">
+                  <button className="flex items-center space-x-2 rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 transition-colors hover:bg-gray-200">
                     <Copy className="h-4 w-4" />
-                    <span className="text-sm font-medium">Get Schema Code</span>
+                    <span className="font-medium text-sm">Get Schema Code</span>
                   </button>
 
                   <button
+                    className="rounded-lg bg-teal-600 px-6 py-2 font-medium text-white transition-colors hover:bg-teal-700"
                     onClick={() => {
                       setIsExtracting(true)
                       setShowExtractPanel(true)
@@ -340,7 +341,6 @@ export default function ExtractPlaygroundPage() {
                         })
                       }, 3000)
                     }}
-                    className="px-6 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-medium transition-colors"
                   >
                     Start Extracting Leads
                   </button>
@@ -349,44 +349,44 @@ export default function ExtractPlaygroundPage() {
             </div>
 
             {/* Options/Schema Panel and Extract Panel */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
               {/* Options or Schema Panel */}
               {activeTab === 'options' ? (
-                <div className="bg-white rounded-xl border p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-sm font-medium text-gray-700">Extract</h3>
-                    <button className="text-gray-700 hover:text-gray-600">
+                <div className="rounded-xl border bg-white p-6">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="font-medium text-gray-700 text-sm">Extract</h3>
+                    <button className="text-gray-700 hover:text-gray-600" type="button">
                       <X className="h-4 w-4" />
                     </button>
                   </div>
 
                   <div className="space-y-4">
                     <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <label className="text-sm font-medium text-gray-700 flex items-center">
-                          <FileText className="h-4 w-4 mr-2" />
+                      <div className="mb-2 flex items-center justify-between">
+                        <label className="flex items-center font-medium text-gray-700 text-sm">
+                          <FileText className="mr-2 h-4 w-4" />
                           Prompt
                         </label>
-                        <span className="text-xs text-gray-500">79 / 500</span>
+                        <span className="text-gray-500 text-xs">79 / 500</span>
                       </div>
                       <textarea
-                        value={prompt}
+                        className="min-h-[100px] w-full resize-none rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                         onChange={(e) => setPrompt(e.target.value)}
-                        className="w-full min-h-[100px] px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
                         placeholder="Define schema (e.g., {name, score, location})"
+                        value={prompt}
                       />
                     </div>
 
-                    <div className="flex items-center justify-between py-3 border-t">
+                    <div className="flex items-center justify-between border-t py-3">
                       <div className="flex items-center space-x-2">
                         <Search className="h-4 w-4 text-gray-700" />
-                        <span className="text-sm font-medium text-gray-700">Enable ZIP search</span>
+                        <span className="font-medium text-gray-700 text-sm">Enable ZIP search</span>
                       </div>
                       <button
-                        onClick={() => setEnableWebSearch(!enableWebSearch)}
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                           enableWebSearch ? 'bg-teal-500' : 'bg-gray-200'
                         }`}
+                        onClick={() => setEnableWebSearch(!enableWebSearch)}
                       >
                         <span
                           className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -396,16 +396,16 @@ export default function ExtractPlaygroundPage() {
                       </button>
                     </div>
 
-                    <div className="flex items-center justify-between py-3 border-t">
+                    <div className="flex items-center justify-between border-t py-3">
                       <div className="flex items-center space-x-2">
                         <Sparkles className="h-4 w-4 text-gray-700" />
-                        <span className="text-sm font-medium text-gray-700">Lead Agent</span>
+                        <span className="font-medium text-gray-700 text-sm">Lead Agent</span>
                       </div>
                       <button
-                        onClick={() => setIlliaAgent(!illiaAgent)}
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                           illiaAgent ? 'bg-teal-500' : 'bg-gray-200'
                         }`}
+                        onClick={() => setIlliaAgent(!illiaAgent)}
                       >
                         <span
                           className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -417,11 +417,11 @@ export default function ExtractPlaygroundPage() {
                   </div>
                 </div>
               ) : (
-                <div className="bg-white rounded-xl border p-6">
-                  <div className="flex items-center justify-between mb-4">
+                <div className="rounded-xl border bg-white p-6">
+                  <div className="mb-4 flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <h3 className="text-sm font-medium text-gray-700">Format</h3>
-                      <button className="text-gray-700 hover:text-gray-600">
+                      <h3 className="font-medium text-gray-700 text-sm">Format</h3>
+                      <button className="text-gray-700 hover:text-gray-600" type="button">
                         <X className="h-4 w-4" />
                       </button>
                     </div>
@@ -429,14 +429,14 @@ export default function ExtractPlaygroundPage() {
 
                   <div className="space-y-4">
                     <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="text-sm font-medium text-gray-700 flex items-center">
-                          <FileText className="h-4 w-4 mr-2" />
+                      <div className="mb-2 flex items-center justify-between">
+                        <h4 className="flex items-center font-medium text-gray-700 text-sm">
+                          <FileText className="mr-2 h-4 w-4" />
                           Schema
                         </h4>
                         <div className="flex items-center space-x-2">
-                          <span className="text-sm font-medium text-gray-700">Format</span>
-                          <select className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                          <span className="font-medium text-gray-700 text-sm">Format</span>
+                          <select className="rounded bg-gray-100 px-2 py-1 text-gray-600 text-sm">
                             <option>CSV</option>
                             <option>JSON</option>
                             <option>Excel</option>
@@ -444,7 +444,7 @@ export default function ExtractPlaygroundPage() {
                         </div>
                       </div>
                       <textarea
-                        className="w-full min-h-[100px] px-3 py-2 border border-teal-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
+                        className="min-h-[100px] w-full resize-none rounded-lg border border-teal-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                         placeholder="Define schema (e.g., {name, email, score >80, location: Charleston})"
                       />
                     </div>
@@ -452,38 +452,38 @@ export default function ExtractPlaygroundPage() {
                     <div className="space-y-2">
                       {schemaFields.map((field) => (
                         <div key={field.id}>
-                          <div className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg">
+                          <div className="flex items-center space-x-2 rounded-lg bg-gray-50 p-2">
                             <GripVertical className="h-4 w-4 text-gray-700" />
-                            <span className="text-sm font-medium">business</span>
-                            <select className="text-sm bg-white border rounded px-2 py-1 ml-auto">
+                            <span className="font-medium text-sm">business</span>
+                            <select className="ml-auto rounded border bg-white px-2 py-1 text-sm">
                               <option>Object</option>
                             </select>
-                            <button className="text-gray-700 hover:text-gray-600">
+                            <button className="text-gray-700 hover:text-gray-600" type="button">
                               <Plus className="h-4 w-4" />
                             </button>
-                            <button className="text-gray-700 hover:text-gray-600">
+                            <button className="text-gray-700 hover:text-gray-600" type="button">
                               <Trash2 className="h-4 w-4" />
                             </button>
                           </div>
                           {field.children?.map((child) => (
-                            <div key={child.id} className="flex items-center space-x-2 p-2 ml-8">
+                            <div className="ml-8 flex items-center space-x-2 p-2" key={child.id}>
                               <GripVertical className="h-4 w-4 text-gray-700" />
                               <span className="text-sm">{child.name}</span>
-                              <select className="text-sm bg-white border rounded px-2 py-1 ml-auto">
+                              <select className="ml-auto rounded border bg-white px-2 py-1 text-sm">
                                 <option>{child.type}</option>
                               </select>
-                              <button className="text-teal-500">
+                              <button className="text-teal-500" type="button">
                                 <span className="text-lg">*</span>
                               </button>
-                              <button className="text-gray-700 hover:text-gray-600">
+                              <button className="text-gray-700 hover:text-gray-600" type="button">
                                 <Trash2 className="h-4 w-4" />
                               </button>
                             </div>
                           ))}
                         </div>
                       ))}
-                      <button className="w-full py-2 text-sm text-gray-600 hover:text-gray-900 border-2 border-dashed border-teal-300 rounded-lg hover:border-teal-400">
-                        <Plus className="h-4 w-4 inline mr-1" />
+                      <button className="w-full rounded-lg border-2 border-teal-300 border-dashed py-2 text-gray-600 text-sm hover:border-teal-400 hover:text-gray-900">
+                        <Plus className="mr-1 inline h-4 w-4" />
                         Add field
                       </button>
                     </div>
@@ -493,51 +493,51 @@ export default function ExtractPlaygroundPage() {
 
               {/* Extract Results Panel */}
               {showExtractPanel && (
-                <div className="bg-white rounded-xl border">
+                <div className="rounded-xl border bg-white">
                   {isExtracting ? (
                     <div className="p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="text-sm font-medium text-gray-700">Extracting...</div>
+                      <div className="mb-4 flex items-center justify-between">
+                        <div className="font-medium text-gray-700 text-sm">Extracting...</div>
                         <div className="flex items-center space-x-2">
-                          <button className="p-2 hover:bg-gray-100 rounded-lg">
+                          <button className="rounded-lg p-2 hover:bg-gray-100" type="button">
                             <Share2 className="h-4 w-4 text-gray-600" />
                           </button>
-                          <button className="p-2 hover:bg-gray-100 rounded-lg text-red-600">
+                          <button className="rounded-lg p-2 text-red-600 hover:bg-gray-100">
                             <StopCircle className="h-4 w-4" />
                             <span className="ml-1 text-sm">Stop</span>
                           </button>
                         </div>
                       </div>
                       <div className="flex flex-col items-center justify-center py-16">
-                        <div className="text-4xl mb-4 font-bold text-teal-600">IL</div>
-                        <p className="text-sm text-gray-600">Parallelizing requests...</p>
+                        <div className="mb-4 font-bold text-4xl text-teal-600">IL</div>
+                        <p className="text-gray-600 text-sm">Parallelizing requests...</p>
                         <div className="mt-8 grid grid-cols-3 gap-2">
-                          {[...Array(12)].map((_, i) => (
-                            <div key={i} className="h-1 w-16 bg-gray-200 rounded animate-pulse" />
+                          {[...new Array(12)].map((_, i) => (
+                            <div className="h-1 w-16 animate-pulse rounded bg-gray-200" key={i} />
                           ))}
                         </div>
                       </div>
                     </div>
                   ) : extractedData ? (
                     <div>
-                      <div className="p-4 border-b flex items-center justify-between">
+                      <div className="flex items-center justify-between border-b p-4">
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-900">Extracted Leads</h3>
-                          <p className="text-xs text-gray-500 mt-1">From 1 search query</p>
+                          <h3 className="font-semibold text-gray-900 text-sm">Extracted Leads</h3>
+                          <p className="mt-1 text-gray-500 text-xs">From 1 search query</p>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900">
+                          <button className="flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900">
                             <AlertTriangle className="h-4 w-4" />
                             <span>Report issue</span>
                           </button>
-                          <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900">
+                          <button className="flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900">
                             <Download className="h-4 w-4" />
                             <span>JSON</span>
                           </button>
                         </div>
                       </div>
                       <div className="p-4">
-                        <pre className="text-xs font-mono text-gray-700">
+                        <pre className="font-mono text-gray-700 text-xs">
                           {`{
   "company": {
     "name": "Illia",
@@ -546,7 +546,7 @@ export default function ExtractPlaygroundPage() {
   }
 }`}
                         </pre>
-                        <button className="mt-4 text-sm text-gray-600 hover:text-gray-900 flex items-center space-x-1">
+                        <button className="mt-4 flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900">
                           <Copy className="h-4 w-4" />
                           <span>Copy as JSON</span>
                         </button>
@@ -559,18 +559,18 @@ export default function ExtractPlaygroundPage() {
 
             {/* Recent Runs */}
             <div className="mt-8">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Extracts</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <h2 className="mb-4 font-semibold text-gray-900 text-lg">Recent Extracts</h2>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 {recentRuns.map((run) => (
                   <div
+                    className={`cursor-pointer rounded-xl border bg-white p-6 transition-all hover:border-teal-500 hover:shadow-lg ${run.id % 2 === 0 ? 'bg-gray-50' : ''}`}
                     key={run.id}
-                    className={`bg-white rounded-xl border p-6 hover:border-teal-500 hover:shadow-lg transition-all cursor-pointer ${run.id % 2 === 0 ? 'bg-gray-50' : ''}`}
                   >
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="mb-4 flex items-start justify-between">
                       <div className="flex items-center space-x-3">
                         <span className="text-2xl">{run.icon}</span>
-                        <div className="text-gray-900 font-medium flex items-center">
-                          <span className="truncate max-w-[150px]">{run.query}</span>
+                        <div className="flex items-center font-medium text-gray-900">
+                          <span className="max-w-[150px] truncate">{run.query}</span>
                         </div>
                       </div>
                     </div>
@@ -578,7 +578,7 @@ export default function ExtractPlaygroundPage() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-500">Mode</span>
-                        <span className="font-medium flex items-center">
+                        <span className="flex items-center font-medium">
                           {run.mode === 'Schema' && '📋'}
                           {run.mode === 'Agent' && '🤖'}
                           {run.mode === 'ZIP search' && '📍'}
@@ -589,7 +589,7 @@ export default function ExtractPlaygroundPage() {
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-500">Status</span>
                         <span className="flex items-center">
-                          <span className="h-2 w-2 bg-teal-500 rounded-full mr-1.5" />
+                          <span className="mr-1.5 h-2 w-2 rounded-full bg-teal-500" />
                           <span className="font-medium text-teal-600">{run.status}</span>
                         </span>
                       </div>
@@ -603,8 +603,8 @@ export default function ExtractPlaygroundPage() {
                       </div>
 
                       {run.mode && (
-                        <div className="pt-3 border-t">
-                          <span className="text-xs text-gray-500">
+                        <div className="border-t pt-3">
+                          <span className="text-gray-500 text-xs">
                             Leads found:{' '}
                             {run.mode === 'Schema' ? '12' : run.mode === 'Agent' ? '18' : '15'}
                           </span>
@@ -620,7 +620,7 @@ export default function ExtractPlaygroundPage() {
       </div>
 
       {/* Intercom Chat */}
-      <button className="fixed bottom-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full shadow-lg">
+      <button className="fixed right-4 bottom-4 rounded-full bg-teal-500 p-4 text-white shadow-lg hover:bg-teal-600">
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>
@@ -630,11 +630,13 @@ export default function ExtractPlaygroundPage() {
 function Users({ className }: { className?: string }) {
   return (
     <svg
+      aria-label="icon"
       className={className}
-      viewBox="0 0 24 24"
       fill="none"
+      role="img"
       stroke="currentColor"
       strokeWidth="2"
+      viewBox="0 0 24 24"
     >
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
       <circle cx="9" cy="7" r="4" />

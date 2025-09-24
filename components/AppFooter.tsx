@@ -6,25 +6,25 @@ export default function AppFooter() {
   const [lang, setLang] = useState('EN')
 
   return (
-    <footer className="bg-teal-50 border-t border-teal-100 py-4 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto text-center text-sm text-gray-600 space-y-2">
-        <div className="flex justify-center items-center gap-4 flex-wrap">
+    <footer className="border-teal-100 border-t bg-teal-50 px-4 py-4 sm:px-6 dark:border-gray-800 dark:bg-gray-900">
+      <div className="mx-auto max-w-7xl space-y-2 text-center text-gray-600 text-sm dark:text-gray-400">
+        <div className="flex flex-wrap items-center justify-center gap-4">
           <span>© 2025 Illia.club. All rights reserved.</span>
-          <a href="/privacy" className="hover:text-teal-600 underline">
+          <a className="underline hover:text-teal-600 dark:hover:text-teal-400" href="/privacy">
             Privacy
           </a>
-          <a href="/terms" className="hover:text-teal-600 underline">
+          <a className="underline hover:text-teal-600 dark:hover:text-teal-400" href="/terms">
             Terms
           </a>
-          <a href="/support" className="hover:text-teal-600 underline">
+          <a className="underline hover:text-teal-600 dark:hover:text-teal-400" href="/support">
             Support
           </a>
         </div>
         <select
-          value={lang}
-          onChange={(e) => setLang(e.target.value)}
-          className="text-sm border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-teal-500"
           aria-label="Select language"
+          className="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:focus:ring-teal-400"
+          onChange={(e) => setLang(e.target.value)}
+          value={lang}
         >
           <option value="EN">English</option>
           <option value="ES">Español</option>

@@ -33,7 +33,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       primary:
         'bg-teal-600 dark:bg-teal-600 text-white hover:bg-teal-700 dark:hover:bg-teal-700 focus:bg-teal-700 dark:focus:bg-teal-700 active:bg-teal-800 dark:active:bg-teal-800 shadow-sm',
       secondary:
-        'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 focus:bg-gray-200 dark:focus:bg-gray-700 active:bg-gray-300 dark:active:bg-gray-600',
+        'bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-700 active:bg-gray-300 dark:active:bg-gray-600',
       outline:
         'border-2 border-teal-600 dark:border-teal-400 text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/20 focus:bg-teal-50 dark:focus:bg-teal-900/20 active:bg-teal-100 dark:active:bg-teal-900/30',
       ghost:
@@ -64,27 +64,21 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <button
-        ref={ref}
-        type={type}
-        disabled={isDisabled}
-        className={`
-          inline-flex items-center justify-center gap-2
-          font-medium rounded-lg
-          transition-all duration-200
-          focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900
-          disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none
-          ${variantStyles[variant]}
+        className={`inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 ${variantStyles[variant]}
           ${sizeStyles[size]}
           ${fullWidth ? 'w-full' : ''}
           ${className}
         `}
+        disabled={isDisabled}
+        ref={ref}
+        type={type}
         {...props}
       >
         {loading ? (
           <>
             <LoadingSpinner
-              size={iconSizes[size]}
               color={variant === 'primary' || variant === 'danger' ? 'white' : 'gray'}
+              size={iconSizes[size]}
             />
             <span>{children}</span>
           </>

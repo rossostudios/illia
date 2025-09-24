@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 
-interface ImageGalleryProps {
+type ImageGalleryProps = {
   images: {
     src: string
     alt?: string
@@ -38,31 +38,31 @@ export function ImageGallery({ images, className = '', aspectRatio = 'auto' }: I
     document.body.style.overflow = ''
   }
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       document.body.style.overflow = ''
-    }
-  }, [])
+    },
+    []
+  )
 
   return (
     <>
       {/* Gallery Grid */}
       <div className={`grid gap-2 ${className}`}>
         {images.length === 1 && (
-          <button
+          <button className="group relative overflow-hidden rounded-lg"
             onClick={() => openLightbox(0)}
-            className="relative overflow-hidden rounded-lg group"
           >
             <div className={`relative ${aspectRatioClasses[aspectRatio]}`}>
               <Image
-                src={images[0].src}
                 alt={images[0].alt || ''}
-                fill
                 className="object-cover transition-transform group-hover:scale-105"
+                fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                src={images[0].src}
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
                 <ZoomIn className="h-8 w-8 text-white drop-shadow-lg" />
               </div>
             </div>
@@ -72,21 +72,20 @@ export function ImageGallery({ images, className = '', aspectRatio = 'auto' }: I
         {images.length === 2 && (
           <div className="grid grid-cols-2 gap-2">
             {images.map((image, index) => (
-              <button
+              <button className="group relative overflow-hidden rounded-lg"
                 key={index}
                 onClick={() => openLightbox(index)}
-                className="relative overflow-hidden rounded-lg group"
               >
                 <div className={`relative ${aspectRatioClasses[aspectRatio]}`}>
                   <Image
-                    src={image.src}
                     alt={image.alt || ''}
-                    fill
                     className="object-cover transition-transform group-hover:scale-105"
+                    fill
                     sizes="(max-width: 768px) 50vw, 25vw"
+                    src={image.src}
                   />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
                     <ZoomIn className="h-6 w-6 text-white drop-shadow-lg" />
                   </div>
                 </div>
@@ -96,34 +95,33 @@ export function ImageGallery({ images, className = '', aspectRatio = 'auto' }: I
         )}
 
         {images.length >= 3 && (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
             {images.slice(0, 5).map((image, index) => (
-              <button
-                key={index}
-                onClick={() => openLightbox(index)}
-                className={`relative overflow-hidden rounded-lg group ${
+              <button className={`group relative overflow-hidden rounded-lg ${
                   index === 0 ? 'col-span-2 row-span-2' : ''
                 }`}
+                key={index}
+                onClick={() => openLightbox(index)}
               >
                 <div className={`relative ${aspectRatioClasses[aspectRatio]} h-full`}>
                   <Image
-                    src={image.src}
                     alt={image.alt || ''}
-                    fill
                     className="object-cover transition-transform group-hover:scale-105"
+                    fill
                     sizes={index === 0 ? '66vw' : '33vw'}
+                    src={image.src}
                   />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                  <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
 
                   {/* Show remaining count on last image */}
                   {index === 4 && images.length > 5 && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                      <span className="text-white text-2xl font-bold">+{images.length - 5}</span>
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                      <span className="font-bold text-2xl text-white">+{images.length - 5}</span>
                     </div>
                   )}
 
                   {index !== 4 || images.length <= 5 ? (
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
                       <ZoomIn className="h-6 w-6 text-white drop-shadow-lg" />
                     </div>
                   ) : null}
@@ -138,16 +136,16 @@ export function ImageGallery({ images, className = '', aspectRatio = 'auto' }: I
       {isFullscreen && selectedIndex !== null && (
         <ImageLightbox
           images={images}
-          selectedIndex={selectedIndex}
           onClose={closeLightbox}
           onNavigate={setSelectedIndex}
+          selectedIndex={selectedIndex}
         />
       )}
     </>
   )
 }
 
-interface ImageLightboxProps {
+type ImageLightboxProps = {
   images: {
     src: string
     alt?: string
@@ -199,9 +197,15 @@ function ImageLightbox({ images, selectedIndex, onClose, onNavigate }: ImageLigh
   // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-      if (e.key === 'ArrowLeft') handlePrevious()
-      if (e.key === 'ArrowRight') handleNext()
+      if (e.key === 'Escape') {
+        onClose()
+      }
+      if (e.key === 'ArrowLeft') {
+        handlePrevious()
+      }
+      if (e.key === 'ArrowRight') {
+        handleNext()
+      }
     }
 
     window.addEventListener('keydown', handleKeyDown)
@@ -251,50 +255,47 @@ function ImageLightbox({ images, selectedIndex, onClose, onNavigate }: ImageLigh
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
+        className="fixed inset-0 z-50 flex flex-col bg-black"
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 bg-black flex flex-col"
+        initial={{ opacity: 0 }}
         onClick={onClose}
       >
         {/* Header */}
-        <div className="relative z-10 flex items-center justify-between p-4 bg-gradient-to-b from-black/50 to-transparent">
-          <button
+        <div className="relative z-10 flex items-center justify-between bg-gradient-to-b from-black/50 to-transparent p-4">
+          <button aria-label="Close"
+            className="rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50"
             onClick={(e) => {
               e.stopPropagation()
               onClose()
-            }}
-            className="p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors"
-            aria-label="Close"
+            }
           >
             <X className="h-5 w-5 text-white" />
           </button>
 
           <div className="flex items-center gap-4">
-            <span className="text-white text-sm">
+            <span className="text-sm text-white">
               {selectedIndex + 1} / {images.length}
             </span>
 
             <div className="flex gap-2">
-              <button
+              <button aria-label="Zoom out"
+                className="rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50 disabled:opacity-50"
+                disabled={scale <= 1}
                 onClick={(e) => {
                   e.stopPropagation()
                   handleZoomOut()
-                }}
-                disabled={scale <= 1}
-                className="p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors disabled:opacity-50"
-                aria-label="Zoom out"
+                }
               >
                 <ZoomOut className="h-5 w-5 text-white" />
               </button>
-              <button
+              <button aria-label="Zoom in"
+                className="rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50 disabled:opacity-50"
+                disabled={scale >= 3}
                 onClick={(e) => {
                   e.stopPropagation()
                   handleZoomIn()
                 }}
-                disabled={scale >= 3}
-                className="p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors disabled:opacity-50"
-                aria-label="Zoom in"
               >
                 <ZoomIn className="h-5 w-5 text-white" />
               </button>
@@ -304,49 +305,47 @@ function ImageLightbox({ images, selectedIndex, onClose, onNavigate }: ImageLigh
 
         {/* Image */}
         <div
-          className="flex-1 flex items-center justify-center relative overflow-hidden"
+          className="relative flex flex-1 items-center justify-center overflow-hidden"
           onClick={(e) => e.stopPropagation()}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          onTouchMove={handleTouchMove}
+          onTouchStart={handleTouchStart}
         >
           <motion.div
-            ref={imageRef}
             animate={{
               scale,
               x: position.x,
               y: position.y,
             }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="relative max-w-full max-h-full"
+            className="relative max-h-full max-w-full"
+            ref={imageRef}
             style={{ touchAction: 'none' }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
             <Image
-              src={images[selectedIndex].src}
               alt={images[selectedIndex].alt || ''}
-              width={1200}
+              className="max-h-full max-w-full object-contain"
               height={800}
-              className="max-w-full max-h-full object-contain"
               priority
+              src={images[selectedIndex].src}
+              width={1200}
             />
           </motion.div>
 
           {/* Navigation arrows */}
           {selectedIndex > 0 && (
-            <button
+            <button aria-label="Previous image"
+              className="absolute left-4 rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50"
               onClick={handlePrevious}
-              className="absolute left-4 p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors"
-              aria-label="Previous image"
             >
               <ChevronLeft className="h-6 w-6 text-white" />
             </button>
           )}
 
           {selectedIndex < images.length - 1 && (
-            <button
+            <button aria-label="Next image"
+              className="absolute right-4 rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50"
               onClick={handleNext}
-              className="absolute right-4 p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors"
-              aria-label="Next image"
             >
               <ChevronRight className="h-6 w-6 text-white" />
             </button>
@@ -355,8 +354,8 @@ function ImageLightbox({ images, selectedIndex, onClose, onNavigate }: ImageLigh
 
         {/* Caption */}
         {images[selectedIndex].caption && (
-          <div className="p-4 bg-gradient-to-t from-black/50 to-transparent">
-            <p className="text-white text-center">{images[selectedIndex].caption}</p>
+          <div className="bg-gradient-to-t from-black/50 to-transparent p-4">
+            <p className="text-center text-white">{images[selectedIndex].caption}</p>
           </div>
         )}
       </motion.div>

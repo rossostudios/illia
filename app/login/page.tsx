@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import { FaApple, FaGoogle, FaLinkedin } from 'react-icons/fa'
 import { ErrorMessage } from '@/components/ui/ErrorMessage'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
-import { ToastProvider, useToast } from '@/hooks/useToast'
+import { ToastProvider, useToast } from '@/hooks/use-toast'
 import { createClient } from '@/lib/supabase/client'
 
 const testimonials = [
@@ -68,7 +68,9 @@ function LoginForm() {
         password,
       })
 
-      if (error) throw error
+      if (error) {
+        throw error
+      }
 
       success('Welcome back!', 'You have successfully logged in.')
       router.push('/dashboard')
@@ -85,12 +87,14 @@ function LoginForm() {
       // Note: Apple provider isn't directly supported by Supabase
       const supabase = createClient()
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: provider === 'apple' ? 'google' : (provider as any),
+        provider: provider === 'apple' ? 'google' : (provider as string),
         options: {
           redirectTo: `${window.location.origin}/dashboard`,
         },
       })
-      if (error) throw error
+      if (error) {
+        throw error
+      }
     } catch (err: any) {
       setError(err)
       showError('Social login failed', err.message)
@@ -100,13 +104,13 @@ function LoginForm() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       {/* Desktop: two columns, Mobile: stacked */}
-      <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+      <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
         {/* Left Column - Auth Form */}
-        <div className="flex items-center justify-center px-6 md:px-10 lg:px-16 py-8">
+        <div className="flex items-center justify-center px-6 py-8 md:px-10 lg:px-16">
           <div className="w-full max-w-[480px] space-y-6">
             {/* Header */}
             <div className="space-y-2 text-center lg:text-left">
-              <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white">
+              <h1 className="font-semibold text-2xl text-gray-900 md:text-3xl dark:text-white">
                 Login to your account
               </h1>
               <p className="text-gray-600 dark:text-gray-400">Enter your details to login.</p>
@@ -115,102 +119,101 @@ function LoginForm() {
             {/* Social Login Buttons */}
             <div className="grid grid-cols-3 gap-3">
               <button
-                onClick={() => handleSocialLogin('apple')}
-                disabled={loading}
                 aria-label="Sign in with Apple"
-                className="flex items-center justify-center min-h-[44px] h-12 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-teal-500 dark:focus:ring-teal-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-gray-800"
+                className="flex h-12 min-h-[44px] items-center justify-center rounded-lg border border-gray-300 bg-white transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
+                disabled={loading}
+                onClick={() => handleSocialLogin('apple')}
               >
                 <FaApple className="text-xl" />
               </button>
               <button
-                onClick={() => handleSocialLogin('google')}
-                disabled={loading}
                 aria-label="Sign in with Google"
-                className="flex items-center justify-center min-h-[44px] h-12 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-teal-500 dark:focus:ring-teal-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-gray-800"
+                className="flex h-12 min-h-[44px] items-center justify-center rounded-lg border border-gray-300 bg-white transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
+                disabled={loading}
+                onClick={() => handleSocialLogin('google')}
               >
-                <FaGoogle className="text-xl text-red-500" />
+                <FaGoogle className="text-red-500 text-xl" />
               </button>
               <button
-                onClick={() => handleSocialLogin('linkedin')}
-                disabled={loading}
                 aria-label="Sign in with LinkedIn"
-                className="flex items-center justify-center min-h-[44px] h-12 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-teal-500 dark:focus:ring-teal-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-gray-800"
+                className="flex h-12 min-h-[44px] items-center justify-center rounded-lg border border-gray-300 bg-white transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
+                disabled={loading}
+                onClick={() => handleSocialLogin('linkedin')}
               >
-                <FaLinkedin className="text-xl text-blue-600" />
+                <FaLinkedin className="text-blue-600 text-xl" />
               </button>
             </div>
 
             {/* OR Divider */}
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-gray-300 dark:border-gray-700" />
+                <span className="w-full border-gray-300 border-t dark:border-gray-700" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="bg-white dark:bg-gray-900 px-4 text-gray-500 dark:text-gray-400">
+                <span className="bg-white px-4 text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                   OR
                 </span>
               </div>
             </div>
 
             {/* Login Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
               {error && <ErrorMessage error={error} variant="banner" />}
 
               <div className="space-y-4">
                 <div>
                   <label
+                    className="mb-1 block font-medium text-gray-700 text-sm dark:text-gray-300"
                     htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                   >
                     Email Address
-                    <span className="text-red-500 ml-0.5" aria-label="required">
+                    <span aria-label="required" className="ml-0.5 text-red-500">
                       *
                     </span>
                   </label>
                   <input
+                    aria-describedby={error ? 'email-error' : undefined}
+                    aria-invalid={error ? 'true' : 'false'}
+                    autoComplete="email"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:focus:ring-teal-400"
                     id="email"
                     name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    aria-invalid={error ? 'true' : 'false'}
-                    aria-describedby={error ? 'email-error' : undefined}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:border-transparent transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                     placeholder="hello@example.com"
+                    required
+                    type="email"
+                    value={email}
                   />
                 </div>
 
                 <div>
                   <label
+                    className="mb-1 block font-medium text-gray-700 text-sm dark:text-gray-300"
                     htmlFor="password"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                   >
                     Password
-                    <span className="text-red-500 ml-0.5" aria-label="required">
+                    <span aria-label="required" className="ml-0.5 text-red-500">
                       *
                     </span>
                   </label>
                   <div className="relative">
                     <input
+                      aria-describedby={error ? 'password-error' : undefined}
+                      aria-invalid={error ? 'true' : 'false'}
+                      autoComplete="current-password"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pr-12 text-gray-900 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:focus:ring-teal-400"
                       id="password"
                       name="password"
-                      type={showPassword ? 'text' : 'password'}
-                      autoComplete="current-password"
-                      required
-                      value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      aria-invalid={error ? 'true' : 'false'}
-                      aria-describedby={error ? 'password-error' : undefined}
-                      className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:border-transparent transition-colors bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                       placeholder="••••••••"
+                      required
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
                     />
                     <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300"
+                      className="-translate-y-1/2 absolute top-1/2 right-3 text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none dark:text-gray-400 dark:focus:text-gray-300 dark:hover:text-gray-300"
+                      onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
@@ -221,37 +224,37 @@ function LoginForm() {
               <div className="flex items-center justify-between">
                 <label className="flex items-center">
                   <input
-                    type="checkbox"
                     checked={rememberMe}
+                    className="h-4 w-4 rounded border-gray-300 bg-white text-teal-600 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-900 dark:focus:ring-teal-400"
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="h-4 w-4 text-teal-600 border-gray-300 dark:border-gray-600 rounded focus:ring-teal-500 dark:focus:ring-teal-400 bg-white dark:bg-gray-800"
+                    type="checkbox"
                   />
-                  <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Remember me</span>
+                  <span className="ml-2 text-gray-700 text-sm dark:text-gray-300">Remember me</span>
                 </label>
                 <Link
+                  className="text-gray-700 text-sm hover:text-gray-900 focus:underline focus:outline-none dark:text-gray-300 dark:hover:text-white"
                   href="/forgot-password"
-                  className="text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none focus:underline"
                 >
                   Forgot password?
                 </Link>
               </div>
 
               <button
-                type="submit"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-teal-600 py-3 font-medium text-white shadow-sm transition-colors hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-teal-600 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-teal-700"
                 disabled={loading}
-                className="w-full py-3 bg-teal-600 dark:bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 dark:hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-teal-500 dark:focus:ring-teal-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm"
+                type="submit"
               >
-                {loading && <LoadingSpinner size="sm" color="white" />}
+                {loading && <LoadingSpinner color="white" size="sm" />}
                 {loading ? 'Signing in...' : 'Sign in'}
               </button>
             </form>
 
             {/* Sign up link */}
-            <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-center text-gray-600 text-sm dark:text-gray-400">
               Don't have an account?{' '}
               <Link
+                className="font-medium text-gray-900 hover:underline focus:underline focus:outline-none"
                 href="/signup"
-                className="font-medium text-gray-900 hover:underline focus:outline-none focus:underline"
               >
                 Sign up
               </Link>
@@ -260,20 +263,20 @@ function LoginForm() {
         </div>
 
         {/* Right Column - Testimonial */}
-        <div className="hidden lg:flex items-center justify-center bg-gradient-to-br from-warmth-50 to-white px-6 md:px-10 lg:px-16 xl:px-24 py-12">
-          <div className="max-w-4xl w-full">
+        <div className="hidden items-center justify-center bg-gradient-to-br from-warmth-50 to-white px-6 py-12 md:px-10 lg:flex lg:px-16 xl:px-24">
+          <div className="w-full max-w-4xl">
             <div className="space-y-8">
               {/* Avatar */}
               <div className="flex justify-start">
-                <div className="h-16 w-16 rounded-full overflow-hidden bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center">
+                <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-teal-400 to-teal-600">
                   {testimonials[currentTestimonial].avatar ? (
                     <img
-                      src={testimonials[currentTestimonial].avatar}
                       alt={testimonials[currentTestimonial].name}
-                      className="w-full h-full object-cover"
+                      className="h-full w-full object-cover"
+                      src={testimonials[currentTestimonial].avatar}
                     />
                   ) : (
-                    <span className="text-2xl font-semibold text-white">
+                    <span className="font-semibold text-2xl text-white">
                       {testimonials[currentTestimonial].initials}
                     </span>
                   )}
@@ -282,14 +285,14 @@ function LoginForm() {
 
               {/* Testimonial Text */}
               <blockquote>
-                <p className="text-3xl lg:text-4xl xl:text-5xl font-semibold leading-tight text-gray-900">
+                <p className="font-semibold text-3xl text-gray-900 leading-tight lg:text-4xl xl:text-5xl">
                   "{testimonials[currentTestimonial].quote}"
                 </p>
               </blockquote>
 
               {/* Author */}
               <div className="pt-4">
-                <p className="font-semibold text-lg text-gray-900">
+                <p className="font-semibold text-gray-900 text-lg">
                   {testimonials[currentTestimonial].name}
                 </p>
                 <p className="text-gray-600">{testimonials[currentTestimonial].title}</p>
@@ -299,14 +302,14 @@ function LoginForm() {
               <div className="flex gap-2 pt-4">
                 {testimonials.map((_, index) => (
                   <button
-                    key={index}
-                    onClick={() => setCurrentTestimonial(index)}
+                    aria-label={`Go to testimonial ${index + 1}`}
                     className={`h-1.5 rounded-full transition-all ${
                       currentTestimonial === index
                         ? 'w-8 bg-teal-600'
                         : 'w-1.5 bg-gray-300 hover:bg-gray-400'
                     }`}
-                    aria-label={`Go to testimonial ${index + 1}`}
+                    key={index}
+                    onClick={() => setCurrentTestimonial(index)}
                   />
                 ))}
               </div>
@@ -316,7 +319,7 @@ function LoginForm() {
       </div>
 
       {/* Footer - positioned absolutely */}
-      <div className="absolute bottom-4 left-6 text-sm text-gray-500">© 2025 Illia.club</div>
+      <div className="absolute bottom-4 left-6 text-gray-500 text-sm">© 2025 Illia.club</div>
     </div>
   )
 }

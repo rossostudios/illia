@@ -11,7 +11,7 @@ import { Award, CheckCircle, Loader2, MapPin, Search, Sparkles, Star, Users, X }
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useId, useRef, useState } from 'react'
-import { useSession } from '@/hooks/useSession'
+import { useSession } from '@/hooks/use-session'
 import { createClient } from '@/lib/supabase/client'
 
 // Mock data for service providers
@@ -201,18 +201,17 @@ export default function DashboardPage() {
     }
   }
 
-  const handleRequestIntro = (providerId: number) => {
+  const handleRequestIntro = (_providerId: number) => {
     if (membershipTier === 'free' && matchesUsed >= matchesLimit) {
       router.push('/dashboard/membership')
       return
     }
-    console.log('Requesting intro to provider:', providerId)
     setMatchesUsed((prev) => prev + 1)
   }
 
   if (sessionLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="flex min-h-[60vh] items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-teal-600" />
       </div>
     )
@@ -221,60 +220,58 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Hero Section with Fixed Search */}
-      <div className="bg-gradient-to-br from-teal-50/50 via-white to-blue-50/50 dark:from-gray-800/50 dark:via-gray-800 dark:to-gray-900/50 rounded-xl p-6 md:p-8 border border-gray-100 dark:border-gray-800">
-        <div className="max-w-5xl mx-auto">
+      <div className="rounded-xl border border-gray-100 bg-gradient-to-br from-teal-50/50 via-white to-blue-50/50 p-6 md:p-8 dark:border-gray-800 dark:from-gray-900/50 dark:via-gray-900 dark:to-black/50">
+        <div className="mx-auto max-w-5xl">
           {/* Hero Header */}
-          <div className="text-center mb-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2 animate-fade-in">
+          <div className="mb-6 text-center">
+            <h1 className="mb-2 animate-fade-in font-bold text-2xl text-gray-900 md:text-3xl dark:text-white">
               Welcome back, {user?.email?.split('@')[0] || 'Explorer'}!
             </h1>
-            <p className="text-base md:text-lg text-gray-700 dark:text-gray-300">
+            <p className="text-base text-gray-700 md:text-lg dark:text-gray-300">
               Ready to find your ideal home helper in{' '}
               {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}?
             </p>
           </div>
 
           {/* Enhanced Search Bar */}
-          <div className="relative max-w-3xl mx-auto mb-6">
+          <div className="relative mx-auto mb-6 max-w-3xl">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-600 dark:text-gray-400 pointer-events-none" />
+              <Search className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-4 h-5 w-5 text-gray-600 dark:text-gray-400" />
               <input
-                id={searchInputId}
-                ref={searchRef}
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={handleKeyDown}
-                onFocus={() => setShowSuggestions(true)}
-                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                placeholder={`Search for cleaners, cooks, or home help in ${selectedCity === 'medellin' ? 'El Poblado' : 'Lagoa'}...`}
-                aria-label="Search for home services"
-                aria-autocomplete="list"
-                aria-controls="search-suggestions"
-                aria-expanded={showSuggestions}
                 aria-activedescendant={
                   selectedSuggestionIndex >= 0 ? `suggestion-${selectedSuggestionIndex}` : undefined
                 }
-                className="w-full pl-12 pr-24 py-4 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:border-transparent text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-all"
+                aria-autocomplete="list"
+                aria-controls="search-suggestions"
+                aria-expanded={showSuggestions}
+                aria-label="Search for home services"
+                className="w-full rounded-full border border-gray-200 bg-white py-4 pr-24 pl-12 text-gray-900 shadow-md transition-all placeholder:text-gray-500 focus:border-transparent focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:placeholder:text-gray-400"
+                id={searchInputId}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setShowSuggestions(true)}
+                onKeyDown={handleKeyDown}
+                placeholder={`Search for cleaners, cooks, or home help in ${selectedCity === 'medellin' ? 'El Poblado' : 'Lagoa'}...`}
+                ref={searchRef}
+                type="text"
+                value={searchQuery}
               />
               {searchQuery && (
                 <button
-                  type="button"
+                  aria-label="Clear search"
+                  className="-translate-y-1/2 absolute top-1/2 right-20 p-1.5 text-gray-600 transition-colors hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
                   onClick={() => {
                     setSearchQuery('')
                     setShowSuggestions(false)
                     searchRef.current?.focus()
                   }}
-                  className="absolute right-20 top-1/2 -translate-y-1/2 p-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
-                  aria-label="Clear search"
                 >
                   <X className="h-4 w-4" />
                 </button>
               )}
               <button
-                type="button"
+                className="-translate-y-1/2 absolute top-1/2 right-2 rounded-full bg-teal-600 px-5 py-2 font-medium text-white shadow-sm transition-all hover:bg-teal-700 focus:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:bg-teal-500 dark:focus:bg-teal-600 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-teal-600"
                 onClick={() => handleSearch()}
-                className="absolute right-2 top-1/2 -translate-y-1/2 px-5 py-2 bg-teal-600 dark:bg-teal-500 text-white rounded-full hover:bg-teal-700 dark:hover:bg-teal-600 focus:bg-teal-700 dark:focus:bg-teal-600 focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all font-medium shadow-sm"
               >
                 Search
               </button>
@@ -283,12 +280,12 @@ export default function DashboardPage() {
             {/* Search Suggestions Dropdown */}
             {showSuggestions && filteredSuggestions.length > 0 && (
               <div
+                className="absolute z-10 mt-2 w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-950"
                 id="search-suggestions"
                 role="listbox"
-                className="absolute z-10 w-full mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
               >
                 <div className="p-2">
-                  <p className="text-xs text-gray-600 dark:text-gray-400 px-3 py-1">
+                  <p className="px-3 py-1 text-gray-600 text-xs dark:text-gray-400">
                     {searchQuery.length === 0 ? 'Recent searches' : 'Suggestions'}
                   </p>
                   {filteredSuggestions.map((suggestion, idx) => {
@@ -297,26 +294,25 @@ export default function DashboardPage() {
 
                     return (
                       <button
-                        type="button"
-                        key={idx}
-                        id={`suggestion-${idx}`}
-                        role="option"
                         aria-selected={isSelected}
+                        className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-all ${
+                          isSelected
+                            ? 'bg-teal-50 text-teal-700 dark:bg-teal-900/20 dark:text-teal-400'
+                            : 'text-gray-700 hover:bg-teal-50 hover:text-teal-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-teal-400'
+                        } focus:bg-teal-50 focus:text-teal-600 focus:outline-none dark:focus:bg-gray-700 dark:focus:text-teal-400`}
+                        id={`suggestion-${idx}`}
+                        key={idx}
                         onClick={() => {
                           setSearchQuery(suggestion)
                           setShowSuggestions(false)
                           handleSearch(suggestion)
                         }}
-                        className={`w-full text-left px-3 py-2 rounded-lg transition-all text-sm ${
-                          isSelected
-                            ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400'
-                            : 'hover:bg-teal-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400'
-                        } focus:bg-teal-50 dark:focus:bg-gray-700 focus:outline-none focus:text-teal-600 dark:focus:text-teal-400`}
+                        role="option"
                       >
-                        <Search className="inline h-3 w-3 mr-2 text-gray-500 dark:text-gray-400" />
+                        <Search className="mr-2 inline h-3 w-3 text-gray-500 dark:text-gray-400" />
                         {suggestion}
                         {isRecent && (
-                          <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
+                          <span className="ml-2 text-gray-500 text-xs dark:text-gray-400">
                             (recent)
                           </span>
                         )}
@@ -325,13 +321,12 @@ export default function DashboardPage() {
                   })}
                   {searchQuery.length === 0 && recentSearches.length > 0 && (
                     <button
-                      type="button"
+                      className="mt-1 w-full border-gray-200 border-t px-3 py-2 text-left text-gray-500 text-xs hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                       onClick={() => {
                         setRecentSearches([])
                         localStorage.removeItem('recentSearches')
                         setShowSuggestions(false)
                       }}
-                      className="w-full text-left px-3 py-2 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 mt-1 border-t border-gray-200 dark:border-gray-700"
                     >
                       Clear recent searches
                     </button>
@@ -344,27 +339,25 @@ export default function DashboardPage() {
           {/* City Selector */}
           <div className="flex justify-center gap-2">
             <button
-              type="button"
-              onClick={() => setSelectedCity('medellin')}
-              className={`px-4 py-2 rounded-lg font-medium transition-all focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none ${
+              className={`rounded-lg px-4 py-2 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                 selectedCity === 'medellin'
-                  ? 'bg-teal-600 dark:bg-teal-600 text-white shadow-lg'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600'
+                  ? 'bg-teal-600 text-white shadow-lg dark:bg-teal-600'
+                  : 'border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800'
               }`}
+              onClick={() => setSelectedCity('medellin')}
             >
-              <MapPin className="inline h-4 w-4 mr-1" />
+              <MapPin className="mr-1 inline h-4 w-4" />
               Medellín
             </button>
             <button
-              type="button"
-              onClick={() => setSelectedCity('florianopolis')}
-              className={`px-4 py-2 rounded-lg font-medium transition-all focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none ${
+              className={`rounded-lg px-4 py-2 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                 selectedCity === 'florianopolis'
-                  ? 'bg-teal-600 dark:bg-teal-600 text-white shadow-lg'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600'
+                  ? 'bg-teal-600 text-white shadow-lg dark:bg-teal-600'
+                  : 'border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800'
               }`}
+              onClick={() => setSelectedCity('florianopolis')}
             >
-              <MapPin className="inline h-4 w-4 mr-1" />
+              <MapPin className="mr-1 inline h-4 w-4" />
               Florianópolis
             </button>
           </div>
@@ -375,37 +368,37 @@ export default function DashboardPage() {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Quick Matches Section */}
         <div className="lg:col-span-2">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+            <div className="border-gray-200 border-b p-6 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <h2 className="font-semibold text-gray-900 text-xl dark:text-white">
                     Your Quick Matches
                   </h2>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  <p className="mt-1 text-gray-600 text-sm dark:text-gray-400">
                     AI-suggested providers based on your preferences
                   </p>
                 </div>
                 <Link
+                  className="rounded font-medium text-sm text-teal-600 transition-all hover:text-teal-700 focus:text-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:text-teal-400 dark:focus:text-teal-300 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:text-teal-300"
                   href="/dashboard/explore"
-                  className="text-sm text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 focus:text-teal-700 dark:focus:text-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900 rounded font-medium transition-all"
                 >
                   View All →
                 </Link>
               </div>
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="space-y-4 p-6">
               {SAMPLE_PROVIDERS.map((provider) => (
                 <div
+                  className="group cursor-pointer rounded-lg border border-gray-200 bg-white p-4 transition-all duration-200 focus-within:scale-[1.02] focus-within:shadow-lg focus-within:ring-2 focus-within:ring-teal-500 focus-within:ring-offset-2 hover:scale-[1.02] hover:shadow-lg dark:border-gray-800 dark:bg-gray-950/50 dark:focus-within:ring-teal-400 dark:focus-within:ring-offset-gray-900"
                   key={provider.id}
-                  className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-lg hover:scale-[1.02] focus-within:shadow-lg focus-within:scale-[1.02] focus-within:ring-2 focus-within:ring-teal-500 dark:focus-within:ring-teal-400 focus-within:ring-offset-2 dark:focus-within:ring-offset-gray-800 transition-all duration-200 cursor-pointer group bg-white dark:bg-gray-800/50"
                 >
                   <div className="flex items-start gap-4">
                     <img
-                      src={provider.photo}
                       alt={`${provider.name} - ${provider.service} provider in ${provider.location}`}
-                      className="w-16 h-16 rounded-full object-cover ring-2 ring-white dark:ring-gray-700 group-hover:ring-teal-100 dark:group-hover:ring-teal-900"
+                      className="h-16 w-16 rounded-full object-cover ring-2 ring-white group-hover:ring-teal-100 dark:ring-gray-700 dark:group-hover:ring-teal-900"
+                      src={provider.photo}
                     />
                     <div className="flex-1">
                       <div className="flex items-start justify-between">
@@ -418,10 +411,10 @@ export default function DashboardPage() {
                               <CheckCircle className="h-4 w-4 text-teal-600 dark:text-teal-400" />
                             )}
                           </div>
-                          <p className="text-sm text-gray-700 dark:text-gray-300">
+                          <p className="text-gray-700 text-sm dark:text-gray-300">
                             {provider.service}
                           </p>
-                          <div className="flex items-center gap-4 mt-2 text-xs text-gray-600 dark:text-gray-400">
+                          <div className="mt-2 flex items-center gap-4 text-gray-600 text-xs dark:text-gray-400">
                             <span className="flex items-center gap-1">
                               <MapPin className="h-3 w-3 text-gray-500 dark:text-gray-400" />
                               {provider.location}
@@ -434,11 +427,11 @@ export default function DashboardPage() {
                               {provider.rate}
                             </span>
                           </div>
-                          <div className="flex gap-2 mt-2">
+                          <div className="mt-2 flex gap-2">
                             {provider.specialties.map((specialty, idx) => (
                               <span
+                                className="rounded bg-teal-50 px-2 py-1 font-medium text-gray-700 text-xs dark:bg-teal-900/20 dark:text-gray-300"
                                 key={idx}
-                                className="text-xs bg-teal-50 dark:bg-teal-900/20 text-gray-700 dark:text-gray-300 px-2 py-1 rounded font-medium"
                               >
                                 {specialty}
                               </span>
@@ -446,12 +439,12 @@ export default function DashboardPage() {
                           </div>
                           {/* Why this match? */}
                           <details className="mt-3">
-                            <summary className="text-xs text-teal-600 dark:text-teal-400 cursor-pointer hover:text-teal-700 dark:hover:text-teal-300 font-medium">
+                            <summary className="cursor-pointer font-medium text-teal-600 text-xs hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300">
                               Why this match? →
                             </summary>
-                            <div className="mt-2 p-2 bg-teal-50 dark:bg-teal-900/20 rounded text-xs text-gray-700 dark:text-gray-300">
+                            <div className="mt-2 rounded bg-teal-50 p-2 text-gray-700 text-xs dark:bg-teal-900/20 dark:text-gray-300">
                               <span className="font-medium">High Match Score:</span>
-                              <ul className="mt-1 space-y-0.5 ml-2">
+                              <ul className="mt-1 ml-2 space-y-0.5">
                                 <li>
                                   ✓ Speaks{' '}
                                   {provider.languages.includes('English')
@@ -466,14 +459,13 @@ export default function DashboardPage() {
                           </details>
                         </div>
                         <button
-                          type="button"
-                          onClick={() => handleRequestIntro(provider.id)}
-                          className={`px-4 py-2 rounded-lg font-medium transition-all focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none ${
+                          className={`rounded-lg px-4 py-2 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
                             membershipTier === 'premium' || matchesUsed < matchesLimit
-                              ? 'bg-teal-600 dark:bg-teal-500 text-white hover:bg-teal-700 dark:hover:bg-teal-600 shadow-sm'
-                              : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 cursor-not-allowed'
+                              ? 'bg-teal-600 text-white shadow-sm hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600'
+                              : 'cursor-not-allowed bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300'
                           }`}
                           disabled={membershipTier === 'free' && matchesUsed >= matchesLimit}
+                          onClick={() => handleRequestIntro(provider.id)}
                         >
                           {membershipTier === 'premium'
                             ? 'Request Intro'
@@ -489,21 +481,21 @@ export default function DashboardPage() {
 
               {/* Empty state for quiz */}
               {showWelcomeQuiz && (
-                <div className="text-center py-8 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  <Sparkles className="h-12 w-12 text-teal-600 dark:text-teal-400 mx-auto mb-3" />
-                  <h3 className="font-semibold text-xl text-gray-900 dark:text-white mb-2">
+                <div className="rounded-lg bg-gray-50 py-8 text-center dark:bg-gray-950">
+                  <Sparkles className="mx-auto mb-3 h-12 w-12 text-teal-600 dark:text-teal-400" />
+                  <h3 className="mb-2 font-semibold text-gray-900 text-xl dark:text-white">
                     Let's find your perfect match!
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                  <p className="mb-6 text-gray-600 text-sm dark:text-gray-400">
                     Take our 2-minute quiz to get personalized recommendations
                   </p>
                   <Link
+                    className="hover:-translate-y-0.5 focus:-translate-y-0.5 inline-flex transform items-center gap-2 rounded-lg bg-gradient-to-r from-teal-600 to-teal-700 px-6 py-3 font-medium text-white shadow-lg transition-all hover:from-teal-700 hover:to-teal-800 hover:shadow-xl focus:from-teal-700 focus:to-teal-800 focus:shadow-xl focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:from-teal-500 dark:to-teal-600 dark:focus:from-teal-600 dark:focus:to-teal-700 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-800 dark:hover:from-teal-600 dark:hover:to-teal-700"
                     href="/en/dashboard/quiz"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 dark:from-teal-500 dark:to-teal-600 text-white rounded-lg font-medium hover:from-teal-700 hover:to-teal-800 dark:hover:from-teal-600 dark:hover:to-teal-700 focus:from-teal-700 focus:to-teal-800 dark:focus:from-teal-600 dark:focus:to-teal-700 focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all shadow-lg hover:shadow-xl focus:shadow-xl transform hover:-translate-y-0.5 focus:-translate-y-0.5"
                   >
                     <Sparkles className="h-5 w-5" />
                     Take the Smart Match Quiz
-                    <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full ml-1">2 min</span>
+                    <span className="ml-1 rounded-full bg-white/20 px-2 py-0.5 text-xs">2 min</span>
                   </Link>
                 </div>
               )}
@@ -514,14 +506,14 @@ export default function DashboardPage() {
         {/* Right Column */}
         <div className="space-y-6">
           {/* Membership Card */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <div className="flex items-center justify-between mb-4">
+          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+            <div className="mb-4 flex items-center justify-between">
               <h3 className="font-semibold text-gray-900 dark:text-white">Your Membership</h3>
               <span
-                className={`px-3 py-1 rounded-full text-xs font-medium ${
+                className={`rounded-full px-3 py-1 font-medium text-xs ${
                   membershipTier === 'premium'
-                    ? 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                    ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300'
+                    : 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300'
                 }`}
               >
                 {membershipTier === 'premium' ? 'Premium' : 'Free Tier'}
@@ -530,32 +522,32 @@ export default function DashboardPage() {
 
             <div className="space-y-3">
               <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-600 dark:text-gray-400 font-medium">Matches Used</span>
+                <div className="mb-1 flex justify-between text-sm">
+                  <span className="font-medium text-gray-600 dark:text-gray-400">Matches Used</span>
                   <span className="font-medium">
                     {matchesUsed}/{matchesLimit}
                   </span>
                 </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-900">
                   <div
-                    className="bg-teal-600 dark:bg-teal-400 h-2 rounded-full transition-all"
+                    className="h-2 rounded-full bg-teal-600 transition-all dark:bg-teal-400"
                     style={{ width: `${(matchesUsed / matchesLimit) * 100}%` }}
                   />
                 </div>
               </div>
 
               {membershipTier === 'free' && (
-                <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-3 font-medium">
+                <div className="border-gray-200 border-t pt-3 dark:border-gray-700">
+                  <p className="mb-3 font-medium text-gray-600 text-xs dark:text-gray-400">
                     Premium members hire 2x faster with unlimited intros
                   </p>
                   <Link
+                    className="block w-full rounded-lg bg-gradient-to-r from-teal-600 to-teal-700 px-4 py-2 text-center text-white shadow-md transition-all hover:from-teal-700 hover:to-teal-800 hover:shadow-lg focus:from-teal-700 focus:to-teal-800 focus:shadow-lg focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:from-teal-500 dark:to-teal-600 dark:focus:from-teal-600 dark:focus:to-teal-700 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-800 dark:hover:from-teal-600 dark:hover:to-teal-700"
                     href="/dashboard/membership"
-                    className="block w-full text-center px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 dark:from-teal-500 dark:to-teal-600 text-white rounded-lg hover:from-teal-700 hover:to-teal-800 dark:hover:from-teal-600 dark:hover:to-teal-700 focus:from-teal-700 focus:to-teal-800 dark:focus:from-teal-600 dark:focus:to-teal-700 focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all shadow-md hover:shadow-lg focus:shadow-lg"
                   >
                     Start Free 7-Day Trial →
                   </Link>
-                  <p className="text-xs text-center text-gray-600 dark:text-gray-400 mt-2">
+                  <p className="mt-2 text-center text-gray-600 text-xs dark:text-gray-400">
                     Then $9/mo • Cancel anytime
                   </p>
                 </div>
@@ -564,12 +556,12 @@ export default function DashboardPage() {
           </div>
 
           {/* Community Highlights */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <div className="flex items-center justify-between mb-4">
+          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+            <div className="mb-4 flex items-center justify-between">
               <h3 className="font-semibold text-gray-900 dark:text-white">Community Buzz</h3>
               <Link
+                className="rounded text-sm text-teal-600 transition-all hover:text-teal-700 focus:text-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:text-teal-400 dark:focus:text-teal-300 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-800 dark:hover:text-teal-300"
                 href="/dashboard/community"
-                className="text-sm text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 focus:text-teal-700 dark:focus:text-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800 rounded transition-all"
               >
                 View All
               </Link>
@@ -578,16 +570,16 @@ export default function DashboardPage() {
             <div className="space-y-3">
               {COMMUNITY_POSTS.map((post) => (
                 <Link
-                  key={post.id}
+                  className="-mx-2 group block rounded border-gray-200 border-b px-2 py-2 pb-3 transition-all last:border-0 last:pb-0 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset dark:border-gray-700 dark:focus:bg-gray-850 dark:focus:ring-teal-400 dark:hover:bg-gray-750"
                   href="/dashboard/community"
-                  className="block pb-3 border-b border-gray-200 dark:border-gray-700 last:border-0 last:pb-0 hover:bg-gray-50 dark:hover:bg-gray-750 focus:bg-gray-50 dark:focus:bg-gray-750 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:ring-inset -mx-2 px-2 py-2 rounded transition-all group"
+                  key={post.id}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white mb-1 group-hover:text-teal-600 dark:group-hover:text-teal-400">
+                      <p className="mb-1 font-medium text-gray-900 text-sm group-hover:text-teal-600 dark:text-white dark:group-hover:text-teal-400">
                         {post.title}
                       </p>
-                      <div className="flex items-center gap-3 text-xs text-gray-600 dark:text-gray-400">
+                      <div className="flex items-center gap-3 text-gray-600 text-xs dark:text-gray-400">
                         <span>{post.author}</span>
                         <span>•</span>
                         <span>{post.replies} replies</span>
@@ -596,11 +588,11 @@ export default function DashboardPage() {
                       </div>
                     </div>
                     {post.trending ? (
-                      <span className="text-xs bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 px-2 py-0.5 rounded-full">
+                      <span className="rounded-full bg-orange-100 px-2 py-0.5 text-orange-700 text-xs dark:bg-orange-900/20 dark:text-orange-300">
                         Hot
                       </span>
                     ) : membershipTier === 'premium' ? (
-                      <span className="text-xs text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/20 px-2 py-0.5 rounded">
+                      <span className="rounded bg-teal-50 px-2 py-0.5 text-teal-600 text-xs dark:bg-teal-900/20 dark:text-teal-400">
                         Priority
                       </span>
                     ) : null}
@@ -609,15 +601,15 @@ export default function DashboardPage() {
               ))}
             </div>
 
-            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-              <div className="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-3">
+            <div className="mt-4 border-gray-200 border-t pt-4 dark:border-gray-700">
+              <div className="rounded-lg bg-teal-50 p-3 dark:bg-teal-900/20">
                 <div className="flex items-start gap-2">
-                  <Award className="h-4 w-4 text-teal-600 dark:text-teal-400 mt-0.5" />
+                  <Award className="mt-0.5 h-4 w-4 text-teal-600 dark:text-teal-400" />
                   <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    <p className="font-medium text-gray-900 text-sm dark:text-white">
                       Tip of the Day
                     </p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 font-medium">
+                    <p className="mt-1 font-medium text-gray-600 text-xs dark:text-gray-400">
                       In Colombia, always agree on payment terms upfront. Weekly payments are common
                       for domestic help.
                     </p>
@@ -628,14 +620,14 @@ export default function DashboardPage() {
           </div>
 
           {/* Active Users */}
-          <div className="bg-gradient-to-br from-teal-50 to-white dark:from-teal-900/20 dark:to-gray-800 rounded-xl border border-teal-200 dark:border-teal-800 p-4">
+          <div className="rounded-xl border border-teal-200 bg-gradient-to-br from-teal-50 to-white p-4 dark:border-teal-800 dark:from-teal-900/20 dark:to-gray-900">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Active Now</p>
-                <p className="text-2xl font-bold text-teal-600 dark:text-teal-400">152</p>
-                <p className="text-xs text-gray-600 dark:text-gray-400">expats online</p>
+                <p className="font-medium text-gray-900 text-sm dark:text-white">Active Now</p>
+                <p className="font-bold text-2xl text-teal-600 dark:text-teal-400">152</p>
+                <p className="text-gray-600 text-xs dark:text-gray-400">expats online</p>
               </div>
-              <Users className="h-8 w-8 text-teal-600 dark:text-teal-400 opacity-50" />
+              <Users className="h-8 w-8 text-teal-600 opacity-50 dark:text-teal-400" />
             </div>
           </div>
         </div>

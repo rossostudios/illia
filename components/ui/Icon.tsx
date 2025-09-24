@@ -135,7 +135,7 @@ const iconMap = {
 
 export type IconName = keyof typeof iconMap
 
-interface IconProps {
+type IconProps = {
   name: IconName
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   className?: string
@@ -155,7 +155,6 @@ export function Icon({
   const IconComponent = iconMap[name]
 
   if (!IconComponent) {
-    console.warn(`Icon "${name}" not found`)
     return null
   }
 
@@ -169,10 +168,10 @@ export function Icon({
 
   return (
     <IconComponent
-      className={`${sizeClasses[size]} ${className}`}
-      strokeWidth={strokeWidth}
       aria-hidden={ariaHidden}
       aria-label={ariaLabel}
+      className={`${sizeClasses[size]} ${className}`}
+      strokeWidth={strokeWidth}
     />
   )
 }

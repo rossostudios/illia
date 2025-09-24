@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useSessionContext } from '@/components/SessionProvider'
 import MessageCenter from './MessageCenter'
 
-interface StartConversationButtonProps {
+type StartConversationButtonProps = {
   userId: string
   userName?: string
   isProvider?: boolean
@@ -27,7 +27,9 @@ export default function StartConversationButton({
   const [isMessageCenterOpen, setIsMessageCenterOpen] = useState(false)
   const { user } = useSessionContext()
 
-  if (!user || user.id === userId) return null
+  if (!user || user.id === userId) {
+    return null
+  }
 
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-sm',
@@ -44,15 +46,11 @@ export default function StartConversationButton({
   return (
     <>
       <button
-        onClick={() => setIsMessageCenterOpen(true)}
-        className={`
-          flex items-center justify-center gap-2
-          ${sizeClasses[size]}
+        className={`flex items-center justify-center gap-2 ${sizeClasses[size]}
           ${variantClasses[variant]}
-          ${fullWidth ? 'w-full' : ''}
-          rounded-lg font-medium transition-colors
-          ${className}
+          ${fullWidth ? 'w-full' : ''}rounded-lg font-medium transition-colors ${className}
         `}
+        onClick={() => setIsMessageCenterOpen(true)}
       >
         <MessageSquare className={size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'} />
         <span>Message {isProvider ? 'Provider' : userName}</span>
@@ -60,9 +58,9 @@ export default function StartConversationButton({
 
       {isMessageCenterOpen && (
         <MessageCenter
+          initialOtherUserId={userId}
           isOpen={isMessageCenterOpen}
           onClose={() => setIsMessageCenterOpen(false)}
-          initialOtherUserId={userId}
         />
       )}
     </>
@@ -80,23 +78,25 @@ export function QuickMessageButton({
   const [isMessageCenterOpen, setIsMessageCenterOpen] = useState(false)
   const { user } = useSessionContext()
 
-  if (!user || user.id === userId) return null
+  if (!user || user.id === userId) {
+    return null
+  }
 
   return (
     <>
       <button
-        onClick={() => setIsMessageCenterOpen(true)}
-        className={`p-2 hover:bg-gray-100 rounded-lg transition-colors ${className}`}
         aria-label="Send message"
+        className={`rounded-lg p-2 transition-colors hover:bg-gray-100 ${className}`}
+        onClick={() => setIsMessageCenterOpen(true)}
       >
         <Send className="h-4 w-4 text-gray-500" />
       </button>
 
       {isMessageCenterOpen && (
         <MessageCenter
+          initialOtherUserId={userId}
           isOpen={isMessageCenterOpen}
           onClose={() => setIsMessageCenterOpen(false)}
-          initialOtherUserId={userId}
         />
       )}
     </>

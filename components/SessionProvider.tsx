@@ -30,8 +30,8 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
           data: { session },
         } = await supabase.auth.getSession()
         setUser(session?.user ?? null)
-      } catch (error) {
-        console.error('Error fetching session:', error)
+      } catch (_error) {
+        // Error handled silently
       } finally {
         setLoading(false)
       }

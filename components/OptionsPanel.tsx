@@ -3,7 +3,7 @@
 import { Info, Plus, X } from 'lucide-react'
 import { useState } from 'react'
 
-interface OptionsPanelProps {
+type OptionsPanelProps = {
   isOpen: boolean
   onClose: () => void
   endpoint: string
@@ -11,7 +11,7 @@ interface OptionsPanelProps {
 
 export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanelProps) {
   const [mainContentOnly, setMainContentOnly] = useState(true)
-  const [parsePDF, setParsePDF] = useState(true)
+  const [parsePdf, setParsePdf] = useState(true)
   const [stealthMode, setStealthMode] = useState(false)
   const [excludeTags, setExcludeTags] = useState<string[]>([])
   const [includeTags, setIncludeTags] = useState<string[]>([])
@@ -38,7 +38,7 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
 
   const handleReset = () => {
     setMainContentOnly(true)
-    setParsePDF(true)
+    setParsePdf(true)
     setStealthMode(false)
     setExcludeTags([])
     setIncludeTags([])
@@ -47,32 +47,35 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
     setMaxAge('2')
   }
 
-  if (!isOpen) return null
+  if (!isOpen) {
+    return null
+  }
 
   return (
-    <div className="fixed inset-y-0 right-0 w-96 bg-white shadow-2xl z-50 flex flex-col">
+    <div className="fixed inset-y-0 right-0 z-50 flex w-96 flex-col bg-white shadow-2xl">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b">
-        <h3 className="text-lg font-semibold text-gray-900">Options</h3>
-        <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg transition-colors">
+      <div className="flex items-center justify-between border-b px-6 py-4">
+        <h3 className="font-semibold text-gray-900 text-lg">Options</h3>
+        <button className="rounded-lg p-1 transition-colors hover:bg-gray-100"
+          onClick={onClose}
+        >
           <X className="h-5 w-5 text-gray-500" />
         </button>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+      <div className="flex-1 space-y-6 overflow-y-auto px-6 py-4">
         {/* Main content only */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-gray-700">Main content only</span>
+            <span className="font-medium text-gray-700 text-sm">Main content only</span>
           </div>
           <div className="flex items-center space-x-3">
-            <span className="text-xs text-gray-500">1 Credit / PDF Page</span>
-            <button
-              onClick={() => setMainContentOnly(!mainContentOnly)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+            <span className="text-gray-500 text-xs">1 Credit / PDF Page</span>
+            <button className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                 mainContentOnly ? 'bg-orange-500' : 'bg-gray-200'
               }`}
+              onClick={() => setMainContentOnly(!mainContentOnly)}
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -86,19 +89,18 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
         {/* Parse PDF */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-gray-700">Parse PDF</span>
+            <span className="font-medium text-gray-700 text-sm">Parse PDF</span>
           </div>
           <div className="flex items-center space-x-3">
-            <span className="text-xs text-gray-500">1 Credit / PDF Page</span>
-            <button
-              onClick={() => setParsePDF(!parsePDF)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                parsePDF ? 'bg-orange-500' : 'bg-gray-200'
+            <span className="text-gray-500 text-xs">1 Credit / PDF Page</span>
+            <button className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                parsePdf ? 'bg-orange-500' : 'bg-gray-200'
               }`}
+              onClick={() => setParsePdf(!parsePdf)}
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  parsePDF ? 'translate-x-6' : 'translate-x-1'
+                  parsePdf ? 'translate-x-6' : 'translate-x-1'
                 }`}
               />
             </button>
@@ -108,15 +110,14 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
         {/* Stealth mode */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-gray-700">Stealth mode</span>
+            <span className="font-medium text-gray-700 text-sm">Stealth mode</span>
           </div>
           <div className="flex items-center space-x-3">
-            <span className="text-xs text-gray-500">5 Credits / Page</span>
-            <button
-              onClick={() => setStealthMode(!stealthMode)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+            <span className="text-gray-500 text-xs">5 Credits / Page</span>
+            <button className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                 stealthMode ? 'bg-orange-500' : 'bg-gray-200'
               }`}
+              onClick={() => setStealthMode(!stealthMode)}
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -130,27 +131,25 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
         {/* Exclude tags */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2 relative">
-              <span className="text-sm font-medium text-gray-700">Exclude tags</span>
+            <div className="relative flex items-center space-x-2">
+              <span className="font-medium text-gray-700 text-sm">Exclude tags</span>
               <div className="relative">
-                <button
-                  onMouseEnter={() => setShowExcludeTooltip(true)}
+                <button className="text-gray-400 hover:text-gray-600"
+                  onMouseEnter={() => setShowExcludeTooltip(true)
                   onMouseLeave={() => setShowExcludeTooltip(false)}
-                  className="text-gray-400 hover:text-gray-600"
                 >
                   <Info className="h-4 w-4" />
                 </button>
                 {showExcludeTooltip && (
-                  <div className="absolute left-0 top-6 w-48 p-2 bg-gray-800 text-white text-xs rounded-lg shadow-lg z-10">
+                  <div className="absolute top-6 left-0 z-10 w-48 rounded-lg bg-gray-800 p-2 text-white text-xs shadow-lg">
                     Only include tags, classes and ids from the page in the final output. Use comma
                     separated values.
                   </div>
                 )}
               </div>
             </div>
-            <button
+            <button className="flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900"
               onClick={handleAddExcludeTag}
-              className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900"
             >
               <Plus className="h-4 w-4" />
               <span>Add</span>
@@ -158,35 +157,33 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
           </div>
           {excludeTags.map((tag, index) => (
             <div
+              className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2"
               key={index}
-              className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2"
             >
-              <span className="text-sm text-gray-700">{tag}</span>
-              <button
+              <span className="text-gray-700 text-sm">{tag}</span>
+              <button className="text-gray-400 hover:text-gray-600"
                 onClick={() => setExcludeTags(excludeTags.filter((_, i) => i !== index))}
-                className="text-gray-400 hover:text-gray-600"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
           ))}
           <input
-            type="text"
-            value={newExcludeTag}
+            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
             onChange={(e) => setNewExcludeTag(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleAddExcludeTag()}
             placeholder="Add tag to exclude..."
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            type="text"
+            value={newExcludeTag}
           />
         </div>
 
         {/* Include tags */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-700">Include tags</span>
-            <button
+            <span className="font-medium text-gray-700 text-sm">Include tags</span>
+            <button className="flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900"
               onClick={handleAddIncludeTag}
-              className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900"
             >
               <Plus className="h-4 w-4" />
               <span>Add</span>
@@ -194,79 +191,77 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
           </div>
           {includeTags.map((tag, index) => (
             <div
+              className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2"
               key={index}
-              className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2"
             >
-              <span className="text-sm text-gray-700">{tag}</span>
-              <button
+              <span className="text-gray-700 text-sm">{tag}</span>
+              <button className="text-gray-400 hover:text-gray-600"
                 onClick={() => setIncludeTags(includeTags.filter((_, i) => i !== index))}
-                className="text-gray-400 hover:text-gray-600"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
           ))}
           <input
-            type="text"
-            value={newIncludeTag}
+            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
             onChange={(e) => setNewIncludeTag(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleAddIncludeTag()}
             placeholder="Add tag to include..."
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            type="text"
+            value={newIncludeTag}
           />
         </div>
 
         {/* Wait */}
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700">Wait</span>
+          <span className="font-medium text-gray-700 text-sm">Wait</span>
           <div className="flex items-center space-x-2">
             <input
+              className="w-20 rounded-lg border border-gray-200 px-3 py-1.5 text-center text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              onChange={(e) => setWaitTime(e.target.value)}
               type="number"
               value={waitTime}
-              onChange={(e) => setWaitTime(e.target.value)}
-              className="w-20 px-3 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
-            <span className="text-sm text-gray-500">seconds</span>
-            <span className="text-xs text-gray-400">ms</span>
+            <span className="text-gray-500 text-sm">seconds</span>
+            <span className="text-gray-400 text-xs">ms</span>
           </div>
         </div>
 
         {/* Timeout */}
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700">Timeout</span>
+          <span className="font-medium text-gray-700 text-sm">Timeout</span>
           <div className="flex items-center space-x-2">
             <input
+              className="w-20 rounded-lg border border-gray-200 px-3 py-1.5 text-center text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              onChange={(e) => setTimeout(e.target.value)}
               type="number"
               value={timeout}
-              onChange={(e) => setTimeout(e.target.value)}
-              className="w-20 px-3 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
-            <span className="text-sm text-gray-500">seconds</span>
-            <span className="text-xs text-gray-400">ms</span>
+            <span className="text-gray-500 text-sm">seconds</span>
+            <span className="text-gray-400 text-xs">ms</span>
           </div>
         </div>
 
         {/* Max age */}
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700">Max age</span>
+          <span className="font-medium text-gray-700 text-sm">Max age</span>
           <div className="flex items-center space-x-2">
             <input
+              className="w-20 rounded-lg border border-gray-200 px-3 py-1.5 text-center text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              onChange={(e) => setMaxAge(e.target.value)}
               type="number"
               value={maxAge}
-              onChange={(e) => setMaxAge(e.target.value)}
-              className="w-20 px-3 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
-            <span className="text-sm text-gray-500">days</span>
-            <span className="text-xs text-gray-400">ms</span>
+            <span className="text-gray-500 text-sm">days</span>
+            <span className="text-gray-400 text-xs">ms</span>
           </div>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="px-6 py-4 border-t">
-        <button
+      <div className="border-t px-6 py-4">
+        <button className="w-full rounded-lg bg-gray-100 py-2 font-medium text-gray-700 text-sm transition-colors hover:bg-gray-200"
           onClick={handleReset}
-          className="w-full py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
         >
           Reset settings
         </button>

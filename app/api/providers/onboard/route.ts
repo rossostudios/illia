@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     } = body
 
     // Validation
-    if (!name || !email || !bio || !city || !services?.length || !languages?.length) {
+    if (!(name && email && bio && city && services?.length && languages?.length)) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
@@ -76,12 +76,8 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error) {
-      console.error('Provider creation error:', error)
       return NextResponse.json({ error: 'Failed to create provider profile' }, { status: 500 })
     }
-
-    // Send notification email to admin (optional)
-    console.log(`New provider application received: ${name} (${email})`)
 
     // TODO: Send welcome email to provider
     // TODO: Notify admin for review
@@ -95,8 +91,7 @@ export async function POST(request: NextRequest) {
         status: provider.status,
       },
     })
-  } catch (error) {
-    console.error('Provider onboarding error:', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'An error occurred during registration' }, { status: 500 })
   }
 }

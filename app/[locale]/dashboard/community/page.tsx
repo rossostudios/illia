@@ -8,8 +8,8 @@ import dynamic from 'next/dynamic'
 const RealtimeCommunity = dynamic(() => import('@/components/community/RealtimeCommunity'), {
   ssr: false,
   loading: () => (
-    <div className="min-h-screen bg-warmth-50/30 flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600" />
+    <div className="flex min-h-screen items-center justify-center bg-warmth-50/30">
+      <div className="h-12 w-12 animate-spin rounded-full border-teal-600 border-b-2" />
     </div>
   ),
 })

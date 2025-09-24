@@ -5,13 +5,13 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSessionContext } from '@/components/SessionProvider'
 import { createClient } from '@/lib/supabase/client'
 
-interface TypingUser {
+type TypingUser = {
   user_id: string
   name: string
   started_at: string
 }
 
-interface UseTypingIndicatorOptions {
+type UseTypingIndicatorOptions = {
   channel: string // e.g., 'thread:uuid', 'dm:user1-user2'
   onTypingStart?: (user: TypingUser) => void
   onTypingStop?: (userId: string) => void
@@ -33,7 +33,7 @@ export function useTypingIndicator(options: UseTypingIndicatorOptions) {
       setTypingUsers((prev) =>
         prev.filter((u) => {
           const typingTime = new Date(u.started_at).getTime()
-          return now - typingTime < 10000 // Remove after 10 seconds
+          return now - typingTime < 10_000 // Remove after 10 seconds
         })
       )
     }, 1000)
@@ -42,7 +42,9 @@ export function useTypingIndicator(options: UseTypingIndicatorOptions) {
   }, [])
 
   useEffect(() => {
-    if (!user) return
+    if (!user) {
+      return
+    }
 
     const setupTypingChannel = async () => {
       // Clean up existing channel
@@ -84,7 +86,6 @@ export function useTypingIndicator(options: UseTypingIndicatorOptions) {
         })
         .subscribe((status) => {
           if (status === 'SUBSCRIBED') {
-            console.log('Subscribed to typing indicators')
           }
         })
 
@@ -110,11 +111,15 @@ export function useTypingIndicator(options: UseTypingIndicatorOptions) {
 
   // Broadcast typing start
   const startTyping = useCallback(async () => {
-    if (!channelRef.current || !user) return
+    if (!(channelRef.current && user)) {
+      return
+    }
 
     const now = Date.now()
     // Throttle typing events (max once per 2 seconds)
-    if (now - lastTypingRef.current < 2000) return
+    if (now - lastTypingRef.current < 2000) {
+      return
+    }
 
     lastTypingRef.current = now
     setIsTyping(true)
@@ -144,7 +149,9 @@ export function useTypingIndicator(options: UseTypingIndicatorOptions) {
 
   // Broadcast typing stop
   const stopTyping = useCallback(async () => {
-    if (!channelRef.current || !user || !isTyping) return
+    if (!(channelRef.current && user && isTyping)) {
+      return
+    }
 
     setIsTyping(false)
 
@@ -168,7 +175,9 @@ export function useTypingIndicator(options: UseTypingIndicatorOptions) {
 
   // Format typing users for display
   const getTypingText = useCallback(() => {
-    if (typingUsers.length === 0) return null
+    if (typingUsers.length === 0) {
+      return null
+    }
 
     if (typingUsers.length === 1) {
       return `${typingUsers[0].name} is typing...`

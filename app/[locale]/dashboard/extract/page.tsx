@@ -69,11 +69,11 @@ export default function ExtractPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 w-56 bg-white border-r">
+      <div className="fixed inset-y-0 left-0 w-56 border-r bg-white">
         {/* Logo */}
-        <div className="p-4 border-b">
-          <Link href="/dashboard" className="flex items-center space-x-2 group">
-            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">
+        <div className="border-b p-4">
+          <Link className="group flex items-center space-x-2" href="/dashboard">
+            <span className="font-bold text-teal-800 text-xl drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md md:text-2xl">
               Illia
             </span>
           </Link>
@@ -82,25 +82,25 @@ export default function ExtractPage() {
         {/* Search */}
         <div className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
+            <Search className="absolute top-2.5 left-3 h-4 w-4 text-gray-700" />
             <input
-              type="text"
+              className="w-full rounded-lg border border-gray-300 bg-gray-200 py-2 pr-3 pl-9 text-gray-900 text-sm placeholder:text-gray-500 focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500"
               placeholder="Search past leads..."
-              className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+              type="text"
             />
-            <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
+            <kbd className="absolute top-2 right-2 rounded border bg-white px-1 text-xs">⌘K</kbd>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="px-3 space-y-1">
+        <nav className="space-y-1 px-3">
           {sidebarItems.map((item) => (
             <div key={item.label}>
               <Link
-                href={item.href}
-                className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center justify-between rounded-lg px-3 py-2 font-medium text-sm transition-colors ${
                   item.active ? 'bg-teal-50 text-teal-600' : 'text-gray-700 hover:bg-gray-100'
                 }`}
+                href={item.href}
                 onClick={(e) => {
                   if (item.hasSubmenu) {
                     e.preventDefault()
@@ -119,16 +119,16 @@ export default function ExtractPage() {
                 )}
               </Link>
               {item.hasSubmenu && item.isOpen && (
-                <div className="ml-7 mt-1 space-y-1">
+                <div className="mt-1 ml-7 space-y-1">
                   {item.submenu?.map((subitem) => (
                     <Link
-                      key={subitem.label}
-                      href={subitem.href}
-                      className={`block px-3 py-2 text-sm rounded-lg ${
+                      className={`block rounded-lg px-3 py-2 text-sm ${
                         subitem.active
-                          ? 'text-teal-600 bg-teal-50'
-                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                          ? 'bg-teal-50 text-teal-600'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       }`}
+                      href={subitem.href}
+                      key={subitem.label}
                     >
                       {subitem.label}
                     </Link>
@@ -141,28 +141,28 @@ export default function ExtractPage() {
 
         {/* What's New */}
         {showWhatsNew && (
-          <div className="absolute bottom-4 left-4 right-4">
-            <div className="bg-teal-50 rounded-lg p-3">
-              <div className="flex items-start justify-between mb-2">
+          <div className="absolute right-4 bottom-4 left-4">
+            <div className="rounded-lg bg-teal-50 p-3">
+              <div className="mb-2 flex items-start justify-between">
                 <div className="flex items-center space-x-2">
                   <Sparkles className="h-4 w-4 text-teal-600" />
-                  <span className="text-xs font-semibold text-teal-600">What&apos;s New (5)</span>
+                  <span className="font-semibold text-teal-600 text-xs">What&apos;s New (5)</span>
                 </div>
                 <button
-                  onClick={() => setShowWhatsNew(false)}
                   className="text-gray-700 hover:text-gray-600"
+                  onClick={() => setShowWhatsNew(false)}
                 >
                   <X className="h-3 w-3" />
                 </button>
               </div>
-              <p className="text-xs text-gray-600">View our latest update</p>
+              <p className="text-gray-600 text-xs">View our latest update</p>
             </div>
 
             {/* User email */}
-            <div className="mt-4 px-3 py-2 text-xs text-gray-500">samlee@content-mobbin.com</div>
+            <div className="mt-4 px-3 py-2 text-gray-500 text-xs">samlee@content-mobbin.com</div>
 
             {/* Collapse button */}
-            <button className="flex items-center space-x-2 mt-2 text-xs text-gray-600 hover:text-gray-900">
+            <button className="mt-2 flex items-center space-x-2 text-gray-600 text-xs hover:text-gray-900">
               <ChevronLeft className="h-3 w-3" />
               <span>Collapse</span>
             </button>
@@ -173,29 +173,29 @@ export default function ExtractPage() {
       {/* Main content */}
       <div className="ml-56">
         {/* Header */}
-        <header className="bg-white border-b px-8 py-4">
+        <header className="border-b bg-white px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-teal-100 text-teal-700 px-3 py-1 rounded-lg">
+              <div className="flex items-center space-x-2 rounded-lg bg-teal-100 px-3 py-1 text-teal-700">
                 <Users className="h-4 w-4" />
-                <span className="text-sm font-medium">Personal Team</span>
+                <span className="font-medium text-sm">Personal Team</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
+              <button className="rounded-lg p-2 hover:bg-gray-100" type="button">
                 <Bell className="h-5 w-5 text-gray-600" />
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
+              <button className="rounded-lg p-2 hover:bg-gray-100" type="button">
                 <HelpCircle className="h-5 w-5 text-gray-600" />
               </button>
               <Link
+                className="flex items-center space-x-2 rounded-lg px-3 py-1.5 hover:bg-gray-100"
                 href="/docs"
-                className="flex items-center space-x-2 px-3 py-1.5 hover:bg-gray-100 rounded-lg"
               >
                 <FileCode className="h-4 w-4" />
-                <span className="text-sm font-medium">Docs</span>
+                <span className="font-medium text-sm">Docs</span>
               </Link>
-              <button className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors">
+              <button className="rounded-lg bg-teal-500 px-4 py-1.5 font-medium text-sm text-white transition-colors hover:bg-teal-600">
                 Upgrade
               </button>
             </div>
@@ -206,8 +206,8 @@ export default function ExtractPage() {
         <div className="p-8">
           {/* Title */}
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-teal-600 mb-2 flex items-center">
-              <Download className="h-6 w-6 mr-2" />
+            <h1 className="mb-2 flex items-center font-bold text-2xl text-teal-600">
+              <Download className="mr-2 h-6 w-6" />
               Lead Extract Overview
             </h1>
             <p className="text-gray-700">
@@ -217,106 +217,113 @@ export default function ExtractPage() {
           </div>
 
           {/* Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
             {/* Lead Docs Card */}
             <Link
+              className="group rounded-xl border border-teal-200 bg-white p-6 transition-all hover:border-teal-500 hover:shadow-lg"
               href="/docs/extract"
-              className="bg-white rounded-xl border border-teal-200 p-6 hover:border-teal-500 hover:shadow-lg transition-all group"
             >
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="p-2 bg-teal-50 rounded-lg">
+              <div className="mb-4 flex items-center space-x-3">
+                <div className="rounded-lg bg-teal-50 p-2">
                   <FileText className="h-5 w-5 text-teal-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900">Lead Docs</h3>
               </div>
-              <p className="text-sm text-gray-600">Explore lead gen reference and guides</p>
+              <p className="text-gray-600 text-sm">Explore lead gen reference and guides</p>
             </Link>
 
             {/* Lead Playground Card */}
             <Link
+              className="group rounded-xl border border-teal-200 bg-white p-6 transition-all hover:border-teal-500 hover:shadow-lg"
               href="/dashboard/playground"
-              className="bg-white rounded-xl border border-teal-200 p-6 hover:border-teal-500 hover:shadow-lg transition-all group"
             >
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="p-2 bg-teal-50 rounded-lg">
+              <div className="mb-4 flex items-center space-x-3">
+                <div className="rounded-lg bg-teal-50 p-2">
                   <Play className="h-5 w-5 text-teal-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900">Lead Playground</h3>
               </div>
-              <p className="text-sm text-gray-600">Easily get structured leads</p>
+              <p className="text-gray-600 text-sm">Easily get structured leads</p>
             </Link>
 
             {/* Integrations Card */}
             <Link
+              className="group rounded-xl border border-teal-200 bg-white p-6 transition-all hover:border-teal-500 hover:shadow-lg"
               href="/integrations/zapier"
-              className="bg-white rounded-xl border border-teal-200 p-6 hover:border-teal-500 hover:shadow-lg transition-all group"
             >
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="p-2 bg-teal-50 rounded-lg">
-                  <svg className="h-5 w-5 text-teal-600" viewBox="0 0 24 24" fill="none">
+              <div className="mb-4 flex items-center space-x-3">
+                <div className="rounded-lg bg-teal-50 p-2">
+                  <svg
+                    aria-label="icon"
+                    className="h-5 w-5 text-teal-600"
+                    fill="none"
+                    role="img"
+                    viewBox="0 0 24 24"
+                  >
+                    <title>Icon</title>
                     <path
                       d="M12 2L2 7L12 12L22 7L12 2Z"
                       stroke="currentColor"
-                      strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      strokeWidth="2"
                     />
                     <path
                       d="M2 17L12 22L22 17"
                       stroke="currentColor"
-                      strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      strokeWidth="2"
                     />
                     <path
                       d="M2 12L12 17L22 12"
                       stroke="currentColor"
-                      strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      strokeWidth="2"
                     />
                   </svg>
                 </div>
                 <h3 className="font-semibold text-gray-900">Integrations</h3>
               </div>
-              <p className="text-sm text-gray-600">Integrate to automate workflows</p>
+              <p className="text-gray-600 text-sm">Integrate to automate workflows</p>
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {/* Usage Section */}
-            <div className="bg-white rounded-xl border p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-gray-900">Usage</h2>
-                <span className="text-2xl font-bold text-teal-600">7%</span>
+            <div className="rounded-xl border bg-white p-6">
+              <div className="mb-6 flex items-center justify-between">
+                <h2 className="font-semibold text-gray-900 text-lg">Usage</h2>
+                <span className="font-bold text-2xl text-teal-600">7%</span>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-600">Leads Extracted</span>
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="text-gray-600 text-sm">Leads Extracted</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <span className="text-xl font-semibold text-gray-900">
+                    <span className="font-semibold text-gray-900 text-xl">
                       {extractLogs.length > 0 ? '35' : '0'}
                     </span>
-                    <span className="text-sm text-gray-500">/ 500 leads</span>
+                    <span className="text-gray-500 text-sm">/ 500 leads</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
-                    <div className="bg-teal-500 h-2 rounded-full" style={{ width: '7%' }}></div>
+                  <div className="mt-3 h-2 w-full rounded-full bg-gray-200">
+                    <div className="h-2 rounded-full bg-teal-500" style={{ width: '7%' }} />
                   </div>
                 </div>
 
-                <div className="pt-4 border-t">
+                <div className="border-t pt-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">
+                    <span className="text-gray-600 text-sm">
                       Bonus leads from promo (ZIP 29401 focus)
                     </span>
-                    <span className="text-sm font-medium">15</span>
+                    <span className="font-medium text-sm">15</span>
                   </div>
-                  <p className="text-sm text-gray-500 mt-2">
+                  <p className="mt-2 text-gray-500 text-sm">
                     Billing via Stripe—
-                    <Link href="/manage" className="text-teal-600 hover:underline">
+                    <Link className="text-teal-600 hover:underline" href="/manage">
                       Pro unlocks unlimited
                     </Link>
                   </p>
@@ -325,18 +332,18 @@ export default function ExtractPage() {
 
               {/* Recent Lead Pulls */}
               {extractLogs.length > 0 && (
-                <div className="mt-6 pt-6 border-t">
-                  <h3 className="text-sm font-medium text-gray-700 mb-4">Recent Lead Pulls</h3>
+                <div className="mt-6 border-t pt-6">
+                  <h3 className="mb-4 font-medium text-gray-700 text-sm">Recent Lead Pulls</h3>
                   <div className="space-y-3">
                     {extractLogs.map((log) => (
                       <div
+                        className="rounded-lg bg-gray-50 p-3 transition-colors hover:bg-gray-100"
                         key={log.id}
-                        className="bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors"
                       >
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm text-teal-700 font-medium flex items-center">
+                        <div className="mb-2 flex items-center justify-between">
+                          <span className="flex items-center font-medium text-sm text-teal-700">
                             {log.query}
-                            {log.hasLink && <ExternalLink className="h-3 w-3 ml-1 text-teal-600" />}
+                            {log.hasLink && <ExternalLink className="ml-1 h-3 w-3 text-teal-600" />}
                           </span>
                           <button
                             className="text-teal-600 hover:text-teal-700"
@@ -347,75 +354,83 @@ export default function ExtractPage() {
                         </div>
                         <div className="flex items-center justify-between text-xs">
                           <div className="flex items-center space-x-2">
-                            <span className="h-2 w-2 bg-green-500 rounded-full"></span>
+                            <span className="h-2 w-2 rounded-full bg-green-500" />
                             <span className="text-gray-500">
                               {log.date} • {log.time}
                             </span>
                           </div>
-                          <span className="text-green-600 font-medium">{log.leads} leads</span>
+                          <span className="font-medium text-green-600">{log.leads} leads</span>
                         </div>
                       </div>
                     ))}
                   </div>
                   <div className="mt-4 text-center">
-                    <p className="text-xs text-gray-500">Showing 1-2 of 2 items • Page 1</p>
+                    <p className="text-gray-500 text-xs">Showing 1-2 of 2 items • Page 1</p>
                   </div>
                 </div>
               )}
 
               {extractLogs.length === 0 && (
-                <div className="mt-8 text-center py-8">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                <div className="mt-8 py-8 text-center">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
                     <FileText className="h-8 w-8 text-gray-700" />
                   </div>
-                  <p className="text-sm text-gray-500">No extract logs yet</p>
+                  <p className="text-gray-500 text-sm">No extract logs yet</p>
                 </div>
               )}
             </div>
 
             {/* Lead Extraction Pricing */}
-            <div className="bg-teal-50 rounded-xl border border-teal-200 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Lead Extraction Pricing</h2>
+            <div className="rounded-xl border border-teal-200 bg-teal-50 p-6">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="font-semibold text-gray-900 text-lg">Lead Extraction Pricing</h2>
                 <Link
+                  className="flex items-center text-sm text-teal-700 hover:text-teal-900"
                   href="/pricing"
-                  className="text-sm text-teal-700 hover:text-teal-900 flex items-center"
                 >
                   <span>View plans</span>
-                  <ExternalLink className="h-3 w-3 ml-1" />
+                  <ExternalLink className="ml-1 h-3 w-3" />
                 </Link>
               </div>
 
-              <p className="text-sm text-gray-700 mb-6">
+              <p className="mb-6 text-gray-700 text-sm">
                 Unlock more extractions and higher limits with Pro subscription.
               </p>
 
-              <div className="space-y-3 mb-6">
+              <div className="mb-6 space-y-3">
                 <div className="flex items-center text-sm">
-                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="mr-2 text-green-600">✓</span>
                   <span className="text-gray-700">Unlimited Charleston area searches</span>
                 </div>
                 <div className="flex items-center text-sm">
-                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="mr-2 text-green-600">✓</span>
                   <span className="text-gray-700">Advanced lead scoring</span>
                 </div>
                 <div className="flex items-center text-sm">
-                  <span className="text-green-600 mr-2">✓</span>
+                  <span className="mr-2 text-green-600">✓</span>
                   <span className="text-gray-700">CRM integration</span>
                 </div>
               </div>
 
               <Link
+                className="inline-flex w-full items-center justify-center rounded-lg bg-teal-600 px-4 py-2 font-medium text-white transition-colors hover:bg-teal-700"
                 href="/pricing"
-                className="inline-flex items-center justify-center w-full px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-medium transition-colors"
               >
                 View Plans
-                <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  aria-label="icon"
+                  className="ml-2 h-4 w-4"
+                  fill="none"
+                  role="img"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <title>Icon</title>
                   <path
+                    d="M9 5l7 7-7 7"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M9 5l7 7-7 7"
                   />
                 </svg>
               </Link>
@@ -425,7 +440,7 @@ export default function ExtractPage() {
       </div>
 
       {/* Intercom Chat */}
-      <button className="fixed bottom-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full shadow-lg">
+      <button className="fixed right-4 bottom-4 rounded-full bg-teal-500 p-4 text-white shadow-lg hover:bg-teal-600">
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>
@@ -435,11 +450,13 @@ export default function ExtractPage() {
 function Users({ className }: { className?: string }) {
   return (
     <svg
+      aria-label="icon"
       className={className}
-      viewBox="0 0 24 24"
       fill="none"
+      role="img"
       stroke="currentColor"
       strokeWidth="2"
+      viewBox="0 0 24 24"
     >
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
       <circle cx="9" cy="7" r="4" />

@@ -2,9 +2,9 @@
 
 import { Loader2, MapPin, Search, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useDebounce } from '@/hooks/useDebounce'
+import { useDebounce } from '@/hooks/use-debounce'
 
-export interface LocationSuggestion {
+export type LocationSuggestion = {
   place_id: string
   display_name: string
   lat: string
@@ -21,7 +21,7 @@ export interface LocationSuggestion {
   }
 }
 
-interface LocationAutocompleteProps {
+type LocationAutocompleteProps = {
   value: string
   onChange: (value: string) => void
   onLocationSelect: (location: {
@@ -79,8 +79,7 @@ export function LocationAutocomplete({
       setSuggestions(data)
       setShowDropdown(true)
       setSelectedIndex(-1)
-    } catch (error) {
-      console.error('Error searching locations:', error)
+    } catch (_error) {
       setSuggestions([])
     } finally {
       setLoading(false)
@@ -99,8 +98,8 @@ export function LocationAutocomplete({
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
           enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 300000, // 5 minutes
+          timeout: 10_000,
+          maximumAge: 300_000, // 5 minutes
         })
       })
 
@@ -131,8 +130,7 @@ export function LocationAutocomplete({
         onChange(`Current location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`)
         setShowDropdown(false)
       }
-    } catch (error) {
-      console.error('Error getting current location:', error)
+    } catch (_error) {
       alert('Unable to get your current location. Please check your browser permissions.')
     } finally {
       setGettingLocation(false)
@@ -157,8 +155,8 @@ export function LocationAutocomplete({
   // Handle suggestion selection
   const handleSuggestionSelect = useCallback(
     (suggestion: LocationSuggestion) => {
-      const latitude = parseFloat(suggestion.lat)
-      const longitude = parseFloat(suggestion.lon)
+      const latitude = Number.parseFloat(suggestion.lat)
+      const longitude = Number.parseFloat(suggestion.lon)
 
       onLocationSelect({
         latitude,
@@ -177,7 +175,9 @@ export function LocationAutocomplete({
   // Handle keyboard navigation
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (!showDropdown || suggestions.length === 0) return
+      if (!showDropdown || suggestions.length === 0) {
+        return
+      }
 
       switch (e.key) {
         case 'ArrowDown':
@@ -238,31 +238,30 @@ export function LocationAutocomplete({
     <div className={`relative ${className}`}>
       {/* Input field */}
       <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
           {loading ? (
-            <Loader2 className="h-5 w-5 text-gray-400 animate-spin" />
+            <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
           ) : (
             <Search className="h-5 w-5 text-gray-400" />
           )}
         </div>
 
         <input
+          className="w-full rounded-lg border border-gray-300 bg-white py-3 pr-10 pl-10 text-gray-900 placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-teal-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:placeholder-gray-400"
+          disabled={disabled}
+          onChange={handleInputChange}
+          onFocus={() => value && setShowDropdown(true)}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
           ref={inputRef}
           type="text"
           value={value}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          onFocus={() => value && setShowDropdown(true)}
-          placeholder={placeholder}
-          disabled={disabled}
-          className="w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-teal-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
         />
 
         {value && (
           <button
+            className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
             onClick={handleClear}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
-            type="button"
           >
             <X className="h-5 w-5" />
           </button>
@@ -272,10 +271,9 @@ export function LocationAutocomplete({
       {/* Current location button */}
       {showCurrentLocation && !disabled && (
         <button
-          onClick={getCurrentLocation}
+          className="absolute top-2 right-2 p-1 text-teal-600 hover:text-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={gettingLocation}
-          className="absolute right-2 top-2 p-1 text-teal-600 hover:text-teal-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          type="button"
+          onClick={getCurrentLocation}
           title="Use current location"
         >
           {gettingLocation ? (
@@ -289,42 +287,41 @@ export function LocationAutocomplete({
       {/* Suggestions dropdown */}
       {showDropdown && (suggestions.length > 0 || loading) && (
         <div
+          className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900"
           ref={dropdownRef}
-          className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-auto"
         >
           {loading && suggestions.length === 0 && (
-            <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2">
+            <div className="flex items-center gap-2 px-4 py-3 text-gray-500 text-sm dark:text-gray-400">
               <Loader2 className="h-4 w-4 animate-spin" />
               Searching locations...
             </div>
           )}
 
           {!loading && suggestions.length === 0 && value.length >= 2 && (
-            <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+            <div className="px-4 py-3 text-gray-500 text-sm dark:text-gray-400">
               No locations found. Try a different search term.
             </div>
           )}
 
           {suggestions.map((suggestion, index) => (
             <button
-              key={suggestion.place_id}
-              onClick={() => handleSuggestionSelect(suggestion)}
-              className={`w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 focus:bg-gray-50 dark:focus:bg-gray-700 focus:outline-none ${
+              className={`w-full px-4 py-3 text-left hover:bg-gray-50 focus:bg-gray-50 focus:outline-none dark:focus:bg-gray-700 dark:hover:bg-gray-800 ${
                 index === selectedIndex ? 'bg-teal-50 dark:bg-teal-900/20' : ''
               }`}
-              type="button"
+              key={suggestion.place_id}
+              onClick={() => handleSuggestionSelect(suggestion)}
             >
               <div className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                <MapPin className="mt-0.5 h-5 w-5 flex-shrink-0 text-gray-400" />
+                <div className="min-w-0 flex-1">
+                  <div className="truncate font-medium text-gray-900 text-sm dark:text-white">
                     {suggestion.display_name.split(',')[0]}
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                  <div className="truncate text-gray-500 text-xs dark:text-gray-400">
                     {suggestion.display_name.split(',').slice(1).join(',').trim()}
                   </div>
                   {suggestion.type && (
-                    <div className="text-xs text-teal-600 dark:text-teal-400 mt-1 capitalize">
+                    <div className="mt-1 text-teal-600 text-xs capitalize dark:text-teal-400">
                       {suggestion.type.replace('_', ' ')}
                     </div>
                   )}

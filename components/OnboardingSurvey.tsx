@@ -3,7 +3,7 @@
 import { X } from 'lucide-react'
 import { useState } from 'react'
 
-interface OnboardingSurveyProps {
+type OnboardingSurveyProps = {
   isOpen: boolean
   onClose: () => void
   onComplete: () => void
@@ -77,15 +77,17 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
 
   const _progressPercentage = (currentStep / totalSteps) * 100
 
-  if (!isOpen) return null
+  if (!isOpen) {
+    return null
+  }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+      <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white">
         {/* Header */}
-        <div className="p-6 border-b">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-semibold text-gray-900">
+        <div className="border-b p-6">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="font-semibold text-2xl text-gray-900">
               {currentStep === 1 && 'What are you using Illia for?'}
               {currentStep === 2 && 'Where did you hear about us?'}
               {currentStep === 3 && 'Terms of Service & Privacy Policy'}
@@ -93,8 +95,8 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
             </h2>
             {currentStep <= 2 && (
               <button
+                className="text-gray-400 transition-colors hover:text-gray-600"
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <X className="h-6 w-6" />
               </button>
@@ -114,18 +116,18 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
 
         {/* Progress bar */}
         <div className="px-6 pt-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex space-x-2 flex-1 mr-4">
+          <div className="mb-6 flex items-center justify-between">
+            <div className="mr-4 flex flex-1 space-x-2">
               {[1, 2, 3, 4].map((step) => (
                 <div
-                  key={step}
                   className={`h-2 flex-1 rounded-full transition-all ${
                     step <= currentStep ? 'bg-orange-500' : 'bg-gray-200'
                   }`}
+                  key={step}
                 />
               ))}
             </div>
-            <span className="text-sm text-gray-500">
+            <span className="text-gray-500 text-sm">
               STEP {currentStep} OF {totalSteps}
             </span>
           </div>
@@ -138,25 +140,25 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
             <div className="space-y-4">
               <div className="space-y-3">
                 {/* Other option with text field */}
-                <div className="border rounded-lg p-4 hover:border-gray-400 transition-all">
-                  <label className="flex items-start space-x-3 cursor-pointer">
+                <div className="rounded-lg border p-4 transition-all hover:border-gray-400">
+                  <label className="flex cursor-pointer items-start space-x-3">
                     <input
-                      type="checkbox"
                       checked={formData.useCase === 'other'}
+                      className="mt-0.5 h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                       onChange={() => setFormData({ ...formData, useCase: 'other' })}
-                      className="mt-0.5 h-4 w-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500"
+                      type="checkbox"
                     />
                     <div className="flex-1">
                       <span className="font-medium text-gray-900">Other</span>
                       {formData.useCase === 'other' && (
                         <input
-                          type="text"
-                          placeholder="Please specify..."
-                          value={formData.otherUseCase}
+                          className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500"
                           onChange={(e) =>
                             setFormData({ ...formData, otherUseCase: e.target.value })
                           }
-                          className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
+                          placeholder="Please specify..."
+                          type="text"
+                          value={formData.otherUseCase}
                         />
                       )}
                     </div>
@@ -166,8 +168,8 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                 {/* Predefined options */}
                 {useCases.map((useCase) => (
                   <div
+                    className="cursor-pointer rounded-lg border p-4 transition-all hover:border-gray-400"
                     key={useCase.id}
-                    className="border rounded-lg p-4 hover:border-gray-400 transition-all cursor-pointer"
                     onClick={() => setFormData({ ...formData, useCase: useCase.id })}
                   >
                     <div className="flex items-start space-x-3">
@@ -181,14 +183,17 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                         >
                           {formData.useCase === useCase.id && (
                             <svg
+                              aria-label="icon"
                               className="h-3 w-3 text-white"
                               fill="currentColor"
+                              role="img"
                               viewBox="0 0 20 20"
                             >
+                              <title>Icon</title>
                               <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                                 clipRule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                fillRule="evenodd"
                               />
                             </svg>
                           )}
@@ -196,7 +201,7 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                       </div>
                       <div>
                         <h3 className="font-medium text-gray-900">{useCase.title}</h3>
-                        <p className="text-sm text-gray-500 mt-1">{useCase.description}</p>
+                        <p className="mt-1 text-gray-500 text-sm">{useCase.description}</p>
                       </div>
                     </div>
                   </div>
@@ -210,25 +215,25 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
             <div className="space-y-4">
               <div className="space-y-3">
                 {/* Other option with text field */}
-                <div className="border rounded-lg p-4 hover:border-gray-400 transition-all">
-                  <label className="flex items-start space-x-3 cursor-pointer">
+                <div className="rounded-lg border p-4 transition-all hover:border-gray-400">
+                  <label className="flex cursor-pointer items-start space-x-3">
                     <input
-                      type="checkbox"
                       checked={formData.source === 'other'}
+                      className="mt-0.5 h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                       onChange={() => setFormData({ ...formData, source: 'other' })}
-                      className="mt-0.5 h-4 w-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500"
+                      type="checkbox"
                     />
                     <div className="flex-1">
                       <span className="font-medium text-gray-900">Other</span>
                       {formData.source === 'other' && (
                         <input
-                          type="text"
-                          placeholder="Please specify..."
-                          value={formData.otherSource}
+                          className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500"
                           onChange={(e) =>
                             setFormData({ ...formData, otherSource: e.target.value })
                           }
-                          className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
+                          placeholder="Please specify..."
+                          type="text"
+                          value={formData.otherSource}
                         />
                       )}
                     </div>
@@ -238,10 +243,10 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                 {/* Predefined sources */}
                 {sources.map((source) => (
                   <div
-                    key={source.id}
-                    className={`border rounded-lg p-4 hover:border-gray-400 transition-all cursor-pointer ${
+                    className={`cursor-pointer rounded-lg border p-4 transition-all hover:border-gray-400 ${
                       source.selected ? 'border-orange-500 bg-orange-50' : ''
                     }`}
+                    key={source.id}
                     onClick={() => setFormData({ ...formData, source: source.id })}
                   >
                     <div className="flex items-center justify-between">
@@ -257,11 +262,18 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                       </div>
                       {(formData.source === source.id || source.selected) && (
                         <div className="text-orange-500">
-                          <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                          <svg
+                            aria-label="icon"
+                            className="h-5 w-5"
+                            fill="currentColor"
+                            role="img"
+                            viewBox="0 0 20 20"
+                          >
+                            <title>Icon</title>
                             <path
-                              fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                               clipRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              fillRule="evenodd"
                             />
                           </svg>
                         </div>
@@ -278,11 +290,11 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
             <div className="space-y-6">
               {currentStep === 3 && (
                 <>
-                  <div className="bg-gray-50 rounded-lg p-6 max-h-96 overflow-y-auto">
-                    <h3 className="font-semibold text-gray-900 mb-4">
+                  <div className="max-h-96 overflow-y-auto rounded-lg bg-gray-50 p-6">
+                    <h3 className="mb-4 font-semibold text-gray-900">
                       TERMS OF USE / SERVICE AGREEMENT
                     </h3>
-                    <p className="text-sm text-gray-600 mb-4">
+                    <p className="mb-4 text-gray-600 text-sm">
                       Date of last revision: November 5, 2024
                     </p>
                     <div className="prose prose-sm text-gray-600">
@@ -306,20 +318,20 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                   <div className="space-y-4">
                     <label className="flex items-start space-x-3">
                       <input
-                        type="checkbox"
                         checked={formData.termsAccepted}
+                        className="mt-0.5 h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                         onChange={(e) =>
                           setFormData({ ...formData, termsAccepted: e.target.checked })
                         }
-                        className="mt-0.5 h-4 w-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500"
+                        type="checkbox"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className="text-gray-700 text-sm">
                         I agree to Illia&apos;s{' '}
-                        <a href="#" className="text-orange-600 underline">
+                        <a className="text-orange-600 underline" href="#">
                           Terms of Service
                         </a>{' '}
                         and{' '}
-                        <a href="#" className="text-orange-600 underline">
+                        <a className="text-orange-600 underline" href="#">
                           Privacy Policy
                         </a>
                         .
@@ -328,37 +340,37 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
 
                     <label className="flex items-start space-x-3">
                       <input
-                        type="checkbox"
                         checked={formData.emailUpdates}
+                        className="mt-0.5 h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                         onChange={(e) =>
                           setFormData({ ...formData, emailUpdates: e.target.checked })
                         }
-                        className="mt-0.5 h-4 w-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500"
+                        type="checkbox"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className="text-gray-700 text-sm">
                         I want to receive product updates and launch emails. You can unsubscribe at
                         any time.
                       </span>
                     </label>
                   </div>
 
-                  <div className="text-xs text-gray-500 text-right">SCROLL TO BOTTOM</div>
+                  <div className="text-right text-gray-500 text-xs">SCROLL TO BOTTOM</div>
                 </>
               )}
 
               {currentStep === 4 && (
                 <>
-                  <div className="bg-gray-50 rounded-lg p-6 max-h-96 overflow-y-auto">
-                    <h3 className="font-semibold text-gray-900 mb-4">3. Complaints</h3>
-                    <p className="text-sm text-gray-600 mb-4">
+                  <div className="max-h-96 overflow-y-auto rounded-lg bg-gray-50 p-6">
+                    <h3 className="mb-4 font-semibold text-gray-900">3. Complaints</h3>
+                    <p className="mb-4 text-gray-600 text-sm">
                       We respect the rights of all of our users, regardless of location or
                       citizenship. If you have any questions or concerns about any of these rights,
                       or if you would like to assert any of these rights at any time, please contact
                       help@illia.com.
                     </p>
 
-                    <h3 className="font-semibold text-gray-900 mb-4">4. Questions about Policy</h3>
-                    <p className="text-sm text-gray-600 mb-4">
+                    <h3 className="mb-4 font-semibold text-gray-900">4. Questions about Policy</h3>
+                    <p className="mb-4 text-gray-600 text-sm">
                       If you have any questions about this privacy policy, contact us at:
                       help@illia.com. By accessing any of our services or content, you are affirming
                       that you understand and agree with the terms of our privacy policy.
@@ -366,45 +378,45 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                   </div>
 
                   <div className="space-y-4">
-                    <div className="flex items-center p-3 bg-orange-50 rounded-lg">
+                    <div className="flex items-center rounded-lg bg-orange-50 p-3">
                       <input
-                        type="checkbox"
                         checked={formData.termsAccepted}
+                        className="h-4 w-4 rounded border-gray-300 text-orange-600"
                         disabled
-                        className="h-4 w-4 text-orange-600 rounded border-gray-300"
+                        type="checkbox"
                       />
-                      <span className="ml-3 text-sm text-gray-700">
+                      <span className="ml-3 text-gray-700 text-sm">
                         I agree to Illia&apos;s{' '}
-                        <a href="#" className="text-orange-600 underline">
+                        <a className="text-orange-600 underline" href="#">
                           Terms of Service
                         </a>{' '}
                         and{' '}
-                        <a href="#" className="text-orange-600 underline">
+                        <a className="text-orange-600 underline" href="#">
                           Privacy Policy
                         </a>
                         .
                       </span>
                       <div className="ml-auto">
-                        <div className="h-6 w-12 bg-orange-500 rounded-full relative">
-                          <div className="absolute right-0.5 top-0.5 h-5 w-5 bg-white rounded-full" />
+                        <div className="relative h-6 w-12 rounded-full bg-orange-500">
+                          <div className="absolute top-0.5 right-0.5 h-5 w-5 rounded-full bg-white" />
                         </div>
                       </div>
                     </div>
 
                     <div className="flex items-center p-3">
                       <input
-                        type="checkbox"
                         checked={formData.emailUpdates}
+                        className="h-4 w-4 rounded border-gray-300 text-gray-300"
                         disabled
-                        className="h-4 w-4 text-gray-300 rounded border-gray-300"
+                        type="checkbox"
                       />
-                      <span className="ml-3 text-sm text-gray-700">
+                      <span className="ml-3 text-gray-700 text-sm">
                         I want to receive product updates and launch emails. You can unsubscribe at
                         any time.
                       </span>
                       <div className="ml-auto">
-                        <div className="h-6 w-12 bg-gray-200 rounded-full relative">
-                          <div className="absolute left-0.5 top-0.5 h-5 w-5 bg-white rounded-full" />
+                        <div className="relative h-6 w-12 rounded-full bg-gray-200">
+                          <div className="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white" />
                         </div>
                       </div>
                     </div>
@@ -416,11 +428,11 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t flex items-center justify-between">
+        <div className="flex items-center justify-between border-t p-6">
           {currentStep > 1 && (
             <button
+              className="font-medium text-gray-600 transition-colors hover:text-gray-900"
               onClick={handleBack}
-              className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
             >
               Back
             </button>
@@ -429,27 +441,27 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
           <div className="ml-auto">
             {currentStep < 4 ? (
               <button
-                onClick={handleNext}
+                className={`rounded-lg px-6 py-2.5 font-medium transition-all ${
+                  (currentStep === 1 && formData.useCase) ||
+                  (currentStep === 2 && formData.source) ||
+                  (currentStep === 3 && formData.termsAccepted)
+                    ? 'bg-gray-900 text-white hover:bg-gray-800'
+                    : 'cursor-not-allowed bg-gray-200 text-gray-400'
+                }`}
                 disabled={
                   (currentStep === 1 && !formData.useCase) ||
                   (currentStep === 2 && !formData.source) ||
                   (currentStep === 3 && !formData.termsAccepted)
                 }
-                className={`px-6 py-2.5 rounded-lg font-medium transition-all ${
-                  (currentStep === 1 && formData.useCase) ||
-                  (currentStep === 2 && formData.source) ||
-                  (currentStep === 3 && formData.termsAccepted)
-                    ? 'bg-gray-900 hover:bg-gray-800 text-white'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                }`}
+                onClick={handleNext}
               >
                 {currentStep === 3 ? 'Finish' : 'Continue'}
               </button>
             ) : (
               <button
-                onClick={handleFinish}
+                className="rounded-lg bg-gray-900 px-6 py-2.5 font-medium text-white transition-all hover:bg-gray-800 disabled:opacity-50"
                 disabled={isLoading}
-                className="px-6 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium transition-all disabled:opacity-50"
+                onClick={handleFinish}
               >
                 {isLoading ? 'Loading...' : 'Get Started'}
               </button>

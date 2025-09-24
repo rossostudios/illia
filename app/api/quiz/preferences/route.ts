@@ -21,10 +21,10 @@ export async function POST(request: NextRequest) {
     if (budget) {
       const budgetParts = budget.split('-')
       if (budgetParts[0] && budgetParts[0] !== '0') {
-        budgetMin = parseInt(budgetParts[0], 10)
+        budgetMin = Number.parseInt(budgetParts[0], 10)
       }
       if (budgetParts[1] && !budgetParts[1].includes('+')) {
-        budgetMax = parseInt(budgetParts[1], 10)
+        budgetMax = Number.parseInt(budgetParts[1], 10)
       }
     }
 
@@ -61,7 +61,6 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error) {
-      console.error('Error saving preferences:', error)
       return NextResponse.json({ error: 'Failed to save preferences' }, { status: 500 })
     }
 
@@ -89,7 +88,6 @@ export async function POST(request: NextRequest) {
     const { data: providers, error: providersError } = await query
 
     if (providersError) {
-      console.error('Error fetching providers:', providersError)
     }
 
     // Save matches to database
@@ -108,8 +106,7 @@ export async function POST(request: NextRequest) {
       preferences: data,
       matches: providers || [],
     })
-  } catch (error) {
-    console.error('Quiz preferences error:', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'Failed to save preferences' }, { status: 500 })
   }
 }
@@ -131,7 +128,9 @@ function calculateMatchScore(provider: any, preferences: any): number {
   score += Math.min(15, languageMatches * 15)
 
   // Verified provider bonus
-  if (provider.verified) score += 10
+  if (provider.verified) {
+    score += 10
+  }
 
   // Rating bonus
   if (provider.rating) {

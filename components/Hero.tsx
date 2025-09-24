@@ -10,18 +10,18 @@ export default function Hero() {
   const _tCommon = useTranslations('common')
 
   return (
-    <section className="relative bg-gradient-to-br from-gray-50 via-white to-green-50 pt-20 pb-24 overflow-hidden">
+    <section className="relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-green-50 pt-20 pb-24">
       {/* Background decoration */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute left-1/4 top-20 w-96 h-96 bg-gradient-to-r from-teal-100 to-teal-200 rounded-full opacity-30 blur-3xl animate-pulse" />
-        <div className="absolute right-1/4 bottom-20 w-96 h-96 bg-gradient-to-r from-teal-100 to-cyan-100 rounded-full opacity-30 blur-3xl animate-pulse" />
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute top-20 left-1/4 h-96 w-96 animate-pulse rounded-full bg-gradient-to-r from-teal-100 to-teal-200 opacity-30 blur-3xl" />
+        <div className="absolute right-1/4 bottom-20 h-96 w-96 animate-pulse rounded-full bg-gradient-to-r from-teal-100 to-cyan-100 opacity-30 blur-3xl" />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Main Hero Content */}
-        <div className="text-center mb-16">
+        <div className="mb-16 text-center">
           {/* Main Headline */}
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6">
+          <h1 className="mb-6 font-bold text-5xl text-gray-900 sm:text-6xl lg:text-7xl">
             {t('headline')}
             <span className="block bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
               {t('headlineAccent')}
@@ -29,70 +29,67 @@ export default function Hero() {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto">{t('subtitle')}</p>
+          <p className="mx-auto mb-10 max-w-3xl text-gray-600 text-xl">{t('subtitle')}</p>
 
           {/* Dual CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+          <div className="mb-8 flex flex-col justify-center gap-4 sm:flex-row">
             <Link
+              className="hover:-translate-y-1 inline-flex transform items-center justify-center rounded-xl bg-gradient-to-r from-green-500 to-green-600 px-8 py-4 font-semibold text-lg text-white shadow-xl transition-all hover:from-green-600 hover:to-green-700 hover:shadow-2xl"
               href="/dashboard/explore"
-              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-green-500 to-green-600 rounded-xl shadow-xl hover:from-green-600 hover:to-green-700 transition-all transform hover:-translate-y-1 hover:shadow-2xl"
             >
               {t('startFreeTrial')}
-              <ArrowRight className="ml-2 w-5 h-5" />
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
-            <button
-              type="button"
-              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-gray-700 bg-white border-2 border-gray-200 rounded-xl hover:border-green-500 hover:text-green-600 transition-all transform hover:-translate-y-1 hover:shadow-lg"
-            >
-              <Play className="mr-2 w-5 h-5" />
+            <button className="hover:-translate-y-1 inline-flex transform items-center justify-center rounded-xl border-2 border-gray-200 bg-white px-8 py-4 font-semibold text-gray-700 text-lg transition-all hover:border-green-500 hover:text-green-600 hover:shadow-lg">
+              <Play className="mr-2 h-5 w-5" />
               {t('watchDemo')}
             </button>
           </div>
 
           {/* Trust indicators */}
-          <div className="flex items-center justify-center gap-6 text-sm text-gray-600">
+          <div className="flex items-center justify-center gap-6 text-gray-600 text-sm">
             <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-green-500" />
+              <CheckCircle className="h-5 w-5 text-green-500" />
               <span>{t('noCard')}</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-green-500" />
+              <CheckCircle className="h-5 w-5 text-green-500" />
               <span>{t('twoMinQuiz')}</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-green-500" />
+              <CheckCircle className="h-5 w-5 text-green-500" />
               <span>{t('freeMatches')}</span>
             </div>
           </div>
         </div>
 
         {/* Interactive Demo Preview */}
-        <div className="relative max-w-5xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-            <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
+        <div className="relative mx-auto max-w-5xl">
+          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl">
+            <div className="border-gray-200 border-b bg-gray-50 px-6 py-3">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                <span className="ml-4 text-sm text-gray-600">
+                <div className="h-3 w-3 rounded-full bg-red-500" />
+                <div className="h-3 w-3 rounded-full bg-yellow-500" />
+                <div className="h-3 w-3 rounded-full bg-green-500" />
+                <span className="ml-4 text-gray-600 text-sm">
                   Illia.club - {t('sidebarExplore')}
                 </span>
               </div>
             </div>
             {/* Dashboard Screenshot */}
-            <div className="relative w-full h-[500px] bg-gray-100">
+            <div className="relative h-[500px] w-full bg-gray-100">
               <Image
-                src="/illia.png"
                 alt="Illia Dashboard"
-                fill
                 className="object-cover object-top"
+                fill
                 priority
+                src="/illia.png"
               />
             </div>
           </div>
 
           {/* Shadow effect */}
-          <div className="absolute -inset-x-4 -bottom-4 h-20 bg-gradient-to-t from-gray-100 to-transparent blur-xl -z-10"></div>
+          <div className="-inset-x-4 -bottom-4 -z-10 absolute h-20 bg-gradient-to-t from-gray-100 to-transparent blur-xl" />
         </div>
       </div>
     </section>

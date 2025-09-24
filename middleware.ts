@@ -1,4 +1,4 @@
-import { type CookieOptions, createServerClient } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { type NextRequest, NextResponse } from 'next/server'
 import createIntlMiddleware from 'next-intl/middleware'
 import { routing } from './i18n/routing'
@@ -16,6 +16,9 @@ export async function middleware(request: NextRequest) {
   const isAuthPage = pathname === '/login' || pathname === '/signup'
   const isAuthCallback = pathname === '/auth/callback'
   const isTestPage = pathname === '/test-tailwind'
+  const _isAdminPage =
+    pathname.startsWith('/admin') ||
+    routing.locales.some((locale) => pathname.startsWith(`/${locale}/admin`))
 
   // Apply locale handling for non-API routes, excluding auth pages
   if (
@@ -40,41 +43,20 @@ export async function middleware(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
+        getAll() {
+          return request.cookies.getAll()
         },
-        set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            request.cookies.set({ name, value, ...options })
           })
           response = NextResponse.next({
             request: {
               headers: request.headers,
             },
           })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-        },
-        remove(name: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set({ name, value, ...options })
           })
         },
       },
@@ -92,19 +74,17 @@ export async function middleware(request: NextRequest) {
 
   // Protected routes (with locale support)
   const dashboardPattern = new RegExp(`^/(${routing.locales.join('|')})?/?dashboard`)
-  if (dashboardPattern.test(pathname)) {
-    if (!session) {
-      // Redirect to non-localized login page
-      return NextResponse.redirect(new URL('/login', request.url))
-    }
+  const adminPattern = new RegExp(`^/(${routing.locales.join('|')})?/?admin`)
+
+  if ((dashboardPattern.test(pathname) || adminPattern.test(pathname)) && !session) {
+    // Redirect to non-localized login page
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
   // Redirect authenticated users away from auth pages (auth pages don't have locale prefix)
-  if (pathname === '/login' || pathname === '/signup') {
-    if (session) {
-      // Redirect to localized dashboard
-      return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url))
-    }
+  if ((pathname === '/login' || pathname === '/signup') && session) {
+    // Redirect to localized dashboard
+    return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url))
   }
 
   return response

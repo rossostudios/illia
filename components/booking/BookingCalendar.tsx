@@ -15,13 +15,12 @@ import {
   subMonths,
 } from 'date-fns'
 import { enUS, es, ptBR } from 'date-fns/locale'
-import { formatInTimeZone } from 'date-fns-tz'
 import { ChevronLeft, ChevronRight, Clock, MapPin } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
-interface TimeSlot {
+type TimeSlot = {
   id: string
   date: string
   startTime: string
@@ -32,7 +31,7 @@ interface TimeSlot {
   currentBookings?: number
 }
 
-interface ProviderAvailability {
+type ProviderAvailability = {
   monday?: string[]
   tuesday?: string[]
   wednesday?: string[]
@@ -42,7 +41,7 @@ interface ProviderAvailability {
   sunday?: string[]
 }
 
-interface BookingCalendarProps {
+type BookingCalendarProps = {
   providerId: string
   providerName?: string
   onSlotSelect?: (slot: TimeSlot) => void
@@ -58,11 +57,11 @@ interface BookingCalendarProps {
 
 const locales = {
   en: enUS,
-  es: es,
+  es,
   pt: ptBR,
 }
 
-const dayNames = {
+const _dayNames = {
   monday: 1,
   tuesday: 2,
   wednesday: 3,
@@ -111,10 +110,12 @@ export default function BookingCalendar({
           .eq('id', providerId)
           .single()
 
-        if (error) throw error
+        if (error) {
+          throw error
+        }
         setProviderAvailability(data?.availability_schedule || {})
-      } catch (error) {
-        console.error('Error fetching provider availability:', error)
+      } catch (_error) {
+        // Error handled silently
       } finally {
         setLoading(false)
       }
@@ -125,7 +126,9 @@ export default function BookingCalendar({
 
   // Fetch available slots for selected date
   useEffect(() => {
-    if (!selectedDate || !providerAvailability) return
+    if (!(selectedDate && providerAvailability)) {
+      return
+    }
 
     async function fetchSlots() {
       setLoadingSlots(true)
@@ -153,7 +156,7 @@ export default function BookingCalendar({
             // Calculate end time for this slot
             let slotEndMin = currentMin + duration
             const slotEndHour = currentHour + Math.floor(slotEndMin / 60)
-            slotEndMin = slotEndMin % 60
+            slotEndMin %= 60
 
             // Don't create slots that exceed the provider's availability
             if (slotEndHour < endHour || (slotEndHour === endHour && slotEndMin <= endMin)) {
@@ -176,7 +179,7 @@ export default function BookingCalendar({
             currentMin += duration
             if (currentMin >= 60) {
               currentHour += Math.floor(currentMin / 60)
-              currentMin = currentMin % 60
+              currentMin %= 60
             }
           }
         }
@@ -221,8 +224,7 @@ export default function BookingCalendar({
         } else {
           setAvailableSlots(slots)
         }
-      } catch (error) {
-        console.error('Error fetching slots:', error)
+      } catch (_error) {
         setAvailableSlots([])
       } finally {
         setLoadingSlots(false)
@@ -249,7 +251,9 @@ export default function BookingCalendar({
 
   // Check if a date has available slots
   const hasAvailability = (date: Date) => {
-    if (!providerAvailability) return false
+    if (!providerAvailability) {
+      return false
+    }
 
     const dayName = format(date, 'EEEE').toLowerCase()
     const daySchedule = providerAvailability[dayName as keyof ProviderAvailability]
@@ -258,35 +262,39 @@ export default function BookingCalendar({
   }
 
   const handleDateSelect = (date: Date) => {
-    if (date < minDate || date > maxDate) return
+    if (date < minDate || date > maxDate) {
+      return
+    }
     setSelectedDate(date)
   }
 
   const handleSlotSelect = (slot: TimeSlot) => {
-    if (!slot.isAvailable) return
+    if (!slot.isAvailable) {
+      return
+    }
     onSlotSelect?.(slot)
   }
 
   return (
     <div className={`booking-calendar ${className}`}>
       {/* Calendar Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+      <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="font-semibold text-gray-900 text-lg dark:text-white">
             Select Date & Time
           </h3>
           {showLegend && (
             <div className="flex items-center gap-4 text-sm">
               <div className="flex items-center gap-1">
-                <div className="w-3 h-3 bg-teal-500 rounded-full" />
+                <div className="h-3 w-3 rounded-full bg-teal-500" />
                 <span className="text-gray-600 dark:text-gray-400">Available</span>
               </div>
               <div className="flex items-center gap-1">
-                <div className="w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full" />
+                <div className="h-3 w-3 rounded-full bg-gray-300 dark:bg-gray-600" />
                 <span className="text-gray-600 dark:text-gray-400">Unavailable</span>
               </div>
               <div className="flex items-center gap-1">
-                <div className="w-3 h-3 bg-blue-500 rounded-full" />
+                <div className="h-3 w-3 rounded-full bg-blue-500" />
                 <span className="text-gray-600 dark:text-gray-400">Selected</span>
               </div>
             </div>
@@ -294,21 +302,21 @@ export default function BookingCalendar({
         </div>
 
         {/* Month Navigation */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4 flex items-center justify-between">
           <button
-            onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             aria-label="Previous month"
+            className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+            onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
           >
             <ChevronLeft className="h-5 w-5 text-gray-600 dark:text-gray-400" />
           </button>
-          <h4 className="text-lg font-medium text-gray-900 dark:text-white">
+          <h4 className="font-medium text-gray-900 text-lg dark:text-white">
             {format(currentMonth, 'MMMM yyyy', { locale: dateLocale })}
           </h4>
           <button
-            onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             aria-label="Next month"
+            className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+            onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
           >
             <ChevronRight className="h-5 w-5 text-gray-600 dark:text-gray-400" />
           </button>
@@ -317,16 +325,16 @@ export default function BookingCalendar({
         {/* Calendar Grid */}
         {loading ? (
           <div className="flex justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600" />
+            <div className="h-8 w-8 animate-spin rounded-full border-teal-600 border-b-2" />
           </div>
         ) : (
           <>
             {/* Day Headers */}
-            <div className="grid grid-cols-7 gap-1 mb-2">
+            <div className="mb-2 grid grid-cols-7 gap-1">
               {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
                 <div
+                  className="py-2 text-center font-medium text-gray-500 text-xs dark:text-gray-400"
                   key={day}
-                  className="text-center text-xs font-medium text-gray-500 dark:text-gray-400 py-2"
                 >
                   {day}
                 </div>
@@ -345,12 +353,7 @@ export default function BookingCalendar({
 
                 return (
                   <button
-                    key={index}
-                    onClick={() => !isDisabled && handleDateSelect(day)}
-                    disabled={isDisabled}
-                    className={`
-                      relative p-2 h-10 rounded-lg transition-all
-                      ${isCurrentMonth ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-600'}
+                    className={`relative h-10 rounded-lg p-2 transition-all ${isCurrentMonth ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-600'}
                       ${
                         isSelected
                           ? 'bg-teal-600 text-white hover:bg-teal-700'
@@ -362,10 +365,13 @@ export default function BookingCalendar({
                       }
                       ${isToday(day) && !isSelected ? 'ring-2 ring-teal-500 ring-inset' : ''}
                     `}
+                    disabled={isDisabled}
+                    key={index}
+                    onClick={() => !isDisabled && handleDateSelect(day)}
                   >
                     <span className="text-sm">{format(day, 'd')}</span>
                     {hasSlots && !isDisabled && (
-                      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-teal-500 rounded-full" />
+                      <div className="-translate-x-1/2 absolute bottom-1 left-1/2 h-1 w-1 rounded-full bg-teal-500" />
                     )}
                   </button>
                 )
@@ -377,46 +383,44 @@ export default function BookingCalendar({
 
       {/* Time Slots */}
       {selectedDate && (
-        <div className="mt-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-          <h4 className="text-md font-medium text-gray-900 dark:text-white mb-3">
+        <div className="mt-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+          <h4 className="mb-3 font-medium text-gray-900 text-md dark:text-white">
             Available Times for {format(selectedDate, 'MMMM d, yyyy')}
           </h4>
 
           {loadingSlots ? (
             <div className="flex justify-center py-4">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-teal-600" />
+              <div className="h-6 w-6 animate-spin rounded-full border-teal-600 border-b-2" />
             </div>
           ) : availableSlots.length > 0 ? (
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
               {availableSlots.map((slot) => (
                 <button
+                  className={`rounded-lg px-3 py-2 font-medium text-sm transition-all ${
+                    selectedSlot?.id === slot.id
+                      ? 'bg-teal-600 text-white'
+                      : slot.isAvailable
+                        ? 'border border-gray-200 bg-gray-50 text-gray-700 hover:bg-teal-50 hover:text-teal-700 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-teal-900/20 dark:hover:text-teal-300'
+                        : 'cursor-not-allowed bg-gray-100 text-gray-400 line-through dark:bg-gray-900 dark:text-gray-600'
+                  }
+                  `}
+                  disabled={!slot.isAvailable}
                   key={slot.id}
                   onClick={() => handleSlotSelect(slot)}
-                  disabled={!slot.isAvailable}
-                  className={`
-                    px-3 py-2 rounded-lg text-sm font-medium transition-all
-                    ${
-                      selectedSlot?.id === slot.id
-                        ? 'bg-teal-600 text-white'
-                        : slot.isAvailable
-                          ? 'bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-teal-50 dark:hover:bg-teal-900/20 hover:text-teal-700 dark:hover:text-teal-300 border border-gray-200 dark:border-gray-600'
-                          : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed line-through'
-                    }
-                  `}
                 >
-                  <Clock className="inline h-3 w-3 mr-1" />
+                  <Clock className="mr-1 inline h-3 w-3" />
                   {slot.startTime}
                 </button>
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 dark:text-gray-400 text-center py-4">
+            <p className="py-4 text-center text-gray-500 dark:text-gray-400">
               No available time slots for this date
             </p>
           )}
 
           {selectedSlot && (
-            <div className="mt-4 p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
+            <div className="mt-4 rounded-lg border border-teal-200 bg-teal-50 p-3 dark:border-teal-800 dark:bg-teal-900/20">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-teal-600 dark:text-teal-400" />

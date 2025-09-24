@@ -1,7 +1,7 @@
 import { AlertCircle, XCircle } from 'lucide-react'
 import { getErrorMessage } from '@/lib/constants/errors'
 
-interface ErrorMessageProps {
+type ErrorMessageProps = {
   error: string | Error | unknown
   variant?: 'inline' | 'banner' | 'field'
   className?: string
@@ -18,7 +18,7 @@ export function ErrorMessage({
 
   if (variant === 'field') {
     return (
-      <div className={`mt-1 text-sm text-red-600 ${className}`} role="alert">
+      <div className={`mt-1 text-red-600 text-sm ${className}`} role="alert">
         <span>{message}</span>
       </div>
     )
@@ -27,17 +27,17 @@ export function ErrorMessage({
   if (variant === 'banner') {
     return (
       <div
-        className={`bg-red-50 border border-red-200 rounded-lg p-4 ${className}`}
-        role="alert"
         aria-live="polite"
+        className={`rounded-lg border border-red-200 bg-red-50 p-4 ${className}`}
+        role="alert"
       >
         <div className="flex">
-          <XCircle className="h-5 w-5 text-red-400 flex-shrink-0" aria-hidden="true" />
+          <XCircle aria-hidden="true" className="h-5 w-5 flex-shrink-0 text-red-400" />
           <div className="ml-3 flex-1">
-            <h3 className="text-sm font-medium text-red-800">{title}</h3>
-            <p className="mt-1 text-sm text-red-700">{message}</p>
+            <h3 className="font-medium text-red-800 text-sm">{title}</h3>
+            <p className="mt-1 text-red-700 text-sm">{message}</p>
             {showSuggestion && suggestion && (
-              <p className="mt-2 text-sm text-red-600">{suggestion}</p>
+              <p className="mt-2 text-red-600 text-sm">{suggestion}</p>
             )}
           </div>
         </div>
@@ -48,32 +48,34 @@ export function ErrorMessage({
   // Default inline variant
   return (
     <div
-      className={`flex items-start gap-2 text-sm text-red-600 ${className}`}
-      role="alert"
       aria-live="polite"
+      className={`flex items-start gap-2 text-red-600 text-sm ${className}`}
+      role="alert"
     >
-      <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" aria-hidden="true" />
+      <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 flex-shrink-0" />
       <div>
         <span className="font-medium">{title}:</span> {message}
         {showSuggestion && suggestion && (
-          <span className="block mt-1 text-red-500">{suggestion}</span>
+          <span className="mt-1 block text-red-500">{suggestion}</span>
         )}
       </div>
     </div>
   )
 }
 
-interface FieldErrorProps {
+type FieldErrorProps = {
   error?: string
   touched?: boolean
 }
 
 export function FieldError({ error, touched }: FieldErrorProps) {
-  if (!error || !touched) return null
+  if (!(error && touched)) {
+    return null
+  }
 
   return (
-    <div className="mt-1 text-sm text-red-600 flex items-center gap-1" role="alert">
-      <AlertCircle className="h-3 w-3" aria-hidden="true" />
+    <div className="mt-1 flex items-center gap-1 text-red-600 text-sm" role="alert">
+      <AlertCircle aria-hidden="true" className="h-3 w-3" />
       <span>{error}</span>
     </div>
   )

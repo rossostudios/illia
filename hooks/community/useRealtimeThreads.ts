@@ -4,7 +4,7 @@ import type { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/
 import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
-export interface Thread {
+export type Thread = {
   id: string
   user_id: string
   title: string
@@ -25,7 +25,7 @@ export interface Thread {
   }[]
 }
 
-interface UseRealtimeThreadsOptions {
+type UseRealtimeThreadsOptions = {
   category?: string
   city?: string
   onThreadAdded?: (thread: Thread) => void
@@ -80,19 +80,14 @@ export function useRealtimeThreads(options: UseRealtimeThreadsOptions = {}) {
       if (error) {
         // If table doesn't exist, migrations haven't been applied
         if (error.message?.includes('relation') || error.code === '42P01') {
-          console.warn(
-            'Community tables not yet created. Please run migration 005_realtime_community_safe.sql'
-          )
           setThreads([])
           setLoading(false)
           return
         }
-        console.warn('Error fetching threads:', error.message)
       }
 
       setThreads(data || [])
     } catch (err) {
-      console.warn('Error fetching threads:', err)
       setError(err as Error)
       setThreads([])
     } finally {
@@ -171,7 +166,9 @@ export function useRealtimeThreads(options: UseRealtimeThreadsOptions = {}) {
     // Set up real-time subscription
     const setupRealtimeSubscription = async () => {
       // Only set up subscription if we have threads (table exists)
-      if (threads.length === 0 && loading) return
+      if (threads.length === 0 && loading) {
+        return
+      }
 
       // Clean up existing subscription
       if (channelRef.current) {
@@ -202,18 +199,16 @@ export function useRealtimeThreads(options: UseRealtimeThreadsOptions = {}) {
           )
           .subscribe((status, error) => {
             if (status === 'SUBSCRIBED') {
-              console.log('Connected to community realtime')
             } else if (status === 'CHANNEL_ERROR') {
               // Only log if it's not a table doesn't exist error
               if (!error?.message?.includes('relation')) {
-                console.warn('Community realtime connection issue:', error?.message)
               }
             }
           })
 
         channelRef.current = channel
-      } catch (err) {
-        console.warn('Could not set up realtime subscription:', err)
+      } catch (_error) {
+        // Error handled silently
       }
     }
 
@@ -242,65 +237,58 @@ export function useRealtimeThreads(options: UseRealtimeThreadsOptions = {}) {
   const incrementViewCount = async (threadId: string) => {
     try {
       await supabase.rpc('increment_thread_views', { thread_id: threadId })
-    } catch (err) {
-      console.error('Error incrementing view count:', err)
+    } catch (_error) {
+      // Error handled silently
     }
   }
 
   // Create new thread
   const createThread = async (thread: Partial<Thread>) => {
-    try {
-      const { data: user } = await supabase.auth.getUser()
-      if (!user.user) throw new Error('User not authenticated')
-
-      const { data, error } = await supabase
-        .from('community_threads')
-        .insert({
-          body: thread.body!,
-          category: thread.category!,
-          title: thread.title!,
-          city_tag: thread.city_tag,
-          tags: thread.tags,
-          user_id: user.user.id,
-        })
-        .select()
-        .single()
-
-      if (error) throw error
-      return data
-    } catch (err) {
-      console.error('Error creating thread:', err)
-      throw err
+    const { data: user } = await supabase.auth.getUser()
+    if (!user.user) {
+      throw new Error('User not authenticated')
     }
+
+    const { data, error } = await supabase
+      .from('community_threads')
+      .insert({
+        body: thread.body!,
+        category: thread.category!,
+        title: thread.title!,
+        city_tag: thread.city_tag,
+        tags: thread.tags,
+        user_id: user.user.id,
+      })
+      .select()
+      .single()
+
+    if (error) {
+      throw error
+    }
+    return data
   }
 
   // Update thread
   const updateThread = async (threadId: string, updates: Partial<Thread>) => {
-    try {
-      const { data, error } = await supabase
-        .from('community_threads')
-        .update(updates as any)
-        .eq('id', threadId)
-        .select()
-        .single()
+    const { data, error } = await supabase
+      .from('community_threads')
+      .update(updates as string)
+      .eq('id', threadId)
+      .select()
+      .single()
 
-      if (error) throw error
-      return data
-    } catch (err) {
-      console.error('Error updating thread:', err)
-      throw err
+    if (error) {
+      throw error
     }
+    return data
   }
 
   // Delete thread
   const deleteThread = async (threadId: string) => {
-    try {
-      const { error } = await supabase.from('community_threads').delete().eq('id', threadId)
+    const { error } = await supabase.from('community_threads').delete().eq('id', threadId)
 
-      if (error) throw error
-    } catch (err) {
-      console.error('Error deleting thread:', err)
-      throw err
+    if (error) {
+      throw error
     }
   }
 

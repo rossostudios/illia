@@ -58,24 +58,36 @@ const LANGUAGE_FLAGS: { [key: string]: string } = {
 function formatCurrency(amount: number, currency: string): string {
   if (currency === 'COP') {
     return `$${amount.toLocaleString()} COP`
-  } else if (currency === 'BRL') {
-    return `R$${amount.toLocaleString()}`
-  } else {
-    return `$${amount.toLocaleString()}`
   }
+  if (currency === 'BRL') {
+    return `R$${amount.toLocaleString()}`
+  }
+  return `$${amount.toLocaleString()}`
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 90) return 'text-green-600 bg-green-100'
-  if (score >= 80) return 'text-blue-600 bg-blue-100'
-  if (score >= 70) return 'text-yellow-600 bg-yellow-100'
+  if (score >= 90) {
+    return 'text-green-600 bg-green-100'
+  }
+  if (score >= 80) {
+    return 'text-blue-600 bg-blue-100'
+  }
+  if (score >= 70) {
+    return 'text-yellow-600 bg-yellow-100'
+  }
   return 'text-gray-600 bg-gray-100'
 }
 
 function getScoreLabel(score: number): string {
-  if (score >= 90) return 'Excellent Match'
-  if (score >= 80) return 'Great Match'
-  if (score >= 70) return 'Good Match'
+  if (score >= 90) {
+    return 'Excellent Match'
+  }
+  if (score >= 80) {
+    return 'Great Match'
+  }
+  if (score >= 70) {
+    return 'Good Match'
+  }
   return 'Potential Match'
 }
 
@@ -90,7 +102,7 @@ export default function MatchesPage() {
     const storedMatches = sessionStorage.getItem('matches')
     const storedQuizData = sessionStorage.getItem('quizData')
 
-    if (!storedMatches || !storedQuizData) {
+    if (!(storedMatches && storedQuizData)) {
       router.push('/quiz')
       return
     }
@@ -101,8 +113,7 @@ export default function MatchesPage() {
 
       setMatches(parsedMatches)
       setQuizData(parsedQuizData)
-    } catch (error) {
-      console.error('Error parsing stored data:', error)
+    } catch (_error) {
       router.push('/quiz')
       return
     }
@@ -134,9 +145,9 @@ export default function MatchesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50">
         <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-4 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="mx-auto mb-4 h-16 w-16 animate-spin rounded-full border-4 border-purple-600 border-t-transparent" />
           <p className="text-gray-600">Loading your matches...</p>
         </div>
       </div>
@@ -146,19 +157,19 @@ export default function MatchesPage() {
   if (matches.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-        <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="mx-auto max-w-4xl px-4 py-12">
           <div className="text-center">
-            <div className="w-24 h-24 mx-auto mb-6 bg-gray-200 rounded-full flex items-center justify-center">
+            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gray-200">
               <span className="text-4xl">😔</span>
             </div>
-            <h1 className="text-3xl font-bold mb-4">No Matches Found</h1>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto">
+            <h1 className="mb-4 font-bold text-3xl">No Matches Found</h1>
+            <p className="mx-auto mb-8 max-w-md text-gray-600">
               We couldn't find any providers matching your specific criteria. Try adjusting your
               preferences and take the quiz again.
             </p>
             <button
+              className="rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-3 text-white transition-all hover:shadow-lg"
               onClick={retakeQuiz}
-              className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:shadow-lg transition-all"
             >
               Retake Quiz
             </button>
@@ -170,30 +181,30 @@ export default function MatchesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-4">Your Perfect Matches! 🎉</h1>
+      <div className="mx-auto max-w-6xl px-4 py-8">
+        <div className="mb-8 text-center">
+          <h1 className="mb-4 font-bold text-4xl">Your Perfect Matches! 🎉</h1>
           <p className="text-gray-600 text-lg">
             We found {matches.length} amazing provider{matches.length !== 1 ? 's' : ''} for you in{' '}
             {quizData?.city}
           </p>
           <button
+            className="mt-4 text-purple-600 transition-colors hover:text-purple-800"
             onClick={retakeQuiz}
-            className="mt-4 text-purple-600 hover:text-purple-800 transition-colors"
           >
             Want different results? Retake quiz →
           </button>
         </div>
 
         {quizData && (
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold mb-4">Your Preferences</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div className="mb-8 rounded-2xl bg-white p-6 shadow-lg">
+            <h2 className="mb-4 font-semibold text-xl">Your Preferences</h2>
+            <div className="grid grid-cols-1 gap-4 text-sm md:grid-cols-3">
               <div>
                 <span className="font-medium text-gray-500">Services:</span>
                 <div className="mt-1">
                   {quizData.services.map((service) => (
-                    <span key={service} className="inline-flex items-center space-x-1 mr-2">
+                    <span className="mr-2 inline-flex items-center space-x-1" key={service}>
                       <span>{SERVICE_EMOJIS[service] || '📋'}</span>
                       <span className="capitalize">{service.replace('_', ' ')}</span>
                     </span>
@@ -204,7 +215,7 @@ export default function MatchesPage() {
                 <span className="font-medium text-gray-500">Languages:</span>
                 <div className="mt-1">
                   {quizData.languages.map((lang) => (
-                    <span key={lang} className="inline-flex items-center space-x-1 mr-2">
+                    <span className="mr-2 inline-flex items-center space-x-1" key={lang}>
                       <span>{LANGUAGE_FLAGS[lang] || '🌍'}</span>
                       <span className="capitalize">{lang}</span>
                     </span>
@@ -219,16 +230,16 @@ export default function MatchesPage() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {matches.map((match, _index) => (
             <div
+              className="overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:shadow-xl"
               key={match.id}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
             >
               <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
+                <div className="mb-4 flex items-start justify-between">
                   <div className="flex items-center space-x-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-purple-400 to-pink-400 font-bold text-white text-xl">
                       {match.name
                         .split(' ')
                         .map((n) => n[0])
@@ -236,9 +247,9 @@ export default function MatchesPage() {
                         .toUpperCase()}
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">{match.name}</h3>
-                      <div className="flex items-center space-x-2 text-sm text-gray-500">
-                        <FiMapPin className="w-4 h-4" />
+                      <h3 className="font-bold text-gray-900 text-xl">{match.name}</h3>
+                      <div className="flex items-center space-x-2 text-gray-500 text-sm">
+                        <FiMapPin className="h-4 w-4" />
                         <span className="capitalize">{match.city}</span>
                         {match.years_experience && (
                           <>
@@ -251,31 +262,31 @@ export default function MatchesPage() {
                   </div>
                   <div className="text-right">
                     <div
-                      className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${getScoreColor(match.match_score)}`}
+                      className={`inline-flex rounded-full px-3 py-1 font-medium text-sm ${getScoreColor(match.match_score)}`}
                     >
                       {match.match_score}% match
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">{getScoreLabel(match.match_score)}</p>
+                    <p className="mt-1 text-gray-500 text-xs">{getScoreLabel(match.match_score)}</p>
                   </div>
                 </div>
 
-                <p className="text-gray-600 mb-4 text-sm line-clamp-2">{match.bio}</p>
+                <p className="mb-4 line-clamp-2 text-gray-600 text-sm">{match.bio}</p>
 
                 <div className="mb-4">
-                  <p className="text-sm font-medium text-purple-700 mb-2">Why this match:</p>
-                  <p className="text-sm text-gray-600 bg-purple-50 p-3 rounded-lg">
+                  <p className="mb-2 font-medium text-purple-700 text-sm">Why this match:</p>
+                  <p className="rounded-lg bg-purple-50 p-3 text-gray-600 text-sm">
                     {match.match_explanation}
                   </p>
                 </div>
 
-                <div className="space-y-3 mb-6">
+                <div className="mb-6 space-y-3">
                   <div>
-                    <span className="text-sm font-medium text-gray-500">Services:</span>
-                    <div className="flex flex-wrap gap-2 mt-1">
+                    <span className="font-medium text-gray-500 text-sm">Services:</span>
+                    <div className="mt-1 flex flex-wrap gap-2">
                       {match.services.map((service) => (
                         <span
+                          className="inline-flex items-center space-x-1 rounded-full bg-blue-100 px-2 py-1 text-blue-800 text-xs"
                           key={service}
-                          className="inline-flex items-center space-x-1 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs"
                         >
                           <span>{SERVICE_EMOJIS[service] || '📋'}</span>
                           <span className="capitalize">{service.replace('_', ' ')}</span>
@@ -286,18 +297,18 @@ export default function MatchesPage() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <span className="text-sm font-medium text-gray-500">Languages:</span>
-                      <div className="flex space-x-1 mt-1">
+                      <span className="font-medium text-gray-500 text-sm">Languages:</span>
+                      <div className="mt-1 flex space-x-1">
                         {match.languages.map((lang) => (
-                          <span key={lang} className="text-sm">
+                          <span className="text-sm" key={lang}>
                             {LANGUAGE_FLAGS[lang] || '🌍'} {lang}
                           </span>
                         ))}
                       </div>
                     </div>
                     <div>
-                      <span className="text-sm font-medium text-gray-500">Rate:</span>
-                      <p className="text-sm font-semibold text-gray-900 mt-1">
+                      <span className="font-medium text-gray-500 text-sm">Rate:</span>
+                      <p className="mt-1 font-semibold text-gray-900 text-sm">
                         {formatCurrency(match.rate_monthly, match.currency)}/month
                       </p>
                     </div>
@@ -305,12 +316,12 @@ export default function MatchesPage() {
 
                   {match.specialties && match.specialties.length > 0 && (
                     <div>
-                      <span className="text-sm font-medium text-gray-500">Specialties:</span>
-                      <div className="flex flex-wrap gap-1 mt-1">
+                      <span className="font-medium text-gray-500 text-sm">Specialties:</span>
+                      <div className="mt-1 flex flex-wrap gap-1">
                         {match.specialties.map((specialty) => (
                           <span
+                            className="rounded-full bg-green-100 px-2 py-1 text-green-800 text-xs"
                             key={specialty}
-                            className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs"
                           >
                             {specialty}
                           </span>
@@ -322,11 +333,11 @@ export default function MatchesPage() {
                   {(match.rating_avg || match.reviews_count) && (
                     <div className="flex items-center space-x-2">
                       <div className="flex items-center space-x-1">
-                        <FiStar className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        <span className="text-sm font-medium">{match.rating_avg || 5.0}</span>
+                        <FiStar className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <span className="font-medium text-sm">{match.rating_avg || 5.0}</span>
                       </div>
                       {match.reviews_count && (
-                        <span className="text-sm text-gray-500">
+                        <span className="text-gray-500 text-sm">
                           ({match.reviews_count} reviews)
                         </span>
                       )}
@@ -336,22 +347,22 @@ export default function MatchesPage() {
 
                 <div className="flex space-x-3">
                   <button
+                    className="flex flex-1 items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 text-white transition-all hover:shadow-lg"
                     onClick={() => handleContactProvider(match)}
-                    className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 rounded-xl hover:shadow-lg transition-all flex items-center justify-center space-x-2"
                   >
-                    <FiMail className="w-4 h-4" />
+                    <FiMail className="h-4 w-4" />
                     <span>Contact Now</span>
                   </button>
                   <button
-                    onClick={() => handleSaveMatch(match.id)}
-                    className={`px-4 py-3 rounded-xl border-2 transition-all ${
+                    className={`rounded-xl border-2 px-4 py-3 transition-all ${
                       selectedMatch === match.id
                         ? 'border-red-400 bg-red-50 text-red-600'
-                        : 'border-gray-200 hover:border-purple-300 text-gray-600'
+                        : 'border-gray-200 text-gray-600 hover:border-purple-300'
                     }`}
+                    onClick={() => handleSaveMatch(match.id)}
                   >
                     <FiHeart
-                      className={`w-5 h-5 ${selectedMatch === match.id ? 'fill-current' : ''}`}
+                      className={`h-5 w-5 ${selectedMatch === match.id ? 'fill-current' : ''}`}
                     />
                   </button>
                 </div>
@@ -360,41 +371,41 @@ export default function MatchesPage() {
           ))}
         </div>
 
-        <div className="text-center mt-12">
-          <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h2 className="text-2xl font-bold mb-4">What's Next?</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+        <div className="mt-12 text-center">
+          <div className="rounded-2xl bg-white p-8 shadow-lg">
+            <h2 className="mb-4 font-bold text-2xl">What's Next?</h2>
+            <div className="grid grid-cols-1 gap-6 text-center md:grid-cols-3">
               <div>
-                <div className="w-12 h-12 mx-auto mb-3 bg-purple-100 rounded-full flex items-center justify-center">
-                  <FiMail className="w-6 h-6 text-purple-600" />
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-purple-100">
+                  <FiMail className="h-6 w-6 text-purple-600" />
                 </div>
-                <h3 className="font-semibold mb-2">1. Contact Providers</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="mb-2 font-semibold">1. Contact Providers</h3>
+                <p className="text-gray-600 text-sm">
                   Reach out to your top matches via WhatsApp or email
                 </p>
               </div>
               <div>
-                <div className="w-12 h-12 mx-auto mb-3 bg-purple-100 rounded-full flex items-center justify-center">
-                  <FiPhone className="w-6 h-6 text-purple-600" />
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-purple-100">
+                  <FiPhone className="h-6 w-6 text-purple-600" />
                 </div>
-                <h3 className="font-semibold mb-2">2. Schedule Meetings</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="mb-2 font-semibold">2. Schedule Meetings</h3>
+                <p className="text-gray-600 text-sm">
                   Set up video calls or in-person meetings to discuss details
                 </p>
               </div>
               <div>
-                <div className="w-12 h-12 mx-auto mb-3 bg-purple-100 rounded-full flex items-center justify-center">
-                  <FiStar className="w-6 h-6 text-purple-600" />
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-purple-100">
+                  <FiStar className="h-6 w-6 text-purple-600" />
                 </div>
-                <h3 className="font-semibold mb-2">3. Start Service</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="mb-2 font-semibold">3. Start Service</h3>
+                <p className="text-gray-600 text-sm">
                   Begin working with your chosen provider and leave reviews
                 </p>
               </div>
             </div>
 
-            <div className="mt-8 p-4 bg-purple-50 rounded-xl">
-              <p className="text-sm text-purple-800">
+            <div className="mt-8 rounded-xl bg-purple-50 p-4">
+              <p className="text-purple-800 text-sm">
                 <strong>💡 Pro tip:</strong> Contact multiple providers to compare rates and
                 availability. Most providers offer free consultations!
               </p>
@@ -402,15 +413,15 @@ export default function MatchesPage() {
           </div>
         </div>
 
-        <div className="text-center mt-8">
-          <p className="text-gray-500 text-sm mb-4">
+        <div className="mt-8 text-center">
+          <p className="mb-4 text-gray-500 text-sm">
             Need help finding the right provider? We're here to help!
           </p>
           <button
+            className="text-purple-600 transition-colors hover:text-purple-800"
             onClick={() =>
               window.open('mailto:support@illia.club?subject=Help with provider matching')
             }
-            className="text-purple-600 hover:text-purple-800 transition-colors"
           >
             Contact Support →
           </button>

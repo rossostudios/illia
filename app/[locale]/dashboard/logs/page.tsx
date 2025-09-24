@@ -162,11 +162,11 @@ export default function ActivityLogsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 w-56 bg-white border-r">
+      <div className="fixed inset-y-0 left-0 w-56 border-r bg-white">
         {/* Logo */}
-        <div className="p-4 border-b">
-          <Link href="/dashboard" className="flex items-center space-x-2 group">
-            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">
+        <div className="border-b p-4">
+          <Link className="group flex items-center space-x-2" href="/dashboard">
+            <span className="font-bold text-teal-800 text-xl drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md md:text-2xl">
               Illia
             </span>
           </Link>
@@ -175,25 +175,25 @@ export default function ActivityLogsPage() {
         {/* Search */}
         <div className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
+            <Search className="absolute top-2.5 left-3 h-4 w-4 text-gray-700" />
             <input
-              type="text"
+              className="w-full rounded-lg border border-gray-300 bg-gray-200 py-2 pr-3 pl-9 text-gray-900 text-sm placeholder:text-gray-500 focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500"
               placeholder="Search"
-              className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+              type="text"
             />
-            <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
+            <kbd className="absolute top-2 right-2 rounded border bg-white px-1 text-xs">⌘K</kbd>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="px-3 space-y-1">
+        <nav className="space-y-1 px-3">
           {sidebarItems.map((item) => (
             <div key={item.label}>
               <Link
-                href={item.href}
-                className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center justify-between rounded-lg px-3 py-2 font-medium text-sm transition-colors ${
                   item.active ? 'bg-teal-50 text-teal-600' : 'text-gray-700 hover:bg-gray-100'
                 }`}
+                href={item.href}
                 onClick={(e) => {
                   if (item.hasSubmenu) {
                     e.preventDefault()
@@ -212,12 +212,12 @@ export default function ActivityLogsPage() {
                 )}
               </Link>
               {item.hasSubmenu && item.isOpen && (
-                <div className="ml-7 mt-1 space-y-1">
+                <div className="mt-1 ml-7 space-y-1">
                   {item.submenu?.map((subitem) => (
                     <Link
-                      key={subitem.label}
+                      className="block rounded-lg px-3 py-2 text-gray-600 text-sm hover:bg-gray-50 hover:text-gray-900"
                       href={subitem.href}
-                      className="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg"
+                      key={subitem.label}
                     >
                       {subitem.label}
                     </Link>
@@ -230,28 +230,28 @@ export default function ActivityLogsPage() {
 
         {/* What's New */}
         {showWhatsNew && (
-          <div className="absolute bottom-4 left-4 right-4">
-            <div className="bg-teal-50 rounded-lg p-3">
-              <div className="flex items-start justify-between mb-2">
+          <div className="absolute right-4 bottom-4 left-4">
+            <div className="rounded-lg bg-teal-50 p-3">
+              <div className="mb-2 flex items-start justify-between">
                 <div className="flex items-center space-x-2">
                   <Sparkles className="h-4 w-4 text-teal-600" />
-                  <span className="text-xs font-semibold text-teal-600">What&apos;s New (5)</span>
+                  <span className="font-semibold text-teal-600 text-xs">What&apos;s New (5)</span>
                 </div>
                 <button
-                  onClick={() => setShowWhatsNew(false)}
                   className="text-gray-700 hover:text-gray-600"
+                  onClick={() => setShowWhatsNew(false)}
                 >
                   <X className="h-3 w-3" />
                 </button>
               </div>
-              <p className="text-xs text-gray-600">View our latest update</p>
+              <p className="text-gray-600 text-xs">View our latest update</p>
             </div>
 
             {/* User email */}
-            <div className="mt-4 px-3 py-2 text-xs text-gray-500">samlee@content-mobbin.com</div>
+            <div className="mt-4 px-3 py-2 text-gray-500 text-xs">samlee@content-mobbin.com</div>
 
             {/* Collapse button */}
-            <button className="flex items-center space-x-2 mt-2 text-xs text-gray-600 hover:text-gray-900">
+            <button className="mt-2 flex items-center space-x-2 text-gray-600 text-xs hover:text-gray-900">
               <ChevronLeft className="h-3 w-3" />
               <span>Collapse</span>
             </button>
@@ -262,37 +262,37 @@ export default function ActivityLogsPage() {
       {/* Main content */}
       <div className="ml-56">
         {/* Header */}
-        <header className="bg-white border-b px-8 py-4">
+        <header className="border-b bg-white px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-teal-100 text-teal-700 px-3 py-1 rounded-lg">
+              <div className="flex items-center space-x-2 rounded-lg bg-teal-100 px-3 py-1 text-teal-700">
                 <Users className="h-4 w-4" />
-                <span className="text-sm font-medium">Personal Team</span>
+                <span className="font-medium text-sm">Personal Team</span>
                 {hasLogs && (
-                  <span className="bg-teal-600 text-white text-xs px-1.5 py-0.5 rounded-full">
+                  <span className="rounded-full bg-teal-600 px-1.5 py-0.5 text-white text-xs">
                     1
                   </span>
                 )}
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="p-2 hover:bg-gray-100 rounded-lg relative">
+              <button className="relative rounded-lg p-2 hover:bg-gray-100" type="button">
                 <Bell className="h-5 w-5 text-gray-600" />
                 {hasLogs && (
-                  <span className="absolute top-1 right-1 h-2 w-2 bg-teal-600 rounded-full" />
+                  <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-teal-600" />
                 )}
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
+              <button className="rounded-lg p-2 hover:bg-gray-100" type="button">
                 <HelpCircle className="h-5 w-5 text-gray-600" />
               </button>
               <Link
+                className="flex items-center space-x-2 rounded-lg px-3 py-1.5 hover:bg-gray-100"
                 href="/docs"
-                className="flex items-center space-x-2 px-3 py-1.5 hover:bg-gray-100 rounded-lg"
               >
                 <FileCode className="h-4 w-4" />
-                <span className="text-sm font-medium">Docs</span>
+                <span className="font-medium text-sm">Docs</span>
               </Link>
-              <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors">
+              <button className="rounded-lg bg-orange-500 px-4 py-1.5 font-medium text-sm text-white transition-colors hover:bg-orange-600">
                 Upgrade
               </button>
             </div>
@@ -303,54 +303,54 @@ export default function ActivityLogsPage() {
         <div className="p-8">
           {/* Title */}
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-teal-600 mb-2">Lead Activity Logs</h1>
+            <h1 className="mb-2 font-bold text-2xl text-teal-600">Lead Activity Logs</h1>
             <p className="text-gray-700">Take a look at your lead generations activity</p>
           </div>
 
           {/* Filters */}
-          <div className="flex items-center space-x-4 mb-6">
+          <div className="mb-6 flex items-center space-x-4">
             {/* Search */}
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
+            <div className="relative max-w-md flex-1">
+              <Search className="absolute top-2.5 left-3 h-4 w-4 text-gray-700" />
               <input
-                type="text"
-                value={searchQuery}
+                className="w-full rounded-lg border border-gray-300 bg-gray-200 py-2 pr-3 pl-10 text-gray-900 text-sm placeholder:text-gray-600 focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500"
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search lead queries (e.g., plumbers 29401)"
-                className="w-full pl-10 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-600 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                type="text"
+                value={searchQuery}
               />
             </div>
 
             {/* Endpoint Filter */}
             <div className="relative">
               <button
+                className="flex items-center space-x-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm hover:bg-gray-50"
                 onClick={() => {
                   setShowEndpointDropdown(!showEndpointDropdown)
                   setShowDateDropdown(false)
                 }}
-                className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm hover:bg-gray-50"
               >
                 <Filter className="h-4 w-4 text-gray-600" />
                 <span>{selectedEndpoint}</span>
                 <ChevronDown className="h-4 w-4 text-gray-700" />
               </button>
               {showEndpointDropdown && (
-                <div className="absolute z-10 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg">
-                  <div className="p-2 border-b">
-                    <p className="text-xs text-gray-500 px-2">Filter by Generation Type</p>
+                <div className="absolute z-10 mt-2 w-56 rounded-lg border border-gray-200 bg-white shadow-lg">
+                  <div className="border-b p-2">
+                    <p className="px-2 text-gray-500 text-xs">Filter by Generation Type</p>
                   </div>
                   <div className="p-2">
                     {endpoints.map((endpoint) => (
                       <button
+                        className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm hover:bg-gray-50 ${
+                          selectedEndpoint === endpoint ? 'text-teal-600' : 'text-gray-700'
+                        }`}
                         key={endpoint}
                         onClick={() => {
                           setSelectedEndpoint(endpoint)
                           setShowEndpointDropdown(false)
                           setHasLogs(true)
                         }}
-                        className={`w-full text-left px-3 py-2 text-sm rounded-lg flex items-center justify-between hover:bg-gray-50 ${
-                          selectedEndpoint === endpoint ? 'text-teal-600' : 'text-gray-700'
-                        }`}
                       >
                         <span>{endpoint}</span>
                         {selectedEndpoint === endpoint && <Check className="h-4 w-4" />}
@@ -364,23 +364,23 @@ export default function ActivityLogsPage() {
             {/* Date Range Filter */}
             <div className="relative">
               <button
+                className="flex items-center space-x-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm hover:bg-gray-50"
                 onClick={() => {
                   setShowDateDropdown(!showDateDropdown)
                   setShowEndpointDropdown(false)
                 }}
-                className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm hover:bg-gray-50"
               >
                 <Calendar className="h-4 w-4 text-gray-600" />
                 <span>{dateRange}</span>
                 <ChevronDown className="h-4 w-4 text-gray-700" />
               </button>
               {showDateDropdown && (
-                <div className="absolute z-10 mt-2 right-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
-                  <div className="p-2 border-b">
-                    <p className="text-xs text-gray-500 px-2">Date Range</p>
+                <div className="absolute right-0 z-10 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg">
+                  <div className="border-b p-2">
+                    <p className="px-2 text-gray-500 text-xs">Date Range</p>
                     <button
-                      onClick={() => setShowDateDropdown(false)}
                       className="absolute top-2 right-2 text-gray-700 hover:text-gray-600"
+                      onClick={() => setShowDateDropdown(false)}
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -388,6 +388,9 @@ export default function ActivityLogsPage() {
                   <div className="p-2">
                     {dateRanges.map((range) => (
                       <button
+                        className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm hover:bg-gray-50 ${
+                          dateRange === range ? 'text-teal-600' : 'text-gray-700'
+                        }`}
                         key={range}
                         onClick={() => {
                           if (range === 'Custom range') {
@@ -398,9 +401,6 @@ export default function ActivityLogsPage() {
                             setShowDateDropdown(false)
                           }
                         }}
-                        className={`w-full text-left px-3 py-2 text-sm rounded-lg flex items-center justify-between hover:bg-gray-50 ${
-                          dateRange === range ? 'text-teal-600' : 'text-gray-700'
-                        }`}
                       >
                         <span>{range}</span>
                         {dateRange === range && <Check className="h-4 w-4" />}
@@ -414,13 +414,13 @@ export default function ActivityLogsPage() {
 
           {/* Custom Date Range Calendar Modal */}
           {showCalendar && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-xl shadow-2xl p-6 max-w-3xl">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">Date Range</h3>
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="max-w-3xl rounded-xl bg-white p-6 shadow-2xl">
+                <div className="mb-4 flex items-center justify-between">
+                  <h3 className="font-semibold text-lg">Date Range</h3>
                   <button
-                    onClick={() => setShowCalendar(false)}
                     className="text-gray-700 hover:text-gray-600"
+                    onClick={() => setShowCalendar(false)}
                   >
                     <X className="h-5 w-5" />
                   </button>
@@ -429,8 +429,8 @@ export default function ActivityLogsPage() {
                 <div className="grid grid-cols-2 gap-6">
                   {/* September 2025 */}
                   <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <button className="text-gray-700 hover:text-gray-600">
+                    <div className="mb-4 flex items-center justify-between">
+                      <button className="text-gray-700 hover:text-gray-600" type="button">
                         <ChevronLeft className="h-4 w-4" />
                       </button>
                       <h4 className="font-medium">September 2025</h4>
@@ -438,7 +438,7 @@ export default function ActivityLogsPage() {
                     </div>
                     <div className="grid grid-cols-7 gap-1 text-xs">
                       {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((day) => (
-                        <div key={day} className="text-center text-gray-500 p-2">
+                        <div className="p-2 text-center text-gray-500" key={day}>
                           {day}
                         </div>
                       ))}
@@ -448,10 +448,10 @@ export default function ActivityLogsPage() {
                         22, 23, 24, 25, 26, 27, 28, 29, 30,
                       ].map((day) => (
                         <button
-                          key={day}
-                          className={`p-2 text-sm hover:bg-gray-100 rounded ${
+                          className={`rounded p-2 text-sm hover:bg-gray-100 ${
                             day === 8 ? 'bg-teal-500 text-white hover:bg-teal-600' : ''
                           }`}
+                          key={day}
                         >
                           {day}
                         </button>
@@ -461,16 +461,16 @@ export default function ActivityLogsPage() {
 
                   {/* October 2025 */}
                   <div>
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="mb-4 flex items-center justify-between">
                       <div />
                       <h4 className="font-medium">October 2025</h4>
-                      <button className="text-gray-700 hover:text-gray-600">
+                      <button className="text-gray-700 hover:text-gray-600" type="button">
                         <ChevronRight className="h-4 w-4" />
                       </button>
                     </div>
                     <div className="grid grid-cols-7 gap-1 text-xs">
                       {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((day) => (
-                        <div key={day} className="text-center text-gray-500 p-2">
+                        <div className="p-2 text-center text-gray-500" key={day}>
                           {day}
                         </div>
                       ))}
@@ -480,7 +480,7 @@ export default function ActivityLogsPage() {
                         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
                         22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
                       ].map((day) => (
-                        <button key={day} className="p-2 text-sm hover:bg-gray-100 rounded">
+                        <button className="rounded p-2 text-sm hover:bg-gray-100" key={day}>
                           {day}
                         </button>
                       ))}
@@ -488,19 +488,19 @@ export default function ActivityLogsPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end mt-6 space-x-3">
+                <div className="mt-6 flex items-center justify-end space-x-3">
                   <button
+                    className="px-4 py-2 text-gray-600 text-sm hover:text-gray-900"
                     onClick={() => setShowCalendar(false)}
-                    className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
                   >
                     Cancel
                   </button>
                   <button
+                    className="rounded-lg bg-teal-500 px-4 py-2 text-sm text-white hover:bg-teal-600"
                     onClick={() => {
                       setDateRange('Custom range')
                       setShowCalendar(false)
                     }}
-                    className="px-4 py-2 text-sm bg-teal-500 hover:bg-teal-600 text-white rounded-lg"
                   >
                     Apply
                   </button>
@@ -510,41 +510,28 @@ export default function ActivityLogsPage() {
           )}
 
           {/* Logs Table */}
-          {!hasLogs ? (
-            <div className="bg-white rounded-xl border p-16">
-              <div className="flex flex-col items-center justify-center">
-                <Clock className="h-12 w-12 text-teal-300 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No lead generations yet?</h3>
-                <p className="text-sm text-gray-500 mb-1">
-                  Your runs will appear here once you start in Playground.
-                </p>
-                <p className="text-sm text-gray-500">
-                  Track queries, scores, and exports from Charleston ZIPs.
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="bg-white rounded-xl border overflow-hidden">
+          {hasLogs ? (
+            <div className="overflow-hidden rounded-xl border bg-white">
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50 border-b">
+                  <thead className="border-b bg-gray-50">
                     <tr>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
                         Mode
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
                         Query
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
                         Status
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
                         Leads Found
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
                         Started
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
@@ -552,42 +539,42 @@ export default function ActivityLogsPage() {
                   <tbody className="divide-y">
                     {filteredLogs.map((log, index) => (
                       <tr
-                        key={index}
                         className={`hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
+                        key={index}
                       >
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="whitespace-nowrap px-6 py-4 text-gray-500 text-sm">
                           {log.mode}
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-900">
-                          <span className="truncate block max-w-md">{log.query}</span>
+                        <td className="px-6 py-4 text-gray-900 text-sm">
+                          <span className="block max-w-md truncate">{log.query}</span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="whitespace-nowrap px-6 py-4">
                           <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-medium text-xs ${
                               log.status === 'Success'
                                 ? 'bg-teal-100 text-teal-800'
                                 : 'bg-red-100 text-red-800'
                             }`}
                           >
                             <span
-                              className={`h-1.5 w-1.5 rounded-full mr-1.5 ${
+                              className={`mr-1.5 h-1.5 w-1.5 rounded-full ${
                                 log.status === 'Success' ? 'bg-teal-500' : 'bg-red-500'
                               }`}
                             />
                             {log.status}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="whitespace-nowrap px-6 py-4 text-gray-900 text-sm">
                           {log.leads}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="whitespace-nowrap px-6 py-4 text-gray-500 text-sm">
                           <div>
                             <div>{log.date}</div>
-                            <div className="text-xs text-gray-700">{log.time}</div>
+                            <div className="text-gray-700 text-xs">{log.time}</div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          <button className="text-gray-700 hover:text-gray-600">
+                        <td className="whitespace-nowrap px-6 py-4 text-gray-500 text-sm">
+                          <button className="text-gray-700 hover:text-gray-600" type="button">
                             <Download className="h-4 w-4" />
                           </button>
                         </td>
@@ -598,16 +585,29 @@ export default function ActivityLogsPage() {
               </div>
 
               {/* Pagination */}
-              <div className="px-6 py-3 border-t flex items-center justify-between">
-                <div className="text-sm text-gray-500">Page 1</div>
+              <div className="flex items-center justify-between border-t px-6 py-3">
+                <div className="text-gray-500 text-sm">Page 1</div>
                 <div className="flex items-center space-x-2">
-                  <button className="p-1 hover:bg-gray-100 rounded text-gray-700">
+                  <button className="rounded p-1 text-gray-700 hover:bg-gray-100" type="button">
                     <ChevronLeft className="h-4 w-4" />
                   </button>
-                  <button className="p-1 hover:bg-gray-100 rounded text-gray-700">
+                  <button className="rounded p-1 text-gray-700 hover:bg-gray-100" type="button">
                     <ChevronRight className="h-4 w-4" />
                   </button>
                 </div>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-xl border bg-white p-16">
+              <div className="flex flex-col items-center justify-center">
+                <Clock className="mb-4 h-12 w-12 text-teal-300" />
+                <h3 className="mb-2 font-medium text-gray-900 text-lg">No lead generations yet?</h3>
+                <p className="mb-1 text-gray-500 text-sm">
+                  Your runs will appear here once you start in Playground.
+                </p>
+                <p className="text-gray-500 text-sm">
+                  Track queries, scores, and exports from Charleston ZIPs.
+                </p>
               </div>
             </div>
           )}
@@ -615,7 +615,7 @@ export default function ActivityLogsPage() {
       </div>
 
       {/* Intercom Chat */}
-      <button className="fixed bottom-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full shadow-lg">
+      <button className="fixed right-4 bottom-4 rounded-full bg-teal-500 p-4 text-white shadow-lg hover:bg-teal-600">
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>
@@ -625,11 +625,13 @@ export default function ActivityLogsPage() {
 function Users({ className }: { className?: string }) {
   return (
     <svg
+      aria-label="icon"
       className={className}
-      viewBox="0 0 24 24"
       fill="none"
+      role="img"
       stroke="currentColor"
       strokeWidth="2"
+      viewBox="0 0 24 24"
     >
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
       <circle cx="9" cy="7" r="4" />

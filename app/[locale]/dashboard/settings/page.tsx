@@ -62,11 +62,11 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 w-56 bg-white border-r">
+      <div className="fixed inset-y-0 left-0 w-56 border-r bg-white">
         {/* Logo */}
-        <div className="p-4 border-b">
-          <Link href="/dashboard" className="flex items-center space-x-2 group">
-            <span className="text-xl md:text-2xl font-bold text-teal-800 drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md">
+        <div className="border-b p-4">
+          <Link className="group flex items-center space-x-2" href="/dashboard">
+            <span className="font-bold text-teal-800 text-xl drop-shadow-sm transition-all group-hover:text-teal-900 group-hover:drop-shadow-md md:text-2xl">
               Illia
             </span>
           </Link>
@@ -75,25 +75,25 @@ export default function SettingsPage() {
         {/* Search */}
         <div className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-700" />
+            <Search className="absolute top-2.5 left-3 h-4 w-4 text-gray-700" />
             <input
-              type="text"
+              className="w-full rounded-lg border border-gray-300 bg-gray-200 py-2 pr-3 pl-9 text-gray-900 text-sm placeholder:text-gray-500 focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500"
               placeholder="Search"
-              className="w-full pl-9 pr-3 py-2 bg-gray-200 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+              type="text"
             />
-            <kbd className="absolute right-2 top-2 text-xs bg-white border rounded px-1">⌘K</kbd>
+            <kbd className="absolute top-2 right-2 rounded border bg-white px-1 text-xs">⌘K</kbd>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="px-3 space-y-1">
+        <nav className="space-y-1 px-3">
           {sidebarItems.map((item) => (
             <div key={item.label}>
               <Link
-                href={item.href}
-                className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center justify-between rounded-lg px-3 py-2 font-medium text-sm transition-colors ${
                   item.active ? 'bg-teal-50 text-teal-600' : 'text-gray-700 hover:bg-gray-100'
                 }`}
+                href={item.href}
                 onClick={(e) => {
                   if (item.hasSubmenu) {
                     e.preventDefault()
@@ -112,12 +112,12 @@ export default function SettingsPage() {
                 )}
               </Link>
               {item.hasSubmenu && item.isOpen && (
-                <div className="ml-7 mt-1 space-y-1">
+                <div className="mt-1 ml-7 space-y-1">
                   {item.submenu?.map((subitem) => (
                     <Link
-                      key={subitem.label}
+                      className="block rounded-lg px-3 py-2 text-gray-600 text-sm hover:bg-gray-50 hover:text-gray-900"
                       href={subitem.href}
-                      className="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg"
+                      key={subitem.label}
                     >
                       {subitem.label}
                     </Link>
@@ -130,37 +130,37 @@ export default function SettingsPage() {
 
         {/* What's New */}
         {showWhatsNew && (
-          <div className="absolute bottom-20 left-4 right-4">
-            <div className="bg-teal-50 rounded-lg p-3">
-              <div className="flex items-start justify-between mb-2">
+          <div className="absolute right-4 bottom-20 left-4">
+            <div className="rounded-lg bg-teal-50 p-3">
+              <div className="mb-2 flex items-start justify-between">
                 <div className="flex items-center space-x-2">
                   <Sparkles className="h-4 w-4 text-teal-600" />
-                  <span className="text-xs font-semibold text-teal-600">What&apos;s New (5)</span>
+                  <span className="font-semibold text-teal-600 text-xs">What&apos;s New (5)</span>
                 </div>
                 <button
-                  onClick={() => setShowWhatsNew(false)}
                   className="text-gray-700 hover:text-gray-600"
+                  onClick={() => setShowWhatsNew(false)}
                 >
                   <X className="h-3 w-3" />
                 </button>
               </div>
-              <p className="text-xs text-gray-600">View our latest update</p>
+              <p className="text-gray-600 text-xs">View our latest update</p>
             </div>
           </div>
         )}
 
         {/* Bottom section with user and collapse */}
-        <div className="absolute bottom-0 left-0 right-0 border-t bg-white">
+        <div className="absolute right-0 bottom-0 left-0 border-t bg-white">
           {/* User email */}
-          <div className="px-4 py-3 flex items-center space-x-3">
-            <div className="h-6 w-6 bg-teal-100 rounded-full flex items-center justify-center">
-              <span className="text-xs font-medium text-teal-600">S</span>
+          <div className="flex items-center space-x-3 px-4 py-3">
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-100">
+              <span className="font-medium text-teal-600 text-xs">S</span>
             </div>
-            <span className="text-xs text-gray-700">samlee@content-mobbin.com</span>
+            <span className="text-gray-700 text-xs">samlee@content-mobbin.com</span>
           </div>
 
           {/* Collapse button */}
-          <button className="w-full flex items-center space-x-2 px-4 py-2 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-t">
+          <button className="flex w-full items-center space-x-2 border-t px-4 py-2 text-gray-600 text-xs hover:bg-gray-50 hover:text-gray-900">
             <ChevronLeft className="h-3 w-3" />
             <span>Collapse</span>
           </button>
@@ -170,29 +170,29 @@ export default function SettingsPage() {
       {/* Main content */}
       <div className="ml-56">
         {/* Header */}
-        <header className="bg-white border-b px-8 py-4">
+        <header className="border-b bg-white px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-teal-100 text-teal-700 px-3 py-1 rounded-lg">
+              <div className="flex items-center space-x-2 rounded-lg bg-teal-100 px-3 py-1 text-teal-700">
                 <Users className="h-4 w-4" />
-                <span className="text-sm font-medium">Personal Team</span>
+                <span className="font-medium text-sm">Personal Team</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
+              <button className="rounded-lg p-2 hover:bg-gray-100" type="button">
                 <Bell className="h-5 w-5 text-gray-600" />
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
+              <button className="rounded-lg p-2 hover:bg-gray-100" type="button">
                 <HelpCircle className="h-5 w-5 text-gray-600" />
               </button>
               <Link
+                className="flex items-center space-x-2 rounded-lg px-3 py-1.5 hover:bg-gray-100"
                 href="/docs"
-                className="flex items-center space-x-2 px-3 py-1.5 hover:bg-gray-100 rounded-lg"
               >
                 <FileCode className="h-4 w-4" />
-                <span className="text-sm font-medium">Docs</span>
+                <span className="font-medium text-sm">Docs</span>
               </Link>
-              <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors">
+              <button className="rounded-lg bg-orange-500 px-4 py-1.5 font-medium text-sm text-white transition-colors hover:bg-orange-600">
                 Upgrade
               </button>
             </div>
@@ -201,11 +201,11 @@ export default function SettingsPage() {
 
         <div className="flex">
           {/* Settings Sidebar */}
-          <div className="w-64 bg-white border-r min-h-screen p-6">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          <div className="min-h-screen w-64 border-r bg-white p-6">
+            <h1 className="mb-2 font-bold text-2xl text-gray-900">
               {activeTab === 'account' ? 'Account' : 'Settings'}
             </h1>
-            <p className="text-sm text-gray-600 mb-6">
+            <p className="mb-6 text-gray-600 text-sm">
               {activeTab === 'account'
                 ? 'Manage your account settings and preferences'
                 : 'Manage your team, billing, and account preferences'}
@@ -213,34 +213,34 @@ export default function SettingsPage() {
 
             <nav className="space-y-1">
               <button
-                onClick={() => setActiveTab('team')}
-                className={`w-full text-left flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex w-full items-center space-x-3 rounded-lg px-3 py-2 text-left font-medium text-sm transition-colors ${
                   activeTab === 'team'
                     ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
+                onClick={() => setActiveTab('team')}
               >
                 <UsersIcon className="h-4 w-4" />
                 <span>Team</span>
               </button>
               <button
-                onClick={() => setActiveTab('billing')}
-                className={`w-full text-left flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex w-full items-center space-x-3 rounded-lg px-3 py-2 text-left font-medium text-sm transition-colors ${
                   activeTab === 'billing'
                     ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
+                onClick={() => setActiveTab('billing')}
               >
                 <CreditCard className="h-4 w-4" />
                 <span>Billing</span>
               </button>
               <button
-                onClick={() => setActiveTab('account')}
-                className={`w-full text-left flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex w-full items-center space-x-3 rounded-lg px-3 py-2 text-left font-medium text-sm transition-colors ${
                   activeTab === 'account'
                     ? 'bg-teal-50 text-teal-600'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
+                onClick={() => setActiveTab('account')}
               >
                 <SettingsIcon className="h-4 w-4" />
                 <span>Advanced</span>
@@ -254,16 +254,16 @@ export default function SettingsPage() {
               <div className="max-w-3xl space-y-8">
                 {/* Team Name */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 mb-1">Team Name</h3>
-                  <p className="text-sm text-gray-500 mb-4">Update your team&apos;s display name</p>
+                  <h3 className="mb-1 font-medium text-gray-700 text-sm">Team Name</h3>
+                  <p className="mb-4 text-gray-500 text-sm">Update your team&apos;s display name</p>
                   <div className="flex items-center space-x-3">
                     <input
+                      className="max-w-sm flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      onChange={(e) => setTeamName(e.target.value)}
                       type="text"
                       value={teamName}
-                      onChange={(e) => setTeamName(e.target.value)}
-                      className="flex-1 max-w-sm px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                     />
-                    <button className="px-4 py-2 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg text-sm font-medium">
+                    <button className="rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-sm hover:bg-gray-50">
                       Save
                     </button>
                   </div>
@@ -271,51 +271,51 @@ export default function SettingsPage() {
 
                 {/* Invite Team Members */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 mb-1">Invite Team Members</h3>
-                  <p className="text-sm text-gray-500 mb-4">Add new members to your team</p>
+                  <h3 className="mb-1 font-medium text-gray-700 text-sm">Invite Team Members</h3>
+                  <p className="mb-4 text-gray-500 text-sm">Add new members to your team</p>
                   <div className="flex items-center space-x-3">
                     <input
-                      type="email"
-                      value={inviteEmail}
+                      className="max-w-sm flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                       onChange={(e) => setInviteEmail(e.target.value)}
                       placeholder="Enter email address"
-                      className="flex-1 max-w-sm px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      type="email"
+                      value={inviteEmail}
                     />
                     <select
-                      value={inviteRole}
+                      className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                       onChange={(e) => setInviteRole(e.target.value)}
-                      className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      value={inviteRole}
                     >
                       <option>Member</option>
                       <option>Admin</option>
                     </select>
-                    <button className="flex items-center space-x-2 px-4 py-2 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg text-sm font-medium">
+                    <button className="flex items-center space-x-2 rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-sm hover:bg-gray-50">
                       <Send className="h-4 w-4" />
                       <span>Send Invite</span>
                     </button>
                   </div>
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="mt-2 text-gray-500 text-xs">
                     Invited members will receive an email with instructions to join your team.
                   </p>
                 </div>
 
                 {/* Team Members */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 mb-1">Team Members</h3>
-                  <p className="text-sm text-gray-500 mb-4">
+                  <h3 className="mb-1 font-medium text-gray-700 text-sm">Team Members</h3>
+                  <p className="mb-4 text-gray-500 text-sm">
                     Manage your team&apos;s access and permissions
                   </p>
-                  <div className="bg-white border rounded-lg divide-y">
-                    <div className="p-4 flex items-center justify-between">
+                  <div className="divide-y rounded-lg border bg-white">
+                    <div className="flex items-center justify-between p-4">
                       <div className="flex items-center space-x-3">
-                        <div className="h-8 w-8 bg-teal-100 rounded-full flex items-center justify-center">
-                          <span className="text-sm font-medium text-teal-600">S</span>
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-100">
+                          <span className="font-medium text-sm text-teal-600">S</span>
                         </div>
                         <div>
                           <div className="font-medium text-sm">samlee@content-mobbin.com</div>
-                          <div className="text-xs text-gray-500">samlee@content-mobbin.com</div>
+                          <div className="text-gray-500 text-xs">samlee@content-mobbin.com</div>
                         </div>
-                        <span className="px-2 py-0.5 bg-teal-100 text-teal-600 text-xs font-medium rounded">
+                        <span className="rounded bg-teal-100 px-2 py-0.5 font-medium text-teal-600 text-xs">
                           ADMIN
                         </span>
                       </div>
@@ -327,12 +327,12 @@ export default function SettingsPage() {
 
             {activeTab === 'billing' && (
               <div className="max-w-3xl">
-                <div className="bg-white border rounded-lg p-6">
-                  <h3 className="text-lg font-semibold mb-4">Billing Information</h3>
-                  <p className="text-sm text-gray-600">
+                <div className="rounded-lg border bg-white p-6">
+                  <h3 className="mb-4 font-semibold text-lg">Billing Information</h3>
+                  <p className="text-gray-600 text-sm">
                     Manage your subscription and payment methods
                   </p>
-                  <button className="mt-4 px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg text-sm font-medium">
+                  <button className="mt-4 rounded-lg bg-teal-500 px-4 py-2 font-medium text-sm text-white hover:bg-teal-600">
                     Manage Subscription
                   </button>
                 </div>
@@ -343,22 +343,22 @@ export default function SettingsPage() {
               <div className="max-w-3xl space-y-8">
                 {/* Email Preferences */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Lead Notifications</h3>
+                  <h3 className="mb-4 font-semibold text-gray-900 text-lg">Lead Notifications</h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-gray-700">Email Alerts</p>
-                        <p className="text-sm text-gray-500">New high-score leads in 29401</p>
+                        <p className="font-medium text-gray-700 text-sm">Email Alerts</p>
+                        <p className="text-gray-500 text-sm">New high-score leads in 29401</p>
                       </div>
                       <button className="relative inline-flex h-6 w-11 items-center rounded-full bg-teal-500 transition-colors">
-                        <span className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-6" />
+                        <span className="inline-block h-4 w-4 translate-x-6 transform rounded-full bg-white transition-transform" />
                       </button>
                     </div>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-gray-600 text-sm">
                       You'll be sent emails with links to your dashboard for new Charleston leads.
                     </p>
                   </div>
-                  <button className="mt-4 flex items-center space-x-2 px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg text-sm font-medium">
+                  <button className="mt-4 flex items-center space-x-2 rounded-lg bg-teal-500 px-4 py-2 font-medium text-sm text-white hover:bg-teal-600">
                     <Mail className="h-4 w-4" />
                     <span>Save Preferences</span>
                   </button>
@@ -366,24 +366,24 @@ export default function SettingsPage() {
 
                 {/* Edit Password */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Edit Password</h3>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <h3 className="mb-4 font-semibold text-gray-900 text-lg">Edit Password</h3>
+                  <p className="mb-4 text-gray-600 text-sm">
                     Update your Supabase authentication password
                   </p>
                   <div className="flex items-center space-x-3">
-                    <div className="relative flex-1 max-w-sm">
+                    <div className="relative max-w-sm flex-1">
                       <input
-                        type={showPassword ? 'text' : 'password'}
-                        value={password}
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder={
                           showPassword ? 'Enter new password (min. 12 characters)' : '••••••••••'
                         }
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
                       />
                       <button
+                        className="absolute top-2.5 right-3"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-2.5"
                       >
                         {showPassword ? (
                           <EyeOff className="h-4 w-4 text-gray-700" />
@@ -393,8 +393,8 @@ export default function SettingsPage() {
                       </button>
                     </div>
                     <button
+                      className="rounded-lg bg-teal-500 px-4 py-2 font-medium text-sm text-white hover:bg-teal-600 disabled:cursor-not-allowed disabled:opacity-50"
                       disabled={password.length < 12}
-                      className="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Save Changes
                     </button>
@@ -403,18 +403,18 @@ export default function SettingsPage() {
 
                 {/* Delete Account */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Delete Account</h3>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <h3 className="mb-4 font-semibold text-gray-900 text-lg">Delete Account</h3>
+                  <p className="mb-4 text-gray-600 text-sm">
                     Delete your account—leads history will be lost. Be certain.
                   </p>
                   <div className="flex items-center space-x-3">
                     <div className="flex items-center space-x-2">
-                      <div className="h-2 w-2 bg-teal-500 rounded-full" />
+                      <div className="h-2 w-2 rounded-full bg-teal-500" />
                       <span className="text-sm">samlee@content-mobbin.com</span>
                     </div>
                     <button
+                      className="rounded-lg bg-red-600 px-4 py-2 font-medium text-sm text-white hover:bg-red-700"
                       onClick={() => setShowDeleteModal(true)}
-                      className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium"
                     >
                       Delete Account
                     </button>
@@ -428,23 +428,23 @@ export default function SettingsPage() {
 
       {/* Delete Account Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Delete Account</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="font-semibold text-lg">Delete Account</h3>
               <button
+                className="text-gray-700 hover:text-gray-600"
                 onClick={() => {
                   setShowDeleteModal(false)
                   setDeleteConfirmation('')
                 }}
-                className="text-gray-700 hover:text-gray-600"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-              <p className="text-sm text-red-800">
+            <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4">
+              <p className="text-red-800 text-sm">
                 This action cannot be undone. This will permanently delete your account and remove
                 all associated data.
               </p>
@@ -452,22 +452,22 @@ export default function SettingsPage() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Type <span className="font-mono bg-gray-100 px-1 rounded">DELETE</span> to
+                <label className="mb-2 block font-medium text-gray-700 text-sm">
+                  Type <span className="rounded bg-gray-100 px-1 font-mono">DELETE</span> to
                   confirm:
                 </label>
                 <input
-                  type="text"
-                  value={deleteConfirmation}
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
                   onChange={(e) => setDeleteConfirmation(e.target.value)}
                   placeholder="DELETE"
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                  type="text"
+                  value={deleteConfirmation}
                 />
               </div>
 
               <button
+                className="w-full rounded-lg bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={deleteConfirmation !== 'DELETE'}
-                className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Delete Permanently
               </button>
@@ -477,7 +477,7 @@ export default function SettingsPage() {
       )}
 
       {/* Intercom Chat */}
-      <button className="fixed bottom-4 right-4 bg-teal-500 hover:bg-teal-600 text-white p-4 rounded-full shadow-lg">
+      <button className="fixed right-4 bottom-4 rounded-full bg-teal-500 p-4 text-white shadow-lg hover:bg-teal-600">
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>
@@ -487,11 +487,13 @@ export default function SettingsPage() {
 function Users({ className }: { className?: string }) {
   return (
     <svg
+      aria-label="icon"
       className={className}
-      viewBox="0 0 24 24"
       fill="none"
+      role="img"
       stroke="currentColor"
       strokeWidth="2"
+      viewBox="0 0 24 24"
     >
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
       <circle cx="9" cy="7" r="4" />

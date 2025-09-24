@@ -78,79 +78,79 @@ export default function AnimatedFeatures() {
   ]
 
   return (
-    <section className="py-24 bg-gray-50 relative overflow-hidden">
+    <section className="relative overflow-hidden bg-gray-50 py-24">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute -top-40 -right-40 w-80 h-80 bg-teal-100 rounded-full opacity-20 blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.2, 0.3, 0.2],
           }}
+          className="-top-40 -right-40 absolute h-80 w-80 rounded-full bg-teal-100 opacity-20 blur-3xl"
           transition={{
             duration: 8,
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
             ease: 'easeInOut',
           }}
         />
         <motion.div
-          className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-100 rounded-full opacity-20 blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.2, 0.3, 0.2],
           }}
+          className="-bottom-40 -left-40 absolute h-80 w-80 rounded-full bg-cyan-100 opacity-20 blur-3xl"
           transition={{
             duration: 10,
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
             ease: 'easeInOut',
           }}
         />
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
+          className="mb-16 text-center"
+          initial={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
         >
           <motion.span
-            initial={{ opacity: 0, scale: 0.9 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            className="mb-4 inline-block rounded-full bg-teal-100 px-4 py-2 font-medium text-sm text-teal-700"
+            initial={{ opacity: 0, scale: 0.9 }}
             transition={{ delay: 0.2 }}
-            className="inline-block px-4 py-2 bg-teal-100 text-teal-700 rounded-full text-sm font-medium mb-4"
           >
             Why Choose Illia
           </motion.span>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{t('title')}</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">{t('subtitle')}</p>
+          <h2 className="mb-4 font-bold text-4xl text-gray-900 md:text-5xl">{t('title')}</h2>
+          <p className="mx-auto max-w-3xl text-gray-600 text-lg">{t('subtitle')}</p>
         </motion.div>
 
         <motion.div
+          animate={isInView ? 'visible' : 'hidden'}
+          className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+          initial="hidden"
           ref={ref}
           variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {features.map((feature, index) => {
             const Icon = feature.icon
             return (
               <motion.div
+                className="group hover:-translate-y-1 relative transform overflow-hidden rounded-2xl bg-white p-8 shadow-sm transition-shadow duration-300 ease-in-out hover:shadow-xl"
                 key={index}
                 variants={itemVariants}
-                className="group relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-shadow duration-300 ease-in-out overflow-hidden hover:-translate-y-1 transform"
               >
                 {/* Background on hover */}
-                <div className="absolute inset-0 bg-teal-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out" />
+                <div className="absolute inset-0 bg-teal-50 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
 
                 {/* Content */}
                 <div className="relative">
-                  <div className="w-14 h-14 bg-teal-600 rounded-xl flex items-center justify-center mb-6 shadow-lg">
-                    <Icon className="w-7 h-7 text-white" />
+                  <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-teal-600 shadow-lg">
+                    <Icon className="h-7 w-7 text-white" />
                   </div>
 
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-teal-600 transition-colors duration-300 ease-in-out">
+                  <h3 className="mb-3 font-semibold text-gray-900 text-xl transition-colors duration-300 ease-in-out group-hover:text-teal-600">
                     {t(feature.titleKey)}
                   </h3>
 
@@ -163,19 +163,19 @@ export default function AnimatedFeatures() {
 
         {/* CTA Section */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
+          className="mt-16 text-center"
+          initial={{ opacity: 0, y: 20 }}
           transition={{ delay: 0.6, duration: 0.6 }}
-          className="text-center mt-16"
         >
           <a
+            className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-8 py-4 font-semibold text-white shadow-lg transition-all duration-300 ease-in-out hover:bg-teal-700 hover:shadow-xl"
             href="/dashboard/explore"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-teal-600 text-white font-semibold rounded-xl shadow-lg hover:bg-teal-700 hover:shadow-xl transition-all duration-300 ease-in-out"
           >
             Discover All Features
             <motion.span
               animate={{ x: [0, 5, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
+              transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
             >
               →
             </motion.span>

@@ -5,7 +5,7 @@ import { X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-interface BottomSheetProps {
+type BottomSheetProps = {
   isOpen: boolean
   onClose: () => void
   title?: string
@@ -61,9 +61,15 @@ export function BottomSheet({
   }
 
   const getHeightValue = () => {
-    if (height === 'full') return '100vh'
-    if (height === 'half') return '50vh'
-    if (height === 'auto') return 'auto'
+    if (height === 'full') {
+      return '100vh'
+    }
+    if (height === 'half') {
+      return '50vh'
+    }
+    if (height === 'auto') {
+      return 'auto'
+    }
     return `${height}px`
   }
 
@@ -73,63 +79,62 @@ export function BottomSheet({
         <>
           {/* Overlay */}
           <motion.div
-            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={closeOnOverlayClick ? onClose : undefined}
-            className="fixed inset-0 bg-black/50 z-40"
             aria-hidden="true"
+            className="fixed inset-0 z-40 bg-black/50"
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            onClick={closeOnOverlayClick ? onClose : undefined}
           />
 
           {/* Bottom Sheet */}
           <motion.div
-            ref={sheetRef}
-            initial="hidden"
             animate={controls}
+            aria-label={title || 'Bottom sheet'}
+            aria-modal="true"
+            className="fixed right-0 bottom-0 left-0 z-50 rounded-t-2xl bg-white shadow-xl"
+            drag={closeOnSwipeDown ? 'y' : false}
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragControls={dragControls}
+            dragElastic={{ top: 0, bottom: 0.5 }}
+            dragListener={false}
             exit="hidden"
-            variants={{
-              visible: { y: 0 },
-              hidden: { y: '100%' },
+            initial="hidden"
+            onDragEnd={handleDragEnd}
+            ref={sheetRef}
+            role="dialog"
+            style={{
+              maxHeight: getHeightValue(),
+              height: height === 'auto' ? 'auto' : getHeightValue(),
             }}
             transition={{
               type: 'spring',
               damping: 40,
               stiffness: 400,
             }}
-            drag={closeOnSwipeDown ? 'y' : false}
-            dragControls={dragControls}
-            dragListener={false}
-            dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={{ top: 0, bottom: 0.5 }}
-            onDragEnd={handleDragEnd}
-            className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-xl"
-            style={{
-              maxHeight: getHeightValue(),
-              height: height === 'auto' ? 'auto' : getHeightValue(),
+            variants={{
+              visible: { y: 0 },
+              hidden: { y: '100%' },
             }}
-            role="dialog"
-            aria-modal="true"
-            aria-label={title || 'Bottom sheet'}
           >
             {/* Drag Handle */}
             {showHandle && (
               <div
-                className="w-full py-3 cursor-grab active:cursor-grabbing"
+                className="w-full cursor-grab py-3 active:cursor-grabbing"
                 onPointerDown={(e) => closeOnSwipeDown && dragControls.start(e)}
               >
-                <div className="mx-auto w-12 h-1 bg-gray-300 rounded-full" />
+                <div className="mx-auto h-1 w-12 rounded-full bg-gray-300" />
               </div>
             )}
 
             {/* Header */}
             {title && (
-              <div className="flex items-center justify-between px-4 pb-3 border-b">
-                <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+              <div className="flex items-center justify-between border-b px-4 pb-3">
+                <h2 className="font-semibold text-gray-900 text-lg">{title}</h2>
                 <button
-                  type="button"
-                  onClick={onClose}
-                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
                   aria-label="Close"
+                  className="rounded-lg p-2 transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  onClick={onClose}
                 >
                   <X className="h-5 w-5 text-gray-500" />
                 </button>
@@ -151,7 +156,9 @@ export function BottomSheet({
   )
 
   // Only render in the browser
-  if (!mounted) return null
+  if (!mounted) {
+    return null
+  }
 
   return createPortal(sheetContent, document.body)
 }
