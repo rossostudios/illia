@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import DashboardSidebar from '@/components/DashboardSidebar'
 import MobileBottomNavEnhanced from '@/components/MobileBottomNavEnhanced'
+import SearchResults from '@/components/SearchResults'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useSession } from '@/hooks/use-session'
@@ -14,6 +15,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [isSearchFocused, setIsSearchFocused] = useState(false)
+  const [showSearchResults, setShowSearchResults] = useState(false)
   const searchInputRef = useRef<HTMLInputElement>(null)
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const { user } = useSession()
@@ -70,13 +72,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       clearTimeout(searchTimeoutRef.current)
     }
 
-    // Set new timeout for debounced search
-    searchTimeoutRef.current = setTimeout(() => {
-      // TODO: Implement actual search logic here
-      if (value.trim()) {
-        // This is where you'd trigger search API calls or filter data
-      }
-    }, 300) // 300ms debounce delay
+    // Show/hide search results based on query
+    if (value.trim()) {
+      setShowSearchResults(true)
+    } else {
+      setShowSearchResults(false)
+    }
   }, [])
 
   // Cleanup timeout on unmount
@@ -91,7 +92,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Sidebar */}
+      {/* Sidebar - Responsive */}
       <DashboardSidebar
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={toggleSidebar}
@@ -101,24 +102,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main content area with responsive margin */}
       <div
         className={`flex flex-1 flex-col transition-all duration-300 ease-in-out ${
-          isSidebarCollapsed ? 'ml-16' : 'ml-64'
-        }`}
+          isSidebarCollapsed ? 'md:ml-16' : 'md:ml-64'
+        } ml-0`}
       >
         {/* Top navigation bar */}
-        <header className="sticky top-0 z-10 border-gray-200 border-b bg-white px-4 py-4 md:px-8 dark:border-gray-800 dark:bg-gray-900">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex flex-1 items-center gap-4">
-              {/* Hamburger menu button - Minimum 44px touch target */}
+        <header className="sticky top-0 z-30 border-gray-200 border-b bg-white px-3 py-3 sm:px-4 sm:py-4 md:px-8 dark:border-gray-800 dark:bg-gray-900">
+          <div className="flex items-center justify-between gap-2 sm:gap-4">
+            <div className="flex flex-1 items-center gap-2 sm:gap-4">
+              {/* Hamburger menu button - Always visible */}
               <button
                 aria-label={isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-                className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-teal-400 dark:focus:ring-offset-[#161616] dark:hover:bg-gray-800/50"
+                className="flex min-h-[40px] min-w-[40px] items-center justify-center rounded-lg transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 md:min-h-[44px] md:min-w-[44px] dark:focus:ring-teal-400 dark:focus:ring-offset-[#161616] dark:hover:bg-gray-800/50"
                 onClick={toggleSidebar}
+                type="button"
               >
                 <Menu className="h-5 w-5 text-gray-600 dark:text-gray-400" />
               </button>
 
-              {/* Search bar */}
-              <div className="relative max-w-4xl flex-1">
+              {/* Search bar - Hidden on mobile, replaced with search icon */}
+              <div className="relative hidden max-w-4xl flex-1 sm:block">
                 <Search className="pointer-events-none absolute top-2.5 left-3 h-4 w-4 text-gray-400" />
                 <input
                   aria-describedby="search-hint"
@@ -129,9 +131,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       ? 'border-teal-500 bg-white dark:border-teal-400 dark:bg-gray-900'
                       : 'border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900/50'
                   }`}
-                  onBlur={() => setIsSearchFocused(false)}
+                  onBlur={() => {
+                    setIsSearchFocused(false)
+                    // Delay hiding results to allow clicking on them
+                    setTimeout(() => {
+                      setShowSearchResults(false)
+                    }, 200)
+                  }}
                   onChange={(e) => handleSearch(e.target.value)}
-                  onFocus={() => setIsSearchFocused(true)}
+                  onFocus={() => {
+                    setIsSearchFocused(true)
+                    if (searchQuery.trim()) {
+                      setShowSearchResults(true)
+                    }
+                  }}
                   placeholder="Search providers, services, or locations..."
                   ref={searchInputRef}
                   spellCheck="false"
@@ -153,8 +166,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     className="-translate-y-1/2 absolute top-1/2 right-2 flex min-h-[44px] min-w-[44px] items-center justify-center rounded bg-gray-100 text-gray-500 transition-colors hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:bg-gray-700 dark:text-gray-400 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-700"
                     onClick={() => {
                       setSearchQuery('')
+                      setShowSearchResults(false)
                       searchInputRef.current?.focus()
                     }}
+                    type="button"
                   >
                     <span className="sr-only">Clear</span>
                     <svg
@@ -175,43 +190,67 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     </svg>
                   </button>
                 )}
+                {/* Search Results Dropdown */}
+                <SearchResults
+                  isOpen={showSearchResults}
+                  locale={locale}
+                  onClose={() => setShowSearchResults(false)}
+                  query={searchQuery}
+                />
               </div>
             </div>
-            <div className="flex items-center space-x-2">
+            {/* Mobile search icon - positioned correctly */}
+            <button
+              aria-label="Search"
+              className="flex min-h-[40px] min-w-[40px] items-center justify-center rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:hidden dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
+              onClick={() => searchInputRef.current?.focus()}
+              type="button"
+            >
+              <Search className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+            </button>
+            <div className="flex items-center space-x-1 sm:space-x-2">
               <ThemeToggle />
               <button
                 aria-label="Notifications"
-                className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
+                className="hidden min-h-[44px] min-w-[44px] items-center justify-center rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:flex dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
+                type="button"
               >
                 <Bell className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                 <span className="sr-only">Notifications</span>
               </button>
               <button
                 aria-label="Help"
-                className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
+                className="hidden min-h-[44px] min-w-[44px] items-center justify-center rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:flex dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
+                type="button"
               >
                 <HelpCircle className="h-5 w-5 text-gray-600 dark:text-gray-400" />
               </button>
               <Link
-                className="px-2 font-medium text-gray-800 text-sm hover:text-teal-600 hover:underline dark:text-gray-200 dark:hover:text-teal-400"
+                className="hidden px-2 font-medium text-gray-800 text-sm hover:text-teal-600 hover:underline md:inline-block dark:text-gray-200 dark:hover:text-teal-400"
                 href={`/${locale}/docs`}
               >
                 Docs
               </Link>
-              <button className="rounded-lg bg-teal-500 px-4 py-1.5 font-medium text-sm text-white shadow-sm transition-colors hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700">
+              <button
+                className="rounded-lg bg-teal-500 px-3 py-1.5 font-medium text-white text-xs shadow-sm transition-colors hover:bg-teal-600 sm:px-4 sm:text-sm dark:bg-teal-600 dark:hover:bg-teal-700"
+                type="button"
+              >
                 Upgrade
               </button>
             </div>
           </div>
         </header>
 
-        {/* Breadcrumbs */}
-        <div className="border-gray-200 border-b bg-gray-50 px-4 py-2 md:px-8 dark:border-gray-800 dark:bg-gray-900/50">
+        {/* Breadcrumbs - Hidden on mobile */}
+        <div className="hidden border-gray-200 border-b bg-gray-50 px-4 py-2 sm:block md:px-8 dark:border-gray-800 dark:bg-gray-900/50">
           <Breadcrumbs />
         </div>
 
         {/* Page content - Add padding for mobile bottom nav */}
-        <main className="flex-1 p-4 pb-20 md:p-8 md:pb-8" id="main-content">
+        <main
+          className="flex-1 overflow-y-auto p-3 pb-28 sm:p-4 sm:pb-24 md:p-8 md:pb-8"
+          id="main-content"
+        >
           {children}
         </main>
       </div>

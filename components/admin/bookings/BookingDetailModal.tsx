@@ -1,6 +1,5 @@
 'use client'
 
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { format } from 'date-fns'
 import {
   AlertCircle,
@@ -16,7 +15,7 @@ import {
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import type { Database } from '@/lib/database.types'
+import { createClient } from '@/lib/supabase/client'
 
 type BookingDetailModalProps = {
   booking: any
@@ -27,7 +26,7 @@ export default function BookingDetailModal({ booking, onClose }: BookingDetailMo
   const [loading, setLoading] = useState(false)
   const [newStatus, setNewStatus] = useState(booking.status)
   const router = useRouter()
-  const supabase = createClientComponentClient<Database>()
+  const supabase = createClient()
 
   const handleStatusChange = async () => {
     if (newStatus === booking.status) {
@@ -92,6 +91,7 @@ export default function BookingDetailModal({ booking, onClose }: BookingDetailMo
           <button
             className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
             onClick={onClose}
+            type="button"
           >
             <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
           </button>
@@ -120,6 +120,7 @@ export default function BookingDetailModal({ booking, onClose }: BookingDetailMo
                   className="rounded-lg bg-purple-600 px-4 py-2 font-medium text-white transition-colors hover:bg-purple-700 disabled:opacity-50"
                   disabled={loading}
                   onClick={handleStatusChange}
+                  type="button"
                 >
                   Update Status
                 </button>
@@ -325,11 +326,17 @@ export default function BookingDetailModal({ booking, onClose }: BookingDetailMo
         <div className="border-gray-200 border-t p-6 dark:border-gray-700">
           <div className="flex justify-between">
             <div className="flex gap-2">
-              <button className="rounded-lg bg-purple-600 px-4 py-2 font-medium text-white transition-colors hover:bg-purple-700">
+              <button
+                className="rounded-lg bg-purple-600 px-4 py-2 font-medium text-white transition-colors hover:bg-purple-700"
+                type="button"
+              >
                 <MessageSquare className="mr-2 inline h-4 w-4" />
                 Contact User
               </button>
-              <button className="rounded-lg bg-purple-600 px-4 py-2 font-medium text-white transition-colors hover:bg-purple-700">
+              <button
+                className="rounded-lg bg-purple-600 px-4 py-2 font-medium text-white transition-colors hover:bg-purple-700"
+                type="button"
+              >
                 <MessageSquare className="mr-2 inline h-4 w-4" />
                 Contact Provider
               </button>
@@ -338,6 +345,7 @@ export default function BookingDetailModal({ booking, onClose }: BookingDetailMo
             <button
               className="rounded-lg px-4 py-2 text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
               onClick={onClose}
+              type="button"
             >
               Close
             </button>

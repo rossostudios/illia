@@ -1,35 +1,37 @@
 {
   "nav": {
-    "features": "Características",
+    "features": "Cómo funciona",
     "pricing": "Precios",
-    "docs": "Docs",
-    "signin": "Iniciar Sesión",
-    "getStarted": "Empezar"
+    "docs": "Recursos",
+    "community": "Comunidad",
+    "signin": "Iniciar sesión",
+    "getStarted": "Comenzar",
+    "caseStudies": "Casos de éxito"
   },
   "hero": {
     "headline": {
-      "find": "Encuentra",
-      "trusted": "Confiables",
-      "serviceProviders": "Proveedores de Servicios"
+      "find": "Construye tu",
+      "trusted": "equipo doméstico confiable",
+      "serviceProviders": "con la concierge local de Illia"
     },
-    "headlineAccent": "Equipo de Confianza",
-    "subtitle": "Automatiza tu configuración de expatriado en Medellín o Florianópolis—encuentra, empareja y conecta con limpiadores y cocineros verificados en segundos.",
-    "badge": "Confiado por miles en tu área",
+    "headlineAccent": "Concierge Illia",
+    "subtitle": "Illia conecta a expatriados con limpiadores, cocineros y personal doméstico con verificación de antecedentes en Medellín y Florianópolis. Comparte tu rutina una vez y recibe intros seleccionadas en 24 horas.",
+    "badge": "Inscripciones abiertas en Medellín y Floripa",
     "cta": {
-      "startExploring": "Comenzar a Explorar",
-      "learnMore": "Saber Más"
+      "startExploring": "Haz el quiz de 2 minutos",
+      "learnMore": "Ver coincidencias de ejemplo"
     },
     "stats": {
-      "activeUsers": "Usuarios Activos",
-      "averageRating": "Calificación Promedio",
-      "verifiedProviders": "Proveedores Verificados",
-      "responseTime": "Tiempo de Respuesta"
+      "activeUsers": "Intros entregadas",
+      "averageRating": "Calificación promedio de proveedores",
+      "verifiedProviders": "Socios con antecedentes verificados",
+      "responseTime": "Tiempo medio de intro"
     },
     "floating": {
-      "verified": "Verificado",
-      "backgroundChecked": "Antecedentes Revisados",
-      "rating": "Calificación 4.9",
-      "reviews": "De 2000+ Reseñas"
+      "verified": "Antecedentes verificados",
+      "backgroundChecked": "Identidad y referencias comprobadas",
+      "rating": "Amado por la comunidad",
+      "reviews": "Acompañamiento local en cada paso"
     },
     "startFreeTrial": "Prueba Gratuita",
     "watchDemo": "Ver Demo",
@@ -42,35 +44,56 @@
     "sidebarSettings": "Configuración",
     "demoTitle": "Limpiador semanal en El Poblado",
     "viewAll": "Ver Todas las Coincidencias",
-    "view": "Ver"
+    "view": "Ver",
+    "categories": {
+      "housekeeping": "Personal de aseo",
+      "childcare": "Cuidado infantil y niñeras",
+      "culinary": "Chefs personales",
+      "pets": "Cuidado de mascotas",
+      "errands": "Diligencias y conductores"
+    },
+    "card": {
+      "badge": "Match destacado",
+      "title": "Contratación guiada en 24 horas",
+      "body": "Comparte tu brief y coordinamos intros, días de prueba y onboarding listo para nómina.",
+      "cta": "Ver perfiles ejemplo"
+    }
   },
   "features": {
-    "title": "Todo lo que Necesitas para una Vida de Expatriado sin Problemas",
-    "subtitle": "Herramientas seleccionadas para que los expatriados encuentren y se conecten con ayuda doméstica confiable—rápido y seguro.",
+    "title": "Cómo Illia arma tu soporte en casa",
+    "subtitle": "Combinamos scouts locales con puntuación de IA para que no empieces desde cero.",
     "lightning": {
-      "title": "Coincidencias Relámpago",
-      "description": "Descubre y empareja con profesionales verificados en segundos—curados por IA para tus necesidades."
+      "title": "Cuestionario de 2 minutos",
+      "description": "Cuéntanos tu horario, presupuesto y requisitos. Lo traducimos para el mercado local."
     },
     "smart": {
-      "title": "Emparejamiento Inteligente",
-      "description": "La IA califica a los proveedores según el ajuste (nivel de inglés, tarifas, reseñas)—sin más conjeturas."
+      "title": "Intros seleccionadas",
+      "description": "Recibe tres proveedores elegidos según inglés, experiencia y encaje."
     },
     "vetted": {
-      "title": "Perfiles Verificados",
-      "description": "Detalles completos: Biografías, tarifas, fotos y reseñas de la comunidad—todo verificado."
+      "title": "Verificación completa",
+      "description": "Cada recomendación incluye identificación, referencias y feedback de la comunidad."
     },
     "insights": {
-      "title": "Insights de Coincidencias",
-      "description": "Rastrea tus contrataciones y ahorros con paneles simples—ve el ROI en tiempo real."
+      "title": "Precios transparentes",
+      "description": "Consulta tarifas en COP o BRL y qué incluye antes de pasar a WhatsApp."
     },
     "privacy": {
-      "title": "Privacidad Primero",
-      "description": "Seguro y conforme—tus datos (y coincidencias) protegidos como familia."
+      "title": "Guía de nómina y contratos",
+      "description": "Compartimos contratos, seguro y checklists de nómina para que contrates en Colombia o Brasil sin sorpresas."
     },
     "city": {
-      "title": "Conocedor de la Ciudad",
-      "description": "Adaptado para Medellín y Florianópolis—información local de redes de expatriados."
+      "title": "Concierge local",
+      "description": "Recibe consejos sobre barrios, días de prueba y contratos de expatriados como tú."
+    },
+    "concierge": {
+      "title": "Equipo humano",
+      "description": "Especialistas bilingües en Medellín y Floripa coordinan horarios, días de prueba y onboarding en el canal que ya usas."
     }
+  },
+  "faq": {
+    "title": "Preguntas que los expatriados hacen antes de contratar con Illia",
+    "subtitle": "Respuestas directas de nuestro equipo concierge."
   },
   "dashboard": {
     "welcome": "Bienvenido de nuevo",
@@ -170,5 +193,206 @@
     "open": "Abrir",
     "yes": "Sí",
     "no": "No"
+  },
+  "pricing": {
+    "title": "Planes concierge pensados para hogares expats",
+    "subtitle": "Empieza con coincidencias curadas y escala cuando necesites soporte continuo.",
+    "cta": "Hablar con concierge",
+    "contact": "Agenda una llamada de 15 minutos",
+    "note": "Todos los planes incluyen verificaciones, referencias y soporte bilingüe.",
+    "tiers": {
+      "starter": {
+        "name": "Concierge inicial",
+        "price": "USD $99",
+        "period": "por ciclo de matching",
+        "tagline": "Necesito un perfil vetado ya",
+        "features": {
+          "intros": "2 presentaciones de proveedores seleccionados",
+          "vetting": "Verificación de identidad, antecedentes y referencias",
+          "playbook": "Checklist de día de prueba y guiones de entrevista",
+          "support": "1 semana de seguimiento concierge"
+        }
+      },
+      "settled": {
+        "name": "Hogar estable",
+        "price": "USD $249",
+        "period": "por mes",
+        "tagline": "Mantén varios servicios funcionando",
+        "features": {
+          "coverage": "Reemplazos y swaps ilimitados",
+          "calendar": "Calendario compartido + recordatorios",
+          "advisory": "Guía de nómina, seguro y cumplimiento",
+          "community": "Biblioteca de proveedores exclusiva de la comunidad"
+        }
+      },
+      "executive": {
+        "name": "Reubicación ejecutiva",
+        "price": "USD $499",
+        "period": "por mes",
+        "tagline": "Acompañamiento premium para recién llegados",
+        "features": {
+          "arrival": "Recogida en aeropuerto + mercado de bienvenida",
+          "setup": "Puesta a punto del hogar para servicios, limpieza y cocina",
+          "docs": "Referencias de visa y concierge legal",
+          "onCall": "Fixer bilingüe on-call 7 días a la semana"
+        }
+      }
+    },
+    "badge": "Planes concierge",
+    "popular": "Más elegido"
+  },
+  "caseStudies": {
+    "title": "Así cubrimos roles del hogar en Medellín y Floripa",
+    "subtitle": "Tres briefs reales que cerramos en menos de 48 horas.",
+    "cta": "Comparte tu brief",
+    "sections": {
+      "family": {
+        "headline": "Familia de cuatro en El Poblado",
+        "context": "Recién llegados con dos niños necesitaban empleada interna que apoyara con rutas escolares y comida.",
+        "matches": [
+          "Presentamos a Ana (7 años con familias bilingües)",
+          "Sugerimos a Luisa como soporte de fin de semana",
+          "Coordinamos dos días de prueba y legalizamos la contratación"
+        ],
+        "result": "Contrataron a Ana en 36 horas y dejaron a Luisa para turnos de fines de semana y festivos."
+      },
+      "remote": {
+        "headline": "Pareja remota en Laureles",
+        "context": "Buscaban limpieza profunda semanal y paseador bilingüe para un perro reactivo.",
+        "matches": [
+          "Curamos dúo de limpieza con referencias en manejo de mascotas",
+          "Reservamos paseador con certificación en entrenamiento positivo",
+          "Coordinamos entrega de llaves y suscripción recurrente"
+        ],
+        "result": "Ahora el hogar funciona con limpieza martes + paseo canino viernes, gestionado con recordatorios Illia."
+      },
+      "founder": {
+        "headline": "Founder aterrizando en Floripa",
+        "context": "Quería chef para almuerzos saludables y niñera part-time en portugués e inglés.",
+        "matches": [
+          "Agendamos con la chef Daniela y planificación plant-based",
+          "Match con la niñera Júlia de enfoque Montessori",
+          "Compartimos plantillas de nómina acorde a la ley doméstica brasileña"
+        ],
+        "result": "Firmaron ambos servicios en 5 días con concierge Illia gestionando contratos y onboarding."
+      }
+    },
+    "metrics": [
+      {
+        "label": "Tiempo promedio al primer intro",
+        "value": "18 h"
+      },
+      {
+        "label": "Conversión de prueba a contratación",
+        "value": "82%"
+      },
+      {
+        "label": "Proveedores activos en roster",
+        "value": "170+"
+      }
+    ],
+    "badge": "Illia Concierge",
+    "explore": "Explorar proveedores",
+    "outcome": "Resultado"
+  },
+  "carousel": {
+    "badge": "Cómo funciona concierge",
+    "title": "Cada contratación avanza con Illia",
+    "subtitle": "Explora los momentos clave para ver cómo te acompañamos en cada paso.",
+    "cta": "Ver proveedores",
+    "slides": {
+      "housekeeper": {
+        "label": "Empleadas internas",
+        "title": "Intros curadas de empleadas internas",
+        "body": "Seleccionamos profesionales bilingües con referencias verificadas y alineamos rutinas antes de presentarlos.",
+        "badge": "Vetadas y listas",
+        "mediaAlt": "Illia mostrando perfiles verificados de empleadas"
+      },
+      "chef": {
+        "label": "Chefs personales",
+        "title": "Menús semanales sin improvisar",
+        "body": "El concierge planifica menús, registra dietas y coordina pruebas para que solo pruebes y apruebes.",
+        "badge": "Planificación de menús",
+        "mediaAlt": "Concierge Illia organizando pruebas con chefs"
+      },
+      "concierge": {
+        "label": "Soporte concierge",
+        "title": "Concierge on-call para cualquier ajuste",
+        "body": "¿Necesitas reemplazos o cambios de horario? Actualizamos el roster y escribimos a los proveedores por ti.",
+        "badge": "Soporte constante",
+        "mediaAlt": "Concierge Illia coordinando con proveedores"
+      }
+    }
+  },
+  "community": {
+    "badge": "Community Illia",
+    "heading": "Comunidad de creadores",
+    "subheading": "Comparte estrategias, lanza nuevas ideas y conéctate con fundadores que construyen sobre Illia — la herramienta de colaboración impulsada por IA.",
+    "quickLinks": {
+      "events": "Eventos y espacios"
+    },
+    "actions": {
+      "startThread": "Crear hilo",
+      "loadMore": "Ver más hilos"
+    },
+    "filters": {
+      "search": "Busca por título o palabra clave…",
+      "categories": {
+        "all": "Todos los temas",
+        "general": "General",
+        "services": "Servicios",
+        "recommendations": "Recomendaciones",
+        "expat": "Vida expat",
+        "housing": "Vivienda",
+        "visa": "Visa"
+      },
+      "cities": {
+        "all": "Todas las ciudades"
+      }
+    },
+    "labels": {
+      "pinned": "Fijado"
+    },
+    "loading": {
+      "more": "Cargando más"
+    },
+    "members": {
+      "heading": "Directorio de miembros",
+      "subtitle": "Encuentra colaboradores, envía mensajes directos o abre un nuevo espacio de proyecto.",
+      "actions": {
+        "follow": "Seguir",
+        "viewAll": "Ver más creadores",
+        "exhausted": "Ya viste a todos los creadores"
+      }
+    },
+    "notifications": {
+      "heading": "Actividad en vivo",
+      "subtitle": "Mantente al tanto de nuevas respuestas, mensajes y lanzamientos.",
+      "openDrawer": "Abrir panel de notificaciones"
+    },
+    "events": {
+      "heading": "Próximos espacios",
+      "subtitle": "Reserva tu lugar en AMAs, talleres y laboratorios.",
+      "actions": {
+        "rsvp": "Confirmar asistencia",
+        "viewAll": "Ver calendario completo"
+      }
+    }
+  },
+  "community_teaser": {
+    "headline": "Desbloquea la comunidad Illia",
+    "description": "Colabora con fundadores que escalan experiencias impulsadas por IA en Medellín y Florianópolis. Accede a playbooks probados, operadores verificados y laboratorios en vivo.",
+    "cta": {
+      "join": "Únete a Illia",
+      "membership": "Explora la membresía"
+    },
+    "stats": {
+      "threads": "Hilos publicados",
+      "threads_desc": "Playbooks compartidos en los últimos 90 días",
+      "intros": "Intros entre operadores",
+      "intros_desc": "Intros cálidas entre miembros este trimestre",
+      "events": "Sesiones en vivo",
+      "events_desc": "Labs y AMAs organizados hasta ahora"
+    }
   }
 }

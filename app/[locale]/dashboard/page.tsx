@@ -218,25 +218,25 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Hero Section with Fixed Search */}
-      <div className="rounded-xl border border-gray-100 bg-gradient-to-br from-teal-50/50 via-white to-blue-50/50 p-6 md:p-8 dark:border-gray-800 dark:from-gray-900/50 dark:via-gray-900 dark:to-black/50">
+      <div className="rounded-lg border border-gray-100 bg-gradient-to-br from-teal-50/50 via-white to-blue-50/50 p-4 md:rounded-xl md:p-6 lg:p-8 dark:border-gray-800 dark:from-gray-900/50 dark:via-gray-900 dark:to-black/50">
         <div className="mx-auto max-w-5xl">
           {/* Hero Header */}
-          <div className="mb-6 text-center">
-            <h1 className="mb-2 animate-fade-in font-bold text-2xl text-gray-900 md:text-3xl dark:text-white">
+          <div className="mb-4 text-center md:mb-6">
+            <h1 className="mb-2 animate-fade-in font-bold text-gray-900 text-xl sm:text-2xl md:text-3xl dark:text-white">
               Welcome back, {user?.email?.split('@')[0] || 'Explorer'}!
             </h1>
-            <p className="text-base text-gray-700 md:text-lg dark:text-gray-300">
+            <p className="px-2 text-gray-700 text-sm sm:text-base md:text-lg dark:text-gray-300">
               Ready to find your ideal home helper in{' '}
               {selectedCity === 'medellin' ? 'Medellín' : 'Florianópolis'}?
             </p>
           </div>
 
           {/* Enhanced Search Bar */}
-          <div className="relative mx-auto mb-6 max-w-3xl">
+          <div className="relative mx-auto mb-4 max-w-3xl px-2 sm:px-0 md:mb-6">
             <div className="relative">
-              <Search className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-4 h-5 w-5 text-gray-600 dark:text-gray-400" />
+              <Search className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-3 h-4 w-4 text-gray-600 sm:left-4 sm:h-5 sm:w-5 dark:text-gray-400" />
               <input
                 aria-activedescendant={
                   selectedSuggestionIndex >= 0 ? `suggestion-${selectedSuggestionIndex}` : undefined
@@ -245,7 +245,7 @@ export default function DashboardPage() {
                 aria-controls="search-suggestions"
                 aria-expanded={showSuggestions}
                 aria-label="Search for home services"
-                className="w-full rounded-full border border-gray-200 bg-white py-4 pr-24 pl-12 text-gray-900 shadow-md transition-all placeholder:text-gray-500 focus:border-transparent focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:placeholder:text-gray-400"
+                className="w-full rounded-full border border-gray-200 bg-white py-3 pr-20 pl-10 text-gray-900 text-sm shadow-md transition-all placeholder:text-gray-500 focus:border-transparent focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:py-4 sm:pr-24 sm:pl-12 sm:text-base dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:placeholder:text-gray-400"
                 id={searchInputId}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -265,15 +265,18 @@ export default function DashboardPage() {
                     setShowSuggestions(false)
                     searchRef.current?.focus()
                   }}
+                  type="button"
                 >
                   <X className="h-4 w-4" />
                 </button>
               )}
               <button
-                className="-translate-y-1/2 absolute top-1/2 right-2 rounded-full bg-teal-600 px-5 py-2 font-medium text-white shadow-sm transition-all hover:bg-teal-700 focus:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:bg-teal-500 dark:focus:bg-teal-600 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-teal-600"
+                className="-translate-y-1/2 absolute top-1/2 right-2 flex min-w-[60px] items-center justify-center rounded-full bg-teal-600 px-4 py-1.5 font-medium text-sm text-white shadow-sm transition-all hover:bg-teal-700 focus:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:px-5 sm:py-2 sm:text-base dark:bg-teal-500 dark:focus:bg-teal-600 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-teal-600"
                 onClick={() => handleSearch()}
+                type="button"
               >
-                Search
+                <span className="hidden sm:inline">Search</span>
+                <Search className="h-4 w-4 sm:hidden" />
               </button>
             </div>
 
@@ -308,6 +311,7 @@ export default function DashboardPage() {
                           handleSearch(suggestion)
                         }}
                         role="option"
+                        type="button"
                       >
                         <Search className="mr-2 inline h-3 w-3 text-gray-500 dark:text-gray-400" />
                         {suggestion}
@@ -327,6 +331,7 @@ export default function DashboardPage() {
                         localStorage.removeItem('recentSearches')
                         setShowSuggestions(false)
                       }}
+                      type="button"
                     >
                       Clear recent searches
                     </button>
@@ -337,25 +342,27 @@ export default function DashboardPage() {
           </div>
 
           {/* City Selector */}
-          <div className="flex justify-center gap-2">
+          <div className="flex justify-center gap-2 px-2 sm:px-0">
             <button
-              className={`rounded-lg px-4 py-2 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+              className={`rounded-lg px-3 py-2 font-medium text-sm transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:px-4 sm:text-base ${
                 selectedCity === 'medellin'
                   ? 'bg-teal-600 text-white shadow-lg dark:bg-teal-600'
                   : 'border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800'
               }`}
               onClick={() => setSelectedCity('medellin')}
+              type="button"
             >
               <MapPin className="mr-1 inline h-4 w-4" />
               Medellín
             </button>
             <button
-              className={`rounded-lg px-4 py-2 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+              className={`rounded-lg px-3 py-2 font-medium text-sm transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:px-4 sm:text-base ${
                 selectedCity === 'florianopolis'
                   ? 'bg-teal-600 text-white shadow-lg dark:bg-teal-600'
                   : 'border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800'
               }`}
               onClick={() => setSelectedCity('florianopolis')}
+              type="button"
             >
               <MapPin className="mr-1 inline h-4 w-4" />
               Florianópolis
@@ -364,18 +371,18 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Main Grid */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      {/* Main Grid - Stack on mobile */}
+      <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-3">
         {/* Quick Matches Section */}
         <div className="lg:col-span-2">
-          <div className="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <div className="border-gray-200 border-b p-6 dark:border-gray-700">
+          <div className="rounded-lg border border-gray-200 bg-white shadow-sm md:rounded-xl dark:border-gray-800 dark:bg-gray-900">
+            <div className="border-gray-200 border-b p-4 md:p-6 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="font-semibold text-gray-900 text-xl dark:text-white">
+                  <h2 className="font-semibold text-gray-900 text-lg md:text-xl dark:text-white">
                     Your Quick Matches
                   </h2>
-                  <p className="mt-1 text-gray-600 text-sm dark:text-gray-400">
+                  <p className="mt-1 text-gray-600 text-xs sm:text-sm dark:text-gray-400">
                     AI-suggested providers based on your preferences
                   </p>
                 </div>
@@ -388,33 +395,33 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="space-y-4 p-6">
+            <div className="space-y-3 p-4 md:space-y-4 md:p-6">
               {SAMPLE_PROVIDERS.map((provider) => (
                 <div
-                  className="group cursor-pointer rounded-lg border border-gray-200 bg-white p-4 transition-all duration-200 focus-within:scale-[1.02] focus-within:shadow-lg focus-within:ring-2 focus-within:ring-teal-500 focus-within:ring-offset-2 hover:scale-[1.02] hover:shadow-lg dark:border-gray-800 dark:bg-gray-950/50 dark:focus-within:ring-teal-400 dark:focus-within:ring-offset-gray-900"
+                  className="group cursor-pointer rounded-lg border border-gray-200 bg-white p-3 transition-all duration-200 hover:shadow-lg md:p-4 dark:border-gray-800 dark:bg-gray-950/50"
                   key={provider.id}
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-3 md:gap-4">
                     <img
                       alt={`${provider.name} - ${provider.service} provider in ${provider.location}`}
-                      className="h-16 w-16 rounded-full object-cover ring-2 ring-white group-hover:ring-teal-100 dark:ring-gray-700 dark:group-hover:ring-teal-900"
+                      className="h-12 w-12 flex-shrink-0 rounded-full object-cover ring-2 ring-white group-hover:ring-teal-100 sm:h-14 sm:w-14 md:h-16 md:w-16 dark:ring-gray-700 dark:group-hover:ring-teal-900"
                       src={provider.photo}
                     />
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between">
-                        <div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
-                            <h3 className="font-semibold text-gray-900 dark:text-white">
+                            <h3 className="truncate font-semibold text-gray-900 text-sm sm:text-base dark:text-white">
                               {provider.name}
                             </h3>
                             {provider.verified && (
                               <CheckCircle className="h-4 w-4 text-teal-600 dark:text-teal-400" />
                             )}
                           </div>
-                          <p className="text-gray-700 text-sm dark:text-gray-300">
+                          <p className="text-gray-700 text-xs sm:text-sm dark:text-gray-300">
                             {provider.service}
                           </p>
-                          <div className="mt-2 flex items-center gap-4 text-gray-600 text-xs dark:text-gray-400">
+                          <div className="mt-2 flex flex-wrap items-center gap-2 text-gray-600 text-xs sm:gap-4 dark:text-gray-400">
                             <span className="flex items-center gap-1">
                               <MapPin className="h-3 w-3 text-gray-500 dark:text-gray-400" />
                               {provider.location}
@@ -427,22 +434,22 @@ export default function DashboardPage() {
                               {provider.rate}
                             </span>
                           </div>
-                          <div className="mt-2 flex gap-2">
+                          <div className="mt-2 flex flex-wrap gap-1 sm:gap-2">
                             {provider.specialties.map((specialty, idx) => (
                               <span
-                                className="rounded bg-teal-50 px-2 py-1 font-medium text-gray-700 text-xs dark:bg-teal-900/20 dark:text-gray-300"
+                                className="rounded bg-teal-50 px-1.5 py-0.5 font-medium text-[10px] text-gray-700 sm:px-2 sm:py-1 sm:text-xs dark:bg-teal-900/20 dark:text-gray-300"
                                 key={idx}
                               >
                                 {specialty}
                               </span>
                             ))}
                           </div>
-                          {/* Why this match? */}
-                          <details className="mt-3">
+                          {/* Why this match? - Hidden on mobile */}
+                          <details className="mt-3 hidden sm:block">
                             <summary className="cursor-pointer font-medium text-teal-600 text-xs hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300">
                               Why this match? →
                             </summary>
-                            <div className="mt-2 rounded bg-teal-50 p-2 text-gray-700 text-xs dark:bg-teal-900/20 dark:text-gray-300">
+                            <div className="mt-2 rounded bg-teal-50 p-2 text-[11px] text-gray-700 sm:text-xs dark:bg-teal-900/20 dark:text-gray-300">
                               <span className="font-medium">High Match Score:</span>
                               <ul className="mt-1 ml-2 space-y-0.5">
                                 <li>
@@ -459,13 +466,14 @@ export default function DashboardPage() {
                           </details>
                         </div>
                         <button
-                          className={`rounded-lg px-4 py-2 font-medium transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                          className={`flex-shrink-0 rounded-lg px-3 py-1.5 font-medium text-xs transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:px-4 sm:py-2 sm:text-sm ${
                             membershipTier === 'premium' || matchesUsed < matchesLimit
                               ? 'bg-teal-600 text-white shadow-sm hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600'
                               : 'cursor-not-allowed bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300'
                           }`}
                           disabled={membershipTier === 'free' && matchesUsed >= matchesLimit}
                           onClick={() => handleRequestIntro(provider.id)}
+                          type="button"
                         >
                           {membershipTier === 'premium'
                             ? 'Request Intro'
@@ -503,10 +511,10 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Right Column */}
-        <div className="space-y-6">
+        {/* Right Column - Membership, Community, etc */}
+        <div className="space-y-4 md:space-y-6">
           {/* Membership Card */}
-          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:rounded-xl md:p-6 dark:border-gray-800 dark:bg-gray-900">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="font-semibold text-gray-900 dark:text-white">Your Membership</h3>
               <span
@@ -556,7 +564,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Community Highlights */}
-          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:rounded-xl md:p-6 dark:border-gray-800 dark:bg-gray-900">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="font-semibold text-gray-900 dark:text-white">Community Buzz</h3>
               <Link
@@ -619,13 +627,19 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Active Users */}
-          <div className="rounded-xl border border-teal-200 bg-gradient-to-br from-teal-50 to-white p-4 dark:border-teal-800 dark:from-teal-900/20 dark:to-gray-900">
+          {/* Active Users - Compact on mobile */}
+          <div className="rounded-lg border border-teal-200 bg-gradient-to-br from-teal-50 to-white p-3 md:rounded-xl md:p-4 dark:border-teal-800 dark:from-teal-900/20 dark:to-gray-900">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium text-gray-900 text-sm dark:text-white">Active Now</p>
-                <p className="font-bold text-2xl text-teal-600 dark:text-teal-400">152</p>
-                <p className="text-gray-600 text-xs dark:text-gray-400">expats online</p>
+                <p className="font-medium text-gray-900 text-xs sm:text-sm dark:text-white">
+                  Active Now
+                </p>
+                <p className="font-bold text-teal-600 text-xl sm:text-2xl dark:text-teal-400">
+                  152
+                </p>
+                <p className="text-[11px] text-gray-600 sm:text-xs dark:text-gray-400">
+                  expats online
+                </p>
               </div>
               <Users className="h-8 w-8 text-teal-600 opacity-50 dark:text-teal-400" />
             </div>

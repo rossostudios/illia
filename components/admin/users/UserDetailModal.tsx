@@ -1,6 +1,5 @@
 'use client'
 
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { format } from 'date-fns'
 import {
   Activity,
@@ -17,7 +16,7 @@ import {
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import type { Database } from '@/lib/database.types'
+import { createClient } from '@/lib/supabase/client'
 
 type UserDetailModalProps = {
   user: any
@@ -27,7 +26,7 @@ type UserDetailModalProps = {
 export default function UserDetailModal({ user, onClose }: UserDetailModalProps) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const supabase = createClientComponentClient<Database>()
+  const supabase = createClient()
 
   const handleSuspendUser = async () => {
     if (!confirm('Are you sure you want to suspend this user?')) {
@@ -106,6 +105,7 @@ export default function UserDetailModal({ user, onClose }: UserDetailModalProps)
           <button
             className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
             onClick={onClose}
+            type="button"
           >
             <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
           </button>
@@ -283,13 +283,22 @@ export default function UserDetailModal({ user, onClose }: UserDetailModalProps)
               Quick Actions
             </h3>
             <div className="flex flex-wrap gap-2">
-              <button className="rounded-lg bg-purple-100 px-3 py-1.5 font-medium text-purple-700 text-sm transition-colors hover:bg-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:hover:bg-purple-900/30">
+              <button
+                className="rounded-lg bg-purple-100 px-3 py-1.5 font-medium text-purple-700 text-sm transition-colors hover:bg-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:hover:bg-purple-900/30"
+                type="button"
+              >
                 View Bookings
               </button>
-              <button className="rounded-lg bg-purple-100 px-3 py-1.5 font-medium text-purple-700 text-sm transition-colors hover:bg-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:hover:bg-purple-900/30">
+              <button
+                className="rounded-lg bg-purple-100 px-3 py-1.5 font-medium text-purple-700 text-sm transition-colors hover:bg-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:hover:bg-purple-900/30"
+                type="button"
+              >
                 View Reviews
               </button>
-              <button className="rounded-lg bg-purple-100 px-3 py-1.5 font-medium text-purple-700 text-sm transition-colors hover:bg-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:hover:bg-purple-900/30">
+              <button
+                className="rounded-lg bg-purple-100 px-3 py-1.5 font-medium text-purple-700 text-sm transition-colors hover:bg-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:hover:bg-purple-900/30"
+                type="button"
+              >
                 Send Message
               </button>
             </div>
@@ -306,6 +315,7 @@ export default function UserDetailModal({ user, onClose }: UserDetailModalProps)
                     className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 font-medium text-white transition-colors hover:bg-purple-700 disabled:opacity-50"
                     disabled={loading}
                     onClick={handleMakeAdmin}
+                    type="button"
                   >
                     <Shield className="h-4 w-4" />
                     Make Admin
@@ -314,6 +324,7 @@ export default function UserDetailModal({ user, onClose }: UserDetailModalProps)
                     className="inline-flex items-center gap-2 rounded-lg bg-orange-600 px-4 py-2 font-medium text-white transition-colors hover:bg-orange-700 disabled:opacity-50"
                     disabled={loading}
                     onClick={handleSuspendUser}
+                    type="button"
                   >
                     <Ban className="h-4 w-4" />
                     Suspend
@@ -325,6 +336,7 @@ export default function UserDetailModal({ user, onClose }: UserDetailModalProps)
             <button
               className="rounded-lg px-4 py-2 text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
               onClick={onClose}
+              type="button"
             >
               Close
             </button>

@@ -1,15 +1,14 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
 import BookingManagementTable from '@/components/admin/bookings/BookingManagementTable'
 import BookingStats from '@/components/admin/bookings/BookingStats'
-import type { Database } from '@/lib/database.types'
+import { createClient } from '@/lib/supabase/server'
 
 export default async function BookingsPage({
   searchParams,
 }: {
-  searchParams: { status?: string; provider?: string; user?: string }
+  searchParams: Promise<{ status?: string; provider?: string; user?: string }>
 }) {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  const params = await searchParams
+  const supabase = await createClient()
 
   // Build query with filters
   let query = supabase.from('bookings').select(`
@@ -20,16 +19,16 @@ export default async function BookingsPage({
   `)
 
   // Apply filters
-  if (searchParams.status) {
-    query = query.eq('status', searchParams.status)
+  if (params.status) {
+    query = query.eq('status', params.status)
   }
 
-  if (searchParams.provider) {
-    query = query.eq('provider_id', searchParams.provider)
+  if (params.provider) {
+    query = query.eq('provider_id', params.provider)
   }
 
-  if (searchParams.user) {
-    query = query.eq('user_id', searchParams.user)
+  if (params.user) {
+    query = query.eq('user_id', params.user)
   }
 
   const { data: bookings } = await query.order('created_at', { ascending: false })
@@ -61,7 +60,7 @@ export default async function BookingsPage({
         <div className="flex gap-2">
           <select
             className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-            defaultValue={searchParams.status || 'all'}
+            defaultValue={params.status || 'all'}
             onChange={(e) => {
               const params = new URLSearchParams(window.location.search)
               if (e.target.value === 'all') {

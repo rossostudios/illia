@@ -250,6 +250,7 @@ export default function ProviderOnboardPage() {
                         setPhotoPreview(null)
                         setFormData({ ...formData, photo: null })
                       }}
+                      type="button"
                     >
                       <X className="h-4 w-4" />
                     </button>

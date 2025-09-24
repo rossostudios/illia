@@ -90,7 +90,9 @@ function ConfirmDialogModal({
     setMounted(true)
   }, [])
 
-  if (!mounted) return null
+  if (!mounted) {
+    return null
+  }
 
   const handleConfirm = async () => {
     setLoading(true)
@@ -134,6 +136,7 @@ function ConfirmDialogModal({
             <button
               className="absolute top-4 right-4 rounded-lg p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300"
               onClick={onCancel}
+              type="button"
             >
               <X className="h-5 w-5" />
             </button>
@@ -153,6 +156,7 @@ function ConfirmDialogModal({
                 className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2.5 font-medium text-gray-700 text-sm transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
                 disabled={loading}
                 onClick={onCancel}
+                type="button"
               >
                 {cancelText}
               </button>
@@ -160,6 +164,7 @@ function ConfirmDialogModal({
                 className={`flex-1 rounded-lg px-4 py-2.5 font-medium text-sm text-white transition-colors disabled:opacity-50 ${buttonColors[type]}`}
                 disabled={loading}
                 onClick={handleConfirm}
+                type="button"
               >
                 {loading ? 'Loading...' : confirmText}
               </button>

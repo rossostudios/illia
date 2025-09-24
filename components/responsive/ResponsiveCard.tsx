@@ -265,11 +265,11 @@ export function ResponsiveCard({
 
           {/* Expand indicator */}
           {expandable && (description || children) && (
-            <button className="mb-3 text-fluid-xs text-teal-600 hover:underline dark:text-teal-400"
-              onClick={(e) => {
+            <button className="mb-3 text-fluid-xs text-teal-600 hover:underline dark:text-teal-400" onClick={(e) => {
                 e.stopPropagation()
                 setIsExpanded(!isExpanded)
               }
+              type="button"
             >
               {isExpanded ? 'Show less' : 'Show more'}
             </button>

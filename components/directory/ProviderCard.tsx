@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Award, Clock, DollarSign, Globe, MapPin, Star, Users } from 'lucide-react'
+import { Award, Clock, DollarSign, Globe, MapPin, Star } from 'lucide-react'
 import Image from 'next/image'
 import type { Provider } from '@/data/mock-providers'
 

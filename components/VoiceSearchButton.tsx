@@ -166,7 +166,7 @@ export function VoiceSearchButton({
       {showTranscriptModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="relative w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-gray-900">
-            <button
+            <Button
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
               onClick={handleCloseTranscript}
             >

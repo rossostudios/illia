@@ -40,6 +40,7 @@ export default function PolarCheckoutButton({
       className={`${className} ${loading ? 'cursor-not-allowed opacity-50' : ''}`}
       disabled={loading}
       onClick={handleCheckout}
+      type="button"
     >
       {loading ? (
         <span className="flex items-center justify-center">

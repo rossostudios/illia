@@ -97,6 +97,7 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
               <button
                 className="text-gray-400 transition-colors hover:text-gray-600"
                 onClick={onClose}
+                type="button"
               >
                 <X className="h-6 w-6" />
               </button>
@@ -433,6 +434,7 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
             <button
               className="font-medium text-gray-600 transition-colors hover:text-gray-900"
               onClick={handleBack}
+              type="button"
             >
               Back
             </button>
@@ -454,6 +456,7 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                   (currentStep === 3 && !formData.termsAccepted)
                 }
                 onClick={handleNext}
+                type="button"
               >
                 {currentStep === 3 ? 'Finish' : 'Continue'}
               </button>
@@ -462,6 +465,7 @@ export default function OnboardingSurvey({ isOpen, onClose, onComplete }: Onboar
                 className="rounded-lg bg-gray-900 px-6 py-2.5 font-medium text-white transition-all hover:bg-gray-800 disabled:opacity-50"
                 disabled={isLoading}
                 onClick={handleFinish}
+                type="button"
               >
                 {isLoading ? 'Loading...' : 'Get Started'}
               </button>

@@ -307,6 +307,7 @@ export default function BookingCalendar({
             aria-label="Previous month"
             className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
             onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+            type="button"
           >
             <ChevronLeft className="h-5 w-5 text-gray-600 dark:text-gray-400" />
           </button>
@@ -317,6 +318,7 @@ export default function BookingCalendar({
             aria-label="Next month"
             className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
             onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+            type="button"
           >
             <ChevronRight className="h-5 w-5 text-gray-600 dark:text-gray-400" />
           </button>
@@ -368,6 +370,7 @@ export default function BookingCalendar({
                     disabled={isDisabled}
                     key={index}
                     onClick={() => !isDisabled && handleDateSelect(day)}
+                    type="button"
                   >
                     <span className="text-sm">{format(day, 'd')}</span>
                     {hasSlots && !isDisabled && (
@@ -407,6 +410,7 @@ export default function BookingCalendar({
                   disabled={!slot.isAvailable}
                   key={slot.id}
                   onClick={() => handleSlotSelect(slot)}
+                  type="button"
                 >
                   <Clock className="mr-1 inline h-3 w-3" />
                   {slot.startTime}

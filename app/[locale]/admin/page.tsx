@@ -67,13 +67,22 @@ export default async function AdminDashboard() {
           Quick Actions
         </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <button className="rounded-lg bg-blue-500 p-4 text-white transition hover:bg-blue-600">
+          <button
+            className="rounded-lg bg-blue-500 p-4 text-white transition hover:bg-blue-600"
+            type="button"
+          >
             Manage Users
           </button>
-          <button className="rounded-lg bg-green-500 p-4 text-white transition hover:bg-green-600">
+          <button
+            className="rounded-lg bg-green-500 p-4 text-white transition hover:bg-green-600"
+            type="button"
+          >
             View Bookings
           </button>
-          <button className="rounded-lg bg-purple-500 p-4 text-white transition hover:bg-purple-600">
+          <button
+            className="rounded-lg bg-purple-500 p-4 text-white transition hover:bg-purple-600"
+            type="button"
+          >
             Approve Providers
           </button>
         </div>

@@ -58,7 +58,10 @@ export default function AdminHeader({ adminUser }: AdminHeaderProps) {
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="relative rounded-lg p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
+          <button
+            className="relative rounded-lg p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+            type="button"
+          >
             <Bell className="h-5 w-5" />
             {notifications > 0 && (
               <span className="-top-1 -right-1 absolute flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white text-xs">

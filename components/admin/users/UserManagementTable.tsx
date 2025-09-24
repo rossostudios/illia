@@ -170,6 +170,7 @@ export default function UserManagementTable({ users }: UserManagementTableProps)
                       <button
                         className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                         onClick={() => setOpenDropdown(openDropdown === user.id ? null : user.id)}
+                        type="button"
                       >
                         <MoreVertical className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                       </button>
@@ -179,19 +180,29 @@ export default function UserManagementTable({ users }: UserManagementTableProps)
                           <button
                             className="flex w-full items-center gap-2 px-4 py-2 text-gray-700 text-sm hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
                             onClick={() => handleViewUser(user)}
+                            type="button"
                           >
                             <Eye className="h-4 w-4" />
                             View Details
                           </button>
-                          <button className="flex w-full items-center gap-2 px-4 py-2 text-gray-700 text-sm hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800">
+                          <button
+                            className="flex w-full items-center gap-2 px-4 py-2 text-gray-700 text-sm hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
+                            type="button"
+                          >
                             <Shield className="h-4 w-4" />
                             Make Admin
                           </button>
-                          <button className="flex w-full items-center gap-2 px-4 py-2 text-orange-600 text-sm hover:bg-gray-50 dark:text-orange-400 dark:hover:bg-gray-800">
+                          <button
+                            className="flex w-full items-center gap-2 px-4 py-2 text-orange-600 text-sm hover:bg-gray-50 dark:text-orange-400 dark:hover:bg-gray-800"
+                            type="button"
+                          >
                             <Ban className="h-4 w-4" />
                             Suspend Account
                           </button>
-                          <button className="flex w-full items-center gap-2 px-4 py-2 text-red-600 text-sm hover:bg-gray-50 dark:text-red-400 dark:hover:bg-gray-800">
+                          <button
+                            className="flex w-full items-center gap-2 px-4 py-2 text-red-600 text-sm hover:bg-gray-50 dark:text-red-400 dark:hover:bg-gray-800"
+                            type="button"
+                          >
                             <Trash2 className="h-4 w-4" />
                             Delete Account
                           </button>

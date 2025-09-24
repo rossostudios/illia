@@ -1,7 +1,5 @@
 'use client'
 
-import { Calendar, CheckCircle, Clock, DollarSign } from 'lucide-react'
-
 type BookingStatsProps = {
   stats: {
     total: number

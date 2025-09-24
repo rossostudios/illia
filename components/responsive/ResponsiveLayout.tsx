@@ -270,6 +270,7 @@ export function ResponsiveLayout({
           <button
             className="fixed right-6 bottom-24 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-teal-600 text-white shadow-lg"
             onClick={() => setShowMobileSidebar(true)}
+            type="button"
           >
             <svg
               aria-label="icon"

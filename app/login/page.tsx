@@ -46,6 +46,7 @@ function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [socialLoading, setSocialLoading] = useState<'apple' | 'google' | 'linkedin' | null>(null)
   const [error, setError] = useState<string | Error | null>(null)
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
 
@@ -83,6 +84,7 @@ function LoginForm() {
   }
 
   const handleSocialLogin = async (provider: 'google' | 'apple' | 'linkedin') => {
+    setSocialLoading(provider)
     try {
       // Note: Apple provider isn't directly supported by Supabase
       const supabase = createClient()
@@ -98,7 +100,9 @@ function LoginForm() {
     } catch (err: any) {
       setError(err)
       showError('Social login failed', err.message)
+      setSocialLoading(null)
     }
+    // Note: Don't reset socialLoading on success as the page will redirect
   }
 
   return (
@@ -119,28 +123,49 @@ function LoginForm() {
             {/* Social Login Buttons */}
             <div className="grid grid-cols-3 gap-3">
               <button
+                aria-busy={socialLoading === 'apple'}
                 aria-label="Sign in with Apple"
-                className="flex h-12 min-h-[44px] items-center justify-center rounded-lg border border-gray-300 bg-white transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
-                disabled={loading}
+                className="relative flex h-12 min-h-[44px] items-center justify-center rounded-lg border border-gray-300 bg-white transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
+                disabled={loading || socialLoading !== null}
                 onClick={() => handleSocialLogin('apple')}
+                type="button"
+                
               >
-                <FaApple className="text-xl" />
+                {socialLoading === 'apple' ? (
+                  <LoadingSpinner color="gray" size="sm" />
+                ) : (
+                  <FaApple className="text-xl" />
+                )}
               </button>
               <button
+                aria-busy={socialLoading === 'google'}
                 aria-label="Sign in with Google"
-                className="flex h-12 min-h-[44px] items-center justify-center rounded-lg border border-gray-300 bg-white transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
-                disabled={loading}
+                className="relative flex h-12 min-h-[44px] items-center justify-center rounded-lg border border-gray-300 bg-white transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
+                disabled={loading || socialLoading !== null}
                 onClick={() => handleSocialLogin('google')}
+                type="button"
+                
               >
-                <FaGoogle className="text-red-500 text-xl" />
+                {socialLoading === 'google' ? (
+                  <LoadingSpinner color="gray" size="sm" />
+                ) : (
+                  <FaGoogle className="text-red-500 text-xl" />
+                )}
               </button>
               <button
+                aria-busy={socialLoading === 'linkedin'}
                 aria-label="Sign in with LinkedIn"
-                className="flex h-12 min-h-[44px] items-center justify-center rounded-lg border border-gray-300 bg-white transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
-                disabled={loading}
+                className="relative flex h-12 min-h-[44px] items-center justify-center rounded-lg border border-gray-300 bg-white transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
+                disabled={loading || socialLoading !== null}
                 onClick={() => handleSocialLogin('linkedin')}
+                type="button"
+                
               >
-                <FaLinkedin className="text-blue-600 text-xl" />
+                {socialLoading === 'linkedin' ? (
+                  <LoadingSpinner color="gray" size="sm" />
+                ) : (
+                  <FaLinkedin className="text-blue-600 text-xl" />
+                )}
               </button>
             </div>
 
@@ -214,6 +239,8 @@ function LoginForm() {
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
                       className="-translate-y-1/2 absolute top-1/2 right-3 text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none dark:text-gray-400 dark:focus:text-gray-300 dark:hover:text-gray-300"
                       onClick={() => setShowPassword(!showPassword)}
+                      type="button"
+                      
                     >
                       {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
@@ -310,6 +337,7 @@ function LoginForm() {
                     }`}
                     key={index}
                     onClick={() => setCurrentTestimonial(index)}
+                    type="button"
                   />
                 ))}
               </div>

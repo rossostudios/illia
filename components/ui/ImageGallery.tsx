@@ -50,8 +50,8 @@ export function ImageGallery({ images, className = '', aspectRatio = 'auto' }: I
       {/* Gallery Grid */}
       <div className={`grid gap-2 ${className}`}>
         {images.length === 1 && (
-          <button className="group relative overflow-hidden rounded-lg"
-            onClick={() => openLightbox(0)}
+          <button className="group relative overflow-hidden rounded-lg" onClick={() => openLightbox(0)}
+            type="button"
           >
             <div className={`relative ${aspectRatioClasses[aspectRatio]}`}>
               <Image
@@ -72,9 +72,9 @@ export function ImageGallery({ images, className = '', aspectRatio = 'auto' }: I
         {images.length === 2 && (
           <div className="grid grid-cols-2 gap-2">
             {images.map((image, index) => (
-              <button className="group relative overflow-hidden rounded-lg"
-                key={index}
+              <button className="group relative overflow-hidden rounded-lg" key={index}
                 onClick={() => openLightbox(index)}
+                type="button"
               >
                 <div className={`relative ${aspectRatioClasses[aspectRatio]}`}>
                   <Image
@@ -99,9 +99,9 @@ export function ImageGallery({ images, className = '', aspectRatio = 'auto' }: I
             {images.slice(0, 5).map((image, index) => (
               <button className={`group relative overflow-hidden rounded-lg ${
                   index === 0 ? 'col-span-2 row-span-2' : ''
-                }`}
-                key={index}
+                }`} key={index}
                 onClick={() => openLightbox(index)}
+                type="button"
               >
                 <div className={`relative ${aspectRatioClasses[aspectRatio]} h-full`}>
                   <Image
@@ -263,12 +263,12 @@ function ImageLightbox({ images, selectedIndex, onClose, onNavigate }: ImageLigh
       >
         {/* Header */}
         <div className="relative z-10 flex items-center justify-between bg-gradient-to-b from-black/50 to-transparent p-4">
-          <button aria-label="Close"
-            className="rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50"
+          <button aria-label="Close" className="rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50"
             onClick={(e) => {
               e.stopPropagation()
               onClose()
             }
+            type="button"
           >
             <X className="h-5 w-5 text-white" />
           </button>
@@ -279,23 +279,23 @@ function ImageLightbox({ images, selectedIndex, onClose, onNavigate }: ImageLigh
             </span>
 
             <div className="flex gap-2">
-              <button aria-label="Zoom out"
-                className="rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50 disabled:opacity-50"
+              <button aria-label="Zoom out" className="rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50 disabled:opacity-50"
                 disabled={scale <= 1}
                 onClick={(e) => {
                   e.stopPropagation()
                   handleZoomOut()
                 }
+                
               >
                 <ZoomOut className="h-5 w-5 text-white" />
               </button>
-              <button aria-label="Zoom in"
-                className="rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50 disabled:opacity-50"
+              <button aria-label="Zoom in" className="rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50 disabled:opacity-50"
                 disabled={scale >= 3}
                 onClick={(e) => {
                   e.stopPropagation()
                   handleZoomIn()
                 }}
+                
               >
                 <ZoomIn className="h-5 w-5 text-white" />
               </button>
@@ -334,18 +334,18 @@ function ImageLightbox({ images, selectedIndex, onClose, onNavigate }: ImageLigh
 
           {/* Navigation arrows */}
           {selectedIndex > 0 && (
-            <button aria-label="Previous image"
-              className="absolute left-4 rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50"
+            <button aria-label="Previous image" className="absolute left-4 rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50"
               onClick={handlePrevious}
+              
             >
               <ChevronLeft className="h-6 w-6 text-white" />
             </button>
           )}
 
           {selectedIndex < images.length - 1 && (
-            <button aria-label="Next image"
-              className="absolute right-4 rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50"
+            <button aria-label="Next image" className="absolute right-4 rounded-full bg-black/30 p-2 transition-colors hover:bg-black/50"
               onClick={handleNext}
+              
             >
               <ChevronRight className="h-6 w-6 text-white" />
             </button>

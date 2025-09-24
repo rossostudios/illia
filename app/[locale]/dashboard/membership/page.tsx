@@ -185,6 +185,7 @@ export default function MembershipPage() {
                   : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
               }`}
               onClick={() => setBillingPeriod('monthly')}
+              type="button"
             >
               Monthly
             </button>
@@ -195,6 +196,7 @@ export default function MembershipPage() {
                   : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
               }`}
               onClick={() => setBillingPeriod('annual')}
+              type="button"
             >
               Annual
               <span className="rounded-full bg-sunset-500 px-2 py-0.5 text-white text-xs">
@@ -236,6 +238,7 @@ export default function MembershipPage() {
             <button
               className="w-full cursor-not-allowed rounded-lg bg-gray-100 py-3 font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300"
               disabled
+              type="button"
             >
               Current Plan
             </button>
@@ -504,6 +507,7 @@ export default function MembershipPage() {
                     }`}
                     key={index}
                     onClick={() => setCurrentTestimonial(index)}
+                    type="button"
                   />
                 ))}
               </div>
@@ -525,6 +529,7 @@ export default function MembershipPage() {
                 <button
                   className="flex w-full items-center justify-between px-6 py-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
                   onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
+                  type="button"
                 >
                   <span className="font-medium text-gray-900 dark:text-white">{faq.question}</span>
                   <ChevronDown

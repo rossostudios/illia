@@ -1,9 +1,7 @@
 import { Parkinsans, Poppins } from 'next/font/google'
 import './globals.css'
 import type { Metadata } from 'next'
-import { ConfirmDialogProvider } from '@/components/ui/ConfirmDialog'
-import { SonnerToaster } from '@/components/ui/SonnerSetup'
-import { ThemeProvider } from '@/hooks/use-theme'
+import { Providers } from './providers'
 
 const parkinsans = Parkinsans({
   variable: '--font-parkinsans',
@@ -105,19 +103,14 @@ export default function RootLayout({
   return (
     <html className={`${parkinsans.variable} ${poppins.variable}`}>
       <body className="flex min-h-screen flex-col font-body antialiased">
-        {/* Skip Navigation Link for Accessibility */}
+        {/* Skip Navigation Link for Accessibility - Hidden by default, shows on focus */}
         <a
-          className="sr-only-focusable absolute top-4 left-4 z-50 rounded-md bg-teal-600 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-teal-600 focus:px-4 focus:py-2 focus:text-white focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
           href="#main-content"
         >
           Skip to main content
         </a>
-        <ThemeProvider>
-          <ConfirmDialogProvider>
-            {children}
-            <SonnerToaster />
-          </ConfirmDialogProvider>
-        </ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

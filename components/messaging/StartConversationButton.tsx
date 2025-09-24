@@ -51,6 +51,7 @@ export default function StartConversationButton({
           ${fullWidth ? 'w-full' : ''}rounded-lg font-medium transition-colors ${className}
         `}
         onClick={() => setIsMessageCenterOpen(true)}
+        type="button"
       >
         <MessageSquare className={size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'} />
         <span>Message {isProvider ? 'Provider' : userName}</span>
@@ -88,6 +89,7 @@ export function QuickMessageButton({
         aria-label="Send message"
         className={`rounded-lg p-2 transition-colors hover:bg-gray-100 ${className}`}
         onClick={() => setIsMessageCenterOpen(true)}
+        type="button"
       >
         <Send className="h-4 w-4 text-gray-500" />
       </button>

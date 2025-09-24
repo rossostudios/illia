@@ -262,6 +262,7 @@ export function LocationAutocomplete({
           <button
             className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
             onClick={handleClear}
+            type="button"
           >
             <X className="h-5 w-5" />
           </button>
@@ -275,6 +276,7 @@ export function LocationAutocomplete({
           disabled={gettingLocation}
           onClick={getCurrentLocation}
           title="Use current location"
+          type="button"
         >
           {gettingLocation ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -310,6 +312,7 @@ export function LocationAutocomplete({
               }`}
               key={suggestion.place_id}
               onClick={() => handleSuggestionSelect(suggestion)}
+              type="button"
             >
               <div className="flex items-start gap-3">
                 <MapPin className="mt-0.5 h-5 w-5 flex-shrink-0 text-gray-400" />

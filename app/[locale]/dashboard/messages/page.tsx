@@ -130,7 +130,10 @@ export default function MessagesPage() {
               <MessageSquare className="h-7 w-7 text-teal-600 dark:text-teal-400" />
               Messages
             </h1>
-            <button className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800">
+            <button
+              className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+              type="button"
+            >
               <Plus className="h-5 w-5 text-gray-600 dark:text-gray-400" />
             </button>
           </div>
@@ -156,6 +159,7 @@ export default function MessagesPage() {
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-700'
               }`}
               onClick={() => setFilterType('all')}
+              type="button"
             >
               All
             </button>
@@ -166,6 +170,7 @@ export default function MessagesPage() {
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-700'
               }`}
               onClick={() => setFilterType('unread')}
+              type="button"
             >
               Unread
               {totalUnread > 0 && (
@@ -181,6 +186,7 @@ export default function MessagesPage() {
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-700'
               }`}
               onClick={() => setFilterType('providers')}
+              type="button"
             >
               <ShieldCheck className="h-3 w-3" />
               Providers
@@ -220,6 +226,7 @@ export default function MessagesPage() {
                   }`}
                   key={conv.conversation_id}
                   onClick={() => selectConversation(conv)}
+                  type="button"
                 >
                   <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-teal-400 to-teal-600">
                     <span className="font-semibold text-white">
@@ -274,6 +281,7 @@ export default function MessagesPage() {
               <button
                 className="rounded-lg p-2 transition-colors hover:bg-gray-100 md:hidden dark:hover:bg-gray-800"
                 onClick={() => setShowMobileConversation(false)}
+                type="button"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -309,7 +317,10 @@ export default function MessagesPage() {
                 )}
               </div>
             </div>
-            <button className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800">
+            <button
+              className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+              type="button"
+            >
               <MoreVertical className="h-5 w-5 text-gray-500 dark:text-gray-400" />
             </button>
           </div>
@@ -371,6 +382,7 @@ export default function MessagesPage() {
                               <button
                                 className="rounded-lg bg-white px-3 py-1 font-medium text-teal-600 text-xs hover:bg-gray-50 dark:bg-gray-700 dark:text-teal-400 dark:hover:bg-gray-700"
                                 onClick={handleEditMessage}
+                                type="button"
                               >
                                 Save
                               </button>
@@ -380,6 +392,7 @@ export default function MessagesPage() {
                                   setEditingMessageId(null)
                                   setEditText('')
                                 }}
+                                type="button"
                               >
                                 Cancel
                               </button>
@@ -424,12 +437,14 @@ export default function MessagesPage() {
                                     setEditingMessageId(message.id)
                                     setEditText(message.message)
                                   }}
+                                  type="button"
                                 >
                                   <Edit2 className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                                 </button>
                                 <button
                                   className="rounded-lg bg-white p-2 shadow transition-colors hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-700"
                                   onClick={() => deleteMessage(message.id)}
+                                  type="button"
                                 >
                                   <Trash2 className="h-4 w-4 text-red-500 dark:text-red-400" />
                                 </button>
@@ -448,7 +463,10 @@ export default function MessagesPage() {
           {/* Message Input */}
           <div className="border-gray-200 border-t bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
             <div className="flex items-end gap-3">
-              <button className="rounded-lg p-2.5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800">
+              <button
+                className="rounded-lg p-2.5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                type="button"
+              >
                 <Paperclip className="h-5 w-5 text-gray-500 dark:text-gray-400" />
               </button>
               <div className="flex-1">
@@ -470,13 +488,17 @@ export default function MessagesPage() {
                   value={messageText}
                 />
               </div>
-              <button className="rounded-lg p-2.5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800">
+              <button
+                className="rounded-lg p-2.5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                type="button"
+              >
                 <Smile className="h-5 w-5 text-gray-500 dark:text-gray-400" />
               </button>
               <button
                 className="rounded-lg bg-gradient-to-r from-teal-500 to-teal-600 p-2.5 text-white shadow-lg transition-all hover:from-teal-600 hover:to-teal-700 disabled:cursor-not-allowed disabled:opacity-50 dark:from-teal-400 dark:to-teal-500 dark:hover:from-teal-500 dark:hover:to-teal-600"
                 disabled={!messageText.trim() || sending}
                 onClick={handleSendMessage}
+                type="button"
               >
                 <Send className="h-5 w-5" />
               </button>

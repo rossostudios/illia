@@ -226,6 +226,7 @@ export default function QuizPage() {
                     }`}
                     key={city.value}
                     onClick={() => updateData('city', city.value)}
+                    type="button"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
@@ -261,6 +262,7 @@ export default function QuizPage() {
                     }`}
                     key={service.value}
                     onClick={() => toggleService(service.value)}
+                    type="button"
                   >
                     <div className="text-center">
                       <span className="mb-2 block text-2xl">{service.icon}</span>
@@ -289,6 +291,7 @@ export default function QuizPage() {
                     }`}
                     key={lang.value}
                     onClick={() => toggleLanguage(lang.value)}
+                    type="button"
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{lang.label}</span>
@@ -321,6 +324,7 @@ export default function QuizPage() {
                     }`}
                     key={budget.value}
                     onClick={() => updateData('budget', budget.value)}
+                    type="button"
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{budget.label}</span>
@@ -353,6 +357,7 @@ export default function QuizPage() {
                     }`}
                     key={freq.value}
                     onClick={() => updateData('frequency', freq.value)}
+                    type="button"
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{freq.label}</span>
@@ -429,6 +434,7 @@ export default function QuizPage() {
               <button
                 className="mt-2 text-red-600 text-xs transition-colors hover:text-red-800"
                 onClick={() => setError('')}
+                type="button"
               >
                 Dismiss
               </button>
@@ -444,6 +450,7 @@ export default function QuizPage() {
                   setStep(step - 1)
                   setError('')
                 }}
+                type="button"
               >
                 <FiChevronLeft />
                 <span>Back</span>
@@ -462,6 +469,7 @@ export default function QuizPage() {
                   setStep(step + 1)
                   setError('')
                 }}
+                type="button"
               >
                 <span>Continue</span>
                 <FiChevronRight />
@@ -475,6 +483,7 @@ export default function QuizPage() {
                 }`}
                 disabled={!canContinue() || loading}
                 onClick={handleSubmit}
+                type="button"
               >
                 {loading && (
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

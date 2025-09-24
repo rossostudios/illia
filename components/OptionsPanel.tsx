@@ -56,8 +56,8 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
       {/* Header */}
       <div className="flex items-center justify-between border-b px-6 py-4">
         <h3 className="font-semibold text-gray-900 text-lg">Options</h3>
-        <button className="rounded-lg p-1 transition-colors hover:bg-gray-100"
-          onClick={onClose}
+        <button className="rounded-lg p-1 transition-colors hover:bg-gray-100" onClick={onClose}
+          type="button"
         >
           <X className="h-5 w-5 text-gray-500" />
         </button>
@@ -74,8 +74,8 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
             <span className="text-gray-500 text-xs">1 Credit / PDF Page</span>
             <button className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                 mainContentOnly ? 'bg-orange-500' : 'bg-gray-200'
-              }`}
-              onClick={() => setMainContentOnly(!mainContentOnly)}
+              }`} onClick={() => setMainContentOnly(!mainContentOnly)}
+              type="button"
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -95,8 +95,8 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
             <span className="text-gray-500 text-xs">1 Credit / PDF Page</span>
             <button className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                 parsePdf ? 'bg-orange-500' : 'bg-gray-200'
-              }`}
-              onClick={() => setParsePdf(!parsePdf)}
+              }`} onClick={() => setParsePdf(!parsePdf)}
+              type="button"
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -116,8 +116,8 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
             <span className="text-gray-500 text-xs">5 Credits / Page</span>
             <button className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                 stealthMode ? 'bg-orange-500' : 'bg-gray-200'
-              }`}
-              onClick={() => setStealthMode(!stealthMode)}
+              }`} onClick={() => setStealthMode(!stealthMode)}
+              type="button"
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -134,9 +134,9 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
             <div className="relative flex items-center space-x-2">
               <span className="font-medium text-gray-700 text-sm">Exclude tags</span>
               <div className="relative">
-                <button className="text-gray-400 hover:text-gray-600"
-                  onMouseEnter={() => setShowExcludeTooltip(true)
+                <button className="text-gray-400 hover:text-gray-600" onMouseEnter={() => setShowExcludeTooltip(true)
                   onMouseLeave={() => setShowExcludeTooltip(false)}
+                  type="button"
                 >
                   <Info className="h-4 w-4" />
                 </button>
@@ -148,8 +148,8 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
                 )}
               </div>
             </div>
-            <button className="flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900"
-              onClick={handleAddExcludeTag}
+            <button className="flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900" onClick={handleAddExcludeTag}
+              
             >
               <Plus className="h-4 w-4" />
               <span>Add</span>
@@ -161,8 +161,8 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
               key={index}
             >
               <span className="text-gray-700 text-sm">{tag}</span>
-              <button className="text-gray-400 hover:text-gray-600"
-                onClick={() => setExcludeTags(excludeTags.filter((_, i) => i !== index))}
+              <button className="text-gray-400 hover:text-gray-600" onClick={() => setExcludeTags(excludeTags.filter((_, i) => i !== index))}
+                
               >
                 <X className="h-4 w-4" />
               </button>
@@ -182,8 +182,8 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="font-medium text-gray-700 text-sm">Include tags</span>
-            <button className="flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900"
-              onClick={handleAddIncludeTag}
+            <button className="flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900" onClick={handleAddIncludeTag}
+              
             >
               <Plus className="h-4 w-4" />
               <span>Add</span>
@@ -195,8 +195,8 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
               key={index}
             >
               <span className="text-gray-700 text-sm">{tag}</span>
-              <button className="text-gray-400 hover:text-gray-600"
-                onClick={() => setIncludeTags(includeTags.filter((_, i) => i !== index))}
+              <button className="text-gray-400 hover:text-gray-600" onClick={() => setIncludeTags(includeTags.filter((_, i) => i !== index))}
+                
               >
                 <X className="h-4 w-4" />
               </button>
@@ -260,8 +260,8 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
 
       {/* Footer */}
       <div className="border-t px-6 py-4">
-        <button className="w-full rounded-lg bg-gray-100 py-2 font-medium text-gray-700 text-sm transition-colors hover:bg-gray-200"
-          onClick={handleReset}
+        <button className="w-full rounded-lg bg-gray-100 py-2 font-medium text-gray-700 text-sm transition-colors hover:bg-gray-200" onClick={handleReset}
+          
         >
           Reset settings
         </button>

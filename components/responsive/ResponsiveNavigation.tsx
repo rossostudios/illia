@@ -174,6 +174,7 @@ export function ResponsiveNavigation({
                 setActiveDropdown(isDropdownOpen ? null : item.id)
               }
             }}
+            type="button"
           >
             <div className="flex items-center gap-3">
               {item.icon && <item.icon className="h-5 w-5" />}
@@ -239,6 +240,7 @@ export function ResponsiveNavigation({
               className="flex items-center gap-2 rounded-lg px-4 py-2 font-medium text-fluid-sm text-gray-700 transition-all duration-200 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
               onClick={() => setActiveDropdown(isDropdownOpen ? null : item.id)}
               onMouseEnter={() => isDesktop() && setActiveDropdown(item.id)}
+              type="button"
             >
               {item.icon && <item.icon className="h-4 w-4" />}
               <span>{item.label}</span>
@@ -319,12 +321,18 @@ export function ResponsiveNavigation({
             {/* Actions */}
             <div className="flex items-center gap-3">
               {/* Search button */}
-              <button className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800">
+              <button
+                className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                type="button"
+              >
                 <Search className="h-5 w-5 text-gray-600 dark:text-gray-400" />
               </button>
 
               {/* Notifications */}
-              <button className="relative rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800">
+              <button
+                className="relative rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                type="button"
+              >
                 <Bell className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                 <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
               </button>
@@ -338,6 +346,7 @@ export function ResponsiveNavigation({
                   aria-label={isOpen ? 'Close menu' : 'Open menu'}
                   className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                   onClick={() => setIsOpen(!isOpen)}
+                  type="button"
                 >
                   {isOpen ? (
                     <X className="h-6 w-6 text-gray-600 dark:text-gray-400" />
@@ -380,6 +389,7 @@ export function ResponsiveNavigation({
               <button
                 className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={() => setIsOpen(false)}
+                type="button"
               >
                 <X className="h-5 w-5 text-gray-600 dark:text-gray-400" />
               </button>

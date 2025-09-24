@@ -6,7 +6,7 @@ import { usePrefetchRoutes } from '@/utils/performance'
 
 // Lazy load heavy components
 const DashboardSidebar = lazy(() => import('@/components/DashboardSidebar'))
-const NotificationDropdown = lazy(() => import('@/components/NotificationDropdown'))
+const _NotificationDropdown = lazy(() => import('@/components/NotificationDropdown'))
 
 type PerformanceLayoutProps = {
   children: React.ReactNode
@@ -60,7 +60,7 @@ function SidebarSkeleton() {
         <div className="h-8 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
       </div>
       <nav className="space-y-2 p-3">
-        {[...Array(8)].map((_, i) => (
+        {[...new Array(8)].map((_, i) => (
           <div className="h-10 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-700" key={i} />
         ))}
       </nav>

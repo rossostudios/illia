@@ -73,7 +73,7 @@ export default function MobileBottomNavEnhanced() {
     }
 
     const handleSwipe = () => {
-      const swipeThreshold = 50
+      const swipeThreshold = 75 // Increased from 50 to prevent accidental triggers
       const diff = touchStartY - touchEndY
 
       if (Math.abs(diff) > swipeThreshold) {
@@ -155,7 +155,7 @@ export default function MobileBottomNavEnhanced() {
       {/* Enhanced Bottom Navigation */}
       <motion.nav
         animate={{ y: isVisible ? 0 : 100 }}
-        className="safe-area-padding fixed right-0 bottom-0 left-0 z-40 border-gray-200/50 border-t bg-white/95 backdrop-blur-lg md:hidden dark:border-gray-800/50 dark:bg-gray-900/95"
+        className="safe-area-padding fixed right-0 bottom-0 left-0 z-50 border-gray-200 border-t bg-white shadow-lg backdrop-blur-lg md:hidden dark:border-gray-700 dark:bg-gray-900"
         initial={{ y: 0 }}
         ref={navRef}
         style={{ opacity }}
@@ -168,7 +168,7 @@ export default function MobileBottomNavEnhanced() {
         {/* Pull indicator for gesture hint */}
         <div className="-top-1 -translate-x-1/2 absolute left-1/2 h-1 w-12 rounded-full bg-gray-300 dark:bg-gray-700" />
 
-        <div className="relative grid h-16 grid-cols-5">
+        <div className="relative grid h-[60px] grid-cols-5 items-center">
           {navItems.map((item, _index) => {
             const isActive =
               pathname === item.href ||
@@ -177,7 +177,7 @@ export default function MobileBottomNavEnhanced() {
 
             return (
               <Link
-                className="relative flex touch-manipulation flex-col items-center justify-center py-2 transition-all duration-200 active:scale-95"
+                className="relative flex h-full touch-manipulation flex-col items-center justify-center py-1 transition-all duration-200 active:scale-95"
                 href={item.href}
                 key={item.label}
               >
@@ -211,7 +211,9 @@ export default function MobileBottomNavEnhanced() {
                       animate={isActive ? { y: -2 } : { y: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <item.icon className={`h-5 w-5 ${isActive ? 'stroke-2' : ''}`} />
+                      <item.icon
+                        className={`h-5 w-5 sm:h-6 sm:w-6 ${isActive ? 'stroke-2' : ''}`}
+                      />
                     </motion.div>
 
                     {/* Enhanced Badge with pulse animation */}
@@ -232,7 +234,7 @@ export default function MobileBottomNavEnhanced() {
                   {/* Label with fade animation */}
                   <motion.span
                     animate={isActive ? { opacity: 1 } : { opacity: 0.7 }}
-                    className="mt-1 font-medium text-[10px]"
+                    className="mt-0.5 font-medium text-[11px] sm:text-xs"
                   >
                     {item.label}
                   </motion.span>

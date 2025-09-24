@@ -222,7 +222,7 @@ export function EnhancedSearchResults({
           {/* View mode toggle */}
           <div className="flex items-center gap-2">
             <div className="flex rounded-lg border border-gray-200 dark:border-gray-600">
-              <button
+              <Button
                 className={`rounded-l-lg p-2 transition-colors ${
                   viewMode === 'list'
                     ? 'bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300'
@@ -232,7 +232,7 @@ export function EnhancedSearchResults({
               >
                 <List className="h-4 w-4" />
               </button>
-              <button
+              <Button
                 className={`p-2 transition-colors ${
                   viewMode === 'grid'
                     ? 'bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300'
@@ -242,7 +242,7 @@ export function EnhancedSearchResults({
               >
                 <Grid3X3 className="h-4 w-4" />
               </button>
-              <button
+              <Button
                 className={`rounded-r-lg p-2 transition-colors ${
                   viewMode === 'compact'
                     ? 'bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300'
@@ -323,13 +323,13 @@ export function EnhancedSearchResults({
             </Button>
             <div className="pointer-events-none absolute top-full right-0 z-10 mt-1 rounded-lg border border-gray-200 bg-white opacity-0 shadow-lg transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 dark:border-gray-700 dark:bg-gray-900">
               <div className="py-1">
-                <button
+                <Button
                   className="w-full px-4 py-2 text-left text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
                   onClick={() => exportResults('csv')}
                 >
                   Export as CSV
                 </button>
-                <button
+                <Button
                   className="w-full px-4 py-2 text-left text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
                   onClick={() => exportResults('json')}
                 >
@@ -512,8 +512,7 @@ const ResultCard = memo(function ResultCard({
         </div>
 
         {comparisonMode && (
-          <button
-            className={`flex h-5 w-5 items-center justify-center rounded border-2 transition-colors ${
+          <button className={`flex h-5 w-5 items-center justify-center rounded border-2 transition-colors ${
               isSelectedForComparison
                 ? 'border-teal-500 bg-teal-500 text-white'
                 : 'border-gray-300 hover:border-teal-400'
@@ -522,6 +521,7 @@ const ResultCard = memo(function ResultCard({
               e.stopPropagation()
               onComparisonToggle()
             }}
+            type="button"
           >
             {isSelectedForComparison && <Check className="h-3 w-3" />}
           </button>
@@ -543,8 +543,7 @@ const ResultCard = memo(function ResultCard({
             <div className="mb-1 flex items-start justify-between">
               <h4 className="truncate font-medium text-gray-900 dark:text-white">{result.name}</h4>
               {comparisonMode && (
-                <button
-                  className={`ml-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
+                <button className={`ml-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
                     isSelectedForComparison
                       ? 'border-teal-500 bg-teal-500 text-white'
                       : 'border-gray-300 hover:border-teal-400'
@@ -553,6 +552,7 @@ const ResultCard = memo(function ResultCard({
                     e.stopPropagation()
                     onComparisonToggle()
                   }}
+                  type="button"
                 >
                   {isSelectedForComparison && <Check className="h-3 w-3" />}
                 </button>
@@ -610,8 +610,7 @@ const ResultCard = memo(function ResultCard({
             <div className="mb-1 flex items-start justify-between">
               <h4 className="truncate font-medium text-gray-900 dark:text-white">{result.name}</h4>
               {comparisonMode && (
-                <button
-                  className={`ml-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
+                <button className={`ml-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
                     isSelectedForComparison
                       ? 'border-teal-500 bg-teal-500 text-white'
                       : 'border-gray-300 hover:border-teal-400'
@@ -620,6 +619,7 @@ const ResultCard = memo(function ResultCard({
                     e.stopPropagation()
                     onComparisonToggle()
                   }}
+                  type="button"
                 >
                   {isSelectedForComparison && <Check className="h-3 w-3" />}
                 </button>

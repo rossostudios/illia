@@ -47,6 +47,7 @@ export default function MessageButton({ className = '', showLabel = false }: Mes
         aria-label="Messages"
         className={`relative flex items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-50 hover:text-teal-600 ${className}`}
         onClick={() => setIsMessageCenterOpen(true)}
+        type="button"
       >
         <div className="relative">
           <MessageSquare className="h-5 w-5" />

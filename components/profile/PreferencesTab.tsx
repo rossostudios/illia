@@ -49,7 +49,7 @@ export function PreferencesTab({ profile, onUpdate }: PreferencesTabProps) {
             const Icon = iconMap[service.icon as keyof typeof iconMap] || Home
             const isSelected = formData.services.includes(service.id)
             return (
-              <button
+              <Button
                 className={`flex items-center gap-3 rounded-lg border p-4 text-left transition-colors ${
                   isSelected
                     ? 'border-teal-500 bg-teal-50 dark:border-teal-500 dark:bg-teal-900/20'

@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, CreditCard, Download, Info } from 'lucide-react'
+import { Check, CreditCard, Download } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import type { UserProfile } from '@/types/profile'
 

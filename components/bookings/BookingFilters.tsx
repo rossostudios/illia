@@ -1,6 +1,6 @@
 'use client'
 
-import { Calendar, Filter, Grid3x3, List, Search } from 'lucide-react'
+import { Calendar, Grid3x3, List, Search } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
 type BookingFiltersProps = {

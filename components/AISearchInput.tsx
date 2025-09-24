@@ -200,7 +200,7 @@ export function AISearchInput({
           />
 
           {value && (
-            <button
+            <Button
               className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400 hover:text-gray-600"
               onClick={handleClear}
             >
@@ -242,10 +242,10 @@ export function AISearchInput({
                   {aiSuggestion.alternativeQueries.length > 0 && (
                     <div className="flex gap-1 overflow-x-auto">
                       {aiSuggestion.alternativeQueries.slice(0, 2).map((query, index) => (
-                        <button
-                          className="whitespace-nowrap rounded-full bg-teal-100 px-3 py-1 text-teal-700 text-xs transition-colors hover:bg-teal-200 dark:bg-teal-900/30 dark:text-teal-300 dark:hover:bg-teal-900/50"
+                        <button className="whitespace-nowrap rounded-full bg-teal-100 px-3 py-1 text-teal-700 text-xs transition-colors hover:bg-teal-200 dark:bg-teal-900/30 dark:text-teal-300 dark:hover:bg-teal-900/50"
                           key={index}
                           onClick={() => handleSuggestionSelect(query)}
+                          type="button"
                         >
                           "{query}"
                         </button>
@@ -266,12 +266,12 @@ export function AISearchInput({
           ref={dropdownRef}
         >
           {allSuggestions.map((suggestion, index) => (
-            <button
-              className={`w-full px-4 py-3 text-left transition-colors hover:bg-gray-50 focus:bg-gray-50 focus:outline-none dark:focus:bg-gray-700 dark:hover:bg-gray-800 ${
+            <button className={`w-full px-4 py-3 text-left transition-colors hover:bg-gray-50 focus:bg-gray-50 focus:outline-none dark:focus:bg-gray-700 dark:hover:bg-gray-800 ${
                 index === selectedIndex ? 'bg-teal-50 dark:bg-teal-900/20' : ''
               }`}
               key={suggestion.id}
               onClick={() => handleSuggestionSelect(suggestion.text)}
+              type="button"
             >
               <div className="flex items-center gap-3">
                 <div className="flex-shrink-0">

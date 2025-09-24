@@ -1,5 +1,16 @@
+import type { NextWebVitalsMetric } from 'next/app'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+
+type WindowWithGtag = Window & {
+  gtag?: (command: string, eventName: string, params: Record<string, unknown>) => void
+}
+
+type NavigatorWithConnection = Navigator & {
+  connection?: NetworkInformation
+  mozConnection?: NetworkInformation
+  webkitConnection?: NetworkInformation
+}
 
 // Prefetch routes when idle
 export function usePrefetchRoutes(routes: string[]) {
@@ -28,29 +39,35 @@ export function usePrefetchRoutes(routes: string[]) {
 }
 
 // Measure web vitals
-export function reportWebVitals(metric: any) {
-  if (metric.label === 'web-vital') {
-    console.log(metric)
-
-    // Send to analytics
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', metric.name, {
-        value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
-        event_label: metric.id,
-        non_interaction: true,
-      })
-    }
+export function reportWebVitals(metric: NextWebVitalsMetric) {
+  if (metric.label !== 'web-vital' || typeof window === 'undefined') {
+    return
   }
+
+  const { gtag } = window as WindowWithGtag
+  if (!gtag) {
+    return
+  }
+
+  const eventPayload = {
+    value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+    // biome-ignore lint/style/useNamingConvention: Required key for gtag events
+    event_label: metric.id,
+    // biome-ignore lint/style/useNamingConvention: Required key for gtag events
+    non_interaction: true,
+  } satisfies Record<string, string | number | boolean>
+
+  gtag('event', metric.name, eventPayload)
 }
 
 // Optimize heavy operations with debouncing
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
+export function debounce<Args extends unknown[]>(
+  func: (...args: Args) => void,
   delay: number
-): (...args: Parameters<T>) => void {
-  let timeoutId: NodeJS.Timeout | null = null
+): (...args: Args) => void {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null
 
-  return (...args: Parameters<T>) => {
+  return (...args: Args) => {
     if (timeoutId) {
       clearTimeout(timeoutId)
     }
@@ -62,21 +79,23 @@ export function debounce<T extends (...args: any[]) => any>(
 }
 
 // Optimize heavy operations with throttling
-export function throttle<T extends (...args: any[]) => any>(
-  func: T,
+export function throttle<Args extends unknown[]>(
+  func: (...args: Args) => void,
   limit: number
-): (...args: Parameters<T>) => void {
+): (...args: Args) => void {
   let inThrottle = false
 
-  return (...args: Parameters<T>) => {
-    if (!inThrottle) {
-      func(...args)
-      inThrottle = true
-
-      setTimeout(() => {
-        inThrottle = false
-      }, limit)
+  return (...args: Args) => {
+    if (inThrottle) {
+      return
     }
+
+    func(...args)
+    inThrottle = true
+
+    setTimeout(() => {
+      inThrottle = false
+    }, limit)
   }
 }
 
@@ -92,12 +111,15 @@ export function lazyLoadImage(imageSrc: string): Promise<void> {
 
 // Detect slow connections
 export function isSlowConnection(): boolean {
-  if (typeof window === 'undefined') return false
+  if (typeof window === 'undefined') {
+    return false
+  }
 
+  const navigatorWithConnection = navigator as NavigatorWithConnection
   const connection =
-    (navigator as any).connection ||
-    (navigator as any).mozConnection ||
-    (navigator as any).webkitConnection
+    navigatorWithConnection.connection ??
+    navigatorWithConnection.mozConnection ??
+    navigatorWithConnection.webkitConnection
 
   if (connection) {
     const effectiveType = connection.effectiveType
@@ -109,7 +131,9 @@ export function isSlowConnection(): boolean {
 
 // Reduce motion for users who prefer it
 export function prefersReducedMotion(): boolean {
-  if (typeof window === 'undefined') return false
+  if (typeof window === 'undefined') {
+    return false
+  }
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 

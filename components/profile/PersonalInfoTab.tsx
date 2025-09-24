@@ -40,7 +40,7 @@ export function PersonalInfoTab({ profile, onUpdate }: PersonalInfoTabProps) {
               sizes="80px"
               src={profile.avatar}
             />
-            <button className="absolute right-0 bottom-0 rounded-full bg-teal-600 p-2 text-white shadow-lg hover:bg-teal-700">
+            <Button className="absolute right-0 bottom-0 rounded-full bg-teal-600 p-2 text-white shadow-lg hover:bg-teal-700">
               <Camera className="h-4 w-4" />
             </button>
           </div>
@@ -126,7 +126,7 @@ export function PersonalInfoTab({ profile, onUpdate }: PersonalInfoTabProps) {
           Language
         </label>
         <div className="relative">
-          <button
+          <Button
             className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2 text-left focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-800"
             onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
           >
@@ -139,7 +139,7 @@ export function PersonalInfoTab({ profile, onUpdate }: PersonalInfoTabProps) {
           {showLanguageDropdown && (
             <div className="absolute z-10 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
               {LANGUAGES.map((lang) => (
-                <button
+                <Button
                   className="flex w-full items-center gap-2 px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700"
                   key={lang.code}
                   onClick={() => {

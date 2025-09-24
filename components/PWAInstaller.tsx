@@ -108,6 +108,7 @@ export default function PWAInstaller() {
           aria-label="Dismiss"
           className="absolute top-2 right-2 rounded-full p-1 transition-colors hover:bg-gray-100"
           onClick={handleDismiss}
+          type="button"
         >
           <X className="h-4 w-4 text-gray-500" />
         </button>
@@ -123,12 +124,14 @@ export default function PWAInstaller() {
           <button
             className="flex-1 rounded-lg bg-teal-600 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-teal-700"
             onClick={handleInstallClick}
+            type="button"
           >
             Install App
           </button>
           <button
             className="px-4 py-2 font-medium text-gray-600 text-sm transition-colors hover:text-gray-800"
             onClick={handleDismiss}
+            type="button"
           >
             Not Now
           </button>

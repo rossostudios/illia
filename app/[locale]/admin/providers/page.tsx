@@ -1,10 +1,8 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
 import ProviderApprovalTabs from '@/components/admin/providers/ProviderApprovalTabs'
-import type { Database } from '@/lib/database.types'
+import { createClient } from '@/lib/supabase/server'
 
 export default async function ProvidersPage() {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  const supabase = await createClient()
 
   // Get all providers with different statuses
   const { data: pendingProviders } = await supabase

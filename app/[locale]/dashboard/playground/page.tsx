@@ -200,7 +200,7 @@ const leads = await response.json()`
           Lead Playground
           <button type="button"
             className="ml-2 relative"
-            onMouseEnter={() = type="button"> setShowInfoTooltip(true)}
+            onMouseEnter={() = > setShowInfoTooltip(true)}
             onMouseLeave={() => setShowInfoTooltip(false)}
           >
             <Info className="h-5 w-5 text-gray-700 hover:text-gray-600" />
@@ -307,7 +307,7 @@ const leads = await response.json()`
             <div className="flex items-center space-x-3">
               <button type="button"
                 onClick={handleGetCode}
-                className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" type="button"
+                className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" 
               >
                 <Copy className="h-4 w-4" />
                 <span className="text-sm font-medium">Get Code</span>
@@ -315,7 +315,7 @@ const leads = await response.json()`
               {result && (
                 <button type="button"
                   onClick={handleExport}
-                  className="flex items-center space-x-2 px-4 py-2 border border-teal-500 text-teal-600 rounded-lg hover:bg-teal-50 transition-colors" type="button"
+                  className="flex items-center space-x-2 px-4 py-2 border border-teal-500 text-teal-600 rounded-lg hover:bg-teal-50 transition-colors" 
                 >
                   <Download className="h-4 w-4" />
                   <span className="text-sm font-medium">Export</span>
@@ -324,7 +324,7 @@ const leads = await response.json()`
               <button type="button"
                 onClick={handleGenerateLeads}
                 disabled={isLoading || !user}
-                className="flex items-center space-x-2 px-6 py-2 bg-teal-500 hover:bg-teal-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50" type="button"
+                className="flex items-center space-x-2 px-6 py-2 bg-teal-500 hover:bg-teal-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50" 
               >
                 {isLoading ? (
                   <>

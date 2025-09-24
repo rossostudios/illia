@@ -170,6 +170,7 @@ export default function MatchesPage() {
             <button
               className="rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-3 text-white transition-all hover:shadow-lg"
               onClick={retakeQuiz}
+              type="button"
             >
               Retake Quiz
             </button>
@@ -191,6 +192,7 @@ export default function MatchesPage() {
           <button
             className="mt-4 text-purple-600 transition-colors hover:text-purple-800"
             onClick={retakeQuiz}
+            type="button"
           >
             Want different results? Retake quiz →
           </button>
@@ -349,6 +351,7 @@ export default function MatchesPage() {
                   <button
                     className="flex flex-1 items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 text-white transition-all hover:shadow-lg"
                     onClick={() => handleContactProvider(match)}
+                    type="button"
                   >
                     <FiMail className="h-4 w-4" />
                     <span>Contact Now</span>
@@ -360,6 +363,7 @@ export default function MatchesPage() {
                         : 'border-gray-200 text-gray-600 hover:border-purple-300'
                     }`}
                     onClick={() => handleSaveMatch(match.id)}
+                    type="button"
                   >
                     <FiHeart
                       className={`h-5 w-5 ${selectedMatch === match.id ? 'fill-current' : ''}`}
@@ -422,6 +426,7 @@ export default function MatchesPage() {
             onClick={() =>
               window.open('mailto:support@illia.club?subject=Help with provider matching')
             }
+            type="button"
           >
             Contact Support →
           </button>

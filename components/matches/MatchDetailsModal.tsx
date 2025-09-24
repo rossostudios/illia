@@ -42,7 +42,9 @@ export function MatchDetailsModal({ match, isOpen, onClose, onAction }: MatchDet
   const [newNote, setNewNote] = useState('')
   const [showAddNote, setShowAddNote] = useState(false)
 
-  if (!match) return null
+  if (!match) {
+    return null
+  }
 
   const config = statusConfig[match.status]
 
@@ -99,7 +101,7 @@ export function MatchDetailsModal({ match, isOpen, onClose, onAction }: MatchDet
                     </span>
                   </div>
                 </div>
-                <button
+                <Button
                   className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
                   onClick={onClose}
                 >

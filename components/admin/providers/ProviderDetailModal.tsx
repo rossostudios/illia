@@ -1,6 +1,5 @@
 'use client'
 
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { format } from 'date-fns'
 import {
   AlertCircle,
@@ -17,7 +16,7 @@ import {
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import type { Database } from '@/lib/database.types'
+import { createClient } from '@/lib/supabase/client'
 
 type ProviderDetailModalProps = {
   provider: any
@@ -33,7 +32,7 @@ export default function ProviderDetailModal({
   const [loading, setLoading] = useState(false)
   const [reason, setReason] = useState('')
   const router = useRouter()
-  const supabase = createClientComponentClient<Database>()
+  const supabase = createClient()
 
   const handleApprove = async () => {
     setLoading(true)
@@ -162,6 +161,7 @@ export default function ProviderDetailModal({
           <button
             className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
             onClick={onClose}
+            type="button"
           >
             <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
           </button>
@@ -357,6 +357,7 @@ export default function ProviderDetailModal({
             <button
               className="rounded-lg px-4 py-2 text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
               onClick={onClose}
+              type="button"
             >
               Close
             </button>
@@ -367,6 +368,7 @@ export default function ProviderDetailModal({
                   className="rounded-lg bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
                   disabled={loading}
                   onClick={handleReject}
+                  type="button"
                 >
                   Reject
                 </button>
@@ -374,6 +376,7 @@ export default function ProviderDetailModal({
                   className="rounded-lg bg-green-600 px-4 py-2 font-medium text-white transition-colors hover:bg-green-700 disabled:opacity-50"
                   disabled={loading}
                   onClick={handleApprove}
+                  type="button"
                 >
                   Approve
                 </button>
@@ -385,6 +388,7 @@ export default function ProviderDetailModal({
                 className="rounded-lg bg-orange-600 px-4 py-2 font-medium text-white transition-colors hover:bg-orange-700 disabled:opacity-50"
                 disabled={loading}
                 onClick={handleSuspend}
+                type="button"
               >
                 Suspend
               </button>
@@ -395,6 +399,7 @@ export default function ProviderDetailModal({
                 className="rounded-lg bg-green-600 px-4 py-2 font-medium text-white transition-colors hover:bg-green-700 disabled:opacity-50"
                 disabled={loading}
                 onClick={handleReactivate}
+                type="button"
               >
                 Reactivate
               </button>

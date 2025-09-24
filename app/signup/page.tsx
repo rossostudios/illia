@@ -135,6 +135,7 @@ export default function SignupPage() {
                 className="flex h-12 items-center justify-center rounded-lg border border-gray-300 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={loading}
                 onClick={() => handleSocialLogin('apple')}
+                type="button"
               >
                 <FaApple className="text-xl" />
               </button>
@@ -143,6 +144,7 @@ export default function SignupPage() {
                 className="flex h-12 items-center justify-center rounded-lg border border-gray-300 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={loading}
                 onClick={() => handleSocialLogin('google')}
+                type="button"
               >
                 <FaGoogle className="text-red-500 text-xl" />
               </button>
@@ -151,6 +153,7 @@ export default function SignupPage() {
                 className="flex h-12 items-center justify-center rounded-lg border border-gray-300 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={loading}
                 onClick={() => handleSocialLogin('linkedin')}
+                type="button"
               >
                 <FaLinkedin className="text-blue-600 text-xl" />
               </button>
@@ -229,6 +232,7 @@ export default function SignupPage() {
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
                       className="-translate-y-1/2 absolute top-1/2 right-3 text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none"
                       onClick={() => setShowPassword(!showPassword)}
+                      type="button"
                     >
                       {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
@@ -265,6 +269,7 @@ export default function SignupPage() {
                       aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                       className="-translate-y-1/2 absolute top-1/2 right-3 text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      type="button"
                     >
                       {showConfirmPassword ? (
                         <EyeOff className="h-5 w-5" />
@@ -378,6 +383,7 @@ export default function SignupPage() {
                     }`}
                     key={index}
                     onClick={() => setCurrentTestimonial(index)}
+                    type="button"
                   />
                 ))}
               </div>

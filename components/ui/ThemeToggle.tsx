@@ -24,6 +24,7 @@ export function ThemeToggle({ showLabel = false, className = '' }: ThemeTogglePr
       <button
         aria-label="Toggle theme"
         className={`rounded-lg bg-gray-100 p-2 dark:bg-gray-900 ${className}`}
+        type="button"
       >
         <div className="h-5 w-5" />
       </button>
@@ -47,6 +48,7 @@ export function ThemeToggle({ showLabel = false, className = '' }: ThemeTogglePr
         aria-label={`Current theme: ${theme}. Click to toggle theme`}
         className="relative rounded-lg bg-gray-100 p-2 transition-colors hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:bg-gray-900 dark:focus:ring-offset-gray-900 dark:hover:bg-gray-800"
         onClick={toggleTheme}
+        type="button"
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -90,6 +92,7 @@ export function ThemeMenu() {
         aria-label="Theme menu"
         className="flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 transition-colors hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:bg-gray-900 dark:hover:bg-gray-800"
         onClick={() => setIsOpen(!isOpen)}
+        type="button"
       >
         {options.find((opt) => opt.value === theme)?.icon && (
           <div className="h-4 w-4 text-gray-600 dark:text-gray-400">
@@ -133,6 +136,7 @@ export function ThemeMenu() {
                     setTheme(option.value)
                     setIsOpen(false)
                   }}
+                  type="button"
                 >
                   <option.icon className="h-4 w-4" />
                   <span className="font-medium">{option.label}</span>

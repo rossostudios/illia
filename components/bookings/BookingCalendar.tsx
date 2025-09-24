@@ -33,8 +33,12 @@ export function BookingCalendar({
   locale = 'en',
 }: BookingCalendarProps) {
   const getLocale = () => {
-    if (locale === 'es') return es
-    if (locale === 'pt') return ptBR
+    if (locale === 'es') {
+      return es
+    }
+    if (locale === 'pt') {
+      return ptBR
+    }
     return enUS
   }
 
@@ -94,6 +98,7 @@ export function BookingCalendar({
               `}
               key={idx}
               onClick={() => onDateChange(day)}
+              type="button"
             >
               <span
                 className={`font-medium ${isToday(day) ? 'text-teal-600 dark:text-teal-400' : ''}
@@ -105,7 +110,7 @@ export function BookingCalendar({
 
               {dayBookings.length > 0 && (
                 <div className="mt-1 space-y-0.5">
-                  {dayBookings.slice(0, 2).map((booking, i) => (
+                  {dayBookings.slice(0, 2).map((booking, _i) => (
                     <div
                       className={`h-1.5 w-full rounded-full ${
                         booking.status === 'confirmed'

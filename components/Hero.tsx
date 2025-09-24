@@ -40,7 +40,10 @@ export default function Hero() {
               {t('startFreeTrial')}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
-            <button className="hover:-translate-y-1 inline-flex transform items-center justify-center rounded-xl border-2 border-gray-200 bg-white px-8 py-4 font-semibold text-gray-700 text-lg transition-all hover:border-green-500 hover:text-green-600 hover:shadow-lg">
+            <button
+              className="hover:-translate-y-1 inline-flex transform items-center justify-center rounded-xl border-2 border-gray-200 bg-white px-8 py-4 font-semibold text-gray-700 text-lg transition-all hover:border-green-500 hover:text-green-600 hover:shadow-lg"
+              type="button"
+            >
               <Play className="mr-2 h-5 w-5" />
               {t('watchDemo')}
             </button>

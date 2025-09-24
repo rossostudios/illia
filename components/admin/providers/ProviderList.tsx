@@ -133,6 +133,7 @@ export default function ProviderList({ providers, status }: ProviderListProps) {
                     <button
                       className="inline-flex items-center gap-1 rounded-lg bg-purple-600 px-3 py-1.5 font-medium text-sm text-white transition-colors hover:bg-purple-700"
                       onClick={() => handleViewProvider(provider)}
+                      type="button"
                     >
                       <Eye className="h-3 w-3" />
                       View

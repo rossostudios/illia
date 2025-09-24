@@ -157,6 +157,7 @@ export function SavedSearchesPanel({
                       <button
                         className="truncate font-medium text-gray-900 text-sm hover:text-teal-600 dark:text-white dark:hover:text-teal-400"
                         onClick={() => handleLoadSearch(search)}
+                        type="button"
                       >
                         {search.name}
                       </button>
@@ -194,7 +195,10 @@ export function SavedSearchesPanel({
 
                   <div className="ml-2 flex items-center gap-1">
                     <div className="group relative">
-                      <button className="p-1 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300">
+                      <button
+                        className="p-1 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
+                        type="button"
+                      >
                         <MoreVertical className="h-4 w-4" />
                       </button>
 
@@ -203,6 +207,7 @@ export function SavedSearchesPanel({
                           <button
                             className="w-full px-3 py-2 text-left text-red-600 text-sm transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
                             onClick={() => handleDeleteSearch(search.id, search.name)}
+                            type="button"
                           >
                             <Trash2 className="mr-2 inline h-4 w-4" />
                             Delete

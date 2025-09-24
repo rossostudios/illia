@@ -191,6 +191,7 @@ export default function ExtractPlaygroundPage() {
                 <button
                   className="text-gray-700 hover:text-gray-600"
                   onClick={() => setShowWhatsNew(false)}
+                  type="button"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -202,7 +203,10 @@ export default function ExtractPlaygroundPage() {
             <div className="mt-4 px-3 py-2 text-gray-500 text-xs">samlee@content-mobbin.com</div>
 
             {/* Collapse button */}
-            <button className="mt-2 flex items-center space-x-2 text-gray-600 text-xs hover:text-gray-900">
+            <button
+              className="mt-2 flex items-center space-x-2 text-gray-600 text-xs hover:text-gray-900"
+              type="button"
+            >
               <ChevronLeft className="h-3 w-3" />
               <span>Collapse</span>
             </button>
@@ -235,7 +239,10 @@ export default function ExtractPlaygroundPage() {
                 <FileCode className="h-4 w-4" />
                 <span className="font-medium text-sm">Docs</span>
               </Link>
-              <button className="rounded-lg bg-orange-500 px-4 py-1.5 font-medium text-sm text-white transition-colors hover:bg-orange-600">
+              <button
+                className="rounded-lg bg-orange-500 px-4 py-1.5 font-medium text-sm text-white transition-colors hover:bg-orange-600"
+                type="button"
+              >
                 Upgrade
               </button>
             </div>
@@ -297,6 +304,7 @@ export default function ExtractPlaygroundPage() {
                           : 'text-gray-600 hover:text-gray-900'
                       }`}
                       onClick={() => setActiveTab('options')}
+                      type="button"
                     >
                       <Settings className="h-4 w-4" />
                       <span>Options</span>
@@ -311,6 +319,7 @@ export default function ExtractPlaygroundPage() {
                           : 'text-gray-600 hover:text-gray-900'
                       }`}
                       onClick={() => setActiveTab('schema')}
+                      type="button"
                     >
                       <FileText className="h-4 w-4" />
                       <span>Schema</span>
@@ -320,7 +329,10 @@ export default function ExtractPlaygroundPage() {
                     </button>
                   </div>
 
-                  <button className="flex items-center space-x-2 rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 transition-colors hover:bg-gray-200">
+                  <button
+                    className="flex items-center space-x-2 rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 transition-colors hover:bg-gray-200"
+                    type="button"
+                  >
                     <Copy className="h-4 w-4" />
                     <span className="font-medium text-sm">Get Schema Code</span>
                   </button>
@@ -341,6 +353,7 @@ export default function ExtractPlaygroundPage() {
                         })
                       }, 3000)
                     }}
+                    type="button"
                   >
                     Start Extracting Leads
                   </button>
@@ -387,6 +400,7 @@ export default function ExtractPlaygroundPage() {
                           enableWebSearch ? 'bg-teal-500' : 'bg-gray-200'
                         }`}
                         onClick={() => setEnableWebSearch(!enableWebSearch)}
+                        type="button"
                       >
                         <span
                           className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -406,6 +420,7 @@ export default function ExtractPlaygroundPage() {
                           illiaAgent ? 'bg-teal-500' : 'bg-gray-200'
                         }`}
                         onClick={() => setIlliaAgent(!illiaAgent)}
+                        type="button"
                       >
                         <span
                           className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -482,7 +497,10 @@ export default function ExtractPlaygroundPage() {
                           ))}
                         </div>
                       ))}
-                      <button className="w-full rounded-lg border-2 border-teal-300 border-dashed py-2 text-gray-600 text-sm hover:border-teal-400 hover:text-gray-900">
+                      <button
+                        className="w-full rounded-lg border-2 border-teal-300 border-dashed py-2 text-gray-600 text-sm hover:border-teal-400 hover:text-gray-900"
+                        type="button"
+                      >
                         <Plus className="mr-1 inline h-4 w-4" />
                         Add field
                       </button>
@@ -502,7 +520,10 @@ export default function ExtractPlaygroundPage() {
                           <button className="rounded-lg p-2 hover:bg-gray-100" type="button">
                             <Share2 className="h-4 w-4 text-gray-600" />
                           </button>
-                          <button className="rounded-lg p-2 text-red-600 hover:bg-gray-100">
+                          <button
+                            className="rounded-lg p-2 text-red-600 hover:bg-gray-100"
+                            type="button"
+                          >
                             <StopCircle className="h-4 w-4" />
                             <span className="ml-1 text-sm">Stop</span>
                           </button>
@@ -526,11 +547,17 @@ export default function ExtractPlaygroundPage() {
                           <p className="mt-1 text-gray-500 text-xs">From 1 search query</p>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <button className="flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900">
+                          <button
+                            className="flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900"
+                            type="button"
+                          >
                             <AlertTriangle className="h-4 w-4" />
                             <span>Report issue</span>
                           </button>
-                          <button className="flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900">
+                          <button
+                            className="flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900"
+                            type="button"
+                          >
                             <Download className="h-4 w-4" />
                             <span>JSON</span>
                           </button>
@@ -546,7 +573,10 @@ export default function ExtractPlaygroundPage() {
   }
 }`}
                         </pre>
-                        <button className="mt-4 flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900">
+                        <button
+                          className="mt-4 flex items-center space-x-1 text-gray-600 text-sm hover:text-gray-900"
+                          type="button"
+                        >
                           <Copy className="h-4 w-4" />
                           <span>Copy as JSON</span>
                         </button>
@@ -620,7 +650,10 @@ export default function ExtractPlaygroundPage() {
       </div>
 
       {/* Intercom Chat */}
-      <button className="fixed right-4 bottom-4 rounded-full bg-teal-500 p-4 text-white shadow-lg hover:bg-teal-600">
+      <button
+        className="fixed right-4 bottom-4 rounded-full bg-teal-500 p-4 text-white shadow-lg hover:bg-teal-600"
+        type="button"
+      >
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>

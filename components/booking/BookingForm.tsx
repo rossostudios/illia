@@ -15,7 +15,7 @@ import {
   Video,
 } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { useSessionContext } from '@/components/SessionProvider'
 import { createClient } from '@/lib/supabase/client'
@@ -97,6 +97,8 @@ export default function BookingForm({
   const [agreeToTerms, setAgreeToTerms] = useState(false)
   const [loading, setLoading] = useState(false)
   const [step, setStep] = useState(1)
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const formSubmittedRef = useRef(false)
 
   // Calculate total duration and price
   const totalDuration = selectedServices.reduce((total, service) => {
@@ -106,6 +108,52 @@ export default function BookingForm({
 
   const hourlyRate = provider.rate_hourly || 0
   const totalPrice = (hourlyRate * totalDuration) / 60
+
+  // Track form changes
+  useEffect(() => {
+    const hasFormData =
+      selectedServices.length > 0 ||
+      selectedSlot !== null ||
+      userAddress.trim() !== '' ||
+      specialInstructions.trim() !== ''
+
+    setHasUnsavedChanges(hasFormData && !formSubmittedRef.current)
+  }, [selectedServices, selectedSlot, userAddress, specialInstructions])
+
+  // Handle beforeunload event
+  const handleBeforeUnload = useCallback(
+    (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges && !formSubmittedRef.current) {
+        const confirmationMessage = 'You have unsaved changes. Are you sure you want to leave?'
+        e.returnValue = confirmationMessage
+        return confirmationMessage
+      }
+    },
+    [hasUnsavedChanges]
+  )
+
+  // Add and remove beforeunload listener
+  useEffect(() => {
+    if (hasUnsavedChanges) {
+      window.addEventListener('beforeunload', handleBeforeUnload)
+      return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload)
+      }
+    }
+  }, [hasUnsavedChanges, handleBeforeUnload])
+
+  // Handle navigation away
+  const handleCancel = useCallback(() => {
+    if (hasUnsavedChanges && !formSubmittedRef.current) {
+      const confirmed = window.confirm(
+        'You have unsaved changes. Are you sure you want to cancel your booking?'
+      )
+      if (!confirmed) {
+        return
+      }
+    }
+    onCancel?.()
+  }, [hasUnsavedChanges, onCancel])
 
   const handleServiceToggle = (service: string) => {
     if (selectedServices.includes(service)) {
@@ -199,6 +247,10 @@ export default function BookingForm({
       toast.success('Booking created!', {
         description: 'Your booking request has been sent to the provider',
       })
+
+      // Mark form as submitted to prevent unsaved changes warning
+      formSubmittedRef.current = true
+
       onSuccess?.(booking.id)
 
       // Redirect to bookings page
@@ -288,6 +340,7 @@ Both parties agree to the terms stated above.`
                     `}
                     key={service}
                     onClick={() => handleServiceToggle(service)}
+                    type="button"
                   >
                     <div className="flex items-start gap-3">
                       <Icon
@@ -422,6 +475,7 @@ Both parties agree to the terms stated above.`
                       `}
                       key={key}
                       onClick={() => setLocationType(key as keyof typeof locationTypes)}
+                      type="button"
                     >
                       <Icon
                         className={`mx-auto mb-1 h-5 w-5 ${
@@ -616,32 +670,89 @@ Both parties agree to the terms stated above.`
     }
   }
 
+  // Announce step changes to screen readers
+  useEffect(() => {
+    const stepLabels = [
+      'Select Services',
+      'Select Date & Time',
+      'Location & Instructions',
+      'Review & Confirm',
+    ]
+    const announcement = `Step ${step} of 4: ${stepLabels[step - 1]}`
+
+    // Create and announce live region content
+    const liveRegion = document.createElement('div')
+    liveRegion.setAttribute('aria-live', 'polite')
+    liveRegion.setAttribute('aria-atomic', 'true')
+    liveRegion.className = 'sr-only'
+    liveRegion.textContent = announcement
+    document.body.appendChild(liveRegion)
+
+    // Clean up after announcement
+    const timer = setTimeout(() => {
+      document.body.removeChild(liveRegion)
+    }, 1000)
+
+    return () => {
+      clearTimeout(timer)
+      if (document.body.contains(liveRegion)) {
+        document.body.removeChild(liveRegion)
+      }
+    }
+  }, [step])
+
   return (
     <div className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
       {/* Progress Steps */}
-      <div className="border-gray-200 border-b p-4 dark:border-gray-700">
+      <div
+        aria-label="Booking progress"
+        className="border-gray-200 border-b p-4 dark:border-gray-700"
+        role="navigation"
+      >
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          {[1, 2, 3, 4].map((stepNumber) => (
-            <div className={`flex items-center ${stepNumber < 4 ? 'flex-1' : ''}`} key={stepNumber}>
+          {[1, 2, 3, 4].map((stepNumber) => {
+            const stepLabels = [
+              'Select Services',
+              'Select Date & Time',
+              'Location & Instructions',
+              'Review & Confirm',
+            ]
+            const isCurrentStep = step === stepNumber
+            const isCompleted = step > stepNumber
+
+            return (
               <div
-                className={`flex h-8 w-8 items-center justify-center rounded-full font-medium text-sm ${
-                  step >= stepNumber
-                    ? 'bg-teal-600 text-white'
-                    : 'bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
-                }
-                `}
+                className={`flex items-center ${stepNumber < 4 ? 'flex-1' : ''}`}
+                key={stepNumber}
               >
-                {step > stepNumber ? <CheckCircle className="h-5 w-5" /> : stepNumber}
-              </div>
-              {stepNumber < 4 && (
                 <div
-                  className={`mx-2 h-1 flex-1 ${
-                    step > stepNumber ? 'bg-teal-600' : 'bg-gray-200 dark:bg-gray-700'
-                  }`}
-                />
-              )}
-            </div>
-          ))}
+                  aria-current={isCurrentStep ? 'step' : undefined}
+                  aria-label={`${stepLabels[stepNumber - 1]}${isCompleted ? ' - Completed' : isCurrentStep ? ' - Current Step' : ''}`}
+                  className={`flex h-8 w-8 items-center justify-center rounded-full font-medium text-sm ${
+                    step >= stepNumber
+                      ? 'bg-teal-600 text-white'
+                      : 'bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
+                  }
+                  `}
+                  role="listitem"
+                >
+                  {isCompleted ? (
+                    <CheckCircle aria-hidden="true" className="h-5 w-5" />
+                  ) : (
+                    stepNumber
+                  )}
+                </div>
+                {stepNumber < 4 && (
+                  <div
+                    aria-hidden="true"
+                    className={`mx-2 h-1 flex-1 ${
+                      step > stepNumber ? 'bg-teal-600' : 'bg-gray-200 dark:bg-gray-700'
+                    }`}
+                  />
+                )}
+              </div>
+            )
+          })}
         </div>
         <div className="mx-auto mt-2 flex max-w-3xl justify-between">
           <span className="text-gray-500 text-xs dark:text-gray-400">Services</span>
@@ -660,13 +771,15 @@ Both parties agree to the terms stated above.`
           <button
             className="px-4 py-2 text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
             onClick={() => setStep(step - 1)}
+            type="button"
           >
             Back
           </button>
         ) : (
           <button
             className="px-4 py-2 text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
-            onClick={onCancel}
+            onClick={handleCancel}
+            type="button"
           >
             Cancel
           </button>
@@ -681,6 +794,7 @@ Both parties agree to the terms stated above.`
               (step === 3 && locationType === 'user_address' && !userAddress.trim())
             }
             onClick={() => setStep(step + 1)}
+            type="button"
           >
             Next
             <ChevronRight className="h-4 w-4" />
@@ -690,6 +804,7 @@ Both parties agree to the terms stated above.`
             className="flex items-center gap-2 rounded-lg bg-teal-600 px-6 py-2 text-white transition-colors hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={!agreeToTerms || loading}
             onClick={handleSubmit}
+            type="button"
           >
             {loading ? (
               <>

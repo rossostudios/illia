@@ -248,6 +248,7 @@ export default function MyMatchesPage() {
             onClick={() => {
               window.location.href = '/en/dashboard/explore'
             }}
+            type="button"
           >
             <Plus className="h-4 w-4" />
             Request New Match
@@ -328,6 +329,7 @@ export default function MyMatchesPage() {
                 )}
                 key={status}
                 onClick={() => setStatusFilter(status)}
+                type="button"
               >
                 {status === 'all' ? 'All' : status}
               </button>
@@ -497,6 +499,7 @@ export default function MyMatchesPage() {
                               setSelectedMatch(match)
                               setNoteDialogOpen(true)
                             }}
+                            type="button"
                           >
                             <FileText className="h-4 w-4" />
                           </button>
@@ -509,6 +512,7 @@ export default function MyMatchesPage() {
                                 setSelectedMatch(match)
                                 setRatingDialogOpen(true)
                               }}
+                              type="button"
                             >
                               <Star className="h-4 w-4" />
                             </button>
@@ -520,6 +524,7 @@ export default function MyMatchesPage() {
                               e.stopPropagation()
                               setSelectedMatch(match)
                             }}
+                            type="button"
                           >
                             <ChevronRight className="h-4 w-4" />
                           </button>
@@ -556,6 +561,7 @@ export default function MyMatchesPage() {
                   aria-label="Close dialog"
                   className="rounded-lg p-2 text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                   onClick={() => setSelectedMatch(null)}
+                  type="button"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -683,6 +689,7 @@ export default function MyMatchesPage() {
                   <button
                     className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
                     onClick={() => setNoteDialogOpen(true)}
+                    type="button"
                   >
                     <FileText className="h-4 w-4" />
                     Add Note
@@ -691,12 +698,16 @@ export default function MyMatchesPage() {
                     <button
                       className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-white transition-colors hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600"
                       onClick={() => setRatingDialogOpen(true)}
+                      type="button"
                     >
                       <Star className="h-4 w-4" />
                       Rate Provider
                     </button>
                   )}
-                  <button className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">
+                  <button
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
+                    type="button"
+                  >
                     <Mail className="h-4 w-4" />
                     Contact
                   </button>
@@ -752,6 +763,7 @@ export default function MyMatchesPage() {
                   <button
                     className="flex-1 rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
                     onClick={() => setNoteDialogOpen(false)}
+                    type="button"
                   >
                     Cancel
                   </button>
@@ -761,6 +773,7 @@ export default function MyMatchesPage() {
                       setNewNote('')
                       setNoteDialogOpen(false)
                     }}
+                    type="button"
                   >
                     Save Note
                   </button>
@@ -811,6 +824,7 @@ export default function MyMatchesPage() {
                         className="rounded focus:outline-none focus:ring-2 focus:ring-teal-500"
                         key={star}
                         onClick={() => setRating(star)}
+                        type="button"
                       >
                         <Star
                           className={cn(
@@ -842,6 +856,7 @@ export default function MyMatchesPage() {
                   <button
                     className="flex-1 rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
                     onClick={() => setRatingDialogOpen(false)}
+                    type="button"
                   >
                     Cancel
                   </button>
@@ -851,6 +866,7 @@ export default function MyMatchesPage() {
                       setRating(5)
                       setRatingDialogOpen(false)
                     }}
+                    type="button"
                   >
                     Submit Rating
                   </button>

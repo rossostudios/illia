@@ -151,6 +151,7 @@ export default function ExtractPage() {
                 <button
                   className="text-gray-700 hover:text-gray-600"
                   onClick={() => setShowWhatsNew(false)}
+                  type="button"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -162,7 +163,10 @@ export default function ExtractPage() {
             <div className="mt-4 px-3 py-2 text-gray-500 text-xs">samlee@content-mobbin.com</div>
 
             {/* Collapse button */}
-            <button className="mt-2 flex items-center space-x-2 text-gray-600 text-xs hover:text-gray-900">
+            <button
+              className="mt-2 flex items-center space-x-2 text-gray-600 text-xs hover:text-gray-900"
+              type="button"
+            >
               <ChevronLeft className="h-3 w-3" />
               <span>Collapse</span>
             </button>
@@ -195,7 +199,10 @@ export default function ExtractPage() {
                 <FileCode className="h-4 w-4" />
                 <span className="font-medium text-sm">Docs</span>
               </Link>
-              <button className="rounded-lg bg-teal-500 px-4 py-1.5 font-medium text-sm text-white transition-colors hover:bg-teal-600">
+              <button
+                className="rounded-lg bg-teal-500 px-4 py-1.5 font-medium text-sm text-white transition-colors hover:bg-teal-600"
+                type="button"
+              >
                 Upgrade
               </button>
             </div>
@@ -348,6 +355,7 @@ export default function ExtractPage() {
                           <button
                             className="text-teal-600 hover:text-teal-700"
                             title="Download leads"
+                            type="button"
                           >
                             <Download className="h-4 w-4" />
                           </button>
@@ -440,7 +448,10 @@ export default function ExtractPage() {
       </div>
 
       {/* Intercom Chat */}
-      <button className="fixed right-4 bottom-4 rounded-full bg-teal-500 p-4 text-white shadow-lg hover:bg-teal-600">
+      <button
+        className="fixed right-4 bottom-4 rounded-full bg-teal-500 p-4 text-white shadow-lg hover:bg-teal-600"
+        type="button"
+      >
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>

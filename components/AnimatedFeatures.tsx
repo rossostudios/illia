@@ -78,7 +78,7 @@ export default function AnimatedFeatures() {
   ]
 
   return (
-    <section className="relative overflow-hidden bg-gray-50 py-24">
+    <section className="relative overflow-hidden bg-gray-50 py-24" id="how-it-works">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
@@ -133,12 +133,12 @@ export default function AnimatedFeatures() {
           ref={ref}
           variants={containerVariants}
         >
-          {features.map((feature, index) => {
+          {features.map((feature) => {
             const Icon = feature.icon
             return (
               <motion.div
                 className="group hover:-translate-y-1 relative transform overflow-hidden rounded-2xl bg-white p-8 shadow-sm transition-shadow duration-300 ease-in-out hover:shadow-xl"
-                key={index}
+                key={feature.titleKey}
                 variants={itemVariants}
               >
                 {/* Background on hover */}

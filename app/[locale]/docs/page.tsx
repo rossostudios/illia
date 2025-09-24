@@ -22,6 +22,7 @@ function FaqItem({ faq }: { faq: { q: string; a: string; expanded?: string } }) 
       <button
         className="w-full bg-white px-6 py-4 text-left transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset"
         onClick={() => setIsOpen(!isOpen)}
+        type="button"
       >
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-gray-900">{faq.q}</h3>
@@ -334,6 +335,7 @@ const leads = await response.json();`,
         aria-label="Toggle table of contents"
         className="fixed top-20 left-4 z-50 rounded-lg border border-gray-200 bg-white p-3 shadow-lg hover:bg-gray-50 lg:hidden"
         onClick={() => setIsTocOpen(!isTocOpen)}
+        type="button"
       >
         {isTocOpen ? (
           <X className="h-5 w-5 text-gray-700" />
@@ -373,6 +375,7 @@ const leads = await response.json();`,
                       : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                   }`}
                   onClick={() => scrollToSection(item.id)}
+                  type="button"
                 >
                   <span className="text-lg">{item.icon}</span>
                   <span className="text-sm">{item.title}</span>
@@ -605,6 +608,7 @@ const leads = await response.json();`,
           aria-label="Scroll to top"
           className="fixed right-8 bottom-8 transform rounded-full bg-teal-600 p-3 text-white shadow-lg transition-all duration-300 hover:scale-110 hover:bg-teal-700"
           onClick={scrollToTop}
+          type="button"
         >
           <ArrowUp className="h-5 w-5" />
         </button>

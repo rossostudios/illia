@@ -1,9 +1,8 @@
 'use client'
 
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useEffect, useState } from 'react'
 import type { AdminRole } from '@/lib/admin/auth'
-import type { Database } from '@/lib/database.types'
+import { createClient } from '@/lib/supabase/client'
 
 type AdminUser = {
   id: string
@@ -16,7 +15,7 @@ type AdminUser = {
 export function useAdmin() {
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null)
   const [loading, setLoading] = useState(true)
-  const supabase = createClientComponentClient<Database>()
+  const supabase = createClient()
 
   useEffect(() => {
     async function checkAdmin() {

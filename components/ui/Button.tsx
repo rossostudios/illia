@@ -35,7 +35,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       secondary:
         'bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-800 focus:bg-gray-200 dark:focus:bg-gray-700 active:bg-gray-300 dark:active:bg-gray-600',
       outline:
-        'border-2 border-teal-600 dark:border-teal-400 text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/20 focus:bg-teal-50 dark:focus:bg-teal-900/20 active:bg-teal-100 dark:active:bg-teal-900/30',
+        'border-2 border-[#0052cc] text-[#0052cc] hover:bg-teal-50 focus:bg-teal-50 active:bg-teal-100 dark:border-[#7aa3ff] dark:text-[#7aa3ff] dark:hover:bg-[#0b0d0f] dark:focus:bg-[#0b0d0f] dark:active:bg-[#0b0d0f]/80',
       ghost:
         'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700',
       danger:
@@ -64,7 +64,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <button
-        className={`inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 ${variantStyles[variant]}
+        aria-busy={loading}
+        aria-disabled={isDisabled}
+        className={`inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0052cc] focus:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 dark:focus:ring-[#7aa3ff] dark:focus:ring-offset-gray-900 ${variantStyles[variant]}
           ${sizeStyles[size]}
           ${fullWidth ? 'w-full' : ''}
           ${className}

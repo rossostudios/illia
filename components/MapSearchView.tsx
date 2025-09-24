@@ -245,7 +245,7 @@ export function MapSearchView({
                 {aiSuggestion.alternativeQueries.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-2">
                     {aiSuggestion.alternativeQueries.slice(0, 3).map((query, index) => (
-                      <button
+                      <Button
                         className="rounded-full bg-teal-100 px-3 py-1 text-teal-700 text-xs transition-colors hover:bg-teal-200 dark:bg-teal-900 dark:text-teal-300 dark:hover:bg-teal-800"
                         key={index}
                         onClick={() => setQuery(query)}

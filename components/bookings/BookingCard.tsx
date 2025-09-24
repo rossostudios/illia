@@ -14,7 +14,6 @@ import {
   Phone,
   RefreshCw,
   Star,
-  Video,
   X,
 } from 'lucide-react'
 import Image from 'next/image'
@@ -245,7 +244,7 @@ export function BookingCard({ booking, viewMode, onAction }: BookingCardProps) {
           <>
             {booking.booking_reviews?.length ? (
               <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
+                {[...new Array(5)].map((_, i) => (
                   <Star
                     className={`h-4 w-4 ${
                       i < (booking.booking_reviews?.[0]?.rating || 0)

@@ -34,7 +34,6 @@ const nextConfig: NextConfig = {
       'recharts',
       'date-fns',
       '@supabase/supabase-js',
-      '@supabase/auth-helpers-nextjs',
       'sonner',
     ],
     cssChunking: 'strict',
@@ -91,11 +90,12 @@ const nextConfig: NextConfig = {
       ],
     },
   ],
+  // Enable build-time checks for better code quality
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
 }
 

@@ -31,7 +31,9 @@ export default function DirectoryPage() {
   const filteredProviders = useMemo(() => {
     return MOCK_PROVIDERS.filter((provider) => {
       // City filter
-      if (provider.city !== filters.city) return false
+      if (provider.city !== filters.city) {
+        return false
+      }
 
       // Search filter
       if (
@@ -59,11 +61,15 @@ export default function DirectoryPage() {
       // Rating filter
       if (filters.rating !== 'all') {
         const minRating = Number.parseFloat(filters.rating)
-        if (provider.rating < minRating) return false
+        if (provider.rating < minRating) {
+          return false
+        }
       }
 
       // Verified filter
-      if (filters.verified && !provider.verified) return false
+      if (filters.verified && !provider.verified) {
+        return false
+      }
 
       return true
     })

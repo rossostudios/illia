@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import LanguageSwitcher from './LanguageSwitcher'
-import MessageButton from './messaging/MessageButton'
 import { useSessionContext } from './SessionProvider'
 
 export default function Navbar() {
@@ -23,34 +22,46 @@ export default function Navbar() {
 
             <div className="ml-10 hidden items-center space-x-6 md:flex">
               <Link
-                className="font-semibold text-gray-900 text-sm transition-colors hover:text-teal-600"
+                className="font-semibold text-gray-900 text-sm transition-colors hover:text-[#0052cc]"
                 href="/"
               >
                 Home
               </Link>
               <Link
-                className="font-medium text-gray-700 text-sm transition-colors hover:text-teal-600"
-                href="/features"
+                className="font-medium text-gray-700 text-sm transition-colors hover:text-[#0052cc]"
+                href="/#how-it-works"
               >
                 {t('features')}
               </Link>
               <Link
-                className="font-medium text-gray-700 text-sm transition-colors hover:text-teal-600"
+                className="font-medium text-gray-700 text-sm transition-colors hover:text-[#0052cc]"
+                href="/features"
+              >
+                {t('caseStudies')}
+              </Link>
+              <Link
+                className="font-medium text-gray-700 text-sm transition-colors hover:text-[#0052cc]"
                 href="/dashboard/explore"
               >
                 Explore
               </Link>
               <Link
-                className="font-medium text-gray-700 text-sm transition-colors hover:text-teal-600"
+                className="font-medium text-gray-700 text-sm transition-colors hover:text-[#0052cc]"
                 href="/pricing"
               >
                 {t('pricing')}
               </Link>
               <Link
-                className="font-medium text-gray-700 text-sm transition-colors hover:text-teal-600"
+                className="font-medium text-gray-700 text-sm transition-colors hover:text-[#0052cc]"
                 href="/docs"
               >
                 {t('docs')}
+              </Link>
+              <Link
+                className="font-medium text-gray-700 text-sm transition-colors hover:text-[#0052cc]"
+                href="/#community"
+              >
+                {t('community') ?? 'Community'}
               </Link>
             </div>
           </div>
@@ -59,7 +70,6 @@ export default function Navbar() {
             <LanguageSwitcher />
             {!loading && user ? (
               <>
-                <MessageButton showLabel={false} />
                 <Link
                   className="font-medium text-gray-700 text-sm transition-colors hover:text-gray-900"
                   href="/dashboard"
@@ -67,7 +77,7 @@ export default function Navbar() {
                   Dashboard
                 </Link>
                 <Link
-                  className="hover:-translate-y-0.5 transform rounded-lg bg-gradient-to-r from-teal-500 to-teal-600 px-5 py-2.5 font-semibold text-sm text-white shadow-md transition-all hover:from-teal-600 hover:to-teal-700 hover:shadow-lg"
+                  className="hover:-translate-y-0.5 transform rounded-full bg-gray-900 px-5 py-2.5 font-semibold text-sm text-white shadow-md transition-all hover:bg-black hover:shadow-lg"
                   href="/dashboard/profile"
                 >
                   Profile
@@ -82,7 +92,7 @@ export default function Navbar() {
                   {t('signin')}
                 </Link>
                 <Link
-                  className="hover:-translate-y-0.5 transform rounded-lg bg-gradient-to-r from-teal-500 to-teal-600 px-5 py-2.5 font-semibold text-sm text-white shadow-md transition-all hover:from-teal-600 hover:to-teal-700 hover:shadow-lg"
+                  className="hover:-translate-y-0.5 transform rounded-full bg-gray-900 px-5 py-2.5 font-semibold text-sm text-white shadow-md transition-all hover:bg-black hover:shadow-lg"
                   href="/dashboard/explore"
                 >
                   {t('getStarted')}

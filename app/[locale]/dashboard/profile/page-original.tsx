@@ -163,6 +163,7 @@ export default function ProfilePage() {
                   className="rounded-full p-1 transition-colors hover:bg-teal-50 dark:hover:bg-teal-900/30"
                   onMouseEnter={() => setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
+                  type="button"
                 >
                   <Info className="h-5 w-5 text-teal-500 dark:text-teal-400" />
                 </button>
@@ -182,6 +183,7 @@ export default function ProfilePage() {
               <button
                 className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
                 onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+                type="button"
               >
                 <Globe className="h-4 w-4" />
                 <span>{LANGUAGES.find((l) => l.code === formData.language)?.label}</span>
@@ -202,6 +204,7 @@ export default function ProfilePage() {
                         setShowLanguageDropdown(false)
                         showSuccessToast(`Language changed to ${lang.label}`)
                       }}
+                      type="button"
                     >
                       <span>{lang.flag}</span>
                       <span>{lang.label}</span>
@@ -227,6 +230,7 @@ export default function ProfilePage() {
                 }`}
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
+                type="button"
               >
                 <Icon className="h-4 w-4" />
                 <span className="hidden sm:inline">{tab.label}</span>
@@ -252,7 +256,10 @@ export default function ProfilePage() {
                     className="h-20 w-20 rounded-full object-cover"
                     src={MOCK_USER.avatar}
                   />
-                  <button className="absolute right-0 bottom-0 rounded-full bg-teal-600 p-1.5 text-white hover:bg-teal-700">
+                  <button
+                    className="absolute right-0 bottom-0 rounded-full bg-teal-600 p-1.5 text-white hover:bg-teal-700"
+                    type="button"
+                  >
                     <Camera className="h-4 w-4" />
                   </button>
                 </div>
@@ -308,6 +315,7 @@ export default function ProfilePage() {
               <button
                 className="flex items-center gap-2 rounded-lg bg-teal-600 px-6 py-2 font-medium text-white transition-colors hover:bg-teal-700"
                 onClick={() => handleSave('Personal info')}
+                type="button"
               >
                 <Save className="h-4 w-4" />
                 Save Changes
@@ -333,6 +341,7 @@ export default function ProfilePage() {
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                     onClick={() => setFormData((prev) => ({ ...prev, city: 'medellin' }))}
+                    type="button"
                   >
                     <MapPin className="mx-auto mb-2 h-6 w-6 text-teal-600" />
                     <p className="font-medium">Medellín</p>
@@ -345,6 +354,7 @@ export default function ProfilePage() {
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                     onClick={() => setFormData((prev) => ({ ...prev, city: 'florianopolis' }))}
+                    type="button"
                   >
                     <Globe className="mx-auto mb-2 h-6 w-6 text-teal-600" />
                     <p className="font-medium">Florianópolis</p>
@@ -371,6 +381,7 @@ export default function ProfilePage() {
                         }`}
                         key={service.id}
                         onClick={() => handleServiceToggle(service.id)}
+                        type="button"
                       >
                         <Icon
                           className={`mx-auto mb-1 h-5 w-5 ${
@@ -420,6 +431,7 @@ export default function ProfilePage() {
               <button
                 className="rounded-lg bg-teal-600 px-6 py-2 font-medium text-white transition-colors hover:bg-teal-700"
                 onClick={() => handleSave('Preferences')}
+                type="button"
               >
                 Update Matches
               </button>
@@ -485,15 +497,22 @@ export default function ProfilePage() {
                     <button
                       className="flex-1 rounded-lg bg-teal-600 py-2 font-medium text-white transition-colors hover:bg-teal-700"
                       onClick={() => router.push('/dashboard/membership')}
+                      type="button"
                     >
                       Upgrade to Premium
                     </button>
                   ) : (
                     <>
-                      <button className="flex-1 rounded-lg border border-gray-300 py-2 text-gray-700 transition-colors hover:bg-gray-50">
+                      <button
+                        className="flex-1 rounded-lg border border-gray-300 py-2 text-gray-700 transition-colors hover:bg-gray-50"
+                        type="button"
+                      >
                         Manage Subscription
                       </button>
-                      <button className="rounded-lg px-4 py-2 text-red-600 transition-colors hover:bg-red-50">
+                      <button
+                        className="rounded-lg px-4 py-2 text-red-600 transition-colors hover:bg-red-50"
+                        type="button"
+                      >
                         Downgrade
                       </button>
                     </>
@@ -560,6 +579,7 @@ export default function ProfilePage() {
                       formData.privacy.discoverable ? 'bg-teal-600' : 'bg-gray-200'
                     }`}
                     onClick={() => handlePrivacyToggle('discoverable')}
+                    type="button"
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -582,6 +602,7 @@ export default function ProfilePage() {
                       formData.privacy.showInForums ? 'bg-teal-600' : 'bg-gray-200'
                     }`}
                     onClick={() => handlePrivacyToggle('showInForums')}
+                    type="button"
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -604,6 +625,7 @@ export default function ProfilePage() {
                       formData.privacy.shareLocation ? 'bg-teal-600' : 'bg-gray-200'
                     }`}
                     onClick={() => handlePrivacyToggle('shareLocation')}
+                    type="button"
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -631,6 +653,7 @@ export default function ProfilePage() {
                       formData.notifications.matches ? 'bg-teal-600' : 'bg-gray-200'
                     }`}
                     onClick={() => handleNotificationToggle('matches')}
+                    type="button"
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -653,6 +676,7 @@ export default function ProfilePage() {
                       formData.notifications.forum ? 'bg-teal-600' : 'bg-gray-200'
                     }`}
                     onClick={() => handleNotificationToggle('forum')}
+                    type="button"
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -667,13 +691,17 @@ export default function ProfilePage() {
               <div className="space-y-4">
                 <h3 className="font-medium text-gray-900">Data Management</h3>
                 <div className="flex gap-3">
-                  <button className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50">
+                  <button
+                    className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50"
+                    type="button"
+                  >
                     <Download className="h-4 w-4" />
                     Download My Data
                   </button>
                   <button
                     className="flex items-center gap-2 rounded-lg border border-red-300 px-4 py-2 text-red-600 transition-colors hover:bg-red-50"
                     onClick={() => setShowDeleteModal(true)}
+                    type="button"
                   >
                     <Trash2 className="h-4 w-4" />
                     Delete Account
@@ -689,6 +717,7 @@ export default function ProfilePage() {
               <button
                 className="rounded-lg bg-teal-600 px-6 py-2 font-medium text-white transition-colors hover:bg-teal-700"
                 onClick={() => handleSave('Privacy settings')}
+                type="button"
               >
                 Save Privacy Settings
               </button>
@@ -701,6 +730,7 @@ export default function ProfilePage() {
           <button
             className="mx-auto flex items-center gap-2 rounded-lg border border-red-300 px-6 py-2 text-red-600 transition-colors hover:bg-red-50"
             onClick={() => setShowLogoutModal(true)}
+            type="button"
           >
             <LogOut className="h-4 w-4" />
             Sign Out
@@ -725,12 +755,14 @@ export default function ProfilePage() {
                 <button
                   className="flex-1 rounded-lg border border-gray-300 py-2 text-gray-700 transition-colors hover:bg-gray-50"
                   onClick={() => setShowDeleteModal(false)}
+                  type="button"
                 >
                   Cancel
                 </button>
                 <button
                   className="flex-1 rounded-lg bg-red-600 py-2 text-white transition-colors hover:bg-red-700"
                   onClick={handleDeleteAccount}
+                  type="button"
                 >
                   Delete Account
                 </button>
@@ -751,12 +783,14 @@ export default function ProfilePage() {
                 <button
                   className="flex-1 rounded-lg border border-gray-300 py-2 text-gray-700 transition-colors hover:bg-gray-50"
                   onClick={() => setShowLogoutModal(false)}
+                  type="button"
                 >
                   Cancel
                 </button>
                 <button
                   className="flex-1 rounded-lg bg-red-600 py-2 text-white transition-colors hover:bg-red-700"
                   onClick={handleLogout}
+                  type="button"
                 >
                   Sign Out
                 </button>

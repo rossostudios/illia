@@ -101,9 +101,9 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
                   <span className="rounded-full bg-gray-100 px-2 py-1 text-gray-500 text-xs">
                     OPTIONAL
                   </span>
-                  <button aria-label="Close modal"
-                    className="rounded-lg p-1.5 transition-colors hover:bg-gray-100"
+                  <button aria-label="Close modal" className="rounded-lg p-1.5 transition-colors hover:bg-gray-100"
                     onClick={onClose}
+                    type="button"
                   >
                     <X className="h-5 w-5 text-gray-500" />
                   </button>
@@ -173,8 +173,8 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
                               CLAIMED
                             </span>
                           ) : step.id !== 1 ? (
-                            <button className="whitespace-nowrap font-medium text-sm text-teal-600 hover:text-teal-700"
-                              onClick={() => handleStepComplete(step.id)}
+                            <button className="whitespace-nowrap font-medium text-sm text-teal-600 hover:text-teal-700" onClick={() => handleStepComplete(step.id)}
+                              type="button"
                             >
                               Complete →
                             </button>
@@ -197,7 +197,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
                         Professional updates and insights
                       </p>
                     </div>
-                    <button className="flex-shrink-0 whitespace-nowrap font-medium text-sm text-teal-600 hover:text-teal-700"
+                    <button className="flex-shrink-0 whitespace-nowrap font-medium text-sm text-teal-600 hover:text-teal-700" type="button"
                     >
                       Follow →
                     </button>
@@ -208,8 +208,8 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
 
             {/* Footer - Fixed */}
             <div className="flex-shrink-0 border-t bg-gray-50 p-6">
-              <button className="w-full transform rounded-lg bg-teal-600 px-6 py-3 font-medium text-white transition-all hover:scale-[1.02] hover:bg-teal-700 active:scale-[0.98]"
-                onClick={handleContinue}
+              <button className="w-full transform rounded-lg bg-teal-600 px-6 py-3 font-medium text-white transition-all hover:scale-[1.02] hover:bg-teal-700 active:scale-[0.98]" onClick={handleContinue}
+                type="button"
               >
                 Continue
               </button>

@@ -24,19 +24,19 @@ const icons = {
 
 const colors = {
   success:
-    'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border-green-200 dark:border-green-800',
+    'bg-green-50 dark:bg-green-900/30 text-green-800 dark:text-green-100 border-green-200 dark:border-green-800',
   error:
-    'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border-red-200 dark:border-red-800',
+    'bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-100 border-red-200 dark:border-red-800',
   warning:
-    'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 border-yellow-200 dark:border-yellow-800',
-  info: 'bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-800',
+    'bg-yellow-50 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-100 border-yellow-200 dark:border-yellow-700',
+  info: 'bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-100 border-blue-200 dark:border-blue-800',
 }
 
 const iconColors = {
-  success: 'text-green-500 dark:text-green-400',
-  error: 'text-red-500 dark:text-red-400',
-  warning: 'text-yellow-500 dark:text-yellow-400',
-  info: 'text-blue-500 dark:text-blue-400',
+  success: 'text-green-600 dark:text-green-400',
+  error: 'text-red-600 dark:text-red-400',
+  warning: 'text-yellow-600 dark:text-yellow-300',
+  info: 'text-blue-600 dark:text-blue-400',
 }
 
 export function Toast({ id, type, title, message, duration = 5000, onClose }: ToastProps) {
@@ -70,6 +70,7 @@ export function Toast({ id, type, title, message, duration = 5000, onClose }: To
         aria-label="Close notification"
         className="inline-flex flex-shrink-0 rounded-md p-1.5 transition-colors hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-teal-400 dark:focus:ring-offset-gray-900 dark:hover:bg-white/5"
         onClick={() => onClose(id)}
+        type="button"
       >
         <X className="h-4 w-4" />
       </button>

@@ -20,9 +20,10 @@ import {
   Users,
   Utensils,
 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 import { ConnectedStepper } from '@/components/ConnectedStepper'
+import type { AISearchSuggestion } from '@/lib/ai-search'
 
 const SERVICES = [
   { id: 'cleaning', label: 'House Cleaning', icon: Home, color: 'teal' },
@@ -33,8 +34,67 @@ const SERVICES = [
   { id: 'organization', label: 'Organization', icon: Home, color: 'sunset' },
 ]
 
+const EXTRA_OPTIONS = ['English speaker', 'Pet-friendly', 'Vegan cooking', 'Eco-friendly'] as const
+
+const SERVICE_KEYWORDS = SERVICES.map((service) => ({
+  id: service.id,
+  keywords: [service.id, service.label].map((value) => normalizeText(value)),
+}))
+
+function mapServiceIds(serviceNames: string[]): string[] {
+  const matches = new Set<string>()
+
+  serviceNames.forEach((name) => {
+    const normalized = normalizeText(name)
+    const match = SERVICE_KEYWORDS.find((service) =>
+      service.keywords.some(
+        (keyword) => keyword.includes(normalized) || normalized.includes(keyword)
+      )
+    )
+
+    if (match) {
+      matches.add(match.id)
+    }
+  })
+
+  return Array.from(matches)
+}
+
+function deriveExtrasFromFilters(filters: Record<string, any>): string[] {
+  const derived: string[] = []
+  const languages: string[] = Array.isArray(filters.languages) ? filters.languages : []
+  const specialties: string[] = Array.isArray(filters.specialties) ? filters.specialties : []
+
+  if (languages.some((lang) => normalizeText(lang).startsWith('en'))) {
+    derived.push('English speaker')
+  }
+
+  if (specialties.some((spec) => normalizeText(spec).includes('pet'))) {
+    derived.push('Pet-friendly')
+  }
+
+  if (specialties.some((spec) => normalizeText(spec).includes('vegan'))) {
+    derived.push('Vegan cooking')
+  }
+
+  if (specialties.some((spec) => normalizeText(spec).includes('eco'))) {
+    derived.push('Eco-friendly')
+  }
+
+  return derived
+}
+
+function normalizeText(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, '')
+}
+
+function clampBudget(value: number) {
+  return Math.min(500, Math.max(50, value))
+}
+
 export default function ExplorePage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [currentStep, setCurrentStep] = useState(1)
   const [selectedCity, setSelectedCity] = useState('medellin')
   const [selectedServices, setSelectedServices] = useState<string[]>([])
@@ -46,6 +106,30 @@ export default function ExplorePage() {
   const [showTooltip, setShowTooltip] = useState(false)
   const [validationError, setValidationError] = useState<string | null>(null)
   const [estimatedMatches, setEstimatedMatches] = useState(0)
+  const [hasInitializedFromQuery, setHasInitializedFromQuery] = useState(false)
+  const [autoSearchPending, setAutoSearchPending] = useState(false)
+  const [initialQuery, setInitialQuery] = useState<string | null>(null)
+  const [aiSummary, setAiSummary] = useState<string | null>(null)
+  const [aiBudgetHint, setAiBudgetHint] = useState<{ min?: number; max?: number } | null>(null)
+  const searchQueryValue = searchParams?.get('search')?.trim() ?? ''
+
+  const suggestionIdParam = searchParams?.get('suggestionId') ?? ''
+  const presetServicesParam = searchParams?.get('presetServices') ?? ''
+  const presetExtrasParam = searchParams?.get('presetExtras') ?? ''
+  const presetCityParam = searchParams?.get('presetCity') ?? ''
+  const presetBudgetMinParam = searchParams?.get('presetBudgetMin') ?? ''
+  const presetBudgetMaxParam = searchParams?.get('presetBudgetMax') ?? ''
+  const presetSummaryParam = searchParams?.get('presetSummary') ?? ''
+
+  const hasPresetFilters = Boolean(
+    suggestionIdParam ||
+      presetServicesParam ||
+      presetExtrasParam ||
+      presetCityParam ||
+      presetBudgetMinParam ||
+      presetBudgetMaxParam ||
+      presetSummaryParam
+  )
 
   const calculateEstimatedMatches = () => {
     // Dynamic calculation based on selections
@@ -88,18 +172,16 @@ export default function ExplorePage() {
     setExtras((prev) => (prev.includes(extra) ? prev.filter((e) => e !== extra) : [...prev, extra]))
   }
 
-  const handleFindMatches = async () => {
+  const handleFindMatches = useCallback(async () => {
     setIsLoading(true)
 
     try {
-      // Build query parameters
       const params = new URLSearchParams({
         city: selectedCity,
         services: selectedServices.join(','),
         budget_max: (budget[1] * 100).toString(), // Convert to cents
       })
 
-      // Add extras as language preferences if applicable
       const languageExtras = extras.includes('English speaker') ? ['english'] : []
       if (languageExtras.length > 0) {
         params.append('languages', languageExtras.join(','))
@@ -111,16 +193,218 @@ export default function ExplorePage() {
       if (data.success && data.providers) {
         setMatches(data.providers)
       } else {
-        // No providers found
         setMatches([])
       }
     } catch (_error) {
-      // Show empty state on error
       setMatches([])
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [budget, extras, selectedCity, selectedServices])
+
+  const applyAiSuggestion = useCallback((suggestion: AISearchSuggestion) => {
+    const filters = suggestion.suggestedFilters ?? {}
+
+    setAiBudgetHint(null)
+
+    if (typeof filters.city === 'string') {
+      const normalizedCity = filters.city.toLowerCase()
+      if (normalizedCity === 'medellin' || normalizedCity === 'florianopolis') {
+        setSelectedCity(normalizedCity)
+      }
+    }
+
+    if (Array.isArray(filters.services)) {
+      const matchedServices = mapServiceIds(filters.services)
+      if (matchedServices.length > 0) {
+        setSelectedServices(matchedServices)
+      }
+    }
+
+    if (filters.priceMin !== undefined || filters.priceMax !== undefined) {
+      setBudget((prev) => {
+        const minCandidate =
+          typeof filters.priceMin === 'number' && Number.isFinite(filters.priceMin)
+            ? clampBudget(Math.round(filters.priceMin))
+            : clampBudget(prev[0])
+        const maxCandidate =
+          typeof filters.priceMax === 'number' && Number.isFinite(filters.priceMax)
+            ? clampBudget(Math.round(filters.priceMax))
+            : clampBudget(prev[1])
+        const nextMin = Math.min(minCandidate, maxCandidate)
+        const nextMax = Math.max(minCandidate, maxCandidate)
+        return [nextMin, nextMax]
+      })
+
+      const hintMin =
+        typeof filters.priceMin === 'number' && Number.isFinite(filters.priceMin)
+          ? clampBudget(Math.round(filters.priceMin))
+          : undefined
+      const hintMax =
+        typeof filters.priceMax === 'number' && Number.isFinite(filters.priceMax)
+          ? clampBudget(Math.round(filters.priceMax))
+          : undefined
+
+      if (hintMin !== undefined || hintMax !== undefined) {
+        setAiBudgetHint({ min: hintMin, max: hintMax })
+      }
+    }
+
+    const derivedExtras = deriveExtrasFromFilters(filters)
+    if (derivedExtras.length > 0) {
+      setExtras((prev) => Array.from(new Set([...prev, ...derivedExtras])))
+    }
+
+    setAiSummary(suggestion.reasoning || null)
+    setCurrentStep(3)
+    setValidationError(null)
+    setAutoSearchPending(true)
+  }, [])
+
+  useEffect(() => {
+    if (hasInitializedFromQuery) {
+      return
+    }
+
+    if (hasPresetFilters) {
+      const serviceTokens = presetServicesParam
+        ? Array.from(
+            new Set(
+              presetServicesParam
+                .split(',')
+                .map((value) => value.trim())
+                .filter(Boolean)
+            )
+          )
+        : []
+      const validServices = serviceTokens.filter((serviceId) =>
+        SERVICES.some((service) => service.id === serviceId)
+      )
+      const extraTokens = presetExtrasParam
+        ? Array.from(
+            new Set(
+              presetExtrasParam
+                .split(',')
+                .map((value) => value.trim())
+                .filter(Boolean)
+            )
+          )
+        : []
+      const validExtras = extraTokens.filter((extra) =>
+        EXTRA_OPTIONS.includes(extra as (typeof EXTRA_OPTIONS)[number])
+      )
+
+      const normalizedCity = presetCityParam.toLowerCase()
+      if (normalizedCity === 'medellin' || normalizedCity === 'florianopolis') {
+        setSelectedCity(normalizedCity)
+      }
+
+      setSelectedServices(validServices)
+      setExtras(validExtras)
+
+      const parsedBudgetMin = Number.parseInt(presetBudgetMinParam, 10)
+      const parsedBudgetMax = Number.parseInt(presetBudgetMaxParam, 10)
+
+      const normalizedBudgetMin =
+        presetBudgetMinParam && Number.isFinite(parsedBudgetMin)
+          ? clampBudget(parsedBudgetMin)
+          : undefined
+      const normalizedBudgetMax =
+        presetBudgetMaxParam && Number.isFinite(parsedBudgetMax)
+          ? clampBudget(parsedBudgetMax)
+          : undefined
+
+      let resultingMin = normalizedBudgetMin
+      let resultingMax = normalizedBudgetMax
+
+      if (normalizedBudgetMin !== undefined || normalizedBudgetMax !== undefined) {
+        setBudget((prev) => {
+          const nextMin = normalizedBudgetMin ?? prev[0]
+          let nextMax = normalizedBudgetMax ?? prev[1]
+          if (nextMax < nextMin) {
+            nextMax = nextMin
+          }
+          resultingMin = nextMin
+          resultingMax = nextMax
+          return [nextMin, nextMax]
+        })
+
+        setAiBudgetHint({
+          ...(normalizedBudgetMin !== undefined ? { min: resultingMin } : {}),
+          ...(normalizedBudgetMax !== undefined ? { max: resultingMax } : {}),
+        })
+      } else {
+        setAiBudgetHint(null)
+      }
+
+      const summary =
+        presetSummaryParam || (searchQueryValue ? `Matches for ${searchQueryValue}` : '')
+      if (summary) {
+        setAiSummary(summary)
+      }
+
+      setInitialQuery(searchQueryValue || summary || null)
+      setCurrentStep(3)
+      setValidationError(null)
+      setHasInitializedFromQuery(true)
+      setAutoSearchPending(true)
+      return
+    }
+
+    if (!searchQueryValue) {
+      return
+    }
+
+    setInitialQuery(searchQueryValue)
+    setAiBudgetHint(null)
+
+    const runAnalysis = async () => {
+      try {
+        const response = await fetch('/api/ai-search/analyze', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query: searchQueryValue }),
+        })
+
+        if (response.ok) {
+          const payload = (await response.json()) as {
+            data: AISearchSuggestion
+          }
+          applyAiSuggestion(payload.data)
+        } else {
+          setAutoSearchPending(true)
+        }
+      } catch (_error) {
+        setAutoSearchPending(true)
+      } finally {
+        setHasInitializedFromQuery(true)
+      }
+    }
+
+    void runAnalysis()
+  }, [
+    applyAiSuggestion,
+    hasInitializedFromQuery,
+    hasPresetFilters,
+    presetBudgetMaxParam,
+    presetBudgetMinParam,
+    presetCityParam,
+    presetExtrasParam,
+    presetServicesParam,
+    presetSummaryParam,
+    searchQueryValue,
+  ])
+
+  useEffect(() => {
+    if (!autoSearchPending) {
+      return
+    }
+
+    void handleFindMatches()
+    setAutoSearchPending(false)
+  }, [autoSearchPending, handleFindMatches])
 
   const canProceed = () => {
     switch (currentStep) {
@@ -179,6 +463,7 @@ export default function ExplorePage() {
                     className="rounded-full p-1 transition-colors hover:bg-teal-50 dark:hover:bg-teal-900/20"
                     onMouseEnter={() => setShowTooltip(true)}
                     onMouseLeave={() => setShowTooltip(false)}
+                    type="button"
                   >
                     <Info className="h-5 w-5 text-teal-500 dark:text-teal-400" />
                   </button>
@@ -195,10 +480,19 @@ export default function ExplorePage() {
               <p className="mt-2 text-gray-600 dark:text-gray-400">
                 Discover & test matches for your expat setup
               </p>
+              {initialQuery && (
+                <div className="mt-3 rounded-lg border border-teal-200 border-dashed bg-teal-50/60 px-4 py-3 text-left text-sm text-teal-700 dark:border-teal-800 dark:bg-teal-900/20 dark:text-teal-200">
+                  <p className="font-medium">Auto search for “{initialQuery}”</p>
+                  <p className="mt-1 text-teal-700/80 dark:text-teal-100/70">
+                    {aiSummary || 'Personalizing matches based on your request…'}
+                  </p>
+                </div>
+              )}
             </div>
             <button
               className="flex min-h-[44px] items-center gap-2 rounded-lg bg-gradient-to-r from-teal-600 to-teal-700 px-6 py-3 font-medium text-white shadow-md transition-all hover:from-teal-700 hover:to-teal-800 focus:from-teal-700 focus:to-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
               onClick={() => router.push('/en/dashboard/quiz')}
+              type="button"
             >
               <Sparkles className="h-4 w-4" />
               Quick Quiz
@@ -343,6 +637,7 @@ export default function ExplorePage() {
                             }`}
                             key={freq}
                             onClick={() => setFrequency(freq)}
+                            type="button"
                           >
                             {freq}
                           </button>
@@ -352,17 +647,28 @@ export default function ExplorePage() {
 
                     {/* Budget Range */}
                     <div>
-                      <label className="mb-2 block font-medium text-gray-700 text-sm">
-                        Monthly Budget: ${budget[0]} - ${budget[1]}
-                      </label>
+                      <div className="mb-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                        <label className="font-medium text-gray-700 text-sm">
+                          Monthly Budget: ${budget[0]} - ${budget[1]}
+                        </label>
+                        {aiBudgetHint?.min !== undefined && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-teal-50 px-2.5 py-1 font-medium text-teal-600 text-xs dark:bg-teal-900/30 dark:text-teal-200">
+                            <Sparkles className="h-3 w-3" /> AI suggests ≥ ${aiBudgetHint.min}
+                          </span>
+                        )}
+                      </div>
                       <div className="px-3">
                         <input
                           className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 accent-teal-600"
                           max="500"
                           min="100"
-                          onChange={(e) =>
-                            setBudget([budget[0], Number.parseInt(e.target.value, 10)])
-                          }
+                          onChange={(e) => {
+                            const nextMax = Number.parseInt(e.target.value, 10)
+                            setBudget([budget[0], nextMax])
+                            setAiBudgetHint((prev) =>
+                              prev ? { ...prev, max: clampBudget(nextMax) } : prev
+                            )
+                          }}
                           type="range"
                           value={budget[1]}
                         />
@@ -375,21 +681,20 @@ export default function ExplorePage() {
                         Special Requirements
                       </label>
                       <div className="flex flex-wrap gap-2">
-                        {['English speaker', 'Pet-friendly', 'Vegan cooking', 'Eco-friendly'].map(
-                          (extra) => (
-                            <button
-                              className={`min-h-[40px] rounded-full px-4 py-2 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
-                                extras.includes(extra)
-                                  ? 'bg-teal-600 text-white'
-                                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                              }`}
-                              key={extra}
-                              onClick={() => handleExtraToggle(extra)}
-                            >
-                              {extra}
-                            </button>
-                          )
-                        )}
+                        {EXTRA_OPTIONS.map((extra) => (
+                          <button
+                            className={`min-h-[40px] rounded-full px-4 py-2 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                              extras.includes(extra)
+                                ? 'bg-teal-600 text-white'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            }`}
+                            key={extra}
+                            onClick={() => handleExtraToggle(extra)}
+                            type="button"
+                          >
+                            {extra}
+                          </button>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -406,6 +711,7 @@ export default function ExplorePage() {
                   }`}
                   disabled={currentStep === 1}
                   onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+                  type="button"
                 >
                   <ChevronLeft className="h-4 w-4" />
                   Back
@@ -427,6 +733,7 @@ export default function ExplorePage() {
                         setValidationError(null)
                         setCurrentStep(currentStep + 1)
                       }}
+                      type="button"
                     >
                       Next
                       <ChevronRight className="h-4 w-4" />
@@ -438,6 +745,7 @@ export default function ExplorePage() {
                           setValidationError(null)
                           setCurrentStep(3)
                         }}
+                        type="button"
                       >
                         Skip for now
                       </button>
@@ -452,6 +760,7 @@ export default function ExplorePage() {
                     }`}
                     disabled={!canProceed() || isLoading}
                     onClick={handleFindMatches}
+                    type="button"
                   >
                     {isLoading ? (
                       <>
@@ -665,7 +974,10 @@ export default function ExplorePage() {
                     ))}
                   </div>
 
-                  <button className="min-h-[44px] w-full rounded-lg py-2 font-medium text-teal-600 transition-all hover:bg-teal-50 focus:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset">
+                  <button
+                    className="min-h-[44px] w-full rounded-lg py-2 font-medium text-teal-600 transition-all hover:bg-teal-50 focus:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-inset"
+                    type="button"
+                  >
                     View Profile →
                   </button>
                 </div>
@@ -676,7 +988,10 @@ export default function ExplorePage() {
               <p className="mb-4 text-gray-700 text-sm">
                 Want unlimited matches and direct intros?
               </p>
-              <button className="min-h-[48px] rounded-lg bg-teal-600 px-6 py-3 font-medium text-white shadow-md transition-all hover:bg-teal-700 hover:shadow-lg focus:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+              <button
+                className="min-h-[48px] rounded-lg bg-teal-600 px-6 py-3 font-medium text-white shadow-md transition-all hover:bg-teal-700 hover:shadow-lg focus:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                type="button"
+              >
                 Upgrade to Premium
               </button>
             </div>
@@ -733,6 +1048,7 @@ export default function ExplorePage() {
                         setSelectedServices([])
                         setExtras([])
                       }}
+                      type="button"
                     >
                       <RefreshCw className="h-4 w-4" />
                       Adjust Preferences
@@ -740,6 +1056,7 @@ export default function ExplorePage() {
                     <button
                       className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg border border-gray-300 px-6 py-3 text-gray-700 transition-all hover:bg-gray-50 focus:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                       onClick={() => router.push('/en/dashboard/quiz')}
+                      type="button"
                     >
                       <Sparkles className="h-4 w-4" />
                       Take Full Quiz

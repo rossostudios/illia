@@ -1,16 +1,7 @@
 'use client'
 
 import { AnimatePresence } from 'framer-motion'
-import {
-  AlertCircle,
-  Archive,
-  CheckCircle,
-  Clock,
-  MessageSquare,
-  Plus,
-  User,
-  X,
-} from 'lucide-react'
+import { CheckCircle, Clock, MessageSquare, Plus, User } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { MatchCard } from '@/components/matches/MatchCard'
@@ -72,7 +63,9 @@ export default function MatchesPage() {
 
   const handleMatchAction = (matchId: number, action: string) => {
     const match = matches.find((m) => m.id === matchId)
-    if (!match) return
+    if (!match) {
+      return
+    }
 
     switch (action) {
       case 'contact':

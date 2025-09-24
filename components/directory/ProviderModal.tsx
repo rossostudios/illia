@@ -32,7 +32,9 @@ export function ProviderModal({
   onContact,
   onSave,
 }: ProviderModalProps) {
-  if (!provider) return null
+  if (!provider) {
+    return null
+  }
 
   return (
     <AnimatePresence>
@@ -53,7 +55,7 @@ export function ProviderModal({
           >
             {/* Header */}
             <div className="relative h-32 bg-gradient-to-br from-teal-400 to-blue-500">
-              <button
+              <Button
                 className="absolute top-4 right-4 rounded-full bg-white/20 p-2 backdrop-blur-sm transition-colors hover:bg-white/30"
                 onClick={onClose}
               >

@@ -140,6 +140,7 @@ export default function SettingsPage() {
                 <button
                   className="text-gray-700 hover:text-gray-600"
                   onClick={() => setShowWhatsNew(false)}
+                  type="button"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -160,7 +161,10 @@ export default function SettingsPage() {
           </div>
 
           {/* Collapse button */}
-          <button className="flex w-full items-center space-x-2 border-t px-4 py-2 text-gray-600 text-xs hover:bg-gray-50 hover:text-gray-900">
+          <button
+            className="flex w-full items-center space-x-2 border-t px-4 py-2 text-gray-600 text-xs hover:bg-gray-50 hover:text-gray-900"
+            type="button"
+          >
             <ChevronLeft className="h-3 w-3" />
             <span>Collapse</span>
           </button>
@@ -192,7 +196,10 @@ export default function SettingsPage() {
                 <FileCode className="h-4 w-4" />
                 <span className="font-medium text-sm">Docs</span>
               </Link>
-              <button className="rounded-lg bg-orange-500 px-4 py-1.5 font-medium text-sm text-white transition-colors hover:bg-orange-600">
+              <button
+                className="rounded-lg bg-orange-500 px-4 py-1.5 font-medium text-sm text-white transition-colors hover:bg-orange-600"
+                type="button"
+              >
                 Upgrade
               </button>
             </div>
@@ -219,6 +226,7 @@ export default function SettingsPage() {
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={() => setActiveTab('team')}
+                type="button"
               >
                 <UsersIcon className="h-4 w-4" />
                 <span>Team</span>
@@ -230,6 +238,7 @@ export default function SettingsPage() {
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={() => setActiveTab('billing')}
+                type="button"
               >
                 <CreditCard className="h-4 w-4" />
                 <span>Billing</span>
@@ -241,6 +250,7 @@ export default function SettingsPage() {
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 onClick={() => setActiveTab('account')}
+                type="button"
               >
                 <SettingsIcon className="h-4 w-4" />
                 <span>Advanced</span>
@@ -263,7 +273,10 @@ export default function SettingsPage() {
                       type="text"
                       value={teamName}
                     />
-                    <button className="rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-sm hover:bg-gray-50">
+                    <button
+                      className="rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-sm hover:bg-gray-50"
+                      type="button"
+                    >
                       Save
                     </button>
                   </div>
@@ -289,7 +302,10 @@ export default function SettingsPage() {
                       <option>Member</option>
                       <option>Admin</option>
                     </select>
-                    <button className="flex items-center space-x-2 rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-sm hover:bg-gray-50">
+                    <button
+                      className="flex items-center space-x-2 rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-sm hover:bg-gray-50"
+                      type="button"
+                    >
                       <Send className="h-4 w-4" />
                       <span>Send Invite</span>
                     </button>
@@ -332,7 +348,10 @@ export default function SettingsPage() {
                   <p className="text-gray-600 text-sm">
                     Manage your subscription and payment methods
                   </p>
-                  <button className="mt-4 rounded-lg bg-teal-500 px-4 py-2 font-medium text-sm text-white hover:bg-teal-600">
+                  <button
+                    className="mt-4 rounded-lg bg-teal-500 px-4 py-2 font-medium text-sm text-white hover:bg-teal-600"
+                    type="button"
+                  >
                     Manage Subscription
                   </button>
                 </div>
@@ -350,7 +369,10 @@ export default function SettingsPage() {
                         <p className="font-medium text-gray-700 text-sm">Email Alerts</p>
                         <p className="text-gray-500 text-sm">New high-score leads in 29401</p>
                       </div>
-                      <button className="relative inline-flex h-6 w-11 items-center rounded-full bg-teal-500 transition-colors">
+                      <button
+                        className="relative inline-flex h-6 w-11 items-center rounded-full bg-teal-500 transition-colors"
+                        type="button"
+                      >
                         <span className="inline-block h-4 w-4 translate-x-6 transform rounded-full bg-white transition-transform" />
                       </button>
                     </div>
@@ -358,7 +380,10 @@ export default function SettingsPage() {
                       You'll be sent emails with links to your dashboard for new Charleston leads.
                     </p>
                   </div>
-                  <button className="mt-4 flex items-center space-x-2 rounded-lg bg-teal-500 px-4 py-2 font-medium text-sm text-white hover:bg-teal-600">
+                  <button
+                    className="mt-4 flex items-center space-x-2 rounded-lg bg-teal-500 px-4 py-2 font-medium text-sm text-white hover:bg-teal-600"
+                    type="button"
+                  >
                     <Mail className="h-4 w-4" />
                     <span>Save Preferences</span>
                   </button>
@@ -384,6 +409,7 @@ export default function SettingsPage() {
                       <button
                         className="absolute top-2.5 right-3"
                         onClick={() => setShowPassword(!showPassword)}
+                        type="button"
                       >
                         {showPassword ? (
                           <EyeOff className="h-4 w-4 text-gray-700" />
@@ -395,6 +421,7 @@ export default function SettingsPage() {
                     <button
                       className="rounded-lg bg-teal-500 px-4 py-2 font-medium text-sm text-white hover:bg-teal-600 disabled:cursor-not-allowed disabled:opacity-50"
                       disabled={password.length < 12}
+                      type="button"
                     >
                       Save Changes
                     </button>
@@ -415,6 +442,7 @@ export default function SettingsPage() {
                     <button
                       className="rounded-lg bg-red-600 px-4 py-2 font-medium text-sm text-white hover:bg-red-700"
                       onClick={() => setShowDeleteModal(true)}
+                      type="button"
                     >
                       Delete Account
                     </button>
@@ -438,6 +466,7 @@ export default function SettingsPage() {
                   setShowDeleteModal(false)
                   setDeleteConfirmation('')
                 }}
+                type="button"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -468,6 +497,7 @@ export default function SettingsPage() {
               <button
                 className="w-full rounded-lg bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={deleteConfirmation !== 'DELETE'}
+                type="button"
               >
                 Delete Permanently
               </button>
@@ -477,7 +507,10 @@ export default function SettingsPage() {
       )}
 
       {/* Intercom Chat */}
-      <button className="fixed right-4 bottom-4 rounded-full bg-teal-500 p-4 text-white shadow-lg hover:bg-teal-600">
+      <button
+        className="fixed right-4 bottom-4 rounded-full bg-teal-500 p-4 text-white shadow-lg hover:bg-teal-600"
+        type="button"
+      >
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>

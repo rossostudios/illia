@@ -2,6 +2,7 @@
 @import "leaflet/dist/leaflet.css";
 @import "./mobile.css";
 @import "./responsive.css";
+@import "./responsive-utilities.css";
 
 /* Configure dark mode variant for Tailwind v4 */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -23,17 +24,17 @@
 /* Tailwind v4 Theme Configuration */
 @theme {
   /* Illia Brand Colors */
-  --color-teal-50: #f0fdfa;
-  --color-teal-100: #ccfbf1;
-  --color-teal-200: #99f6e4;
-  --color-teal-300: #5eead4;
-  --color-teal-400: #2dd4bf;
-  --color-teal-500: #14b8a6;
-  --color-teal-600: #0d9488;
-  --color-teal-700: #0f766e;
-  --color-teal-800: #115e59;
-  --color-teal-900: #134e4a;
-  --color-teal-950: #042f2e;
+  --color-teal-50: #f5f7ff;
+  --color-teal-100: #e6edff;
+  --color-teal-200: #c4d5ff;
+  --color-teal-300: #9bb9ff;
+  --color-teal-400: #6a8dff;
+  --color-teal-500: #0052cc;
+  --color-teal-600: #0b0d0f;
+  --color-teal-700: #07080a;
+  --color-teal-800: #040506;
+  --color-teal-900: #020304;
+  --color-teal-950: #000000;
 
   /* Gray Scale */
   --color-gray-50: #f9fafb;
@@ -44,9 +45,9 @@
   --color-gray-500: #6b7280;
   --color-gray-600: #4b5563;
   --color-gray-700: #374151;
-  --color-gray-800: #1f2937;
-  --color-gray-900: #111827;
-  --color-gray-950: #030712;
+  --color-gray-800: #1a1d24;
+  --color-gray-900: #0b0d0f;
+  --color-gray-950: #050608;
 
   /* Custom Colors */
   --color-background: var(--background);
@@ -56,17 +57,17 @@
   --color-text-muted: #4b5563;
 
   /* Brand Colors for utilities */
-  --color-primary-50: #f0fdfa;
-  --color-primary-100: #ccfbf1;
-  --color-primary-200: #99f6e4;
-  --color-primary-300: #5eead4;
-  --color-primary-400: #2dd4bf;
-  --color-primary-500: #14b8a6;
-  --color-primary-600: #0d9488;
-  --color-primary-700: #0f766e;
-  --color-primary-800: #115e59;
-  --color-primary-900: #134e4a;
-  --color-primary-950: #042f2e;
+  --color-primary-50: var(--color-teal-50);
+  --color-primary-100: var(--color-teal-100);
+  --color-primary-200: var(--color-teal-200);
+  --color-primary-300: var(--color-teal-300);
+  --color-primary-400: var(--color-teal-400);
+  --color-primary-500: var(--color-teal-500);
+  --color-primary-600: var(--color-teal-600);
+  --color-primary-700: var(--color-teal-700);
+  --color-primary-800: var(--color-teal-800);
+  --color-primary-900: var(--color-teal-900);
+  --color-primary-950: var(--color-teal-950);
 
   /* Typography */
   --font-family-sans:
@@ -173,11 +174,7 @@ th,
 @layer utilities {
   /* Text Gradient */
   .text-gradient {
-    background: linear-gradient(
-      135deg,
-      var(--color-teal-600) 0%,
-      var(--color-teal-400) 100%
-    );
+    background: linear-gradient(135deg, #0b0d0f 0%, #0052cc 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

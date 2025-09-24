@@ -135,6 +135,7 @@ export function BottomSheet({
                   aria-label="Close"
                   className="rounded-lg p-2 transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
                   onClick={onClose}
+                  type="button"
                 >
                   <X className="h-5 w-5 text-gray-500" />
                 </button>

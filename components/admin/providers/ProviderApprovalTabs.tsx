@@ -80,6 +80,7 @@ export default function ProviderApprovalTabs({
               `}
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
+              type="button"
             >
               <tab.icon className="h-4 w-4" />
               {tab.label}

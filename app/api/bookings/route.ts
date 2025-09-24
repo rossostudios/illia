@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     let query = supabase.from('bookings').select(`
         *,
         user:users!user_id(id, name, email, avatar_url),
-        provider:providers!provider_id(id, name, email, phone, whatsapp, photo_url),
+        provider:providers!bookings_provider_id_fkey(id, name, email, phone, whatsapp, photo_url),
         service_agreements(accepted_at, version),
         booking_reviews(rating, review_text)
       `)

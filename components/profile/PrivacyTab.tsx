@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertTriangle, Download, LogOut, Shield, Trash2 } from 'lucide-react'
+import { AlertTriangle, Download, LogOut, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import type { UserProfile } from '@/types/profile'

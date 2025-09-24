@@ -23,6 +23,7 @@ export default function LanguageSwitcher() {
       <button
         aria-label="Change language"
         className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 font-medium text-gray-700 text-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500"
+        type="button"
       >
         <span className="sm:hidden">{languages.find((lang) => lang.code === locale)?.flag}</span>
         <span className="hidden sm:inline">
@@ -40,6 +41,7 @@ export default function LanguageSwitcher() {
               }`}
               key={lang.code}
               onClick={() => handleLanguageChange(lang.code)}
+              type="button"
             >
               <span className="text-lg">{lang.flag}</span>
               <span>{lang.name}</span>

@@ -84,7 +84,7 @@ export default function ProfilePage() {
     toast.success('Preparing your data export...')
     // In production, this would generate and download a JSON file
     const dataStr = JSON.stringify(profile, null, 2)
-    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr)
+    const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`
     const exportFileDefaultName = 'profile-data.json'
 
     const linkElement = document.createElement('a')
@@ -121,6 +121,7 @@ export default function ProfilePage() {
                   `}
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
+                  type="button"
                 >
                   <Icon className="h-5 w-5" />
                   {tab.label}

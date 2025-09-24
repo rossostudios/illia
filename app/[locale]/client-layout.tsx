@@ -5,7 +5,6 @@ import { lazy, Suspense } from 'react'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { OptimizedScripts } from '@/components/OptimizedScripts'
 import { SessionProvider } from '@/components/SessionProvider'
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 import { ThemeProvider } from '@/hooks/use-theme'
 import { ToastProvider } from '@/hooks/use-toast'
 

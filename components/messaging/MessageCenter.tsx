@@ -156,6 +156,7 @@ export default function MessageCenter({
               <button
                 className="rounded-lg p-1 transition-colors hover:bg-teal-700 md:hidden"
                 onClick={() => setShowConversationList(true)}
+                type="button"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -166,7 +167,11 @@ export default function MessageCenter({
               {totalUnread > 0 && <p className="text-teal-100 text-xs">{totalUnread} unread</p>}
             </div>
           </div>
-          <button className="rounded-lg p-2 transition-colors hover:bg-teal-700" onClick={onClose}>
+          <button
+            className="rounded-lg p-2 transition-colors hover:bg-teal-700"
+            onClick={onClose}
+            type="button"
+          >
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -216,6 +221,7 @@ export default function MessageCenter({
                     }`}
                     key={conv.conversation_id}
                     onClick={() => selectConversation(conv)}
+                    type="button"
                   >
                     <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-teal-100">
                       <span className="font-medium text-sm text-teal-700">
@@ -283,7 +289,10 @@ export default function MessageCenter({
                     )}
                   </div>
                 </div>
-                <button className="rounded-lg p-2 transition-colors hover:bg-gray-100">
+                <button
+                  className="rounded-lg p-2 transition-colors hover:bg-gray-100"
+                  type="button"
+                >
                   <MoreVertical className="h-4 w-4 text-gray-500" />
                 </button>
               </div>
@@ -338,6 +347,7 @@ export default function MessageCenter({
                                     <button
                                       className="rounded bg-white px-2 py-1 text-teal-600 text-xs dark:bg-gray-800 dark:text-teal-400"
                                       onClick={handleEditMessage}
+                                      type="button"
                                     >
                                       Save
                                     </button>
@@ -347,6 +357,7 @@ export default function MessageCenter({
                                         setEditingMessageId(null)
                                         setEditText('')
                                       }}
+                                      type="button"
                                     >
                                       Cancel
                                     </button>
@@ -393,12 +404,14 @@ export default function MessageCenter({
                                           setEditingMessageId(message.id)
                                           setEditText(message.message)
                                         }}
+                                        type="button"
                                       >
                                         <Edit2 className="h-3 w-3 text-gray-500" />
                                       </button>
                                       <button
                                         className="rounded bg-white p-1 shadow hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700"
                                         onClick={() => deleteMessage(message.id)}
+                                        type="button"
                                       >
                                         <Trash2 className="h-3 w-3 text-red-500" />
                                       </button>
@@ -430,7 +443,10 @@ export default function MessageCenter({
               {/* Message Input */}
               <div className="border-t bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
                 <div className="flex items-end gap-2">
-                  <button className="rounded-lg p-2 transition-colors hover:bg-gray-100">
+                  <button
+                    className="rounded-lg p-2 transition-colors hover:bg-gray-100"
+                    type="button"
+                  >
                     <Paperclip className="h-5 w-5 text-gray-500" />
                   </button>
                   <div className="relative flex-1">
@@ -453,7 +469,10 @@ export default function MessageCenter({
                       style={{ maxHeight: '120px' }}
                       value={messageText}
                     />
-                    <button className="absolute right-2 bottom-2 rounded p-1 hover:bg-gray-100">
+                    <button
+                      className="absolute right-2 bottom-2 rounded p-1 hover:bg-gray-100"
+                      type="button"
+                    >
                       <Smile className="h-4 w-4 text-gray-500" />
                     </button>
                   </div>
@@ -461,6 +480,7 @@ export default function MessageCenter({
                     className="rounded-lg bg-teal-600 p-2 text-white transition-colors hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
                     disabled={!messageText.trim() || sending}
                     onClick={handleSendMessage}
+                    type="button"
                   >
                     <Send className="h-5 w-5" />
                   </button>

@@ -2,34 +2,28 @@
 
 import { toast } from 'sonner'
 import { useConfirm } from './ConfirmDialog'
-import {
-  CircularProgress,
-  LoadingDots,
-  ProgressBar,
-  PulseLoader,
-  StepProgress,
-} from './ProgressIndicators'
+import { ProgressBar, StepProgress } from './ProgressIndicators'
 
 // Example implementations for your app
 
 // 1. SONNER TOAST EXAMPLES
 export function ToastExamples() {
   // Success toast
-  const handleSuccess = () => {
+  const _handleSuccess = () => {
     toast.success('Profile updated successfully!', {
       description: 'Your changes have been saved.',
     })
   }
 
   // Error toast
-  const handleError = () => {
+  const _handleError = () => {
     toast.error('Failed to update profile', {
       description: 'Please check your connection and try again.',
     })
   }
 
   // Loading toast with promise
-  const handleAsyncOperation = () => {
+  const _handleAsyncOperation = () => {
     toast.promise(new Promise((resolve) => setTimeout(resolve, 3000)), {
       loading: 'Saving your changes...',
       success: 'Changes saved successfully!',
@@ -38,11 +32,11 @@ export function ToastExamples() {
   }
 
   // Custom action toast
-  const handleUndo = () => {
+  const _handleUndo = () => {
     toast('Message deleted', {
       action: {
         label: 'Undo',
-        onClick: () => console.log('Undo'),
+        onClick: () => {},
       },
     })
   }
@@ -69,7 +63,7 @@ export function DeleteButton({ onDelete }: { onDelete: () => void }) {
   }
 
   return (
-    <button className="text-red-600" onClick={handleDelete}>
+    <button className="text-red-600" onClick={handleDelete} type="button">
       Delete
     </button>
   )
@@ -89,7 +83,7 @@ export function FormWithValidation() {
 
       // Update toast to success
       toast.success('Form submitted successfully!', { id: toastId })
-    } catch (error) {
+    } catch (_error) {
       // Update toast to error
       toast.error('Failed to submit form', { id: toastId })
     }
@@ -136,7 +130,11 @@ export function FileUploadWithProgress() {
     }, 500)
   }
 
-  return <button onClick={handleUpload}>Upload File</button>
+  return (
+    <button onClick={handleUpload} type="button">
+      Upload File
+    </button>
+  )
 }
 
 // 5. MULTI-STEP PROCESS

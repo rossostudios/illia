@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronDown, Filter, Globe, Home, MapPin, Search, Star, Utensils, X } from 'lucide-react'
+import { Filter, MapPin, Search, Star, Utensils, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { LOCATIONS, SERVICES } from '@/data/mock-providers'
 
@@ -76,7 +76,7 @@ export function DirectoryFilters({
 
               {/* City Toggle */}
               <div className="flex rounded-lg border border-gray-200 dark:border-gray-700">
-                <button
+                <Button
                   className={`px-3 py-1.5 text-sm ${
                     filters.city === 'medellin'
                       ? 'bg-teal-600 text-white'
@@ -86,7 +86,7 @@ export function DirectoryFilters({
                 >
                   Medellín
                 </button>
-                <button
+                <Button
                   className={`px-3 py-1.5 text-sm ${
                     filters.city === 'florianopolis'
                       ? 'bg-teal-600 text-white'

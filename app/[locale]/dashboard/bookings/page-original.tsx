@@ -421,6 +421,7 @@ export default function BookingsPage() {
                     : 'hover:bg-gray-200 dark:hover:bg-gray-800'
                 }`}
                 onClick={() => setView('list')}
+                type="button"
               >
                 <List className="h-4 w-4" />
               </button>
@@ -432,6 +433,7 @@ export default function BookingsPage() {
                     : 'hover:bg-gray-200 dark:hover:bg-gray-800'
                 }`}
                 onClick={() => setView('grid')}
+                type="button"
               >
                 <Grid3x3 className="h-4 w-4" />
               </button>
@@ -443,6 +445,7 @@ export default function BookingsPage() {
                     : 'hover:bg-gray-200 dark:hover:bg-gray-800'
                 }`}
                 onClick={() => setView('calendar')}
+                type="button"
               >
                 <Calendar className="h-4 w-4" />
               </button>
@@ -452,6 +455,7 @@ export default function BookingsPage() {
             <button
               className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-800"
               onClick={exportBookings}
+              type="button"
             >
               <Download className="h-4 w-4" />
               Export
@@ -582,6 +586,7 @@ export default function BookingsPage() {
                           className="rounded-lg bg-green-600 px-3 py-1 text-sm text-white transition-colors hover:bg-green-700 disabled:opacity-50"
                           disabled={isActionLoading}
                           onClick={() => handleBookingAction(booking.id, 'confirm')}
+                          type="button"
                         >
                           {isActionLoading ? (
                             <div className="h-4 w-4 animate-spin rounded-full border-white border-b-2" />
@@ -595,6 +600,7 @@ export default function BookingsPage() {
                           className="rounded-lg bg-blue-600 px-3 py-1 text-sm text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
                           disabled={isActionLoading}
                           onClick={() => handleBookingAction(booking.id, 'complete')}
+                          type="button"
                         >
                           {isActionLoading ? (
                             <div className="h-4 w-4 animate-spin rounded-full border-white border-b-2" />
@@ -608,6 +614,7 @@ export default function BookingsPage() {
                           className="rounded-lg border border-red-600 px-3 py-1 text-red-600 text-sm transition-colors hover:bg-red-50 disabled:opacity-50 dark:border-red-400 dark:text-red-400 dark:hover:bg-red-900/20"
                           disabled={isActionLoading}
                           onClick={() => handleBookingAction(booking.id, 'cancel')}
+                          type="button"
                         >
                           {isActionLoading ? (
                             <div className="h-4 w-4 animate-spin rounded-full border-red-600 border-b-2" />
@@ -619,6 +626,7 @@ export default function BookingsPage() {
                       <button
                         className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                         onClick={() => openBookingDetails(booking)}
+                        type="button"
                       >
                         <Eye className="h-4 w-4" />
                       </button>
@@ -695,6 +703,7 @@ export default function BookingsPage() {
               <button
                 className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={() => setCurrentMonth(addMonths(currentMonth, -1))}
+                type="button"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -704,6 +713,7 @@ export default function BookingsPage() {
               <button
                 className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+                type="button"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
@@ -785,6 +795,7 @@ export default function BookingsPage() {
                 <button
                   className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
                   onClick={() => setShowDetailsModal(false)}
+                  type="button"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -992,6 +1003,7 @@ export default function BookingsPage() {
                         handleBookingAction(selectedBooking.id, 'confirm')
                         setShowDetailsModal(false)
                       }}
+                      type="button"
                     >
                       Confirm Booking
                     </button>
@@ -1003,6 +1015,7 @@ export default function BookingsPage() {
                         handleBookingAction(selectedBooking.id, 'cancel')
                         setShowDetailsModal(false)
                       }}
+                      type="button"
                     >
                       Cancel Booking
                     </button>

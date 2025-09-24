@@ -188,6 +188,7 @@ export default function BookingManagementTable({ bookings }: BookingManagementTa
                           onClick={() =>
                             setOpenDropdown(openDropdown === booking.id ? null : booking.id)
                           }
+                          type="button"
                         >
                           <MoreVertical className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                         </button>
@@ -197,19 +198,29 @@ export default function BookingManagementTable({ bookings }: BookingManagementTa
                             <button
                               className="flex w-full items-center gap-2 px-4 py-2 text-gray-700 text-sm hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
                               onClick={() => handleViewBooking(booking)}
+                              type="button"
                             >
                               <Eye className="h-4 w-4" />
                               View Details
                             </button>
-                            <button className="flex w-full items-center gap-2 px-4 py-2 text-gray-700 text-sm hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800">
+                            <button
+                              className="flex w-full items-center gap-2 px-4 py-2 text-gray-700 text-sm hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
+                              type="button"
+                            >
                               <RefreshCw className="h-4 w-4" />
                               Change Status
                             </button>
-                            <button className="flex w-full items-center gap-2 px-4 py-2 text-gray-700 text-sm hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800">
+                            <button
+                              className="flex w-full items-center gap-2 px-4 py-2 text-gray-700 text-sm hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
+                              type="button"
+                            >
                               <MessageSquare className="h-4 w-4" />
                               Contact User
                             </button>
-                            <button className="flex w-full items-center gap-2 px-4 py-2 text-red-600 text-sm hover:bg-gray-50 dark:text-red-400 dark:hover:bg-gray-800">
+                            <button
+                              className="flex w-full items-center gap-2 px-4 py-2 text-red-600 text-sm hover:bg-gray-50 dark:text-red-400 dark:hover:bg-gray-800"
+                              type="button"
+                            >
                               <XCircle className="h-4 w-4" />
                               Cancel Booking
                             </button>

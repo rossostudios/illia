@@ -23,7 +23,9 @@ export default function AnalyticsDashboardPage() {
 
   // Log any runtime errors
   useEffect(() => {
-    const handleError = (_event: ErrorEvent) => {}
+    const handleError = (_event: ErrorEvent) => {
+      // TODO: integrate runtime error reporting (e.g., Sentry)
+    }
 
     window.addEventListener('error', handleError)
     return () => window.removeEventListener('error', handleError)
@@ -49,6 +51,9 @@ export default function AnalyticsDashboardPage() {
       case '1y':
         start.setFullYear(end.getFullYear() - 1)
         break
+      default:
+        start.setDate(end.getDate() - 30)
+        break
     }
 
     setDateRange({ start, end })
@@ -65,7 +70,6 @@ export default function AnalyticsDashboardPage() {
         title: 'Illia Analytics Report',
         dateRange: dateRangeText,
         includeCharts: true,
-        includeStats: true,
       })
     } catch (_error) {
       // You could show a toast notification here
@@ -103,11 +107,20 @@ export default function AnalyticsDashboardPage() {
     )
   }
 
+  const metricSkeletonKeys = [
+    'total-users',
+    'active-users',
+    'conversion-rate',
+    'retention',
+  ] as const
+  const insightSkeletonKeys = ['searches', 'matches', 'leads'] as const
+  const insightDetailSkeletonKeys = ['primary', 'secondary', 'tertiary'] as const
+
   // Loading skeleton for metrics
   const renderMetricsSkeleton = () => (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-      {Array.from({ length: 4 }).map((_, index) => (
-        <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900" key={index}>
+      {metricSkeletonKeys.map((metricKey) => (
+        <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900" key={metricKey}>
           <div className="flex items-center">
             <Skeleton className="h-12 w-12 rounded-lg" />
             <div className="ml-4 space-y-2">
@@ -388,12 +401,12 @@ export default function AnalyticsDashboardPage() {
       {/* Additional Stats */}
       {loading ? (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900" key={index}>
+          {insightSkeletonKeys.map((metricKey) => (
+            <div className="rounded-xl bg-white p-6 shadow-md dark:bg-gray-900" key={metricKey}>
               <Skeleton className="mb-4 h-6 w-32" />
               <div className="space-y-2">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div className="flex justify-between" key={i}>
+                {insightDetailSkeletonKeys.map((detailKey) => (
+                  <div className="flex justify-between" key={detailKey}>
                     <Skeleton className="h-4 w-24" />
                     <Skeleton className="h-4 w-12" />
                   </div>

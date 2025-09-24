@@ -43,7 +43,11 @@ export default function SearchOptionsPanel({ isOpen, onClose }: SearchOptionsPan
       {/* Header */}
       <div className="flex items-center justify-between border-b px-6 py-4">
         <h3 className="font-semibold text-gray-900 text-lg">Options</h3>
-        <button className="rounded-lg p-1 transition-colors hover:bg-gray-100" onClick={onClose}>
+        <button
+          className="rounded-lg p-1 transition-colors hover:bg-gray-100"
+          onClick={onClose}
+          type="button"
+        >
           <X className="h-5 w-5 text-gray-500" />
         </button>
       </div>
@@ -78,6 +82,7 @@ export default function SearchOptionsPanel({ isOpen, onClose }: SearchOptionsPan
             <button
               className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-left text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
               onClick={() => setShowTimeDropdown(!showTimeDropdown)}
+              type="button"
             >
               {timeRange
                 ? timeOptions.find((opt) => opt.value === timeRange)?.label
@@ -109,6 +114,7 @@ export default function SearchOptionsPanel({ isOpen, onClose }: SearchOptionsPan
                       setTimeRange(option.value)
                       setShowTimeDropdown(false)
                     }}
+                    type="button"
                   >
                     {option.label}
                   </button>
@@ -165,6 +171,7 @@ export default function SearchOptionsPanel({ isOpen, onClose }: SearchOptionsPan
               scrapeResults ? 'bg-orange-500' : 'bg-gray-200'
             }`}
             onClick={() => setScrapeResults(!scrapeResults)}
+            type="button"
           >
             <span
               className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -205,6 +212,7 @@ export default function SearchOptionsPanel({ isOpen, onClose }: SearchOptionsPan
               mainContentOnly ? 'bg-orange-500' : 'bg-gray-200'
             }`}
             onClick={() => setMainContentOnly(!mainContentOnly)}
+            type="button"
           >
             <span
               className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -242,6 +250,7 @@ export default function SearchOptionsPanel({ isOpen, onClose }: SearchOptionsPan
                 parsePdf ? 'bg-orange-500' : 'bg-gray-200'
               }`}
               onClick={() => setParsePdf(!parsePdf)}
+              type="button"
             >
               <span
                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -258,6 +267,7 @@ export default function SearchOptionsPanel({ isOpen, onClose }: SearchOptionsPan
         <button
           className="w-full rounded-lg bg-gray-100 py-2 font-medium text-gray-700 text-sm transition-colors hover:bg-gray-200"
           onClick={handleReset}
+          type="button"
         >
           Reset settings
         </button>

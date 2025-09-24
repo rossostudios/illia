@@ -178,7 +178,7 @@ export function FilterPanel({
     <>
       {/* Mobile Toggle Button */}
       {showMobileToggle && (
-        <button
+        <Button
           aria-label="Toggle filters"
           className="fixed right-4 bottom-24 z-40 rounded-full bg-teal-600 p-3 text-white shadow-lg transition-colors hover:bg-teal-700 md:hidden"
           onClick={onToggle}
@@ -218,7 +218,7 @@ export function FilterPanel({
                   )}
                 </div>
                 {showMobileToggle && (
-                  <button
+                  <Button
                     aria-label="Close filters"
                     className="rounded-lg p-2 hover:bg-gray-100 md:hidden dark:hover:bg-gray-800"
                     onClick={onToggle}
@@ -251,7 +251,7 @@ export function FilterPanel({
                     localFilters.sortBy === 'rating' ||
                     localFilters.sortBy === 'distance') && (
                     <div className="flex gap-2">
-                      <button
+                      <Button
                         className={`flex-1 rounded px-3 py-1.5 text-sm transition-colors ${
                           localFilters.sortOrder === 'asc'
                             ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
@@ -266,7 +266,7 @@ export function FilterPanel({
                             ? 'Low'
                             : 'Near'}
                       </button>
-                      <button
+                      <Button
                         className={`flex-1 rounded px-3 py-1.5 text-sm transition-colors ${
                           localFilters.sortOrder === 'desc'
                             ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
@@ -324,8 +324,7 @@ export function FilterPanel({
                   {/* Price Type Selector */}
                   <div className="flex gap-2">
                     {['monthly', 'hourly', 'both'].map((type) => (
-                      <button
-                        className={`flex-1 rounded-lg px-3 py-2 text-sm transition-colors ${
+                      <button className={`flex-1 rounded-lg px-3 py-2 text-sm transition-colors ${
                           localFilters.priceType === type
                             ? 'border border-teal-300 bg-teal-100 text-teal-700 dark:border-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700'
@@ -334,6 +333,7 @@ export function FilterPanel({
                         onClick={() =>
                           handleFilterChange('priceType', type as FilterOptions['priceType'])
                         }
+                        type="button"
                       >
                         {type === 'monthly' ? 'Monthly' : type === 'hourly' ? 'Hourly' : 'Both'}
                       </button>
@@ -387,14 +387,14 @@ export function FilterPanel({
                 </label>
                 <div className="flex items-center gap-2">
                   {[0, 3, 3.5, 4, 4.5].map((rating) => (
-                    <button
-                      className={`rounded-lg border px-3 py-1.5 transition-colors ${
+                    <button className={`rounded-lg border px-3 py-1.5 transition-colors ${
                         localFilters.rating === rating
                           ? 'border-teal-500 bg-teal-50 text-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
                           : 'border-gray-300 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500'
                       }`}
                       key={rating}
                       onClick={() => handleFilterChange('rating', rating)}
+                      type="button"
                     >
                       {rating === 0 ? 'Any' : `${rating}+`}
                     </button>
@@ -452,8 +452,7 @@ export function FilterPanel({
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {LANGUAGE_OPTIONS.map((language) => (
-                    <button
-                      className={`rounded-lg border px-3 py-1.5 transition-colors ${
+                    <button className={`rounded-lg border px-3 py-1.5 transition-colors ${
                         localFilters.languages.includes(language)
                           ? 'border-teal-500 bg-teal-50 text-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
                           : 'border-gray-300 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500'
@@ -465,6 +464,7 @@ export function FilterPanel({
                           : [...localFilters.languages, language]
                         handleFilterChange('languages', newLanguages)
                       }}
+                      type="button"
                     >
                       {language}
                     </button>

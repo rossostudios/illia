@@ -180,6 +180,8 @@ export default function APIKeysPage() {
                 <button
                   className="text-gray-700 hover:text-gray-600"
                   onClick={() => setShowWhatsNew(false)}
+                  type="button"
+                  
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -191,7 +193,10 @@ export default function APIKeysPage() {
             <div className="mt-4 px-3 py-2 text-gray-500 text-xs">samlee@content-mobbin.com</div>
 
             {/* Collapse button */}
-            <button className="mt-2 flex items-center space-x-2 text-gray-600 text-xs hover:text-gray-900">
+            <button
+              className="mt-2 flex items-center space-x-2 text-gray-600 text-xs hover:text-gray-900"
+              type="button"
+            >
               <ChevronLeft className="h-3 w-3" />
               <span>Collapse</span>
             </button>
@@ -224,7 +229,10 @@ export default function APIKeysPage() {
                 <FileCode className="h-4 w-4" />
                 <span className="font-medium text-sm">Docs</span>
               </Link>
-              <button className="rounded-lg bg-orange-500 px-4 py-1.5 font-medium text-sm text-white transition-colors hover:bg-orange-600">
+              <button
+                className="rounded-lg bg-orange-500 px-4 py-1.5 font-medium text-sm text-white transition-colors hover:bg-orange-600"
+                type="button"
+              >
                 Upgrade
               </button>
             </div>
@@ -253,6 +261,8 @@ export default function APIKeysPage() {
               <button
                 className="flex items-center space-x-2 rounded-lg bg-teal-600 px-4 py-2 text-white transition-colors hover:bg-teal-700"
                 onClick={() => setShowCreateModal(true)}
+                type="button"
+                
               >
                 <Plus className="h-4 w-4" />
                 <span className="font-medium text-sm">Create New Key</span>
@@ -271,6 +281,8 @@ export default function APIKeysPage() {
                       className="rounded-lg p-2 text-red-400 transition-colors hover:bg-red-50 hover:text-red-600"
                       onClick={() => deleteKey(apiKey.id)}
                       title="Revoke key"
+                      type="button"
+                      
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -283,6 +295,8 @@ export default function APIKeysPage() {
                     <button
                       className="rounded-lg p-2 transition-colors hover:bg-teal-200"
                       onClick={() => toggleKeyVisibility(apiKey.id)}
+                      type="button"
+                      
                     >
                       {apiKey.visible ? (
                         <EyeOff className="h-4 w-4 text-teal-600" />
@@ -293,6 +307,8 @@ export default function APIKeysPage() {
                     <button
                       className="rounded-lg p-2 transition-colors hover:bg-teal-200"
                       onClick={() => copyToClipboard(apiKey.fullKey, apiKey.id)}
+                      type="button"
+                      
                     >
                       {copiedKeyId === apiKey.id ? (
                         <Check className="h-4 w-4 text-green-600" />
@@ -319,6 +335,8 @@ export default function APIKeysPage() {
               <button
                 className="text-gray-700 hover:text-gray-600"
                 onClick={() => setShowCreateModal(false)}
+                type="button"
+                
               >
                 <X className="h-5 w-5" />
               </button>
@@ -326,9 +344,12 @@ export default function APIKeysPage() {
 
             <div className="space-y-4">
               <div>
-                <label className="mb-2 block font-medium text-gray-700 text-sm">Key Name</label>
+                <label className="mb-2 block font-medium text-gray-700 text-sm" htmlFor="key-name">
+                  Key Name
+                </label>
                 <input
                   className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  id="key-name"
                   onChange={(e) => setKeyName(e.target.value)}
                   placeholder="e.g., Zapier Integration Key"
                   type="text"
@@ -342,6 +363,7 @@ export default function APIKeysPage() {
               <button
                 className="w-full rounded-lg bg-teal-500 px-4 py-2 font-medium text-white transition-colors hover:bg-teal-600"
                 onClick={handleCreateKey}
+                type="button"
               >
                 Create Key
               </button>
@@ -363,7 +385,10 @@ export default function APIKeysPage() {
       )}
 
       {/* Intercom Chat */}
-      <button className="fixed right-4 bottom-4 rounded-full bg-teal-500 p-4 text-white shadow-lg hover:bg-teal-600">
+      <button
+        className="fixed right-4 bottom-4 rounded-full bg-teal-500 p-4 text-white shadow-lg hover:bg-teal-600"
+        type="button"
+      >
         <MessageSquare className="h-6 w-6" />
       </button>
     </div>

@@ -1,15 +1,14 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
 import UserFilters from '@/components/admin/users/UserFilters'
 import UserManagementTable from '@/components/admin/users/UserManagementTable'
-import type { Database } from '@/lib/database.types'
+import { createClient } from '@/lib/supabase/server'
 
 export default async function UsersPage({
   searchParams,
 }: {
-  searchParams: { search?: string; type?: string; tier?: string; status?: string }
+  searchParams: Promise<{ search?: string; type?: string; tier?: string; status?: string }>
 }) {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  const params = await searchParams
+  const supabase = await createClient()
 
   // Build query with filters
   let query = supabase.from('users').select(`
@@ -19,25 +18,25 @@ export default async function UsersPage({
   `)
 
   // Apply filters
-  if (searchParams.search) {
+  if (params.search) {
     query = query.or(
-      `username.ilike.%${searchParams.search}%,display_name.ilike.%${searchParams.search}%,email.ilike.%${searchParams.search}%`
+      `username.ilike.%${params.search}%,display_name.ilike.%${params.search}%,email.ilike.%${params.search}%`
     )
   }
 
-  if (searchParams.type === 'providers') {
+  if (params.type === 'providers') {
     query = query.eq('is_provider', true)
-  } else if (searchParams.type === 'users') {
+  } else if (params.type === 'users') {
     query = query.eq('is_provider', false)
   }
 
-  if (searchParams.tier) {
-    query = query.eq('tier', searchParams.tier)
+  if (params.tier) {
+    query = query.eq('tier', params.tier)
   }
 
-  if (searchParams.status === 'active') {
+  if (params.status === 'active') {
     query = query.eq('is_deleted', false)
-  } else if (searchParams.status === 'deleted') {
+  } else if (params.status === 'deleted') {
     query = query.eq('is_deleted', true)
   }
 

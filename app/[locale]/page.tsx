@@ -10,8 +10,16 @@ const AnimatedHero = dynamic(() => import('@/components/AnimatedHero'), {
   ssr: true,
 })
 
-const AnimatedFeatures = dynamic(() => import('@/components/AnimatedFeatures'), {
+const FeaturesCarousel = dynamic(() => import('@/components/FeaturesCarousel'), {
   loading: () => <FeaturesSkeleton />,
+  ssr: true,
+})
+
+const FAQSection = dynamic(() => import('@/components/FAQSection'), {
+  ssr: true,
+})
+
+const PricingSection = dynamic(() => import('@/components/PricingSection'), {
   ssr: true,
 })
 
@@ -22,7 +30,9 @@ export default function Home() {
       <Navbar />
       <AnimatedHero />
       <SocialProof />
-      <AnimatedFeatures />
+      <FeaturesCarousel />
+      <FAQSection />
+      <PricingSection />
     </div>
   )
 }

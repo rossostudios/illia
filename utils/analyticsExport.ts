@@ -6,7 +6,6 @@ import type { AnalyticsData } from '@/hooks/use-analytics'
 export type PDFExportOptions = {
   title?: string
   includeCharts?: boolean
-  includeStats?: boolean
   dateRange?: string
 }
 
@@ -17,7 +16,6 @@ export async function exportAnalyticsToPDF(
   const {
     title = 'Illia Analytics Report',
     includeCharts = true,
-    includeStats = true,
     dateRange = 'Last 30 days',
   } = options
 
@@ -176,20 +174,20 @@ export function exportAnalyticsToCSV(data: AnalyticsData): void {
   // Create engagement metrics CSV
   const engagementData = [
     {
-      Metric: 'Total Searches',
-      Value: data.engagement.totalSearches,
+        'Metric': 'Total Searches',
+        'Value': data.engagement.totalSearches,
       'Conversion Rate': `${data.engagement.conversionRate.toFixed(1)}%`,
       'Avg Search Time': `${data.engagement.avgSearchTime.toFixed(2)}s`,
     },
     {
-      Metric: 'Total Matches',
-      Value: data.engagement.totalMatches,
+        'Metric': 'Total Matches',
+        'Value': data.engagement.totalMatches,
       'Conversion Rate': '',
       'Avg Search Time': '',
     },
     {
-      Metric: 'Total Leads',
-      Value: data.engagement.totalLeads,
+        'Metric': 'Total Leads',
+        'Value': data.engagement.totalLeads,
       'Conversion Rate': '',
       'Avg Search Time': '',
     },
