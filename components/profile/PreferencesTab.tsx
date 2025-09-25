@@ -79,7 +79,7 @@ export function PreferencesTab({ profile, onUpdate }: PreferencesTabProps) {
                 >
                   {service.label}
                 </span>
-              </button>
+              </Button>
             )
           })}
         </div>

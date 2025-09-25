@@ -1,6 +1,6 @@
 import BookingManagementTable from '@/components/admin/bookings/BookingManagementTable'
 import BookingStats from '@/components/admin/bookings/BookingStats'
-import { createClient } from '@/lib/supabase/server'
+// import { createClient } from '@/lib/supabase/server'
 
 export default async function BookingsPage({
   searchParams,
@@ -8,33 +8,14 @@ export default async function BookingsPage({
   searchParams: Promise<{ status?: string; provider?: string; user?: string }>
 }) {
   const params = await searchParams
-  const supabase = await createClient()
+  // const supabase = await createClient()
 
-  // Build query with filters
-  let query = supabase.from('bookings').select(`
-    *,
-    users!user_id (id, username, display_name, email, avatar_url),
-    providers:users!provider_id (id, username, display_name, email, avatar_url),
-    booking_reviews (rating, comment)
-  `)
+  // TODO: Create bookings table in database before enabling this functionality
+  // The bookings table doesn't exist yet
+  const bookings: any[] = []
 
-  // Apply filters
-  if (params.status) {
-    query = query.eq('status', params.status)
-  }
-
-  if (params.provider) {
-    query = query.eq('provider_id', params.provider)
-  }
-
-  if (params.user) {
-    query = query.eq('user_id', params.user)
-  }
-
-  const { data: bookings } = await query.order('created_at', { ascending: false })
-
-  // Get statistics
-  const { data: statsData } = await supabase.from('bookings').select('status, total_amount')
+  // Mock statistics for now
+  const statsData: any[] = []
 
   const stats = {
     total: statsData?.length || 0,

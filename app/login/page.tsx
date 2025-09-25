@@ -129,7 +129,6 @@ function LoginForm() {
                 disabled={loading || socialLoading !== null}
                 onClick={() => handleSocialLogin('apple')}
                 type="button"
-                
               >
                 {socialLoading === 'apple' ? (
                   <LoadingSpinner color="gray" size="sm" />
@@ -144,7 +143,6 @@ function LoginForm() {
                 disabled={loading || socialLoading !== null}
                 onClick={() => handleSocialLogin('google')}
                 type="button"
-                
               >
                 {socialLoading === 'google' ? (
                   <LoadingSpinner color="gray" size="sm" />
@@ -159,7 +157,6 @@ function LoginForm() {
                 disabled={loading || socialLoading !== null}
                 onClick={() => handleSocialLogin('linkedin')}
                 type="button"
-                
               >
                 {socialLoading === 'linkedin' ? (
                   <LoadingSpinner color="gray" size="sm" />
@@ -240,7 +237,6 @@ function LoginForm() {
                       className="-translate-y-1/2 absolute top-1/2 right-3 text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none dark:text-gray-400 dark:focus:text-gray-300 dark:hover:text-gray-300"
                       onClick={() => setShowPassword(!showPassword)}
                       type="button"
-                      
                     >
                       {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>

@@ -14,10 +14,10 @@ type PersonalInfoTabProps = {
 export function PersonalInfoTab({ profile, onUpdate }: PersonalInfoTabProps) {
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
   const [formData, setFormData] = useState({
-    name: profile.name,
-    bio: profile.bio,
-    city: profile.city,
-    language: profile.language,
+    name: profile.name || '',
+    bio: profile.bio || '',
+    city: profile.city || '',
+    language: profile.language || 'en',
   })
 
   const handleSave = () => {
@@ -42,7 +42,7 @@ export function PersonalInfoTab({ profile, onUpdate }: PersonalInfoTabProps) {
             />
             <Button className="absolute right-0 bottom-0 rounded-full bg-teal-600 p-2 text-white shadow-lg hover:bg-teal-700">
               <Camera className="h-4 w-4" />
-            </button>
+            </Button>
           </div>
           <div>
             <Button size="sm" variant="outline">
@@ -135,7 +135,7 @@ export function PersonalInfoTab({ profile, onUpdate }: PersonalInfoTabProps) {
               {LANGUAGES.find((l) => l.code === formData.language)?.label}
             </span>
             <ChevronDown className="h-4 w-4 text-gray-400" />
-          </button>
+          </Button>
           {showLanguageDropdown && (
             <div className="absolute z-10 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
               {LANGUAGES.map((lang) => (
@@ -149,7 +149,7 @@ export function PersonalInfoTab({ profile, onUpdate }: PersonalInfoTabProps) {
                 >
                   <span>{lang.flag}</span>
                   <span className="text-gray-900 dark:text-white">{lang.label}</span>
-                </button>
+                </Button>
               ))}
             </div>
           )}

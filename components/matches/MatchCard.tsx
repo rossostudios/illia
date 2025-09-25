@@ -15,20 +15,44 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/Button'
-import type { Match } from '@/types/match'
-import { statusConfig } from '@/types/match'
+import type { Match } from './types'
 
 type MatchCardProps = {
   match: Match
   viewMode: 'card' | 'list'
-  onAction: (matchId: number, action: string) => void
+  onAction: (matchId: string, action: string) => void
   onClick: () => void
+}
+
+const statusConfig = {
+  pending: {
+    label: 'Pending',
+    color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
+  },
+  contacted: {
+    label: 'Contacted',
+    color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+  },
+  viewed: {
+    label: 'Viewed',
+    color: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
+  },
+  hired: {
+    label: 'Hired',
+    color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+  },
+  dismissed: {
+    label: 'Dismissed',
+    color: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300',
+  },
 }
 
 const statusIconMap = {
   pending: Clock,
   contacted: MessageSquare,
+  viewed: CheckCircle,
   hired: CheckCircle,
+  dismissed: X,
   archived: Archive,
   declined: X,
 }
@@ -52,7 +76,7 @@ export function MatchCard({ match, viewMode, onAction, onClick }: MatchCardProps
               className="object-cover"
               fill
               sizes="48px"
-              src={match.provider.image}
+              src={match.provider.avatar_url || `https://i.pravatar.cc/100?u=${match.provider.id}`}
             />
           </div>
           <div>
@@ -73,15 +97,17 @@ export function MatchCard({ match, viewMode, onAction, onClick }: MatchCardProps
                 <Star className="h-3 w-3 text-yellow-400" />
                 {match.provider.rating}
               </span>
-              <span className="flex items-center gap-1">
-                <DollarSign className="h-3 w-3" />${match.provider.hourlyRate}/hr
+              <span className="font-medium">
+                {match.matchScore ? `${Math.round(match.matchScore * 100)}% match` : ''}
               </span>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-gray-500 text-sm">
-            {formatDistanceToNow(new Date(match.introRequested), { addSuffix: true })}
+            {match.createdAt
+              ? formatDistanceToNow(new Date(match.createdAt), { addSuffix: true })
+              : 'Recently'}
           </span>
           <ChevronRight className="h-5 w-5 text-gray-400 transition-transform group-hover:translate-x-1" />
         </div>
@@ -106,7 +132,7 @@ export function MatchCard({ match, viewMode, onAction, onClick }: MatchCardProps
                 className="object-cover"
                 fill
                 sizes="48px"
-                src={match.provider.image}
+                src={match.provider.avatar_url || `https://i.pravatar.cc/100?u=${match.provider.id}`}
               />
             </div>
             <div>
@@ -126,34 +152,31 @@ export function MatchCard({ match, viewMode, onAction, onClick }: MatchCardProps
         </div>
 
         {/* Provider Details */}
-        <div className="mb-4 grid grid-cols-2 gap-3 text-sm">
+        <div className="mb-4 space-y-2 text-sm">
           <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
             <MapPin className="h-4 w-4" />
             {match.provider.location}
           </div>
           <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-            <DollarSign className="h-4 w-4" />${match.provider.hourlyRate}/hr
-          </div>
-          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
             <Star className="h-4 w-4 text-yellow-400" />
-            {match.provider.rating} ({match.provider.reviews} reviews)
+            {match.provider.rating > 0 ? match.provider.rating.toFixed(1) : 'No rating'}
           </div>
           <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-            <Clock className="h-4 w-4" />
-            {match.provider.experience}
+            <CheckCircle className="h-4 w-4" />
+            {match.matchScore ? `${Math.round(match.matchScore * 100)}% match` : 'Match'}
           </div>
         </div>
 
-        {/* Languages */}
+        {/* Match Info */}
         <div className="mb-4 flex flex-wrap gap-1">
-          {match.provider.languages.map((lang) => (
-            <span
-              className="rounded-full bg-gray-100 px-2 py-0.5 text-gray-600 text-xs dark:bg-gray-800 dark:text-gray-400"
-              key={lang}
-            >
-              {lang}
+          <span className="rounded-full bg-gray-100 px-2 py-0.5 text-gray-600 text-xs dark:bg-gray-800 dark:text-gray-400">
+            {match.provider.city}
+          </span>
+          {match.provider.verified && (
+            <span className="rounded-full bg-blue-100 px-2 py-0.5 text-blue-600 text-xs dark:bg-blue-800 dark:text-blue-400">
+              Verified
             </span>
-          ))}
+          )}
         </div>
 
         {/* Timeline */}
@@ -167,7 +190,13 @@ export function MatchCard({ match, viewMode, onAction, onClick }: MatchCardProps
                 className="flex items-center gap-2 text-gray-600 text-xs dark:text-gray-400"
                 key={index}
               >
-                <span>{format(new Date(event.date), 'MMM d, h:mm a')}</span>
+                <span>
+                  {event.date ? (
+                    format(new Date(event.date), 'MMM d, h:mm a')
+                  ) : (
+                    'Unknown'
+                  )}
+                </span>
                 <span className="text-gray-400">•</span>
                 <span>{event.event}</span>
               </div>
@@ -186,7 +215,7 @@ export function MatchCard({ match, viewMode, onAction, onClick }: MatchCardProps
                   onAction(match.id, 'contact')
                 }}
                 size="sm"
-                variant="default"
+                variant="primary"
               >
                 Contact
               </Button>
@@ -212,7 +241,7 @@ export function MatchCard({ match, viewMode, onAction, onClick }: MatchCardProps
                   onAction(match.id, 'hire')
                 }}
                 size="sm"
-                variant="default"
+                variant="primary"
               >
                 Hire
               </Button>

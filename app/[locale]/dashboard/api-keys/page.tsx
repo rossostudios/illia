@@ -181,7 +181,6 @@ export default function APIKeysPage() {
                   className="text-gray-700 hover:text-gray-600"
                   onClick={() => setShowWhatsNew(false)}
                   type="button"
-                  
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -262,7 +261,6 @@ export default function APIKeysPage() {
                 className="flex items-center space-x-2 rounded-lg bg-teal-600 px-4 py-2 text-white transition-colors hover:bg-teal-700"
                 onClick={() => setShowCreateModal(true)}
                 type="button"
-                
               >
                 <Plus className="h-4 w-4" />
                 <span className="font-medium text-sm">Create New Key</span>
@@ -282,7 +280,6 @@ export default function APIKeysPage() {
                       onClick={() => deleteKey(apiKey.id)}
                       title="Revoke key"
                       type="button"
-                      
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -296,7 +293,6 @@ export default function APIKeysPage() {
                       className="rounded-lg p-2 transition-colors hover:bg-teal-200"
                       onClick={() => toggleKeyVisibility(apiKey.id)}
                       type="button"
-                      
                     >
                       {apiKey.visible ? (
                         <EyeOff className="h-4 w-4 text-teal-600" />
@@ -308,7 +304,6 @@ export default function APIKeysPage() {
                       className="rounded-lg p-2 transition-colors hover:bg-teal-200"
                       onClick={() => copyToClipboard(apiKey.fullKey, apiKey.id)}
                       type="button"
-                      
                     >
                       {copiedKeyId === apiKey.id ? (
                         <Check className="h-4 w-4 text-green-600" />
@@ -336,7 +331,6 @@ export default function APIKeysPage() {
                 className="text-gray-700 hover:text-gray-600"
                 onClick={() => setShowCreateModal(false)}
                 type="button"
-                
               >
                 <X className="h-5 w-5" />
               </button>

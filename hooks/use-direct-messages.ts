@@ -52,10 +52,18 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
   const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set())
+  const [activeConversationId, setActiveConversationId] = useState<string | null>(
+    options.conversationId ?? null
+  )
   const channelRef = useRef<RealtimeChannel | null>(null)
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const { user } = useSessionContext()
   const supabase = createClient()
+
+  // keep local conversation id in sync with caller
+  useEffect(() => {
+    setActiveConversationId(options.conversationId ?? null)
+  }, [options.conversationId])
 
   // Fetch conversations list
   const fetchConversations = useCallback(async () => {
@@ -75,9 +83,12 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
           return
         }
       }
-      setConversations(data || [])
+      const result = data || []
+      setConversations(result)
+      return result
     } catch (_error) {
       setConversations([])
+      return []
     }
   }, [user, supabase])
 
@@ -104,7 +115,9 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
 
         // Update conversation unread count
         setConversations((prev) =>
-          prev.map((conv) => (conv.id === conversationId ? { ...conv, unread_count: 0 } : conv))
+          prev.map((conv) =>
+            conv.conversation_id === conversationId ? { ...conv, unread_count: 0 } : conv
+          )
         )
       } catch (_error) {
         // Error handled silently
@@ -142,6 +155,10 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
 
       if (!conversationId) {
         return
+      }
+
+      if (conversationId !== activeConversationId) {
+        setActiveConversationId(conversationId)
       }
 
       // Fetch messages
@@ -188,6 +205,8 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
       try {
         setSending(true)
 
+        const conversationId = options.conversationId ?? activeConversationId ?? undefined
+
         const { data, error } = await supabase.rpc('send_message', {
           p_sender_id: user.id,
           p_receiver_id: options.otherUserId,
@@ -203,7 +222,7 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
         // Optimistically add message to list
         const newMessage: Message = {
           id: data,
-          conversation_id: options.conversationId || '',
+          conversation_id: conversationId || '',
           sender_id: user.id,
           receiver_id: options.otherUserId,
           message: text,
@@ -221,12 +240,15 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
 
         setMessages((prev) => [...prev, newMessage])
 
+        // Refresh conversation list so previews/unread counts stay in sync
+        fetchConversations()
+
         return data
       } finally {
         setSending(false)
       }
     },
-    [user, options.otherUserId, options.conversationId, supabase]
+    [user, options.otherUserId, options.conversationId, supabase, fetchConversations, activeConversationId]
   )
 
   // Delete a message
@@ -457,6 +479,7 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
     conversations,
     loading,
     sending,
+    conversationId: activeConversationId,
     typingUsers: Array.from(typingUsers),
     sendMessage,
     deleteMessage,

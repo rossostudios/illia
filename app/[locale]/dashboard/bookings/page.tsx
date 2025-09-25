@@ -47,7 +47,7 @@ export default function BookingsPage() {
   const router = useRouter()
   const params = useParams()
   const locale = (params.locale as string) || 'en'
-  const { session } = useSessionContext()
+  const { user } = useSessionContext()
   const [bookings, setBookings] = useState<Booking[]>([])
   const [loading, setLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -62,38 +62,21 @@ export default function BookingsPage() {
       setErrorMessage(null)
       setIsSampleData(false)
 
-      if (!session?.user?.id) {
+      if (!user?.id) {
         setBookings([])
         return
       }
 
-      const supabase = createClient()
-      const { data, error } = await supabase
-        .from('bookings')
-        .select(
-          `*,
-            provider:providers!bookings_provider_id_fkey (
-              id,
-              name,
-              email,
-              phone,
-              whatsapp,
-              photo_url
-            ),
-            booking_reviews ( rating, review_text )`
-        )
-        .eq('user_id', session.user.id)
-        .order('booking_date', { ascending: true })
+      // TODO: Enable when bookings table is created in database
+      // const supabase = createClient()
+      // const { data, error } = await supabase
+      //   .from('bookings')
+      //   .select('*')
+      //   .eq('user_id', user.id)
+      //   .order('booking_date', { ascending: true })
 
-      if (error) {
-        throw error
-      }
-
-      if (data && data.length > 0) {
-        setBookings(data as Booking[])
-      } else {
-        setBookings([])
-      }
+      // For now, just use mock data
+      throw new Error('Bookings table not yet available')
     } catch (_error) {
       setErrorMessage(
         'Live bookings are temporarily unavailable. Showing sample data for reference.'
@@ -103,7 +86,7 @@ export default function BookingsPage() {
     } finally {
       setLoading(false)
     }
-  }, [session?.user?.id])
+  }, [user?.id])
 
   useEffect(() => {
     fetchBookings()

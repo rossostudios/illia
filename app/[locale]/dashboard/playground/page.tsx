@@ -1,15 +1,17 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function PlaygroundPage() {
   const router = useRouter()
+  const params = useParams()
+  const locale = params?.locale || 'en'
 
   useEffect(() => {
-    // Redirect to the new Service Finder page
-    router.replace('/dashboard/service-finder')
-  }, [router])
+    // Redirect to the explore page with proper locale
+    router.replace(`/${locale}/dashboard/explore`)
+  }, [router, locale])
 
   return null
 }

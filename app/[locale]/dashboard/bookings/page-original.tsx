@@ -403,7 +403,7 @@ export default function BookingsPage() {
             {/* Date Filter */}
             <select
               className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:focus:ring-teal-400"
-              onChange={(e) => setFilterDate(e.target.value as string)}
+              onChange={(e) => setFilterDate(e.target.value as 'all' | 'upcoming' | 'past')}
               value={filterDate}
             >
               <option value="all">All Dates</option>
@@ -810,9 +810,10 @@ export default function BookingsPage() {
                       statusColors[selectedBooking.status]
                     }`}
                   >
-                    {React.createElement(statusIcons[selectedBooking.status], {
-                      className: 'h-4 w-4',
-                    })}
+                    {(() => {
+                      const Icon = statusIcons[selectedBooking.status]
+                      return <Icon className="h-4 w-4" />
+                    })()}
                     {selectedBooking.status.charAt(0).toUpperCase() +
                       selectedBooking.status.slice(1)}
                   </span>
@@ -927,7 +928,7 @@ export default function BookingsPage() {
                               : "Provider's Location"}
                           </p>
                           <p className="text-gray-600 text-sm dark:text-gray-400">
-                            {selectedBooking.location_details?.address ||
+                            {(selectedBooking.location_details?.address as string) ||
                               'Address will be confirmed'}
                           </p>
                         </div>

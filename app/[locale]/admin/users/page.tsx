@@ -93,7 +93,7 @@ export default async function UsersPage({
         </div>
       </div>
 
-      <UserFilters currentFilters={searchParams} />
+      <UserFilters currentFilters={params} />
 
       <UserManagementTable users={users || []} />
     </div>

@@ -76,7 +76,7 @@ async function fetchInitialThreads(
       `
     )
     .order('is_pinned', { ascending: false })
-    .order('last_activity_at', { ascending: false, nullsLast: false })
+    .order('last_activity_at', { ascending: false })
     .order('created_at', { ascending: false })
     .limit(10)
 

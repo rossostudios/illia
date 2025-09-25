@@ -1,7 +1,7 @@
 'use client'
 
 import { Download, FileText, Search, Star, TrendingUp, Users } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { PopularSearchTermsChart } from '@/components/analytics/PopularSearchTermsChart'
 import { ProviderPerformanceChart } from '@/components/analytics/ProviderPerformanceChart'
 import { SearchTypeChart } from '@/components/analytics/SearchTypeChart'
@@ -14,10 +14,10 @@ import { type DateRange, useAnalytics } from '@/hooks/use-analytics'
 import { exportAnalyticsToCSV, exportAnalyticsToPDF } from '@/utils/analyticsExport'
 
 export default function AnalyticsDashboardPage() {
-  const [dateRange, setDateRange] = useState<DateRange>({
+  const [dateRange, setDateRange] = useState<DateRange>(() => ({
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
     end: new Date(),
-  })
+  }))
 
   const { data, loading, error, refetch } = useAnalytics(dateRange)
 
@@ -34,7 +34,36 @@ export default function AnalyticsDashboardPage() {
   // Don't show error if we have data (even fallback data)
   const shouldShowError = error && !data
 
-  const handleDateRangeChange = (range: '7d' | '30d' | '90d' | '1y') => {
+  // Memoize computed values
+  const metrics = useMemo(() => {
+    if (!data) return null
+    return {
+      totalSearches: data.engagement.totalSearches.toLocaleString(),
+      totalMatches: data.engagement.totalMatches.toLocaleString(),
+      conversionRate: `${data.engagement.conversionRate.toFixed(1)}%`,
+      avgRating: data.providers.avgRating.toFixed(1),
+      totalProviders: data.providers.totalProviders,
+      verifiedProviders: data.providers.verifiedProviders,
+      verificationRate: data.providers.totalProviders > 0
+        ? ((data.providers.verifiedProviders / data.providers.totalProviders) * 100).toFixed(1)
+        : '0',
+      totalLeads: data.engagement.totalLeads,
+      avgSearchTime: `${data.engagement.avgSearchTime.toFixed(2)}s`,
+      avgResultsPerSearch: data.search.avgResultsPerSearch.toFixed(1),
+    }
+  }, [data])
+
+  const topProviders = useMemo(() => {
+    if (!data) return []
+    return data.providers.topRatedProviders.slice(0, 5)
+  }, [data])
+
+  const citiesDistribution = useMemo(() => {
+    if (!data) return []
+    return data.providers.providersByCity.slice(0, 3)
+  }, [data])
+
+  const handleDateRangeChange = useCallback((range: '7d' | '30d' | '90d' | '1y') => {
     const end = new Date()
     const start = new Date()
 
@@ -57,9 +86,9 @@ export default function AnalyticsDashboardPage() {
     }
 
     setDateRange({ start, end })
-  }
+  }, [])
 
-  const exportToPdf = async () => {
+  const exportToPdf = useCallback(async () => {
     if (!data) {
       return
     }
@@ -74,9 +103,9 @@ export default function AnalyticsDashboardPage() {
     } catch (_error) {
       // You could show a toast notification here
     }
-  }
+  }, [data, dateRange])
 
-  const exportToCsv = () => {
+  const exportToCsv = useCallback(() => {
     if (!data) {
       return
     }
@@ -86,7 +115,7 @@ export default function AnalyticsDashboardPage() {
     } catch (_error) {
       // You could show a toast notification here
     }
-  }
+  }, [data])
 
   if (loading) {
     return (
@@ -166,52 +195,28 @@ export default function AnalyticsDashboardPage() {
             <Button
               onClick={() => handleDateRangeChange('7d')}
               size="sm"
-              variant={
-                dateRange.start.getTime() ===
-                new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime()
-                  ? 'primary'
-                  : 'outline'
-              }
+              variant="outline"
             >
               7 Days
             </Button>
             <Button
               onClick={() => handleDateRangeChange('30d')}
               size="sm"
-              variant={
-                dateRange.start.getTime() ===
-                new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).getTime()
-                  ? 'primary'
-                  : 'outline'
-              }
+              variant="outline"
             >
               30 Days
             </Button>
             <Button
               onClick={() => handleDateRangeChange('90d')}
               size="sm"
-              variant={
-                dateRange.start.getTime() ===
-                new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).getTime()
-                  ? 'primary'
-                  : 'outline'
-              }
+              variant="outline"
             >
               90 Days
             </Button>
             <Button
               onClick={() => handleDateRangeChange('1y')}
               size="sm"
-              variant={
-                dateRange.start.getTime() ===
-                new Date(
-                  new Date().getFullYear() - 1,
-                  new Date().getMonth(),
-                  new Date().getDate()
-                ).getTime()
-                  ? 'primary'
-                  : 'outline'
-              }
+              variant="outline"
             >
               1 Year
             </Button>
@@ -246,7 +251,7 @@ export default function AnalyticsDashboardPage() {
                   Total Searches
                 </p>
                 <p className="font-bold text-2xl text-gray-900 dark:text-white">
-                  {data.engagement.totalSearches.toLocaleString()}
+                  {metrics?.totalSearches || '0'}
                 </p>
               </div>
             </div>
@@ -262,7 +267,7 @@ export default function AnalyticsDashboardPage() {
                   Total Matches
                 </p>
                 <p className="font-bold text-2xl text-gray-900 dark:text-white">
-                  {data.engagement.totalMatches.toLocaleString()}
+                  {metrics?.totalMatches || '0'}
                 </p>
               </div>
             </div>
@@ -278,7 +283,7 @@ export default function AnalyticsDashboardPage() {
                   Conversion Rate
                 </p>
                 <p className="font-bold text-2xl text-gray-900 dark:text-white">
-                  {data.engagement.conversionRate.toFixed(1)}%
+                  {metrics?.conversionRate || '0%'}
                 </p>
               </div>
             </div>
@@ -294,7 +299,7 @@ export default function AnalyticsDashboardPage() {
                   Avg Provider Rating
                 </p>
                 <p className="font-bold text-2xl text-gray-900 dark:text-white">
-                  {data.providers.avgRating.toFixed(1)}
+                  {metrics?.avgRating || '0.0'}
                 </p>
               </div>
             </div>
@@ -336,7 +341,7 @@ export default function AnalyticsDashboardPage() {
               Top Rated Providers
             </h3>
             <div className="space-y-3">
-              {data.providers.topRatedProviders.slice(0, 5).map((provider, index) => (
+              {topProviders.map((provider, index) => (
                 <div className="flex items-center justify-between" key={provider.name}>
                   <div className="flex items-center">
                     <span className="mr-2 text-gray-600 text-sm dark:text-gray-300">
@@ -425,25 +430,19 @@ export default function AnalyticsDashboardPage() {
               <div className="flex justify-between">
                 <span className="text-gray-600 text-sm dark:text-gray-300">Total Providers</span>
                 <span className="font-medium text-gray-900 text-sm dark:text-white">
-                  {data.providers.totalProviders}
+                  {metrics?.totalProviders || 0}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600 text-sm dark:text-gray-300">Verified Providers</span>
                 <span className="font-medium text-gray-900 text-sm dark:text-white">
-                  {data.providers.verifiedProviders}
+                  {metrics?.verifiedProviders || 0}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600 text-sm dark:text-gray-300">Verification Rate</span>
                 <span className="font-medium text-gray-900 text-sm dark:text-white">
-                  {data.providers.totalProviders > 0
-                    ? (
-                        (data.providers.verifiedProviders / data.providers.totalProviders) *
-                        100
-                      ).toFixed(1)
-                    : 0}
-                  %
+                  {metrics?.verificationRate || '0'}%
                 </span>
               </div>
             </div>
@@ -457,19 +456,19 @@ export default function AnalyticsDashboardPage() {
               <div className="flex justify-between">
                 <span className="text-gray-600 text-sm dark:text-gray-300">Total Leads</span>
                 <span className="font-medium text-gray-900 text-sm dark:text-white">
-                  {data.engagement.totalLeads}
+                  {metrics?.totalLeads || 0}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600 text-sm dark:text-gray-300">Avg Search Time</span>
                 <span className="font-medium text-gray-900 text-sm dark:text-white">
-                  {data.engagement.avgSearchTime.toFixed(2)}s
+                  {metrics?.avgSearchTime || '0s'}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600 text-sm dark:text-gray-300">Avg Results</span>
                 <span className="font-medium text-gray-900 text-sm dark:text-white">
-                  {data.search.avgResultsPerSearch.toFixed(1)}
+                  {metrics?.avgResultsPerSearch || '0'}
                 </span>
               </div>
             </div>
@@ -480,7 +479,7 @@ export default function AnalyticsDashboardPage() {
               Provider Distribution
             </h3>
             <div className="space-y-2">
-              {data.providers.providersByCity.map((city) => (
+              {citiesDistribution.map((city) => (
                 <div className="flex justify-between" key={city.city}>
                   <span className="text-gray-600 text-sm capitalize dark:text-gray-300">
                     {city.city}

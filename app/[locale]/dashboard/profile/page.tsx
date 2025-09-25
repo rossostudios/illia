@@ -1,46 +1,16 @@
 'use client'
 
-import { CreditCard, Shield, UserCircle } from 'lucide-react'
+import { CreditCard, Loader2, Shield, UserCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { MembershipTab } from '@/components/profile/MembershipTab'
 import { PersonalInfoTab } from '@/components/profile/PersonalInfoTab'
 import { PreferencesTab } from '@/components/profile/PreferencesTab'
 import { PrivacyTab } from '@/components/profile/PrivacyTab'
-import type { UserProfile } from '@/types/profile'
-
-// Mock user data
-const MOCK_USER: UserProfile = {
-  id: '123',
-  name: 'Christopher',
-  email: 'chris@example.com',
-  avatar: 'https://i.pravatar.cc/150?img=8',
-  bio: 'Digital nomad exploring Latin America. Looking for reliable home help to focus on my remote work.',
-  city: 'medellin',
-  services: ['cleaning', 'cooking'],
-  budget: [150, 300],
-  tier: 'free',
-  matchesUsed: 3,
-  matchesLimit: 5,
-  language: 'en',
-  notifications: {
-    email: true,
-    matches: true,
-    forum: false,
-    marketing: false,
-  },
-  privacy: {
-    discoverable: true,
-    showInForums: true,
-    shareLocation: false,
-  },
-  joinDate: '2024-08-15',
-  billingHistory: [
-    { date: '2024-09-01', amount: '$0.00', description: 'Free Plan' },
-    { date: '2024-08-01', amount: '$0.00', description: 'Free Plan' },
-  ],
-}
+import { useSessionContext } from '@/components/SessionProvider'
+import { useProfile } from '@/hooks/use-profile'
+import { createClient } from '@/lib/supabase/client'
 
 const TABS = [
   { id: 'personal', label: 'Personal Info', icon: UserCircle },
@@ -51,12 +21,21 @@ const TABS = [
 
 export default function ProfilePage() {
   const router = useRouter()
+  const { user } = useSessionContext()
   const [activeTab, setActiveTab] = useState('personal')
-  const [profile, setProfile] = useState<UserProfile>(MOCK_USER)
+  const supabase = createClient()
 
-  const handleProfileUpdate = (updates: Partial<UserProfile>) => {
-    setProfile((prev) => ({ ...prev, ...updates }))
-    toast.success('Profile updated successfully')
+  // Use the profile hook
+  const { profile, loading, error, updateProfile, uploadAvatar, deleteAccount, exportUserData } =
+    useProfile()
+
+  const handleProfileUpdate = async (updates: any) => {
+    const result = await updateProfile(updates)
+    if (result.success) {
+      toast.success('Profile updated successfully')
+    } else {
+      toast.error(result.error || 'Failed to update profile')
+    }
   }
 
   const handleUpgrade = () => {
@@ -64,33 +43,90 @@ export default function ProfilePage() {
     router.push('/en/dashboard/membership')
   }
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete your account? This action cannot be undone.'
+    )
+    if (!confirmed) return
+
     toast.error('Account deletion in progress...')
-    // In production, this would call Supabase to delete the account
-    setTimeout(() => {
+    const result = await deleteAccount()
+    if (result.success) {
       router.push('/login')
-    }, 2000)
+    } else {
+      toast.error(result.error || 'Failed to delete account')
+    }
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     toast.info('Signing out...')
-    // In production, this would call Supabase auth signOut
-    setTimeout(() => {
-      router.push('/login')
-    }, 1000)
+    await supabase.auth.signOut()
+    router.push('/login')
   }
 
-  const handleExportData = () => {
+  const handleExportData = async () => {
     toast.success('Preparing your data export...')
-    // In production, this would generate and download a JSON file
-    const dataStr = JSON.stringify(profile, null, 2)
-    const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`
-    const exportFileDefaultName = 'profile-data.json'
+    const result = await exportUserData()
+    if (result.success && result.data) {
+      const dataStr = JSON.stringify(result.data, null, 2)
+      const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`
+      const exportFileDefaultName = 'profile-data.json'
 
-    const linkElement = document.createElement('a')
-    linkElement.setAttribute('href', dataUri)
-    linkElement.setAttribute('download', exportFileDefaultName)
-    linkElement.click()
+      const linkElement = document.createElement('a')
+      linkElement.setAttribute('href', dataUri)
+      linkElement.setAttribute('download', exportFileDefaultName)
+      linkElement.click()
+    } else {
+      toast.error(result.error || 'Failed to export data')
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="mx-auto h-8 w-8 animate-spin text-teal-600" />
+          <p className="mt-2 text-gray-600 dark:text-gray-400">Loading profile...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !profile) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600">Error: {error || 'Profile not found'}</p>
+          <button
+            className="mt-4 rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+            onClick={() => window.location.reload()}
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // Transform profile data to match frontend interface
+  const userProfile = {
+    ...profile,
+    avatar: profile.avatar_url || `https://i.pravatar.cc/150?u=${profile.id}`,
+    name: profile.name || user?.email?.split('@')[0] || 'User',
+    notifications: profile.notification_settings || {
+      email: true,
+      matches: true,
+      forum: false,
+      marketing: false,
+    },
+    privacy: profile.preferences?.privacy || {
+      discoverable: true,
+      showInForums: true,
+      shareLocation: false,
+    },
+    budget: [profile.budget_min || 150, profile.budget_max || 300],
+    joinDate: profile.created_at || new Date().toISOString(),
+    billingHistory: [],
   }
 
   return (
@@ -134,13 +170,24 @@ export default function ProfilePage() {
         {/* Tab Content */}
         <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900">
           {activeTab === 'personal' && (
-            <PersonalInfoTab onUpdate={handleProfileUpdate} profile={profile} />
+            <PersonalInfoTab
+              onUpdate={handleProfileUpdate}
+              onUploadAvatar={async (file: File) => {
+                const result = await uploadAvatar(file)
+                if (result.success) {
+                  toast.success('Avatar uploaded successfully')
+                } else {
+                  toast.error(result.error || 'Failed to upload avatar')
+                }
+              }}
+              profile={userProfile}
+            />
           )}
           {activeTab === 'preferences' && (
-            <PreferencesTab onUpdate={handleProfileUpdate} profile={profile} />
+            <PreferencesTab onUpdate={handleProfileUpdate} profile={userProfile} />
           )}
           {activeTab === 'membership' && (
-            <MembershipTab onUpgrade={handleUpgrade} profile={profile} />
+            <MembershipTab onUpgrade={handleUpgrade} profile={userProfile} />
           )}
           {activeTab === 'privacy' && (
             <PrivacyTab
@@ -148,7 +195,7 @@ export default function ProfilePage() {
               onExportData={handleExportData}
               onLogout={handleLogout}
               onUpdate={handleProfileUpdate}
-              profile={profile}
+              profile={userProfile}
             />
           )}
         </div>

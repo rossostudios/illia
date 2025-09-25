@@ -11,7 +11,12 @@
     "lint": "biome lint ./",
     "format": "biome format --write ./",
     "check": "biome check --write ./",
-    "analyze": "ANALYZE=true npm run build"
+    "analyze": "ANALYZE=true npm run build",
+    "db:migrate": "tsx scripts/apply-migrations.ts",
+    "db:migrate:specific": "tsx scripts/apply-migrations.ts",
+    "db:types": "tsx scripts/generate-types.ts",
+    "validate": "tsx scripts/validate-system.ts",
+    "setup": "npm run db:migrate && npm run db:types"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -19,6 +24,7 @@
     "@polar-sh/sdk": "^0.35.1",
     "@supabase/ssr": "^0.7.0",
     "@tanstack/react-query": "^5.90.1",
+    "@tanstack/react-table": "^8.21.3",
     "@types/leaflet": "^1.9.20",
     "clsx": "^2.1.1",
     "critters": "^0.0.23",
