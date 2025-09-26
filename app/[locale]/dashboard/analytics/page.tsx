@@ -51,7 +51,7 @@ export default function AnalyticsDashboardPage() {
           ? ((data.providers.verifiedProviders / data.providers.totalProviders) * 100).toFixed(1)
           : '0',
       totalLeads: data.engagement.totalLeads,
-      avgSearchTime: `${data.engagement.avgSearchTime.toFixed(2)}s`,
+      avgResultsPerQuery: data.engagement.avgResultsCount.toFixed(1),
       avgResultsPerSearch: data.search.avgResultsPerSearch.toFixed(1),
     }
   }, [data])
@@ -451,9 +451,9 @@ export default function AnalyticsDashboardPage() {
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600 text-sm dark:text-gray-300">Avg Search Time</span>
+                <span className="text-gray-600 text-sm dark:text-gray-300">Avg Results/Query</span>
                 <span className="font-medium text-gray-900 text-sm dark:text-white">
-                  {metrics?.avgSearchTime || '0s'}
+                  {metrics?.avgResultsPerQuery || '0'}
                 </span>
               </div>
               <div className="flex justify-between">

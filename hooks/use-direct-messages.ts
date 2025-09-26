@@ -72,19 +72,27 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
     }
 
     try {
-      const { data, error } = await supabase.rpc('get_user_conversations', {
-        p_user_id: user.id,
-      })
+      // Get conversations where user is a participant
+      const { data: participantData } = await supabase
+        .from('conversation_participants')
+        .select('conversation_id')
+        .eq('user_id', user.id)
 
-      if (error) {
-        // If the function doesn't exist, it means migrations haven't been applied
-        if (error.message?.includes('function') || error.code === '42883') {
-          setConversations([])
-          return
-        }
+      if (!participantData || participantData.length === 0) {
+        setConversations([])
+        return []
       }
-      const result = data || []
-      setConversations(result)
+
+      const conversationIds = participantData.map((p) => p.conversation_id).filter(Boolean)
+
+      // Get conversation details
+      const { data: conversationsData } = await supabase
+        .from('conversations')
+        .select('*')
+        .in('id', conversationIds)
+
+      const result = conversationsData || []
+      setConversations(result as any)
       return result
     } catch (_error) {
       setConversations([])

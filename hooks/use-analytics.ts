@@ -11,7 +11,7 @@ export type UserEngagementMetrics = {
   totalMatches: number
   totalLeads: number
   conversionRate: number
-  avgSearchTime: number
+  avgResultsCount: number
   searchesByDate: Array<{ date: string; count: number }>
   matchesByDate: Array<{ date: string; count: number }>
   leadsByDate: Array<{ date: string; count: number }>
@@ -46,7 +46,7 @@ const defaultAnalyticsData: AnalyticsData = {
     totalMatches: 0,
     totalLeads: 0,
     conversionRate: 0,
-    avgSearchTime: 0,
+    avgResultsCount: 0,
     searchesByDate: [],
     matchesByDate: [],
     leadsByDate: [],
@@ -84,7 +84,7 @@ export function useAnalytics(dateRange?: DateRange) {
         // Get search analytics (if table exists)
         const { data: searches } = await supabase
           .from('search_analytics')
-          .select('created_at, result_count, time_to_results')
+          .select('created_at, results_count')
           .gte('created_at', startDate.toISOString())
           .lte('created_at', endDate.toISOString())
 
@@ -110,11 +110,11 @@ export function useAnalytics(dateRange?: DateRange) {
         // Calculate conversion rate (leads from searches)
         const conversionRate = totalSearches > 0 ? (totalLeads / totalSearches) * 100 : 0
 
-        // Calculate average search time
-        const validTimes =
-          searches?.filter((s) => s.time_to_results).map((s) => s.time_to_results) || []
-        const avgSearchTime =
-          validTimes.length > 0 ? validTimes.reduce((a, b) => a + b, 0) / validTimes.length : 0
+        // Calculate average results per search
+        const validResults =
+          searches?.filter((s) => s.results_count !== null).map((s) => s.results_count as number) || []
+        const avgResultsCount =
+          validResults.length > 0 ? validResults.reduce((a, b) => a + b, 0) / validResults.length : 0
 
         // Group by date function
         const groupByDate = (items: any[], dateField: string) => {
@@ -144,7 +144,7 @@ export function useAnalytics(dateRange?: DateRange) {
           totalMatches,
           totalLeads,
           conversionRate,
-          avgSearchTime,
+          avgResultsCount,
           searchesByDate: groupByDate(searches || [], 'created_at'),
           matchesByDate: groupByDate(matches || [], 'created_at'),
           leadsByDate: groupByDate(leads || [], 'created_at'),
@@ -165,7 +165,7 @@ export function useAnalytics(dateRange?: DateRange) {
       try {
         const { data: analytics } = await supabase
           .from('search_analytics')
-          .select('query, search_type, result_count, clicked_result_id')
+          .select('query, query_type, results_count, results_clicked')
           .gte('created_at', startDate.toISOString())
           .lte('created_at', endDate.toISOString())
 
@@ -192,7 +192,7 @@ export function useAnalytics(dateRange?: DateRange) {
         // Search type distribution
         const typeCounts = analytics.reduce(
           (acc, item) => {
-            const type = item.search_type || 'unknown'
+            const type = item.query_type || 'unknown'
             acc[type] = (acc[type] || 0) + 1
             return acc
           },
@@ -206,13 +206,15 @@ export function useAnalytics(dateRange?: DateRange) {
 
         // Average results per search
         const avgResultsPerSearch =
-          analytics.reduce((sum, item) => sum + (item.result_count || 0), 0) / analytics.length
+          analytics.reduce((sum, item) => sum + (item.results_count || 0), 0) / analytics.length
 
         // Top clicked providers (simplified - don't fetch provider names to avoid N+1)
         const clickCounts = analytics.reduce(
           (acc, item) => {
-            if (item.clicked_result_id) {
-              acc[item.clicked_result_id] = (acc[item.clicked_result_id] || 0) + 1
+            if (item.results_clicked && item.results_clicked.length > 0) {
+              item.results_clicked.forEach((resultId) => {
+                acc[resultId] = (acc[resultId] || 0) + 1
+              })
             }
             return acc
           },
@@ -260,7 +262,7 @@ export function useAnalytics(dateRange?: DateRange) {
         const verifiedProviders = providers.filter((p) => p.status === 'verified').length
 
         // Average rating
-        const ratings = providers.filter((p) => p.rating_avg).map((p) => p.rating_avg) || []
+        const ratings = providers.filter((p) => p.rating_avg).map((p) => p.rating_avg as number) || []
         const avgRating =
           ratings.length > 0 ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0
 
@@ -270,7 +272,7 @@ export function useAnalytics(dateRange?: DateRange) {
           .sort((a, b) => (b.rating_avg || 0) - (a.rating_avg || 0))
           .slice(0, 10)
           .map((p) => ({
-            name: p.name,
+            name: p.name || 'Unknown Provider',
             rating: p.rating_avg || 0,
             reviewCount: p.reviews_count || 0,
           }))

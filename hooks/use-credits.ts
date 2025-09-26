@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { useSession } from './useSession'
+import { useSession } from './use-session'
 
 export function useCredits() {
   const { user } = useSession()
