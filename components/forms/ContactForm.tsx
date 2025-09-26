@@ -21,7 +21,7 @@ export function ContactForm() {
     <form action={formAction} className="mx-auto max-w-md space-y-4" ref={formRef}>
       {state?.success && (
         <div className="rounded-lg bg-green-50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-200">
-          {state.data?.message}
+          {(state.data as any)?.message}
         </div>
       )}
 

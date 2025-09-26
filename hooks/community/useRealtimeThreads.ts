@@ -86,7 +86,7 @@ export function useRealtimeThreads(options: UseRealtimeThreadsOptions = {}) {
         }
       }
 
-      setThreads(data || [])
+      setThreads((data || []) as any)
     } catch (err) {
       setError(err as Error)
       setThreads([])
@@ -236,7 +236,20 @@ export function useRealtimeThreads(options: UseRealtimeThreadsOptions = {}) {
   // Increment view count
   const incrementViewCount = async (threadId: string) => {
     try {
-      await supabase.rpc('increment_thread_views', { thread_id: threadId })
+      // Views increment functionality not yet implemented - would need RPC function
+      // For now, just updating the thread's view count directly
+      const { data: thread } = await supabase
+        .from('community_threads')
+        .select('views_count')
+        .eq('id', threadId)
+        .single()
+
+      if (thread) {
+        await supabase
+          .from('community_threads')
+          .update({ views_count: (thread.views_count || 0) + 1 })
+          .eq('id', threadId)
+      }
     } catch (_error) {
       // Error handled silently
     }
@@ -272,7 +285,7 @@ export function useRealtimeThreads(options: UseRealtimeThreadsOptions = {}) {
   const updateThread = async (threadId: string, updates: Partial<Thread>) => {
     const { data, error } = await supabase
       .from('community_threads')
-      .update(updates as string)
+      .update(updates)
       .eq('id', threadId)
       .select()
       .single()

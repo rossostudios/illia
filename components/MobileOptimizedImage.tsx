@@ -35,7 +35,7 @@ export default function MobileOptimizedImage({
   // Adjust quality based on network conditions
   useEffect(() => {
     if ('connection' in navigator) {
-      const connection = (navigator as string).connection
+      const connection = (navigator as any).connection
       if (connection) {
         const effectiveType = connection.effectiveType
         if (effectiveType === '2g' || effectiveType === 'slow-2g') {

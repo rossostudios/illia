@@ -81,14 +81,14 @@ export function MatchFilters({
               <Button
                 onClick={() => onViewModeChange('card')}
                 size="sm"
-                variant={viewMode === 'card' ? 'default' : 'ghost'}
+                variant={viewMode === 'card' ? 'primary' : 'ghost'}
               >
                 <Grid3x3 className="h-4 w-4" />
               </Button>
               <Button
                 onClick={() => onViewModeChange('list')}
                 size="sm"
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
+                variant={viewMode === 'list' ? 'primary' : 'ghost'}
               >
                 <List className="h-4 w-4" />
               </Button>

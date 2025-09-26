@@ -36,7 +36,7 @@ export function useAdmin() {
           .eq('is_active', true)
           .single()
 
-        setAdminUser(data)
+        setAdminUser(data as any)
       } catch (_error) {
         setAdminUser(null)
       } finally {

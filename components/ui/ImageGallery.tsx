@@ -267,7 +267,7 @@ function ImageLightbox({ images, selectedIndex, onClose, onNavigate }: ImageLigh
             onClick={(e) => {
               e.stopPropagation()
               onClose()
-            }
+            }}
             type="button"
           >
             <X className="h-5 w-5 text-white" />
@@ -284,8 +284,7 @@ function ImageLightbox({ images, selectedIndex, onClose, onNavigate }: ImageLigh
                 onClick={(e) => {
                   e.stopPropagation()
                   handleZoomOut()
-                }
-                
+                }}
               >
                 <ZoomOut className="h-5 w-5 text-white" />
               </button>
@@ -295,7 +294,6 @@ function ImageLightbox({ images, selectedIndex, onClose, onNavigate }: ImageLigh
                   e.stopPropagation()
                   handleZoomIn()
                 }}
-                
               >
                 <ZoomIn className="h-5 w-5 text-white" />
               </button>

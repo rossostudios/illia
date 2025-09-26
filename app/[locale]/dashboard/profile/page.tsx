@@ -2,7 +2,7 @@
 
 import { CreditCard, Loader2, Shield, UserCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import { MembershipTab } from '@/components/profile/MembershipTab'
 import { PersonalInfoTab } from '@/components/profile/PersonalInfoTab'
@@ -26,7 +26,7 @@ export default function ProfilePage() {
   const supabase = createClient()
 
   // Use the profile hook
-  const { profile, loading, error, updateProfile, uploadAvatar, deleteAccount, exportUserData } =
+  const { profile, loading, error, updateProfile, deleteAccount, exportUserData } =
     useProfile()
 
   const handleProfileUpdate = async (updates: any) => {
@@ -47,7 +47,9 @@ export default function ProfilePage() {
     const confirmed = window.confirm(
       'Are you sure you want to delete your account? This action cannot be undone.'
     )
-    if (!confirmed) return
+    if (!confirmed) {
+      return
+    }
 
     toast.error('Account deletion in progress...')
     const result = await deleteAccount()
@@ -109,23 +111,32 @@ export default function ProfilePage() {
   }
 
   // Transform profile data to match frontend interface
-  const userProfile = {
+  const userProfile: any = {
     ...profile,
-    avatar: profile.avatar_url || `https://i.pravatar.cc/150?u=${profile.id}`,
-    name: profile.name || user?.email?.split('@')[0] || 'User',
-    notifications: profile.notification_settings || {
+    id: user?.id || '',
+    email: user?.email || '',
+    avatar: `https://i.pravatar.cc/150?u=${user?.id}`,
+    name: (profile as any).full_name || (profile as any).name || user?.email?.split('@')[0] || 'User',
+    bio: '',
+    city: (profile as any).city || '',
+    services: (profile as any).services || [],
+    tier: ((profile as any).tier || 'free') as 'free' | 'premium' | 'professional',
+    language: (profile as any).preferred_language || 'en',
+    notifications: {
       email: true,
       matches: true,
       forum: false,
       marketing: false,
     },
-    privacy: profile.preferences?.privacy || {
+    privacy: {
       discoverable: true,
       showInForums: true,
       shareLocation: false,
     },
-    budget: [profile.budget_min || 150, profile.budget_max || 300],
-    joinDate: profile.created_at || new Date().toISOString(),
+    budget: [(profile as any).budget_min || 150, (profile as any).budget_max || 300] as [number, number],
+    matchesUsed: (profile as any).matchesUsed || 0,
+    matchesLimit: (profile as any).matchesLimit || 10,
+    joinDate: (profile as any).created_at || new Date().toISOString(),
     billingHistory: [],
   }
 
@@ -172,14 +183,6 @@ export default function ProfilePage() {
           {activeTab === 'personal' && (
             <PersonalInfoTab
               onUpdate={handleProfileUpdate}
-              onUploadAvatar={async (file: File) => {
-                const result = await uploadAvatar(file)
-                if (result.success) {
-                  toast.success('Avatar uploaded successfully')
-                } else {
-                  toast.error(result.error || 'Failed to upload avatar')
-                }
-              }}
               profile={userProfile}
             />
           )}

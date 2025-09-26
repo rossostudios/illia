@@ -27,13 +27,13 @@ export async function POST(req: NextRequest) {
     // Check user tier for lead limits
     const { data: purchase } = await supabase
       .from('purchases')
-      .select('tier')
-      .eq('user_email', user.email)
+      .select('product_id, metadata')
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(1)
       .single()
 
-    const tier = purchase?.tier || 'basic'
+    const tier = (purchase?.metadata as any)?.tier || 'basic'
     const leadLimit = tier === 'basic' ? 10 : tier === 'pro' ? 50 : 100
 
     // Generate mock leads (replace with actual lead generation logic)

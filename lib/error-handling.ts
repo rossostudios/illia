@@ -1,5 +1,5 @@
-import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
+import { createClient } from '@/lib/supabase/client'
 
 // Error severity levels
 export enum ErrorSeverity {
@@ -88,12 +88,6 @@ class ErrorLogger {
 
     // Log to console in development
     if (process.env.NODE_ENV === 'development') {
-      console.group(`🚨 ${appError.category.toUpperCase()} ERROR`)
-      console.error('Message:', appError.message)
-      console.error('Severity:', appError.severity)
-      console.error('Context:', appError.context)
-      console.error('Stack:', appError.stack)
-      console.groupEnd()
     }
   }
 
@@ -133,9 +127,7 @@ class ErrorLogger {
       }))
 
       await supabase.from('analytics_events').insert(analyticsEvents)
-    } catch (logError) {
-      // Silently fail logging errors to prevent infinite loops
-      console.error('Failed to log error to database:', logError)
+    } catch (_logError) {
     } finally {
       this.isProcessing = false
 
@@ -282,18 +274,34 @@ export function handleApiError(response: Response): never {
 }
 
 function getErrorCategoryFromStatus(status: number): ErrorCategory {
-  if (status === 401 || status === 403) return ErrorCategory.AUTHENTICATION
-  if (status === 400 || status === 422) return ErrorCategory.VALIDATION
-  if (status === 404) return ErrorCategory.BUSINESS_LOGIC
-  if (status === 429) return ErrorCategory.NETWORK
-  if (status >= 500) return ErrorCategory.DATABASE
+  if (status === 401 || status === 403) {
+    return ErrorCategory.AUTHENTICATION
+  }
+  if (status === 400 || status === 422) {
+    return ErrorCategory.VALIDATION
+  }
+  if (status === 404) {
+    return ErrorCategory.BUSINESS_LOGIC
+  }
+  if (status === 429) {
+    return ErrorCategory.NETWORK
+  }
+  if (status >= 500) {
+    return ErrorCategory.DATABASE
+  }
   return ErrorCategory.UNKNOWN
 }
 
 function getSeverityFromStatus(status: number): ErrorSeverity {
-  if (status >= 500) return ErrorSeverity.HIGH
-  if (status === 429) return ErrorSeverity.MEDIUM
-  if (status === 404) return ErrorSeverity.LOW
+  if (status >= 500) {
+    return ErrorSeverity.HIGH
+  }
+  if (status === 429) {
+    return ErrorSeverity.MEDIUM
+  }
+  if (status === 404) {
+    return ErrorSeverity.LOW
+  }
   return ErrorSeverity.MEDIUM
 }
 

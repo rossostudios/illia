@@ -35,7 +35,13 @@ export default function UserDetailModal({ user, onClose }: UserDetailModalProps)
 
     setLoading(true)
     try {
-      const { error } = await supabase.from('users').update({ is_deleted: true }).eq('id', user.id)
+      // Add to blocked users table instead
+      const { error } = await supabase.from('blocked_users').insert({
+        user_id: user.id,
+        blocked_user_id: user.id,
+        reason: 'Suspended by admin',
+        blocked_at: new Date().toISOString(),
+      })
 
       if (error) {
         throw error

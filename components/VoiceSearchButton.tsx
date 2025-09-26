@@ -10,7 +10,7 @@ type VoiceSearchButtonProps = {
   onError?: (error: string) => void
   className?: string
   size?: 'sm' | 'md' | 'lg'
-  variant?: 'default' | 'outline' | 'ghost'
+  variant?: 'primary' | 'outline' | 'ghost'
   language?: string
   showTranscript?: boolean
 }
@@ -171,7 +171,7 @@ export function VoiceSearchButton({
               onClick={handleCloseTranscript}
             >
               <AlertCircle className="h-5 w-5" />
-            </button>
+            </Button>
 
             <div className="mb-4 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">

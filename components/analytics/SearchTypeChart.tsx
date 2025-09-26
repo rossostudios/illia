@@ -27,7 +27,7 @@ export function SearchTypeChart({ data, className = '' }: SearchTypeChartProps) 
             data={chartData}
             dataKey="value"
             fill="#8884d8"
-            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
             labelLine={false}
             outerRadius={80}
           >
@@ -36,7 +36,7 @@ export function SearchTypeChart({ data, className = '' }: SearchTypeChartProps) 
             ))}
           </Pie>
           <Tooltip
-            content={({ active, payload }) => {
+            content={({ active, payload }: any) => {
               if (active && payload && payload.length) {
                 const data = payload[0]
                 return (

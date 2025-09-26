@@ -105,15 +105,15 @@ export default function BookingCalendar({
       setLoading(true)
       try {
         const { data, error } = await supabase
-          .from('providers')
-          .select('availability_schedule')
+          .from('service_providers')
+          .select('work_hours, work_days')
           .eq('id', providerId)
           .single()
 
         if (error) {
           throw error
         }
-        setProviderAvailability(data?.availability_schedule || {})
+        setProviderAvailability((data?.work_hours as ProviderAvailability) || {})
       } catch (_error) {
         // Error handled silently
       } finally {
@@ -131,6 +131,7 @@ export default function BookingCalendar({
     }
 
     async function fetchSlots() {
+      if (!selectedDate || !providerAvailability) return
       setLoadingSlots(true)
       try {
         const dateStr = format(selectedDate, 'yyyy-MM-dd')

@@ -1,13 +1,161 @@
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: '13.0.5'
-  }
   public: {
     Tables: {
+      admin_audit_logs: {
+        Row: {
+          action: string
+          admin_id: string | null
+          created_at: string | null
+          details: Json
+          id: string
+          ip_address: string | null
+          resource_id: string | null
+          resource_type: string
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          admin_id?: string | null
+          created_at?: string | null
+          details?: Json
+          id?: string
+          ip_address?: string | null
+          resource_id?: string | null
+          resource_type: string
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          admin_id?: string | null
+          created_at?: string | null
+          details?: Json
+          id?: string
+          ip_address?: string | null
+          resource_id?: string | null
+          resource_type?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      admin_sessions: {
+        Row: {
+          admin_id: string
+          created_at: string | null
+          expires_at: string
+          id: string
+          ip_address: string | null
+          last_activity: string | null
+          token_hash: string
+          user_agent: string | null
+        }
+        Insert: {
+          admin_id: string
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          ip_address?: string | null
+          last_activity?: string | null
+          token_hash: string
+          user_agent?: string | null
+        }
+        Update: {
+          admin_id?: string
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          ip_address?: string | null
+          last_activity?: string | null
+          token_hash?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      admin_users: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_active: boolean | null
+          permissions: Json
+          role: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          permissions?: Json
+          role?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          permissions?: Json
+          role?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      analytics_events: {
+        Row: {
+          created_at: string | null
+          event_category: string | null
+          event_name: string
+          event_properties: Json
+          id: string
+          ip_address: string | null
+          page_path: string | null
+          page_title: string | null
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_category?: string | null
+          event_name: string
+          event_properties?: Json
+          id?: string
+          ip_address?: string | null
+          page_path?: string | null
+          page_title?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_category?: string | null
+          event_name?: string
+          event_properties?: Json
+          id?: string
+          ip_address?: string | null
+          page_path?: string | null
+          page_title?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       blocked_users: {
         Row: {
           blocked_at: string | null
@@ -30,35 +178,404 @@ export type Database = {
           reason?: string | null
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'blocked_users_blocked_user_id_fkey'
-            columns: ['blocked_user_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'blocked_users_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
+      }
+      booking_notification_preferences: {
+        Row: {
+          created_at: string | null
+          email_enabled: boolean | null
+          id: string
+          in_app_enabled: boolean | null
+          push_enabled: boolean | null
+          quiet_hours_enabled: boolean | null
+          quiet_hours_end: string | null
+          quiet_hours_start: string | null
+          reminder_1hr: boolean | null
+          reminder_24hr: boolean | null
+          reminder_custom_minutes: number | null
+          sms_enabled: boolean | null
+          timezone: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email_enabled?: boolean | null
+          id?: string
+          in_app_enabled?: boolean | null
+          push_enabled?: boolean | null
+          quiet_hours_enabled?: boolean | null
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          reminder_1hr?: boolean | null
+          reminder_24hr?: boolean | null
+          reminder_custom_minutes?: number | null
+          sms_enabled?: boolean | null
+          timezone?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email_enabled?: boolean | null
+          id?: string
+          in_app_enabled?: boolean | null
+          push_enabled?: boolean | null
+          quiet_hours_enabled?: boolean | null
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          reminder_1hr?: boolean | null
+          reminder_24hr?: boolean | null
+          reminder_custom_minutes?: number | null
+          sms_enabled?: boolean | null
+          timezone?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      booking_reminders: {
+        Row: {
+          booking_id: string | null
+          channel: string[] | null
+          created_at: string | null
+          id: string
+          last_error: string | null
+          reminder_type: string
+          retry_count: number | null
+          scheduled_for: string
+          sent_at: string | null
+          status: string | null
+        }
+        Insert: {
+          booking_id?: string | null
+          channel?: string[] | null
+          created_at?: string | null
+          id?: string
+          last_error?: string | null
+          reminder_type: string
+          retry_count?: number | null
+          scheduled_for: string
+          sent_at?: string | null
+          status?: string | null
+        }
+        Update: {
+          booking_id?: string | null
+          channel?: string[] | null
+          created_at?: string | null
+          id?: string
+          last_error?: string | null
+          reminder_type?: string
+          retry_count?: number | null
+          scheduled_for?: string
+          sent_at?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
+      booking_reviews: {
+        Row: {
+          booking_id: string | null
+          communication: number | null
+          created_at: string | null
+          id: string
+          is_verified: boolean | null
+          provider_id: string | null
+          provider_responded_at: string | null
+          provider_response: string | null
+          punctuality: number | null
+          rating: number
+          review_text: string | null
+          service_quality: number | null
+          updated_at: string | null
+          user_id: string | null
+          value_for_money: number | null
+          would_recommend: boolean | null
+        }
+        Insert: {
+          booking_id?: string | null
+          communication?: number | null
+          created_at?: string | null
+          id?: string
+          is_verified?: boolean | null
+          provider_id?: string | null
+          provider_responded_at?: string | null
+          provider_response?: string | null
+          punctuality?: number | null
+          rating: number
+          review_text?: string | null
+          service_quality?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          value_for_money?: number | null
+          would_recommend?: boolean | null
+        }
+        Update: {
+          booking_id?: string | null
+          communication?: number | null
+          created_at?: string | null
+          id?: string
+          is_verified?: boolean | null
+          provider_id?: string | null
+          provider_responded_at?: string | null
+          provider_response?: string | null
+          punctuality?: number | null
+          rating?: number
+          review_text?: string | null
+          service_quality?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          value_for_money?: number | null
+          would_recommend?: boolean | null
+        }
+        Relationships: []
+      }
+      booking_slots: {
+        Row: {
+          block_reason: string | null
+          created_at: string | null
+          current_bookings: number | null
+          date: string
+          end_time: string
+          id: string
+          is_available: boolean | null
+          is_blocked: boolean | null
+          max_bookings: number | null
+          provider_id: string | null
+          start_time: string
+          updated_at: string | null
+        }
+        Insert: {
+          block_reason?: string | null
+          created_at?: string | null
+          current_bookings?: number | null
+          date: string
+          end_time: string
+          id?: string
+          is_available?: boolean | null
+          is_blocked?: boolean | null
+          max_bookings?: number | null
+          provider_id?: string | null
+          start_time: string
+          updated_at?: string | null
+        }
+        Update: {
+          block_reason?: string | null
+          created_at?: string | null
+          current_bookings?: number | null
+          date?: string
+          end_time?: string
+          id?: string
+          is_available?: boolean | null
+          is_blocked?: boolean | null
+          max_bookings?: number | null
+          provider_id?: string | null
+          start_time?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      booking_status_history: {
+        Row: {
+          booking_id: string | null
+          change_reason: string | null
+          changed_by: string | null
+          created_at: string | null
+          id: string
+          metadata: Json
+          new_status: string
+          old_status: string | null
+        }
+        Insert: {
+          booking_id?: string | null
+          change_reason?: string | null
+          changed_by?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json
+          new_status: string
+          old_status?: string | null
+        }
+        Update: {
+          booking_id?: string | null
+          change_reason?: string | null
+          changed_by?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json
+          new_status?: string
+          old_status?: string | null
+        }
+        Relationships: []
+      }
+      bookings: {
+        Row: {
+          attachments: Json
+          booking_date: string
+          cancellation_fee: number | null
+          cancellation_policy: Json
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          completed_at: string | null
+          confirmed_at: string | null
+          conversation_id: string | null
+          created_at: string | null
+          currency: string | null
+          duration_minutes: number
+          end_time: string
+          hourly_rate: number | null
+          id: string
+          is_recurring: boolean | null
+          location_details: Json
+          parent_booking_id: string | null
+          payment_intent_id: string | null
+          payment_status: string | null
+          provider_id: string | null
+          recurring_group_id: string | null
+          recurring_pattern: Json
+          service_type: string[]
+          special_instructions: string | null
+          start_time: string
+          status: string
+          total_amount: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          attachments?: Json
+          booking_date: string
+          cancellation_fee?: number | null
+          cancellation_policy?: Json
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          completed_at?: string | null
+          confirmed_at?: string | null
+          conversation_id?: string | null
+          created_at?: string | null
+          currency?: string | null
+          duration_minutes: number
+          end_time: string
+          hourly_rate?: number | null
+          id?: string
+          is_recurring?: boolean | null
+          location_details?: Json
+          parent_booking_id?: string | null
+          payment_intent_id?: string | null
+          payment_status?: string | null
+          provider_id?: string | null
+          recurring_group_id?: string | null
+          recurring_pattern?: Json
+          service_type: string[]
+          special_instructions?: string | null
+          start_time: string
+          status?: string
+          total_amount?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          attachments?: Json
+          booking_date?: string
+          cancellation_fee?: number | null
+          cancellation_policy?: Json
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          completed_at?: string | null
+          confirmed_at?: string | null
+          conversation_id?: string | null
+          created_at?: string | null
+          currency?: string | null
+          duration_minutes?: number
+          end_time?: string
+          hourly_rate?: number | null
+          id?: string
+          is_recurring?: boolean | null
+          location_details?: Json
+          parent_booking_id?: string | null
+          payment_intent_id?: string | null
+          payment_status?: string | null
+          provider_id?: string | null
+          recurring_group_id?: string | null
+          recurring_pattern?: Json
+          service_type?: string[]
+          special_instructions?: string | null
+          start_time?: string
+          status?: string
+          total_amount?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      community_events: {
+        Row: {
+          attendees_count: number | null
+          capacity: number | null
+          created_at: string | null
+          description: string | null
+          end_at: string
+          host_id: string | null
+          id: string
+          is_online: boolean | null
+          location: string | null
+          meeting_link: string | null
+          start_at: string
+          status: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          attendees_count?: number | null
+          capacity?: number | null
+          created_at?: string | null
+          description?: string | null
+          end_at: string
+          host_id?: string | null
+          id?: string
+          is_online?: boolean | null
+          location?: string | null
+          meeting_link?: string | null
+          start_at: string
+          status?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          attendees_count?: number | null
+          capacity?: number | null
+          created_at?: string | null
+          description?: string | null
+          end_at?: string
+          host_id?: string | null
+          id?: string
+          is_online?: boolean | null
+          location?: string | null
+          meeting_link?: string | null
+          start_at?: string
+          status?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       community_threads: {
         Row: {
           body: string
-          category: Database['public']['Enums']['thread_category']
-          city_tag: Database['public']['Enums']['city'] | null
+          category: string
+          city_tag: string | null
           created_at: string | null
           id: string
           is_locked: boolean | null
           is_pinned: boolean | null
           last_activity_at: string | null
           replies_count: number | null
-          search_vector: unknown | null
+          search_vector: string | null
           tags: string[] | null
           title: string
           updated_at: string | null
@@ -67,15 +584,15 @@ export type Database = {
         }
         Insert: {
           body: string
-          category: Database['public']['Enums']['thread_category']
-          city_tag?: Database['public']['Enums']['city'] | null
+          category: string
+          city_tag?: string | null
           created_at?: string | null
           id?: string
           is_locked?: boolean | null
           is_pinned?: boolean | null
           last_activity_at?: string | null
           replies_count?: number | null
-          search_vector?: unknown | null
+          search_vector?: string | null
           tags?: string[] | null
           title: string
           updated_at?: string | null
@@ -84,30 +601,22 @@ export type Database = {
         }
         Update: {
           body?: string
-          category?: Database['public']['Enums']['thread_category']
-          city_tag?: Database['public']['Enums']['city'] | null
+          category?: string
+          city_tag?: string | null
           created_at?: string | null
           id?: string
           is_locked?: boolean | null
           is_pinned?: boolean | null
           last_activity_at?: string | null
           replies_count?: number | null
-          search_vector?: unknown | null
+          search_vector?: string | null
           tags?: string[] | null
           title?: string
           updated_at?: string | null
           user_id?: string
           views_count?: number | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'community_threads_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
       }
       conversation_participants: {
         Row: {
@@ -143,22 +652,7 @@ export type Database = {
           unread_count?: number | null
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'conversation_participants_conversation_id_fkey'
-            columns: ['conversation_id']
-            isOneToOne: false
-            referencedRelation: 'conversations'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'conversation_participants_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
       }
       conversations: {
         Row: {
@@ -166,7 +660,7 @@ export type Database = {
           id: string
           last_message_at: string | null
           last_message_preview: string | null
-          metadata: Json | null
+          metadata: Json
           updated_at: string | null
         }
         Insert: {
@@ -174,7 +668,7 @@ export type Database = {
           id?: string
           last_message_at?: string | null
           last_message_preview?: string | null
-          metadata?: Json | null
+          metadata?: Json
           updated_at?: string | null
         }
         Update: {
@@ -182,14 +676,14 @@ export type Database = {
           id?: string
           last_message_at?: string | null
           last_message_preview?: string | null
-          metadata?: Json | null
+          metadata?: Json
           updated_at?: string | null
         }
         Relationships: []
       }
       direct_messages: {
         Row: {
-          attachments: Json | null
+          attachments: Json
           conversation_id: string | null
           created_at: string | null
           deleted_at: string | null
@@ -200,13 +694,13 @@ export type Database = {
           is_read: boolean | null
           message: string
           message_type: string | null
-          reactions: Json | null
+          reactions: Json
           receiver_id: string | null
           reply_to_id: string | null
           sender_id: string | null
         }
         Insert: {
-          attachments?: Json | null
+          attachments?: Json
           conversation_id?: string | null
           created_at?: string | null
           deleted_at?: string | null
@@ -217,13 +711,13 @@ export type Database = {
           is_read?: boolean | null
           message: string
           message_type?: string | null
-          reactions?: Json | null
+          reactions?: Json
           receiver_id?: string | null
           reply_to_id?: string | null
           sender_id?: string | null
         }
         Update: {
-          attachments?: Json | null
+          attachments?: Json
           conversation_id?: string | null
           created_at?: string | null
           deleted_at?: string | null
@@ -234,41 +728,39 @@ export type Database = {
           is_read?: boolean | null
           message?: string
           message_type?: string | null
-          reactions?: Json | null
+          reactions?: Json
           receiver_id?: string | null
           reply_to_id?: string | null
           sender_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'direct_messages_conversation_id_fkey'
-            columns: ['conversation_id']
-            isOneToOne: false
-            referencedRelation: 'conversations'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'direct_messages_receiver_id_fkey'
-            columns: ['receiver_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'direct_messages_reply_to_id_fkey'
-            columns: ['reply_to_id']
-            isOneToOne: false
-            referencedRelation: 'direct_messages'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'direct_messages_sender_id_fkey'
-            columns: ['sender_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
+      }
+      event_attendees: {
+        Row: {
+          attended_at: string | null
+          event_id: string | null
+          id: string
+          registered_at: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          attended_at?: string | null
+          event_id?: string | null
+          id?: string
+          registered_at?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          attended_at?: string | null
+          event_id?: string | null
+          id?: string
+          registered_at?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       illia_leads: {
         Row: {
@@ -282,6 +774,7 @@ export type Database = {
           score: number | null
           status: string | null
           user_email: string
+          user_id: string | null
           zip_code: string | null
         }
         Insert: {
@@ -295,6 +788,7 @@ export type Database = {
           score?: number | null
           status?: string | null
           user_email: string
+          user_id?: string | null
           zip_code?: string | null
         }
         Update: {
@@ -308,6 +802,7 @@ export type Database = {
           score?: number | null
           status?: string | null
           user_email?: string
+          user_id?: string | null
           zip_code?: string | null
         }
         Relationships: []
@@ -320,6 +815,7 @@ export type Database = {
           niche: string
           status: string | null
           user_email: string
+          user_id: string | null
           zip_code: string | null
         }
         Insert: {
@@ -329,6 +825,7 @@ export type Database = {
           niche: string
           status?: string | null
           user_email: string
+          user_id?: string | null
           zip_code?: string | null
         }
         Update: {
@@ -338,6 +835,7 @@ export type Database = {
           niche?: string
           status?: string | null
           user_email?: string
+          user_id?: string | null
           zip_code?: string | null
         }
         Relationships: []
@@ -351,7 +849,7 @@ export type Database = {
           provider_id: string
           responded_at: string | null
           scheduled_for: string | null
-          status: Database['public']['Enums']['intro_status'] | null
+          status: string | null
           user_id: string
         }
         Insert: {
@@ -362,7 +860,7 @@ export type Database = {
           provider_id: string
           responded_at?: string | null
           scheduled_for?: string | null
-          status?: Database['public']['Enums']['intro_status'] | null
+          status?: string | null
           user_id: string
         }
         Update: {
@@ -373,25 +871,10 @@ export type Database = {
           provider_id?: string
           responded_at?: string | null
           scheduled_for?: string | null
-          status?: Database['public']['Enums']['intro_status'] | null
+          status?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: 'intro_requests_provider_id_fkey'
-            columns: ['provider_id']
-            isOneToOne: false
-            referencedRelation: 'service_providers'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'intro_requests_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
       }
       leads: {
         Row: {
@@ -451,8 +934,15 @@ export type Database = {
           dismissed_at: string | null
           explanation: string
           id: string
+          intro_requested: boolean | null
+          intro_requested_at: string | null
+          last_interaction_at: string | null
+          match_score: number | null
+          metadata: Json
+          notes: Json
           provider_id: string
           score: number
+          status: string | null
           user_id: string
           viewed_at: string | null
         }
@@ -462,8 +952,15 @@ export type Database = {
           dismissed_at?: string | null
           explanation: string
           id?: string
+          intro_requested?: boolean | null
+          intro_requested_at?: string | null
+          last_interaction_at?: string | null
+          match_score?: number | null
+          metadata?: Json
+          notes?: Json
           provider_id: string
           score: number
+          status?: string | null
           user_id: string
           viewed_at?: string | null
         }
@@ -473,27 +970,19 @@ export type Database = {
           dismissed_at?: string | null
           explanation?: string
           id?: string
+          intro_requested?: boolean | null
+          intro_requested_at?: string | null
+          last_interaction_at?: string | null
+          match_score?: number | null
+          metadata?: Json
+          notes?: Json
           provider_id?: string
           score?: number
+          status?: string | null
           user_id?: string
           viewed_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'matches_provider_id_fkey'
-            columns: ['provider_id']
-            isOneToOne: false
-            referencedRelation: 'service_providers'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'matches_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
       }
       message_read_receipts: {
         Row: {
@@ -514,370 +1003,791 @@ export type Database = {
           read_at?: string | null
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'message_read_receipts_message_id_fkey'
-            columns: ['message_id']
-            isOneToOne: false
-            referencedRelation: 'direct_messages'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'message_read_receipts_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          action_url: string | null
+          created_at: string | null
+          data: Json
+          id: string
+          is_read: boolean | null
+          message: string
+          priority: string | null
+          read_at: string | null
+          title: string
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          action_url?: string | null
+          created_at?: string | null
+          data?: Json
+          id?: string
+          is_read?: boolean | null
+          message: string
+          priority?: string | null
+          read_at?: string | null
+          title: string
+          type: string
+          user_id?: string | null
+        }
+        Update: {
+          action_url?: string | null
+          created_at?: string | null
+          data?: Json
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          priority?: string | null
+          read_at?: string | null
+          title?: string
+          type?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      platform_analytics: {
+        Row: {
+          active_bookings: number | null
+          active_providers: number | null
+          active_users_30d: number | null
+          active_users_7d: number | null
+          avg_booking_value: number | null
+          avg_match_score: number | null
+          booking_completion_rate: number | null
+          created_at: string | null
+          date: string
+          id: string
+          intro_acceptance_rate: number | null
+          new_bookings: number | null
+          new_signups: number | null
+          revenue_total: number | null
+          total_bookings: number | null
+          total_intros: number | null
+          total_matches: number | null
+          total_providers: number | null
+          total_searches: number | null
+          total_users: number | null
+        }
+        Insert: {
+          active_bookings?: number | null
+          active_providers?: number | null
+          active_users_30d?: number | null
+          active_users_7d?: number | null
+          avg_booking_value?: number | null
+          avg_match_score?: number | null
+          booking_completion_rate?: number | null
+          created_at?: string | null
+          date: string
+          id?: string
+          intro_acceptance_rate?: number | null
+          new_bookings?: number | null
+          new_signups?: number | null
+          revenue_total?: number | null
+          total_bookings?: number | null
+          total_intros?: number | null
+          total_matches?: number | null
+          total_providers?: number | null
+          total_searches?: number | null
+          total_users?: number | null
+        }
+        Update: {
+          active_bookings?: number | null
+          active_providers?: number | null
+          active_users_30d?: number | null
+          active_users_7d?: number | null
+          avg_booking_value?: number | null
+          avg_match_score?: number | null
+          booking_completion_rate?: number | null
+          created_at?: string | null
+          date?: string
+          id?: string
+          intro_acceptance_rate?: number | null
+          new_bookings?: number | null
+          new_signups?: number | null
+          revenue_total?: number | null
+          total_bookings?: number | null
+          total_intros?: number | null
+          total_matches?: number | null
+          total_providers?: number | null
+          total_searches?: number | null
+          total_users?: number | null
+        }
+        Relationships: []
+      }
+      platform_settings: {
+        Row: {
+          category: string
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_public: boolean | null
+          key: string
+          updated_at: string | null
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          category?: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          key: string
+          updated_at?: string | null
+          updated_by?: string | null
+          value: Json
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          key?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          value?: Json
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
           avatar_url: string | null
-          city: Database['public']['Enums']['city'] | null
+          bio: string | null
+          city: string | null
           created_at: string | null
-          email: string
+          email: string | null
           full_name: string | null
           id: string
-          languages: Database['public']['Enums']['language'][] | null
-          metadata: Json | null
-          onboarding_completed: boolean | null
+          intro_call_link: string | null
+          languages: string[] | null
+          location_address: string | null
+          location_coordinates: Json
+          membership_level: string | null
+          onboarding_complete: boolean | null
           phone: string | null
-          stripe_customer_id: string | null
-          stripe_subscription_id: string | null
-          tier: Database['public']['Enums']['user_tier']
-          trial_ends_at: string | null
+          preferences: Json
+          role: string | null
+          tier: string | null
           updated_at: string | null
-          whatsapp_number: string | null
+          username: string | null
         }
         Insert: {
           avatar_url?: string | null
-          city?: Database['public']['Enums']['city'] | null
+          bio?: string | null
+          city?: string | null
           created_at?: string | null
-          email: string
+          email?: string | null
           full_name?: string | null
           id: string
-          languages?: Database['public']['Enums']['language'][] | null
-          metadata?: Json | null
-          onboarding_completed?: boolean | null
+          intro_call_link?: string | null
+          languages?: string[] | null
+          location_address?: string | null
+          location_coordinates?: Json
+          membership_level?: string | null
+          onboarding_complete?: boolean | null
           phone?: string | null
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
-          tier?: Database['public']['Enums']['user_tier']
-          trial_ends_at?: string | null
+          preferences?: Json
+          role?: string | null
+          tier?: string | null
           updated_at?: string | null
-          whatsapp_number?: string | null
+          username?: string | null
         }
         Update: {
           avatar_url?: string | null
-          city?: Database['public']['Enums']['city'] | null
+          bio?: string | null
+          city?: string | null
           created_at?: string | null
-          email?: string
+          email?: string | null
           full_name?: string | null
           id?: string
-          languages?: Database['public']['Enums']['language'][] | null
-          metadata?: Json | null
-          onboarding_completed?: boolean | null
+          intro_call_link?: string | null
+          languages?: string[] | null
+          location_address?: string | null
+          location_coordinates?: Json
+          membership_level?: string | null
+          onboarding_complete?: boolean | null
           phone?: string | null
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
-          tier?: Database['public']['Enums']['user_tier']
-          trial_ends_at?: string | null
+          preferences?: Json
+          role?: string | null
+          tier?: string | null
           updated_at?: string | null
-          whatsapp_number?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      provider_approval_queue: {
+        Row: {
+          admin_notes: string | null
+          background_check_status: string | null
+          created_at: string | null
+          documents_status: string | null
+          final_status: string | null
+          id: string
+          id_verification_status: string | null
+          provider_id: string | null
+          references_status: string | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          submitted_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          background_check_status?: string | null
+          created_at?: string | null
+          documents_status?: string | null
+          final_status?: string | null
+          id?: string
+          id_verification_status?: string | null
+          provider_id?: string | null
+          references_status?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          background_check_status?: string | null
+          created_at?: string | null
+          documents_status?: string | null
+          final_status?: string | null
+          id?: string
+          id_verification_status?: string | null
+          provider_id?: string | null
+          references_status?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      provider_calendar_sync: {
+        Row: {
+          access_token: string | null
+          calendar_id: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_synced_at: string | null
+          provider: string
+          provider_id: string | null
+          refresh_token: string | null
+          sync_direction: string | null
+          sync_enabled: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          access_token?: string | null
+          calendar_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_synced_at?: string | null
+          provider: string
+          provider_id?: string | null
+          refresh_token?: string | null
+          sync_direction?: string | null
+          sync_enabled?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          access_token?: string | null
+          calendar_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_synced_at?: string | null
+          provider?: string
+          provider_id?: string | null
+          refresh_token?: string | null
+          sync_direction?: string | null
+          sync_enabled?: boolean | null
+          updated_at?: string | null
         }
         Relationships: []
       }
       providers: {
         Row: {
-          active: boolean | null
-          availability: string | null
+          avatar_url: string | null
           bio: string | null
-          city: string
+          city: string | null
           created_at: string | null
           email: string | null
-          featured: boolean | null
+          hourly_rate: number | null
           id: string
-          languages: string[]
+          languages: string[] | null
           name: string
-          neighborhood: string | null
           phone: string | null
-          photo_url: string | null
-          rate_hourly: number | null
-          rate_monthly: number | null
-          rating: number | null
           rating_avg: number | null
-          review_count: number | null
           reviews_count: number | null
-          services: string[]
+          services: string[] | null
           specialties: string[] | null
           status: string | null
-          updated_at: string | null
-          verified: boolean | null
-          whatsapp: string | null
+          user_id: string | null
           years_experience: number | null
         }
         Insert: {
-          active?: boolean | null
-          availability?: string | null
+          avatar_url?: string | null
           bio?: string | null
-          city: string
+          city?: string | null
           created_at?: string | null
           email?: string | null
-          featured?: boolean | null
+          hourly_rate?: number | null
           id?: string
-          languages: string[]
+          languages?: string[] | null
           name: string
-          neighborhood?: string | null
           phone?: string | null
-          photo_url?: string | null
-          rate_hourly?: number | null
-          rate_monthly?: number | null
-          rating?: number | null
           rating_avg?: number | null
-          review_count?: number | null
           reviews_count?: number | null
-          services: string[]
+          services?: string[] | null
           specialties?: string[] | null
           status?: string | null
-          updated_at?: string | null
-          verified?: boolean | null
-          whatsapp?: string | null
+          user_id?: string | null
           years_experience?: number | null
         }
         Update: {
-          active?: boolean | null
-          availability?: string | null
+          avatar_url?: string | null
           bio?: string | null
-          city?: string
+          city?: string | null
           created_at?: string | null
           email?: string | null
-          featured?: boolean | null
+          hourly_rate?: number | null
           id?: string
-          languages?: string[]
+          languages?: string[] | null
           name?: string
-          neighborhood?: string | null
           phone?: string | null
-          photo_url?: string | null
-          rate_hourly?: number | null
-          rate_monthly?: number | null
-          rating?: number | null
           rating_avg?: number | null
-          review_count?: number | null
           reviews_count?: number | null
-          services?: string[]
+          services?: string[] | null
           specialties?: string[] | null
           status?: string | null
-          updated_at?: string | null
-          verified?: boolean | null
-          whatsapp?: string | null
+          user_id?: string | null
           years_experience?: number | null
         }
         Relationships: []
       }
       purchases: {
         Row: {
-          amount: number | null
+          amount: number
           created_at: string | null
+          currency: string | null
           id: string
+          metadata: Json
+          product_id: string
           status: string | null
-          stripe_tx_id: string | null
-          tier: string
-          user_email: string
+          subscription_id: string | null
+          updated_at: string | null
+          user_id: string | null
         }
         Insert: {
-          amount?: number | null
+          amount: number
           created_at?: string | null
+          currency?: string | null
           id?: string
+          metadata?: Json
+          product_id: string
           status?: string | null
-          stripe_tx_id?: string | null
-          tier: string
-          user_email: string
+          subscription_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
-          amount?: number | null
+          amount?: number
           created_at?: string | null
+          currency?: string | null
           id?: string
+          metadata?: Json
+          product_id?: string
           status?: string | null
-          stripe_tx_id?: string | null
-          tier?: string
-          user_email?: string
+          subscription_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
       reviews: {
         Row: {
-          comment: string | null
           created_at: string | null
-          helpful_count: number | null
           id: string
-          is_verified: boolean | null
-          provider_id: string
+          message: string | null
+          provider_id: string | null
           rating: number
-          service_date: string | null
           updated_at: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
-          comment?: string | null
           created_at?: string | null
-          helpful_count?: number | null
           id?: string
-          is_verified?: boolean | null
-          provider_id: string
+          message?: string | null
+          provider_id?: string | null
           rating: number
-          service_date?: string | null
           updated_at?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
-          comment?: string | null
           created_at?: string | null
-          helpful_count?: number | null
           id?: string
-          is_verified?: boolean | null
-          provider_id?: string
+          message?: string | null
+          provider_id?: string | null
           rating?: number
-          service_date?: string | null
           updated_at?: string | null
-          user_id?: string
+          user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'reviews_provider_id_fkey'
-            columns: ['provider_id']
-            isOneToOne: false
-            referencedRelation: 'service_providers'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'reviews_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
+      }
+      saved_searches: {
+        Row: {
+          created_at: string | null
+          filters: Json
+          id: string
+          last_used_at: string | null
+          name: string
+          notification_enabled: boolean | null
+          notification_frequency: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          filters: Json
+          id?: string
+          last_used_at?: string | null
+          name: string
+          notification_enabled?: boolean | null
+          notification_frequency?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          filters?: Json
+          id?: string
+          last_used_at?: string | null
+          name?: string
+          notification_enabled?: boolean | null
+          notification_frequency?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      search_analytics: {
+        Row: {
+          budget_range: string | null
+          city_filter: string | null
+          created_at: string | null
+          id: string
+          language_filter: string[] | null
+          location: Json
+          matched_count: number | null
+          query: string | null
+          query_type: string | null
+          results_clicked: string[] | null
+          results_count: number | null
+          search_vector: string | null
+          service_filter: string[] | null
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          budget_range?: string | null
+          city_filter?: string | null
+          created_at?: string | null
+          id?: string
+          language_filter?: string[] | null
+          location?: Json
+          matched_count?: number | null
+          query?: string | null
+          query_type?: string | null
+          results_clicked?: string[] | null
+          results_count?: number | null
+          search_vector?: string | null
+          service_filter?: string[] | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          budget_range?: string | null
+          city_filter?: string | null
+          created_at?: string | null
+          id?: string
+          language_filter?: string[] | null
+          location?: Json
+          matched_count?: number | null
+          query?: string | null
+          query_type?: string | null
+          results_clicked?: string[] | null
+          results_count?: number | null
+          search_vector?: string | null
+          service_filter?: string[] | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      service_agreements: {
+        Row: {
+          accepted_at: string | null
+          created_at: string | null
+          deposit_amount: number | null
+          effective_date: string | null
+          end_date: string | null
+          id: string
+          payment_terms: Json
+          provider_id: string | null
+          renewal_date: string | null
+          service_details: Json
+          status: string | null
+          terms: Json
+          total_amount: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string | null
+          deposit_amount?: number | null
+          effective_date?: string | null
+          end_date?: string | null
+          id?: string
+          payment_terms?: Json
+          provider_id?: string | null
+          renewal_date?: string | null
+          service_details?: Json
+          status?: string | null
+          terms?: Json
+          total_amount?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string | null
+          deposit_amount?: number | null
+          effective_date?: string | null
+          end_date?: string | null
+          id?: string
+          payment_terms?: Json
+          provider_id?: string | null
+          renewal_date?: string | null
+          service_details?: Json
+          status?: string | null
+          terms?: Json
+          total_amount?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       service_providers: {
         Row: {
-          availability: Json | null
+          accept_terms: boolean | null
           avatar_url: string | null
-          bio: string
-          city: Database['public']['Enums']['city']
+          bio: string | null
+          certifications: string[] | null
+          city: string | null
           created_at: string | null
-          currency: string | null
+          description: string | null
           email: string | null
-          featured: boolean | null
+          hourly_rate: number | null
           id: string
-          languages: Database['public']['Enums']['language'][]
-          metadata: Json | null
-          name: string
+          intro_offer: string | null
+          is_active: boolean | null
+          languages: string[] | null
+          location: string | null
+          name: string | null
+          notification_preferences: Json
           phone: string | null
-          rate_hourly: number | null
-          rate_monthly: number | null
-          rate_weekly: number | null
+          portfolio_urls: string[] | null
+          price_range: string | null
           rating_avg: number | null
+          references: Json
+          response_time_minutes: number | null
           reviews_count: number | null
-          search_vector: unknown | null
-          services: Database['public']['Enums']['service_category'][]
+          service_areas: string[] | null
+          service_type: string[] | null
+          services: string[] | null
           specialties: string[] | null
-          status: Database['public']['Enums']['provider_status'] | null
+          status: string | null
+          stripe_account_id: string | null
           updated_at: string | null
-          verified_at: string | null
-          verified_by: string | null
-          whatsapp_number: string | null
+          user_id: string | null
+          whatsapp: string | null
+          work_days: string[] | null
+          work_hours: Json
           years_experience: number | null
         }
         Insert: {
-          availability?: Json | null
+          accept_terms?: boolean | null
           avatar_url?: string | null
-          bio: string
-          city: Database['public']['Enums']['city']
+          bio?: string | null
+          certifications?: string[] | null
+          city?: string | null
           created_at?: string | null
-          currency?: string | null
+          description?: string | null
           email?: string | null
-          featured?: boolean | null
+          hourly_rate?: number | null
           id?: string
-          languages?: Database['public']['Enums']['language'][]
-          metadata?: Json | null
-          name: string
+          intro_offer?: string | null
+          is_active?: boolean | null
+          languages?: string[] | null
+          location?: string | null
+          name?: string | null
+          notification_preferences?: Json
           phone?: string | null
-          rate_hourly?: number | null
-          rate_monthly?: number | null
-          rate_weekly?: number | null
+          portfolio_urls?: string[] | null
+          price_range?: string | null
           rating_avg?: number | null
+          references?: Json
+          response_time_minutes?: number | null
           reviews_count?: number | null
-          search_vector?: unknown | null
-          services: Database['public']['Enums']['service_category'][]
+          service_areas?: string[] | null
+          service_type?: string[] | null
+          services?: string[] | null
           specialties?: string[] | null
-          status?: Database['public']['Enums']['provider_status'] | null
+          status?: string | null
+          stripe_account_id?: string | null
           updated_at?: string | null
-          verified_at?: string | null
-          verified_by?: string | null
-          whatsapp_number?: string | null
+          user_id?: string | null
+          whatsapp?: string | null
+          work_days?: string[] | null
+          work_hours?: Json
           years_experience?: number | null
         }
         Update: {
-          availability?: Json | null
+          accept_terms?: boolean | null
           avatar_url?: string | null
-          bio?: string
-          city?: Database['public']['Enums']['city']
+          bio?: string | null
+          certifications?: string[] | null
+          city?: string | null
           created_at?: string | null
-          currency?: string | null
+          description?: string | null
           email?: string | null
-          featured?: boolean | null
+          hourly_rate?: number | null
           id?: string
-          languages?: Database['public']['Enums']['language'][]
-          metadata?: Json | null
-          name?: string
+          intro_offer?: string | null
+          is_active?: boolean | null
+          languages?: string[] | null
+          location?: string | null
+          name?: string | null
+          notification_preferences?: Json
           phone?: string | null
-          rate_hourly?: number | null
-          rate_monthly?: number | null
-          rate_weekly?: number | null
+          portfolio_urls?: string[] | null
+          price_range?: string | null
           rating_avg?: number | null
+          references?: Json
+          response_time_minutes?: number | null
           reviews_count?: number | null
-          search_vector?: unknown | null
-          services?: Database['public']['Enums']['service_category'][]
+          service_areas?: string[] | null
+          service_type?: string[] | null
+          services?: string[] | null
           specialties?: string[] | null
-          status?: Database['public']['Enums']['provider_status'] | null
+          status?: string | null
+          stripe_account_id?: string | null
           updated_at?: string | null
-          verified_at?: string | null
-          verified_by?: string | null
-          whatsapp_number?: string | null
+          user_id?: string | null
+          whatsapp?: string | null
+          work_days?: string[] | null
+          work_hours?: Json
           years_experience?: number | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'service_providers_verified_by_fkey'
-            columns: ['verified_by']
-            isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
       }
-      spatial_ref_sys: {
+      support_ticket_messages: {
         Row: {
-          auth_name: string | null
-          auth_srid: number | null
-          proj4text: string | null
-          srid: number
-          srtext: string | null
+          attachments: Json
+          created_at: string | null
+          id: string
+          is_internal: boolean | null
+          message: string
+          sender_id: string | null
+          sender_type: string | null
+          ticket_id: string | null
         }
         Insert: {
-          auth_name?: string | null
-          auth_srid?: number | null
-          proj4text?: string | null
-          srid: number
-          srtext?: string | null
+          attachments?: Json
+          created_at?: string | null
+          id?: string
+          is_internal?: boolean | null
+          message: string
+          sender_id?: string | null
+          sender_type?: string | null
+          ticket_id?: string | null
         }
         Update: {
-          auth_name?: string | null
-          auth_srid?: number | null
-          proj4text?: string | null
-          srid?: number
-          srtext?: string | null
+          attachments?: Json
+          created_at?: string | null
+          id?: string
+          is_internal?: boolean | null
+          message?: string
+          sender_id?: string | null
+          sender_type?: string | null
+          ticket_id?: string | null
+        }
+        Relationships: []
+      }
+      support_tickets: {
+        Row: {
+          assigned_to: string | null
+          category: string | null
+          closed_at: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string
+          id: string
+          last_activity_at: string | null
+          priority: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          status: string | null
+          subject: string
+          tags: string[] | null
+          ticket_number: string
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          category?: string | null
+          closed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description: string
+          id?: string
+          last_activity_at?: string | null
+          priority?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          status?: string | null
+          subject: string
+          tags?: string[] | null
+          ticket_number: string
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          category?: string | null
+          closed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string
+          id?: string
+          last_activity_at?: string | null
+          priority?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          status?: string | null
+          subject?: string
+          tags?: string[] | null
+          ticket_number?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -887,198 +1797,186 @@ export type Database = {
           created_at: string | null
           edited_at: string | null
           id: string
-          is_solution: boolean | null
+          is_accepted_answer: boolean | null
+          is_deleted: boolean | null
           likes_count: number | null
-          thread_id: string
+          parent_post_id: string | null
+          thread_id: string | null
           updated_at: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           body: string
           created_at?: string | null
           edited_at?: string | null
           id?: string
-          is_solution?: boolean | null
+          is_accepted_answer?: boolean | null
+          is_deleted?: boolean | null
           likes_count?: number | null
-          thread_id: string
+          parent_post_id?: string | null
+          thread_id?: string | null
           updated_at?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           body?: string
           created_at?: string | null
           edited_at?: string | null
           id?: string
-          is_solution?: boolean | null
+          is_accepted_answer?: boolean | null
+          is_deleted?: boolean | null
           likes_count?: number | null
-          thread_id?: string
+          parent_post_id?: string | null
+          thread_id?: string | null
           updated_at?: string | null
-          user_id?: string
+          user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'thread_posts_thread_id_fkey'
-            columns: ['thread_id']
-            isOneToOne: false
-            referencedRelation: 'community_threads'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'thread_posts_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
       }
       thread_reactions: {
         Row: {
           created_at: string | null
           id: string
           post_id: string | null
-          reaction: string
-          thread_id: string | null
+          reaction_type: string
           user_id: string | null
         }
         Insert: {
           created_at?: string | null
           id?: string
           post_id?: string | null
-          reaction: string
-          thread_id?: string | null
+          reaction_type: string
           user_id?: string | null
         }
         Update: {
           created_at?: string | null
           id?: string
           post_id?: string | null
-          reaction?: string
-          thread_id?: string | null
+          reaction_type?: string
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'thread_reactions_post_id_fkey'
-            columns: ['post_id']
-            isOneToOne: false
-            referencedRelation: 'thread_posts'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'thread_reactions_thread_id_fkey'
-            columns: ['thread_id']
-            isOneToOne: false
-            referencedRelation: 'community_threads'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'thread_reactions_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
       }
       thread_subscriptions: {
         Row: {
           created_at: string | null
           id: string
-          notify_mentions: boolean | null
-          notify_replies: boolean | null
+          last_notified_at: string | null
+          notification_enabled: boolean | null
           thread_id: string | null
           user_id: string | null
         }
         Insert: {
           created_at?: string | null
           id?: string
-          notify_mentions?: boolean | null
-          notify_replies?: boolean | null
+          last_notified_at?: string | null
+          notification_enabled?: boolean | null
           thread_id?: string | null
           user_id?: string | null
         }
         Update: {
           created_at?: string | null
           id?: string
-          notify_mentions?: boolean | null
-          notify_replies?: boolean | null
+          last_notified_at?: string | null
+          notification_enabled?: boolean | null
           thread_id?: string | null
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'thread_subscriptions_thread_id_fkey'
-            columns: ['thread_id']
-            isOneToOne: false
-            referencedRelation: 'community_threads'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'thread_subscriptions_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
       }
       typing_indicators: {
         Row: {
-          channel: string
-          expires_at: string | null
+          conversation_id: string | null
+          created_at: string | null
           id: string
-          started_at: string | null
+          last_typed_at: string | null
           user_id: string | null
         }
         Insert: {
-          channel: string
-          expires_at?: string | null
+          conversation_id?: string | null
+          created_at?: string | null
           id?: string
-          started_at?: string | null
+          last_typed_at?: string | null
           user_id?: string | null
         }
         Update: {
-          channel?: string
-          expires_at?: string | null
+          conversation_id?: string | null
+          created_at?: string | null
           id?: string
-          started_at?: string | null
+          last_typed_at?: string | null
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'typing_indicators_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
       }
       usage_tracking: {
         Row: {
+          billing_period_end: string | null
+          billing_period_start: string | null
           created_at: string | null
+          feature: string
           id: string
-          meter_type: string | null
-          quantity: number | null
-          subscription_id: string | null
+          overage_allowed: boolean | null
+          overage_used: number | null
+          reset_at: string | null
+          tier: string | null
+          tier_limit: number | null
+          updated_at: string | null
+          usage: number | null
           user_id: string | null
         }
         Insert: {
+          billing_period_end?: string | null
+          billing_period_start?: string | null
           created_at?: string | null
+          feature: string
           id?: string
-          meter_type?: string | null
-          quantity?: number | null
-          subscription_id?: string | null
+          overage_allowed?: boolean | null
+          overage_used?: number | null
+          reset_at?: string | null
+          tier?: string | null
+          tier_limit?: number | null
+          updated_at?: string | null
+          usage?: number | null
           user_id?: string | null
         }
         Update: {
+          billing_period_end?: string | null
+          billing_period_start?: string | null
           created_at?: string | null
+          feature?: string
           id?: string
-          meter_type?: string | null
-          quantity?: number | null
-          subscription_id?: string | null
+          overage_allowed?: boolean | null
+          overage_used?: number | null
+          reset_at?: string | null
+          tier?: string | null
+          tier_limit?: number | null
+          updated_at?: string | null
+          usage?: number | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_lead_summary: {
+        Row: {
+          created_at: string | null
+          email_address: string
+          id: string
+          lead_count: number | null
+          niche_counts: Json
+        }
+        Insert: {
+          created_at?: string | null
+          email_address: string
+          id?: string
+          lead_count?: number | null
+          niche_counts?: Json
+        }
+        Update: {
+          created_at?: string | null
+          email_address?: string
+          id?: string
+          lead_count?: number | null
+          niche_counts?: Json
         }
         Relationships: []
       }
@@ -1086,171 +1984,151 @@ export type Database = {
         Row: {
           created_at: string | null
           id: string
-          is_read: boolean | null
-          mentioned_user_id: string | null
-          mentioning_user_id: string | null
+          mentioned_at: string | null
+          mentioned_by: string | null
+          mentioned_user: string | null
           post_id: string | null
         }
         Insert: {
           created_at?: string | null
           id?: string
-          is_read?: boolean | null
-          mentioned_user_id?: string | null
-          mentioning_user_id?: string | null
+          mentioned_at?: string | null
+          mentioned_by?: string | null
+          mentioned_user?: string | null
           post_id?: string | null
         }
         Update: {
           created_at?: string | null
           id?: string
-          is_read?: boolean | null
-          mentioned_user_id?: string | null
-          mentioning_user_id?: string | null
+          mentioned_at?: string | null
+          mentioned_by?: string | null
+          mentioned_user?: string | null
           post_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'user_mentions_mentioned_user_id_fkey'
-            columns: ['mentioned_user_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'user_mentions_mentioning_user_id_fkey'
-            columns: ['mentioning_user_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'user_mentions_post_id_fkey'
-            columns: ['post_id']
-            isOneToOne: false
-            referencedRelation: 'thread_posts'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
       }
       user_preferences: {
         Row: {
-          budget_max: number | null
-          budget_min: number | null
-          created_at: string | null
-          languages_required: Database['public']['Enums']['language'][] | null
-          preferred_city: Database['public']['Enums']['city']
-          schedule_preference: Json | null
-          services_needed: Database['public']['Enums']['service_category'][] | null
-          special_requirements: string[] | null
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          budget_max?: number | null
-          budget_min?: number | null
-          created_at?: string | null
-          languages_required?: Database['public']['Enums']['language'][] | null
-          preferred_city: Database['public']['Enums']['city']
-          schedule_preference?: Json | null
-          services_needed?: Database['public']['Enums']['service_category'][] | null
-          special_requirements?: string[] | null
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          budget_max?: number | null
-          budget_min?: number | null
-          created_at?: string | null
-          languages_required?: Database['public']['Enums']['language'][] | null
-          preferred_city?: Database['public']['Enums']['city']
-          schedule_preference?: Json | null
-          services_needed?: Database['public']['Enums']['service_category'][] | null
-          special_requirements?: string[] | null
-          updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'user_preferences_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: true
-            referencedRelation: 'profiles'
-            referencedColumns: ['id']
-          },
-        ]
-      }
-      user_presence: {
-        Row: {
-          channel: string
+          budget_range: string | null
+          communication_preferences: Json
           created_at: string | null
           id: string
-          last_seen: string | null
-          metadata: Json | null
-          status: string | null
+          language_preference: string | null
+          notification_preferences: Json
+          preferred_cities: string[] | null
+          preferred_languages: string[] | null
+          preferred_payment_methods: string[] | null
+          preferred_service_times: Json
+          preferred_services: string[] | null
+          search_radius_km: number | null
+          timezone: string | null
+          updated_at: string | null
           user_id: string | null
         }
         Insert: {
-          channel: string
+          budget_range?: string | null
+          communication_preferences?: Json
           created_at?: string | null
           id?: string
-          last_seen?: string | null
-          metadata?: Json | null
-          status?: string | null
+          language_preference?: string | null
+          notification_preferences?: Json
+          preferred_cities?: string[] | null
+          preferred_languages?: string[] | null
+          preferred_payment_methods?: string[] | null
+          preferred_service_times?: Json
+          preferred_services?: string[] | null
+          search_radius_km?: number | null
+          timezone?: string | null
+          updated_at?: string | null
           user_id?: string | null
         }
         Update: {
-          channel?: string
+          budget_range?: string | null
+          communication_preferences?: Json
           created_at?: string | null
           id?: string
-          last_seen?: string | null
-          metadata?: Json | null
-          status?: string | null
+          language_preference?: string | null
+          notification_preferences?: Json
+          preferred_cities?: string[] | null
+          preferred_languages?: string[] | null
+          preferred_payment_methods?: string[] | null
+          preferred_service_times?: Json
+          preferred_services?: string[] | null
+          search_radius_km?: number | null
+          timezone?: string | null
+          updated_at?: string | null
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'user_presence_user_id_fkey'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
+      }
+      user_presence: {
+        Row: {
+          id: string
+          last_seen_at: string | null
+          status: string | null
+          status_emoji: string | null
+          status_message: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          id?: string
+          last_seen_at?: string | null
+          status?: string | null
+          status_emoji?: string | null
+          status_message?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          id?: string
+          last_seen_at?: string | null
+          status?: string | null
+          status_emoji?: string | null
+          status_message?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       user_subscriptions: {
         Row: {
+          cancel_at_period_end: boolean | null
           created_at: string | null
           current_period_end: string | null
           current_period_start: string | null
-          customer_id: string | null
           id: string
-          metadata: Json | null
-          product_id: string | null
+          is_active: boolean | null
+          metadata: Json
+          plan_id: string
           status: string | null
           subscription_id: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
+          cancel_at_period_end?: boolean | null
           created_at?: string | null
           current_period_end?: string | null
           current_period_start?: string | null
-          customer_id?: string | null
           id?: string
-          metadata?: Json | null
-          product_id?: string | null
+          is_active?: boolean | null
+          metadata?: Json
+          plan_id: string
           status?: string | null
           subscription_id?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
+          cancel_at_period_end?: boolean | null
           created_at?: string | null
           current_period_end?: string | null
           current_period_start?: string | null
-          customer_id?: string | null
           id?: string
-          metadata?: Json | null
-          product_id?: string | null
+          is_active?: boolean | null
+          metadata?: Json
+          plan_id?: string
           status?: string | null
           subscription_id?: string | null
           updated_at?: string | null
@@ -1260,2107 +2138,171 @@ export type Database = {
       }
       users: {
         Row: {
-          budget_max: number | null
-          budget_min: number | null
-          city: string | null
           created_at: string | null
-          email: string
+          email: string | null
+          full_name: string | null
           id: string
-          name: string | null
-          onboarding_completed: boolean | null
+          location_address: string | null
+          location_coordinates: Json
+          onboarding_complete: boolean | null
           phone: string | null
-          preferences: Json | null
-          preferred_language: string | null
-          services: string[] | null
-          subscription_expires_at: string | null
-          subscription_id: string | null
-          subscription_status: string | null
           tier: string | null
           updated_at: string | null
         }
         Insert: {
-          budget_max?: number | null
-          budget_min?: number | null
-          city?: string | null
           created_at?: string | null
-          email: string
+          email?: string | null
+          full_name?: string | null
           id: string
-          name?: string | null
-          onboarding_completed?: boolean | null
+          location_address?: string | null
+          location_coordinates?: Json
+          onboarding_complete?: boolean | null
           phone?: string | null
-          preferences?: Json | null
-          preferred_language?: string | null
-          services?: string[] | null
-          subscription_expires_at?: string | null
-          subscription_id?: string | null
-          subscription_status?: string | null
           tier?: string | null
           updated_at?: string | null
         }
         Update: {
-          budget_max?: number | null
-          budget_min?: number | null
-          city?: string | null
           created_at?: string | null
-          email?: string
+          email?: string | null
+          full_name?: string | null
           id?: string
-          name?: string | null
-          onboarding_completed?: boolean | null
+          location_address?: string | null
+          location_coordinates?: Json
+          onboarding_complete?: boolean | null
           phone?: string | null
-          preferences?: Json | null
-          preferred_language?: string | null
-          services?: string[] | null
-          subscription_expires_at?: string | null
-          subscription_id?: string | null
-          subscription_status?: string | null
           tier?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      voice_search_transcripts: {
+        Row: {
+          confidence_score: number | null
+          created_at: string | null
+          duration_ms: number | null
+          id: string
+          is_final: boolean | null
+          language: string | null
+          processed_query: string | null
+          raw_transcript: string
+          user_id: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string | null
+          duration_ms?: number | null
+          id?: string
+          is_final?: boolean | null
+          language?: string | null
+          processed_query?: string | null
+          raw_transcript: string
+          user_id?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string | null
+          duration_ms?: number | null
+          id?: string
+          is_final?: boolean | null
+          language?: string | null
+          processed_query?: string | null
+          raw_transcript?: string
+          user_id?: string | null
         }
         Relationships: []
       }
     }
     Views: {
-      geography_columns: {
-        Row: {
-          coord_dimension: number | null
-          f_geography_column: unknown | null
-          f_table_catalog: unknown | null
-          f_table_name: unknown | null
-          f_table_schema: unknown | null
-          srid: number | null
-          type: string | null
-        }
-        Relationships: []
-      }
-      geometry_columns: {
-        Row: {
-          coord_dimension: number | null
-          f_geometry_column: unknown | null
-          f_table_catalog: string | null
-          f_table_name: unknown | null
-          f_table_schema: unknown | null
-          srid: number | null
-          type: string | null
-        }
-        Insert: {
-          coord_dimension?: number | null
-          f_geometry_column?: unknown | null
-          f_table_catalog?: string | null
-          f_table_name?: unknown | null
-          f_table_schema?: unknown | null
-          srid?: number | null
-          type?: string | null
-        }
-        Update: {
-          coord_dimension?: number | null
-          f_geometry_column?: unknown | null
-          f_table_catalog?: string | null
-          f_table_name?: unknown | null
-          f_table_schema?: unknown | null
-          srid?: number | null
-          type?: string | null
-        }
-        Relationships: []
-      }
-      user_lead_summary: {
-        Row: {
-          avg_score: number | null
-          last_activity: string | null
-          tier: string | null
-          total_generations: number | null
-          total_leads: number | null
-          user_email: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
-      _postgis_deprecate: {
-        Args: { newname: string; oldname: string; version: string }
-        Returns: undefined
-      }
-      _postgis_index_extent: {
-        Args: { col: string; tbl: unknown }
-        Returns: unknown
-      }
-      _postgis_pgsql_version: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      _postgis_scripts_pgsql_version: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      _postgis_selectivity: {
-        Args: { att_name: string; geom: unknown; mode?: string; tbl: unknown }
-        Returns: number
-      }
-      _st_3dintersects: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      _st_bestsrid: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      _st_contains: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      _st_containsproperly: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      _st_coveredby: {
-        Args: { geog1: unknown; geog2: unknown } | { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      _st_covers: {
-        Args: { geog1: unknown; geog2: unknown } | { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      _st_crosses: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      _st_dwithin: {
-        Args: {
-          geog1: unknown
-          geog2: unknown
-          tolerance: number
-          use_spheroid?: boolean
-        }
-        Returns: boolean
-      }
-      _st_equals: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      _st_intersects: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      _st_linecrossingdirection: {
-        Args: { line1: unknown; line2: unknown }
-        Returns: number
-      }
-      _st_longestline: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      _st_maxdistance: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: number
-      }
-      _st_orderingequals: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      _st_overlaps: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      _st_pointoutside: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      _st_sortablehash: {
-        Args: { geom: unknown }
-        Returns: number
-      }
-      _st_touches: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      _st_voronoi: {
-        Args: {
-          clip?: unknown
-          g1: unknown
-          return_polygons?: boolean
-          tolerance?: number
-        }
-        Returns: unknown
-      }
-      _st_within: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      addauth: {
-        Args: { '': string }
-        Returns: boolean
-      }
-      addgeometrycolumn: {
-        Args:
-          | {
-              catalog_name: string
-              column_name: string
-              new_dim: number
-              new_srid_in: number
-              new_type: string
-              schema_name: string
-              table_name: string
-              use_typmod?: boolean
-            }
-          | {
-              column_name: string
-              new_dim: number
-              new_srid: number
-              new_type: string
-              schema_name: string
-              table_name: string
-              use_typmod?: boolean
-            }
-          | {
-              column_name: string
-              new_dim: number
-              new_srid: number
-              new_type: string
-              table_name: string
-              use_typmod?: boolean
-            }
-        Returns: string
-      }
-      box: {
-        Args: { '': unknown } | { '': unknown }
-        Returns: unknown
-      }
-      box2d: {
-        Args: { '': unknown } | { '': unknown }
-        Returns: unknown
-      }
-      box2d_in: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      box2d_out: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      box2df_in: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      box2df_out: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      box3d: {
-        Args: { '': unknown } | { '': unknown }
-        Returns: unknown
-      }
-      box3d_in: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      box3d_out: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      box3dtobox: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      bytea: {
-        Args: { '': unknown } | { '': unknown }
-        Returns: string
-      }
-      disablelongtransactions: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      dropgeometrycolumn: {
-        Args:
-          | {
-              catalog_name: string
-              column_name: string
-              schema_name: string
-              table_name: string
-            }
-          | { column_name: string; schema_name: string; table_name: string }
-          | { column_name: string; table_name: string }
-        Returns: string
-      }
-      dropgeometrytable: {
-        Args:
-          | { catalog_name: string; schema_name: string; table_name: string }
-          | { schema_name: string; table_name: string }
-          | { table_name: string }
-        Returns: string
-      }
-      enablelongtransactions: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      equals: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geography: {
-        Args: { '': string } | { '': unknown }
-        Returns: unknown
-      }
-      geography_analyze: {
-        Args: { '': unknown }
-        Returns: boolean
-      }
-      geography_gist_compress: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geography_gist_decompress: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geography_out: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geography_send: {
-        Args: { '': unknown }
-        Returns: string
-      }
-      geography_spgist_compress_nd: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geography_typmod_in: {
-        Args: { '': unknown[] }
-        Returns: number
-      }
-      geography_typmod_out: {
-        Args: { '': number }
-        Returns: unknown
-      }
-      geometry: {
-        Args:
-          | { '': string }
-          | { '': string }
-          | { '': unknown }
-          | { '': unknown }
-          | { '': unknown }
-          | { '': unknown }
-          | { '': unknown }
-          | { '': unknown }
-        Returns: unknown
-      }
-      geometry_above: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_analyze: {
-        Args: { '': unknown }
-        Returns: boolean
-      }
-      geometry_below: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_cmp: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: number
-      }
-      geometry_contained_3d: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_contains: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_contains_3d: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_distance_box: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: number
-      }
-      geometry_distance_centroid: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: number
-      }
-      geometry_eq: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_ge: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_gist_compress_2d: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geometry_gist_compress_nd: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geometry_gist_decompress_2d: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geometry_gist_decompress_nd: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geometry_gist_sortsupport_2d: {
-        Args: { '': unknown }
-        Returns: undefined
-      }
-      geometry_gt: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_hash: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      geometry_in: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geometry_le: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_left: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_lt: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_out: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geometry_overabove: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_overbelow: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_overlaps: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_overlaps_3d: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_overleft: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_overright: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_recv: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geometry_right: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_same: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_same_3d: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometry_send: {
-        Args: { '': unknown }
-        Returns: string
-      }
-      geometry_sortsupport: {
-        Args: { '': unknown }
-        Returns: undefined
-      }
-      geometry_spgist_compress_2d: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geometry_spgist_compress_3d: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geometry_spgist_compress_nd: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      geometry_typmod_in: {
-        Args: { '': unknown[] }
-        Returns: number
-      }
-      geometry_typmod_out: {
-        Args: { '': number }
-        Returns: unknown
-      }
-      geometry_within: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      geometrytype: {
-        Args: { '': unknown } | { '': unknown }
-        Returns: string
-      }
-      geomfromewkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      geomfromewkt: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      get_or_create_conversation: {
-        Args: { user1_id: string; user2_id: string }
-        Returns: string
-      }
-      get_proj4_from_srid: {
-        Args: { '': number }
-        Returns: string
-      }
-      get_user_conversations: {
-        Args: { p_user_id: string }
-        Returns: {
-          conversation_id: string
-          is_provider: boolean
-          last_message_at: string
-          last_message_preview: string
-          other_user_email: string
-          other_user_id: string
-          other_user_name: string
-          other_user_tier: string
-          unread_count: number
-        }[]
-      }
-      gettransactionid: {
-        Args: Record<PropertyKey, never>
-        Returns: unknown
-      }
-      gidx_in: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      gidx_out: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      gtrgm_compress: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      gtrgm_decompress: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      gtrgm_in: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      gtrgm_options: {
-        Args: { '': unknown }
-        Returns: undefined
-      }
-      gtrgm_out: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      increment_thread_views: {
-        Args: { thread_id: string }
-        Returns: undefined
-      }
-      json: {
-        Args: { '': unknown }
-        Returns: Json
-      }
-      jsonb: {
-        Args: { '': unknown }
-        Returns: Json
-      }
-      longtransactionsenabled: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      mark_messages_read: {
-        Args: { p_conversation_id: string; p_user_id: string }
-        Returns: undefined
-      }
-      path: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      pgis_asflatgeobuf_finalfn: {
-        Args: { '': unknown }
-        Returns: string
-      }
-      pgis_asgeobuf_finalfn: {
-        Args: { '': unknown }
-        Returns: string
-      }
-      pgis_asmvt_finalfn: {
-        Args: { '': unknown }
-        Returns: string
-      }
-      pgis_asmvt_serialfn: {
-        Args: { '': unknown }
-        Returns: string
-      }
-      pgis_geometry_clusterintersecting_finalfn: {
-        Args: { '': unknown }
-        Returns: unknown[]
-      }
-      pgis_geometry_clusterwithin_finalfn: {
-        Args: { '': unknown }
-        Returns: unknown[]
-      }
-      pgis_geometry_collect_finalfn: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      pgis_geometry_makeline_finalfn: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      pgis_geometry_polygonize_finalfn: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      pgis_geometry_union_parallel_finalfn: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      pgis_geometry_union_parallel_serialfn: {
-        Args: { '': unknown }
-        Returns: string
-      }
-      point: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      polygon: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      populate_geometry_columns: {
-        Args: { tbl_oid: unknown; use_typmod?: boolean } | { use_typmod?: boolean }
-        Returns: string
-      }
-      postgis_addbbox: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      postgis_constraint_dims: {
-        Args: { geomcolumn: string; geomschema: string; geomtable: string }
-        Returns: number
-      }
-      postgis_constraint_srid: {
-        Args: { geomcolumn: string; geomschema: string; geomtable: string }
-        Returns: number
-      }
-      postgis_constraint_type: {
-        Args: { geomcolumn: string; geomschema: string; geomtable: string }
-        Returns: string
-      }
-      postgis_dropbbox: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      postgis_extensions_upgrade: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_full_version: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_geos_noop: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      postgis_geos_version: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_getbbox: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      postgis_hasbbox: {
-        Args: { '': unknown }
-        Returns: boolean
-      }
-      postgis_index_supportfn: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      postgis_lib_build_date: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_lib_revision: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_lib_version: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_libjson_version: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_liblwgeom_version: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_libprotobuf_version: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_libxml_version: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_noop: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      postgis_proj_version: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_scripts_build_date: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_scripts_installed: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_scripts_released: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_svn_version: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_type_name: {
-        Args: {
-          coord_dimension: number
-          geomname: string
-          use_new_name?: boolean
-        }
-        Returns: string
-      }
-      postgis_typmod_dims: {
-        Args: { '': number }
-        Returns: number
-      }
-      postgis_typmod_srid: {
-        Args: { '': number }
-        Returns: number
-      }
-      postgis_typmod_type: {
-        Args: { '': number }
-        Returns: string
-      }
-      postgis_version: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      postgis_wagyu_version: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      send_message: {
-        Args: {
-          p_attachments?: Json
-          p_message: string
-          p_message_type?: string
-          p_receiver_id: string
-          p_sender_id: string
-        }
-        Returns: string
-      }
-      set_limit: {
-        Args: { '': number }
-        Returns: number
-      }
-      show_limit: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
-      show_trgm: {
-        Args: { '': string }
-        Returns: string[]
-      }
-      spheroid_in: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      spheroid_out: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_3dclosestpoint: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_3ddistance: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: number
-      }
-      st_3dintersects: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      st_3dlength: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_3dlongestline: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_3dmakebox: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_3dmaxdistance: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: number
-      }
-      st_3dperimeter: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_3dshortestline: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_addpoint: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_angle: {
-        Args:
-          | { line1: unknown; line2: unknown }
-          | { pt1: unknown; pt2: unknown; pt3: unknown; pt4?: unknown }
-        Returns: number
-      }
-      st_area: {
-        Args: { '': string } | { '': unknown } | { geog: unknown; use_spheroid?: boolean }
-        Returns: number
-      }
-      st_area2d: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_asbinary: {
-        Args: { '': unknown } | { '': unknown }
-        Returns: string
-      }
-      st_asencodedpolyline: {
-        Args: { geom: unknown; nprecision?: number }
-        Returns: string
-      }
-      st_asewkb: {
-        Args: { '': unknown }
-        Returns: string
-      }
-      st_asewkt: {
-        Args: { '': string } | { '': unknown } | { '': unknown }
-        Returns: string
-      }
-      st_asgeojson: {
-        Args:
-          | { '': string }
-          | { geog: unknown; maxdecimaldigits?: number; options?: number }
-          | { geom: unknown; maxdecimaldigits?: number; options?: number }
-          | {
-              geom_column?: string
-              maxdecimaldigits?: number
-              pretty_bool?: boolean
-              r: Record<string, unknown>
-            }
-        Returns: string
-      }
-      st_asgml: {
-        Args:
-          | { '': string }
-          | {
-              geog: unknown
-              id?: string
-              maxdecimaldigits?: number
-              nprefix?: string
-              options?: number
-            }
-          | {
-              geog: unknown
-              id?: string
-              maxdecimaldigits?: number
-              nprefix?: string
-              options?: number
-              version: number
-            }
-          | {
-              geom: unknown
-              id?: string
-              maxdecimaldigits?: number
-              nprefix?: string
-              options?: number
-              version: number
-            }
-          | { geom: unknown; maxdecimaldigits?: number; options?: number }
-        Returns: string
-      }
-      st_ashexewkb: {
-        Args: { '': unknown }
-        Returns: string
-      }
-      st_askml: {
-        Args:
-          | { '': string }
-          | { geog: unknown; maxdecimaldigits?: number; nprefix?: string }
-          | { geom: unknown; maxdecimaldigits?: number; nprefix?: string }
-        Returns: string
-      }
-      st_aslatlontext: {
-        Args: { geom: unknown; tmpl?: string }
-        Returns: string
-      }
-      st_asmarc21: {
-        Args: { format?: string; geom: unknown }
-        Returns: string
-      }
-      st_asmvtgeom: {
-        Args: {
-          bounds: unknown
-          buffer?: number
-          clip_geom?: boolean
-          extent?: number
-          geom: unknown
-        }
-        Returns: unknown
-      }
-      st_assvg: {
-        Args:
-          | { '': string }
-          | { geog: unknown; maxdecimaldigits?: number; rel?: number }
-          | { geom: unknown; maxdecimaldigits?: number; rel?: number }
-        Returns: string
-      }
-      st_astext: {
-        Args: { '': string } | { '': unknown } | { '': unknown }
-        Returns: string
-      }
-      st_astwkb: {
-        Args:
-          | {
-              geom: unknown[]
-              ids: number[]
-              prec?: number
-              prec_m?: number
-              prec_z?: number
-              with_boxes?: boolean
-              with_sizes?: boolean
-            }
-          | {
-              geom: unknown
-              prec?: number
-              prec_m?: number
-              prec_z?: number
-              with_boxes?: boolean
-              with_sizes?: boolean
-            }
-        Returns: string
-      }
-      st_asx3d: {
-        Args: { geom: unknown; maxdecimaldigits?: number; options?: number }
-        Returns: string
-      }
-      st_azimuth: {
-        Args: { geog1: unknown; geog2: unknown } | { geom1: unknown; geom2: unknown }
-        Returns: number
-      }
-      st_boundary: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_boundingdiagonal: {
-        Args: { fits?: boolean; geom: unknown }
-        Returns: unknown
-      }
-      st_buffer: {
-        Args:
-          | { geom: unknown; options?: string; radius: number }
-          | { geom: unknown; quadsegs: number; radius: number }
-        Returns: unknown
-      }
-      st_buildarea: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_centroid: {
-        Args: { '': string } | { '': unknown }
-        Returns: unknown
-      }
-      st_cleangeometry: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_clipbybox2d: {
-        Args: { box: unknown; geom: unknown }
-        Returns: unknown
-      }
-      st_closestpoint: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_clusterintersecting: {
-        Args: { '': unknown[] }
-        Returns: unknown[]
-      }
-      st_collect: {
-        Args: { '': unknown[] } | { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_collectionextract: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_collectionhomogenize: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_concavehull: {
-        Args: {
-          param_allow_holes?: boolean
-          param_geom: unknown
-          param_pctconvex: number
-        }
-        Returns: unknown
-      }
-      st_contains: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      st_containsproperly: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      st_convexhull: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_coorddim: {
-        Args: { geometry: unknown }
-        Returns: number
-      }
-      st_coveredby: {
-        Args: { geog1: unknown; geog2: unknown } | { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      st_covers: {
-        Args: { geog1: unknown; geog2: unknown } | { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      st_crosses: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      st_curvetoline: {
-        Args: { flags?: number; geom: unknown; tol?: number; toltype?: number }
-        Returns: unknown
-      }
-      st_delaunaytriangles: {
-        Args: { flags?: number; g1: unknown; tolerance?: number }
-        Returns: unknown
-      }
-      st_difference: {
-        Args: { geom1: unknown; geom2: unknown; gridsize?: number }
-        Returns: unknown
-      }
-      st_dimension: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_disjoint: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      st_distance: {
-        Args:
-          | { geog1: unknown; geog2: unknown; use_spheroid?: boolean }
-          | { geom1: unknown; geom2: unknown }
-        Returns: number
-      }
-      st_distancesphere: {
-        Args:
-          | { geom1: unknown; geom2: unknown }
-          | { geom1: unknown; geom2: unknown; radius: number }
-        Returns: number
-      }
-      st_distancespheroid: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: number
-      }
-      st_dump: {
-        Args: { '': unknown }
-        Returns: Database['public']['CompositeTypes']['geometry_dump'][]
-      }
-      st_dumppoints: {
-        Args: { '': unknown }
-        Returns: Database['public']['CompositeTypes']['geometry_dump'][]
-      }
-      st_dumprings: {
-        Args: { '': unknown }
-        Returns: Database['public']['CompositeTypes']['geometry_dump'][]
-      }
-      st_dumpsegments: {
-        Args: { '': unknown }
-        Returns: Database['public']['CompositeTypes']['geometry_dump'][]
-      }
-      st_dwithin: {
-        Args: {
-          geog1: unknown
-          geog2: unknown
-          tolerance: number
-          use_spheroid?: boolean
-        }
-        Returns: boolean
-      }
-      st_endpoint: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_envelope: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_equals: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      st_expand: {
-        Args:
-          | { box: unknown; dx: number; dy: number }
-          | { box: unknown; dx: number; dy: number; dz?: number }
-          | { dm?: number; dx: number; dy: number; dz?: number; geom: unknown }
-        Returns: unknown
-      }
-      st_exteriorring: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_flipcoordinates: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_force2d: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_force3d: {
-        Args: { geom: unknown; zvalue?: number }
-        Returns: unknown
-      }
-      st_force3dm: {
-        Args: { geom: unknown; mvalue?: number }
-        Returns: unknown
-      }
-      st_force3dz: {
-        Args: { geom: unknown; zvalue?: number }
-        Returns: unknown
-      }
-      st_force4d: {
-        Args: { geom: unknown; mvalue?: number; zvalue?: number }
-        Returns: unknown
-      }
-      st_forcecollection: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_forcecurve: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_forcepolygonccw: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_forcepolygoncw: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_forcerhr: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_forcesfs: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_generatepoints: {
-        Args: { area: unknown; npoints: number } | { area: unknown; npoints: number; seed: number }
-        Returns: unknown
-      }
-      st_geogfromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_geogfromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_geographyfromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_geohash: {
-        Args: { geog: unknown; maxchars?: number } | { geom: unknown; maxchars?: number }
-        Returns: string
-      }
-      st_geomcollfromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_geomcollfromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_geometricmedian: {
-        Args: {
-          fail_if_not_converged?: boolean
-          g: unknown
-          max_iter?: number
-          tolerance?: number
-        }
-        Returns: unknown
-      }
-      st_geometryfromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_geometrytype: {
-        Args: { '': unknown }
-        Returns: string
-      }
-      st_geomfromewkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_geomfromewkt: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_geomfromgeojson: {
-        Args: { '': Json } | { '': Json } | { '': string }
-        Returns: unknown
-      }
-      st_geomfromgml: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_geomfromkml: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_geomfrommarc21: {
-        Args: { marc21xml: string }
-        Returns: unknown
-      }
-      st_geomfromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_geomfromtwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_geomfromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_gmltosql: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_hasarc: {
-        Args: { geometry: unknown }
-        Returns: boolean
-      }
-      st_hausdorffdistance: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: number
-      }
-      st_hexagon: {
-        Args: { cell_i: number; cell_j: number; origin?: unknown; size: number }
-        Returns: unknown
-      }
-      st_hexagongrid: {
-        Args: { bounds: unknown; size: number }
-        Returns: Record<string, unknown>[]
-      }
-      st_interpolatepoint: {
-        Args: { line: unknown; point: unknown }
-        Returns: number
-      }
-      st_intersection: {
-        Args: { geom1: unknown; geom2: unknown; gridsize?: number }
-        Returns: unknown
-      }
-      st_intersects: {
-        Args: { geog1: unknown; geog2: unknown } | { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      st_isclosed: {
-        Args: { '': unknown }
-        Returns: boolean
-      }
-      st_iscollection: {
-        Args: { '': unknown }
-        Returns: boolean
-      }
-      st_isempty: {
-        Args: { '': unknown }
-        Returns: boolean
-      }
-      st_ispolygonccw: {
-        Args: { '': unknown }
-        Returns: boolean
-      }
-      st_ispolygoncw: {
-        Args: { '': unknown }
-        Returns: boolean
-      }
-      st_isring: {
-        Args: { '': unknown }
-        Returns: boolean
-      }
-      st_issimple: {
-        Args: { '': unknown }
-        Returns: boolean
-      }
-      st_isvalid: {
-        Args: { '': unknown }
-        Returns: boolean
-      }
-      st_isvaliddetail: {
-        Args: { flags?: number; geom: unknown }
-        Returns: Database['public']['CompositeTypes']['valid_detail']
-      }
-      st_isvalidreason: {
-        Args: { '': unknown }
-        Returns: string
-      }
-      st_isvalidtrajectory: {
-        Args: { '': unknown }
-        Returns: boolean
-      }
-      st_length: {
-        Args: { '': string } | { '': unknown } | { geog: unknown; use_spheroid?: boolean }
-        Returns: number
-      }
-      st_length2d: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_letters: {
-        Args: { font?: Json; letters: string }
-        Returns: unknown
-      }
-      st_linecrossingdirection: {
-        Args: { line1: unknown; line2: unknown }
-        Returns: number
-      }
-      st_linefromencodedpolyline: {
-        Args: { nprecision?: number; txtin: string }
-        Returns: unknown
-      }
-      st_linefrommultipoint: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_linefromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_linefromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_linelocatepoint: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: number
-      }
-      st_linemerge: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_linestringfromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_linetocurve: {
-        Args: { geometry: unknown }
-        Returns: unknown
-      }
-      st_locatealong: {
-        Args: { geometry: unknown; leftrightoffset?: number; measure: number }
-        Returns: unknown
-      }
-      st_locatebetween: {
-        Args: {
-          frommeasure: number
-          geometry: unknown
-          leftrightoffset?: number
-          tomeasure: number
-        }
-        Returns: unknown
-      }
-      st_locatebetweenelevations: {
-        Args: { fromelevation: number; geometry: unknown; toelevation: number }
-        Returns: unknown
-      }
-      st_longestline: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_m: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_makebox2d: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_makeline: {
-        Args: { '': unknown[] } | { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_makepolygon: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_makevalid: {
-        Args: { '': unknown } | { geom: unknown; params: string }
-        Returns: unknown
-      }
-      st_maxdistance: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: number
-      }
-      st_maximuminscribedcircle: {
-        Args: { '': unknown }
-        Returns: Record<string, unknown>
-      }
-      st_memsize: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_minimumboundingcircle: {
-        Args: { inputgeom: unknown; segs_per_quarter?: number }
-        Returns: unknown
-      }
-      st_minimumboundingradius: {
-        Args: { '': unknown }
-        Returns: Record<string, unknown>
-      }
-      st_minimumclearance: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_minimumclearanceline: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_mlinefromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_mlinefromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_mpointfromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_mpointfromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_mpolyfromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_mpolyfromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_multi: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_multilinefromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_multilinestringfromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_multipointfromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_multipointfromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_multipolyfromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_multipolygonfromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_ndims: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_node: {
-        Args: { g: unknown }
-        Returns: unknown
-      }
-      st_normalize: {
-        Args: { geom: unknown }
-        Returns: unknown
-      }
-      st_npoints: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_nrings: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_numgeometries: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_numinteriorring: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_numinteriorrings: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_numpatches: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_numpoints: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_offsetcurve: {
-        Args: { distance: number; line: unknown; params?: string }
-        Returns: unknown
-      }
-      st_orderingequals: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      st_orientedenvelope: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_overlaps: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      st_perimeter: {
-        Args: { '': unknown } | { geog: unknown; use_spheroid?: boolean }
-        Returns: number
-      }
-      st_perimeter2d: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_pointfromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_pointfromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_pointm: {
-        Args: {
-          mcoordinate: number
-          srid?: number
-          xcoordinate: number
-          ycoordinate: number
-        }
-        Returns: unknown
-      }
-      st_pointonsurface: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_points: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_pointz: {
-        Args: {
-          srid?: number
-          xcoordinate: number
-          ycoordinate: number
-          zcoordinate: number
-        }
-        Returns: unknown
-      }
-      st_pointzm: {
-        Args: {
-          mcoordinate: number
-          srid?: number
-          xcoordinate: number
-          ycoordinate: number
-          zcoordinate: number
-        }
-        Returns: unknown
-      }
-      st_polyfromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_polyfromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_polygonfromtext: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_polygonfromwkb: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_polygonize: {
-        Args: { '': unknown[] }
-        Returns: unknown
-      }
-      st_project: {
-        Args: { azimuth: number; distance: number; geog: unknown }
-        Returns: unknown
-      }
-      st_quantizecoordinates: {
-        Args: {
-          g: unknown
-          prec_m?: number
-          prec_x: number
-          prec_y?: number
-          prec_z?: number
-        }
-        Returns: unknown
-      }
-      st_reduceprecision: {
-        Args: { geom: unknown; gridsize: number }
-        Returns: unknown
-      }
-      st_relate: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: string
-      }
-      st_removerepeatedpoints: {
-        Args: { geom: unknown; tolerance?: number }
-        Returns: unknown
-      }
-      st_reverse: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_segmentize: {
-        Args: { geog: unknown; max_segment_length: number }
-        Returns: unknown
-      }
-      st_setsrid: {
-        Args: { geog: unknown; srid: number } | { geom: unknown; srid: number }
-        Returns: unknown
-      }
-      st_sharedpaths: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_shiftlongitude: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_shortestline: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_simplifypolygonhull: {
-        Args: { geom: unknown; is_outer?: boolean; vertex_fraction: number }
-        Returns: unknown
-      }
-      st_split: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_square: {
-        Args: { cell_i: number; cell_j: number; origin?: unknown; size: number }
-        Returns: unknown
-      }
-      st_squaregrid: {
-        Args: { bounds: unknown; size: number }
-        Returns: Record<string, unknown>[]
-      }
-      st_srid: {
-        Args: { geog: unknown } | { geom: unknown }
-        Returns: number
-      }
-      st_startpoint: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      st_subdivide: {
-        Args: { geom: unknown; gridsize?: number; maxvertices?: number }
-        Returns: unknown[]
-      }
-      st_summary: {
-        Args: { '': unknown } | { '': unknown }
-        Returns: string
-      }
-      st_swapordinates: {
-        Args: { geom: unknown; ords: unknown }
-        Returns: unknown
-      }
-      st_symdifference: {
-        Args: { geom1: unknown; geom2: unknown; gridsize?: number }
-        Returns: unknown
-      }
-      st_symmetricdifference: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: unknown
-      }
-      st_tileenvelope: {
-        Args: {
-          bounds?: unknown
-          margin?: number
-          x: number
-          y: number
-          zoom: number
-        }
-        Returns: unknown
-      }
-      st_touches: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      st_transform: {
-        Args:
-          | { from_proj: string; geom: unknown; to_proj: string }
-          | { from_proj: string; geom: unknown; to_srid: number }
-          | { geom: unknown; to_proj: string }
-        Returns: unknown
-      }
-      st_triangulatepolygon: {
-        Args: { g1: unknown }
-        Returns: unknown
-      }
-      st_union: {
-        Args:
-          | { '': unknown[] }
-          | { geom1: unknown; geom2: unknown }
-          | { geom1: unknown; geom2: unknown; gridsize: number }
-        Returns: unknown
-      }
-      st_voronoilines: {
-        Args: { extend_to?: unknown; g1: unknown; tolerance?: number }
-        Returns: unknown
-      }
-      st_voronoipolygons: {
-        Args: { extend_to?: unknown; g1: unknown; tolerance?: number }
-        Returns: unknown
-      }
-      st_within: {
-        Args: { geom1: unknown; geom2: unknown }
-        Returns: boolean
-      }
-      st_wkbtosql: {
-        Args: { wkb: string }
-        Returns: unknown
-      }
-      st_wkttosql: {
-        Args: { '': string }
-        Returns: unknown
-      }
-      st_wrapx: {
-        Args: { geom: unknown; move: number; wrap: number }
-        Returns: unknown
-      }
-      st_x: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_xmax: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_xmin: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_y: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_ymax: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_ymin: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_z: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_zmax: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_zmflag: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      st_zmin: {
-        Args: { '': unknown }
-        Returns: number
-      }
-      text: {
-        Args: { '': unknown }
-        Returns: string
-      }
-      unaccent: {
-        Args: { '': string }
-        Returns: string
-      }
-      unaccent_init: {
-        Args: { '': unknown }
-        Returns: unknown
-      }
-      unlockrows: {
-        Args: { '': string }
-        Returns: number
-      }
-      updategeometrysrid: {
-        Args: {
-          catalogn_name: string
-          column_name: string
-          new_srid_in: number
-          schema_name: string
-          table_name: string
-        }
-        Returns: string
-      }
+      [_ in never]: never
     }
     Enums: {
-      city: 'medellin' | 'florianopolis'
-      intro_status: 'pending' | 'accepted' | 'declined' | 'expired'
-      language: 'english' | 'spanish' | 'portuguese' | 'french' | 'german' | 'italian'
-      provider_status: 'pending' | 'verified' | 'suspended'
-      service_category:
-        | 'cleaning'
-        | 'cooking'
-        | 'meal_prep'
-        | 'childcare'
-        | 'pet_care'
-        | 'gardening'
-        | 'handyman'
-        | 'other'
-      thread_category:
-        | 'general'
-        | 'housing'
-        | 'services'
-        | 'social'
-        | 'visa'
-        | 'safety'
-        | 'recommendations'
-      user_tier: 'free' | 'premium' | 'admin'
+      [_ in never]: never
     }
     CompositeTypes: {
-      geometry_dump: {
-        path: number[] | null
-        geom: unknown | null
-      }
-      valid_detail: {
-        valid: boolean | null
-        reason: string | null
-        location: unknown | null
-      }
+      [_ in never]: never
     }
   }
 }
 
-type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>
-
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>]
-
 export type Tables<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
-    : never = never,
-> = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
-    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
-        Row: infer R
-      }
-      ? R
-      : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
     : never
+  : never
 
 export type TablesInsert<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
-    : never = never,
-> = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
-        Insert: infer I
-      }
-      ? I
-      : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
     : never
+  : never
 
 export type TablesUpdate<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
-    : never = never,
-> = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
-        Update: infer U
-      }
-      ? U
-      : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
     : never
+  : never
 
 export type Enums<
-  DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema['Enums']
-    | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
-    : never = never,
-> = DefaultSchemaEnumNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
-    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
-    : never
-
-export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema['CompositeTypes']
-    | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
-    : never = never,
-> = PublicCompositeTypeNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
-    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
-    : never
-
-export const Constants = {
-  public: {
-    Enums: {
-      city: ['medellin', 'florianopolis'],
-      intro_status: ['pending', 'accepted', 'declined', 'expired'],
-      language: ['english', 'spanish', 'portuguese', 'french', 'german', 'italian'],
-      provider_status: ['pending', 'verified', 'suspended'],
-      service_category: [
-        'cleaning',
-        'cooking',
-        'meal_prep',
-        'childcare',
-        'pet_care',
-        'gardening',
-        'handyman',
-        'other',
-      ],
-      thread_category: [
-        'general',
-        'housing',
-        'services',
-        'social',
-        'visa',
-        'safety',
-        'recommendations',
-      ],
-      user_tier: ['free', 'premium', 'admin'],
-    },
-  },
-} as const
+  PublicEnumNameOrOptions extends
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : never

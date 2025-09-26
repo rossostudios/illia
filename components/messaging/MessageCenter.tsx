@@ -317,15 +317,16 @@ export default function MessageCenter({
                       const isOwn = message.sender_id === user?.id
                       const showDate =
                         index === 0 ||
-                        new Date(message.created_at).toDateString() !==
-                          new Date(messages[index - 1].created_at).toDateString()
+                        (message.created_at && messages[index - 1]?.created_at &&
+                          new Date(message.created_at).toDateString() !==
+                            new Date(messages[index - 1].created_at!).toDateString())
 
                       return (
                         <div key={message.id}>
                           {showDate && (
                             <div className="my-4 text-center">
                               <span className="rounded-full bg-gray-100 px-3 py-1 text-gray-400 text-xs">
-                                {new Date(message.created_at).toLocaleDateString()}
+                                {message.created_at ? new Date(message.created_at).toLocaleDateString() : 'N/A'}
                               </span>
                             </div>
                           )}
@@ -378,10 +379,10 @@ export default function MessageCenter({
                                         isOwn ? 'text-teal-100' : 'text-gray-400'
                                       }`}
                                     >
-                                      {new Date(message.created_at).toLocaleTimeString([], {
+                                      {message.created_at ? new Date(message.created_at).toLocaleTimeString([], {
                                         hour: '2-digit',
                                         minute: '2-digit',
-                                      })}
+                                      }) : 'N/A'}
                                       {message.edited_at && ' (edited)'}
                                     </span>
                                     {isOwn && (

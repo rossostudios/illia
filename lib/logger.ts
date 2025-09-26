@@ -22,7 +22,7 @@ export enum LogCategory {
   SYSTEM = 'system',
 }
 
-interface LogEntry {
+type LogEntry = {
   level: LogLevel
   category: LogCategory
   message: string
@@ -42,12 +42,13 @@ class Logger {
   private flushInterval: NodeJS.Timeout | null = null
   private readonly maxBufferSize = 50
   private readonly flushIntervalMs = 5000
-  private sessionId: string
-  private isEnabled: boolean
+  private readonly sessionId: string
+  private readonly isEnabled: boolean
 
   private constructor() {
     this.sessionId = this.generateSessionId()
-    this.isEnabled = process.env.NODE_ENV === 'production' || process.env.NEXT_PUBLIC_ENABLE_LOGGING === 'true'
+    this.isEnabled =
+      process.env.NODE_ENV === 'production' || process.env.NEXT_PUBLIC_ENABLE_LOGGING === 'true'
 
     if (this.isEnabled) {
       this.startFlushInterval()
@@ -125,21 +126,17 @@ class Logger {
 
   private consoleLog(entry: LogEntry) {
     if (process.env.NODE_ENV === 'development') {
-      const formattedMessage = this.formatConsoleMessage(entry)
+      const _formattedMessage = this.formatConsoleMessage(entry)
 
       switch (entry.level) {
         case LogLevel.DEBUG:
-          console.debug(formattedMessage, entry.data || '')
           break
         case LogLevel.INFO:
-          console.info(formattedMessage, entry.data || '')
           break
         case LogLevel.WARN:
-          console.warn(formattedMessage, entry.data || '')
           break
         case LogLevel.ERROR:
         case LogLevel.FATAL:
-          console.error(formattedMessage, entry.data || '')
           break
       }
     }
@@ -161,7 +158,9 @@ class Logger {
   }
 
   async flush() {
-    if (!this.isEnabled || this.buffer.length === 0) return
+    if (!this.isEnabled || this.buffer.length === 0) {
+      return
+    }
 
     const logsToFlush = [...this.buffer]
     this.buffer = []
@@ -190,10 +189,9 @@ class Logger {
 
       // Batch insert logs
       await supabase.from('analytics_events').insert(events)
-    } catch (error) {
+    } catch (_error) {
       // Restore logs to buffer if flush failed
       this.buffer = [...logsToFlush, ...this.buffer].slice(-this.maxBufferSize)
-      console.error('Failed to flush logs:', error)
     }
   }
 
@@ -273,18 +271,13 @@ class Logger {
       requestId: id,
       logResponse: (status: number, responseData?: any) => {
         const level = status >= 400 ? LogLevel.ERROR : LogLevel.INFO
-        const entry = this.createLogEntry(
-          level,
-          LogCategory.API,
-          `${method} ${url} - ${status}`,
-          {
-            request_id: id,
-            method,
-            url,
-            status,
-            response_data: responseData,
-          }
-        )
+        const entry = this.createLogEntry(level, LogCategory.API, `${method} ${url} - ${status}`, {
+          request_id: id,
+          method,
+          url,
+          status,
+          response_data: responseData,
+        })
         entry.requestId = id
         this.consoleLog(entry)
         if (this.isEnabled) {
@@ -334,11 +327,7 @@ export function useComponentLogger(componentName: string) {
 // Middleware for API routes
 export function withLogging(handler: Function) {
   return async (req: any, res: any) => {
-    const { requestId, logResponse } = logger.logApiRequest(
-      req.method,
-      req.url,
-      req.body
-    )
+    const { requestId, logResponse } = logger.logApiRequest(req.method, req.url, req.body)
 
     try {
       // Add request ID to response headers

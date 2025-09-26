@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-interface DropdownMenuProps {
+type DropdownMenuProps = {
   children: React.ReactNode
 }
 
@@ -11,7 +11,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({ children }) => {
 
   return (
     <div className="relative inline-block text-left">
-      {React.Children.map(children, child =>
+      {React.Children.map(children, (child) =>
         React.isValidElement(child)
           ? React.cloneElement(child as React.ReactElement<any>, { isOpen, setIsOpen })
           : child
@@ -20,7 +20,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({ children }) => {
   )
 }
 
-interface DropdownMenuTriggerProps {
+type DropdownMenuTriggerProps = {
   children: React.ReactNode
   asChild?: boolean
   isOpen?: boolean
@@ -30,7 +30,7 @@ interface DropdownMenuTriggerProps {
 export const DropdownMenuTrigger: React.FC<DropdownMenuTriggerProps> = ({
   children,
   asChild = false,
-  setIsOpen = () => {}
+  setIsOpen = () => {},
 }) => {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -46,7 +46,7 @@ export const DropdownMenuTrigger: React.FC<DropdownMenuTriggerProps> = ({
   return <div onClick={handleClick}>{children}</div>
 }
 
-interface DropdownMenuContentProps {
+type DropdownMenuContentProps = {
   children: React.ReactNode
   align?: 'start' | 'center' | 'end'
   isOpen?: boolean
@@ -57,7 +57,7 @@ export const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
   children,
   align = 'start',
   isOpen = false,
-  setIsOpen = () => {}
+  setIsOpen = () => {},
 }) => {
   const ref = React.useRef<HTMLDivElement>(null)
 
@@ -77,7 +77,9 @@ export const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
     }
   }, [isOpen, setIsOpen])
 
-  if (!isOpen) return null
+  if (!isOpen) {
+    return null
+  }
 
   const alignmentClasses = {
     start: 'left-0',
@@ -87,15 +89,15 @@ export const DropdownMenuContent: React.FC<DropdownMenuContentProps> = ({
 
   return (
     <div
-      ref={ref}
       className={`absolute z-50 mt-2 min-w-[8rem] overflow-hidden rounded-md border border-gray-200 bg-white p-1 shadow-md dark:border-gray-700 dark:bg-gray-800 ${alignmentClasses[align]}`}
+      ref={ref}
     >
       {children}
     </div>
   )
 }
 
-interface DropdownMenuItemProps {
+type DropdownMenuItemProps = {
   children: React.ReactNode
   onClick?: () => void
   className?: string
@@ -104,30 +106,24 @@ interface DropdownMenuItemProps {
 export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
   children,
   onClick,
-  className = ''
-}) => {
-  return (
-    <div
-      className={`relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white ${className}`}
-      onClick={onClick}
-    >
-      {children}
-    </div>
-  )
-}
+  className = '',
+}) => (
+  <div
+    className={`relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700 dark:hover:text-white ${className}`}
+    onClick={onClick}
+  >
+    {children}
+  </div>
+)
 
-export const DropdownMenuSeparator: React.FC = () => {
-  return <div className="my-1 h-px bg-gray-200 dark:bg-gray-700" />
-}
+export const DropdownMenuSeparator: React.FC = () => (
+  <div className="my-1 h-px bg-gray-200 dark:bg-gray-700" />
+)
 
-interface DropdownMenuLabelProps {
+type DropdownMenuLabelProps = {
   children: React.ReactNode
 }
 
-export const DropdownMenuLabel: React.FC<DropdownMenuLabelProps> = ({ children }) => {
-  return (
-    <div className="px-2 py-1.5 font-semibold text-sm">
-      {children}
-    </div>
-  )
-}
+export const DropdownMenuLabel: React.FC<DropdownMenuLabelProps> = ({ children }) => (
+  <div className="px-2 py-1.5 font-semibold text-sm">{children}</div>
+)

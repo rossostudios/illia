@@ -15,7 +15,6 @@ import {
 } from '@tanstack/react-table'
 import {
   ArrowUpDown,
-  Briefcase,
   ChevronLeft,
   ChevronRight,
   Clock,
@@ -28,7 +27,7 @@ import {
   Users,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { ProviderDetailModal } from '@/components/providers/ProviderDetailModal'
 import { useSessionContext } from '@/components/SessionProvider'
@@ -77,8 +76,40 @@ export default function DirectoryPage() {
   // Fetch providers
   const { providers, loading, error, totalCount } = useProviders(providerFilters)
 
+  // Define handlers
+  const handleContact = useCallback(async (provider: ServiceProvider) => {
+    if (!user) {
+      toast.error('Please sign in to contact providers')
+      router.push('/login')
+      return
+    }
+
+    const result = await createMatch(provider.id)
+    if (result.success) {
+      toast.success(`Connected with ${provider.name}`)
+      router.push('/dashboard/messages')
+    } else {
+      toast.error(result.error || 'Failed to contact provider')
+    }
+  }, [user, createMatch, router])
+
+  const handleSave = useCallback(async (provider: ServiceProvider) => {
+    if (!user) {
+      toast.error('Please sign in to save providers')
+      router.push('/login')
+      return
+    }
+
+    const result = await createMatch(provider.id)
+    if (result.success) {
+      toast.success(`${provider.name} saved to matches`)
+    } else {
+      toast.error(result.error || 'Failed to save provider')
+    }
+  }, [user, createMatch, router])
+
   // Define columns
-  const columns = useMemo<ColumnDef<ServiceProvider>[]>(
+  const columns = useMemo(
     () => [
       columnHelper.accessor('name', {
         header: ({ column }) => (
@@ -94,11 +125,10 @@ export default function DirectoryPage() {
           <div className="flex items-center gap-3">
             <div className="relative">
               <img
-                alt={info.getValue()}
+                alt={String(info.getValue())}
                 className="h-10 w-10 rounded-full object-cover"
                 src={
                   info.row.original.avatar_url ||
-                  info.row.original.photo_url ||
                   `https://i.pravatar.cc/150?u=${info.row.original.id}`
                 }
               />
@@ -107,7 +137,7 @@ export default function DirectoryPage() {
               )}
             </div>
             <div>
-              <div className="font-medium text-gray-900 dark:text-white">{info.getValue()}</div>
+              <div className="font-medium text-gray-900 dark:text-white">{String(info.getValue())}</div>
               <div className="text-gray-500 text-sm dark:text-gray-400">
                 {info.row.original.email}
               </div>
@@ -115,14 +145,13 @@ export default function DirectoryPage() {
           </div>
         ),
       }),
-      columnHelper.accessor('services', {
+      columnHelper.accessor('service_type', {
         header: 'Services',
         cell: (info) => (
           <div className="flex flex-wrap gap-1">
-            {info
-              .getValue()
+            {(info.getValue() as string[] | undefined)
               ?.slice(0, 2)
-              .map((service) => (
+              .map((service: string) => (
                 <span
                   className="inline-flex items-center rounded-full bg-teal-50 px-2 py-0.5 font-medium text-teal-700 text-xs dark:bg-teal-900/30 dark:text-teal-300"
                   key={service}
@@ -130,15 +159,15 @@ export default function DirectoryPage() {
                   {service}
                 </span>
               ))}
-            {(info.getValue()?.length || 0) > 2 && (
+            {((info.getValue() as string[] | undefined)?.length || 0) > 2 && (
               <span className="text-gray-500 text-xs">
-                +{(info.getValue()?.length || 0) - 2} more
+                +{((info.getValue() as string[] | undefined)?.length || 0) - 2} more
               </span>
             )}
           </div>
         ),
       }),
-      columnHelper.accessor('city', {
+      columnHelper.accessor('location', {
         header: ({ column }) => (
           <button
             className="flex items-center gap-1 font-semibold"
@@ -152,7 +181,7 @@ export default function DirectoryPage() {
         cell: (info) => (
           <div className="flex items-center gap-1">
             <MapPin className="h-4 w-4 text-gray-400" />
-            <span className="capitalize">{info.getValue() || 'Unknown'}</span>
+            <span className="capitalize">{String(info.getValue() || 'Unknown')}</span>
           </div>
         ),
       }),
@@ -168,7 +197,7 @@ export default function DirectoryPage() {
           </button>
         ),
         cell: (info) => {
-          const rating = info.getValue() || 0
+          const rating = (info.getValue() as number) || 0
           const reviews = info.row.original.reviews_count || 0
           return (
             <div className="flex items-center gap-2">
@@ -181,7 +210,7 @@ export default function DirectoryPage() {
           )
         },
       }),
-      columnHelper.accessor('rate_hourly', {
+      columnHelper.accessor('hourly_rate', {
         header: ({ column }) => (
           <button
             className="flex items-center gap-1 font-semibold"
@@ -193,8 +222,8 @@ export default function DirectoryPage() {
           </button>
         ),
         cell: (info) => {
-          const hourly = info.getValue()
-          const monthly = info.row.original.rate_monthly
+          const hourly = info.getValue() as number | null | undefined
+          const monthly = undefined
           return (
             <div className="text-sm">
               {hourly && <div className="font-medium">${hourly}/hr</div>}
@@ -207,8 +236,10 @@ export default function DirectoryPage() {
       columnHelper.accessor('years_experience', {
         header: 'Experience',
         cell: (info) => {
-          const years = info.getValue()
-          if (!years) return <span className="text-gray-400">-</span>
+          const years = info.getValue() as number | null | undefined
+          if (!years) {
+            return <span className="text-gray-400">-</span>
+          }
           return (
             <div className="flex items-center gap-1">
               <Clock className="h-4 w-4 text-gray-400" />
@@ -240,7 +271,7 @@ export default function DirectoryPage() {
         ),
       }),
     ],
-    []
+    [handleContact, handleSave]
   )
 
   // Create table instance
@@ -264,37 +295,6 @@ export default function DirectoryPage() {
     pageCount: Math.ceil(totalCount / pagination.pageSize),
     manualPagination: false,
   })
-
-  const handleContact = async (provider: ServiceProvider) => {
-    if (!user) {
-      toast.error('Please sign in to contact providers')
-      router.push('/login')
-      return
-    }
-
-    const result = await createMatch(provider.id)
-    if (result.success) {
-      toast.success(`Connected with ${provider.name}`)
-      router.push('/dashboard/messages')
-    } else {
-      toast.error(result.error || 'Failed to contact provider')
-    }
-  }
-
-  const handleSave = async (provider: ServiceProvider) => {
-    if (!user) {
-      toast.error('Please sign in to save providers')
-      router.push('/login')
-      return
-    }
-
-    const result = await createMatch(provider.id)
-    if (result.success) {
-      toast.success(`${provider.name} saved to matches`)
-    } else {
-      toast.error(result.error || 'Failed to save provider')
-    }
-  }
 
   const handleProviderClick = (provider: ServiceProvider) => {
     setSelectedProvider(provider)
@@ -504,7 +504,7 @@ export default function DirectoryPage() {
                     </button>
 
                     {/* Page numbers */}
-                    {[...Array(table.getPageCount())].slice(0, 5).map((_, index) => (
+                    {[...new Array(table.getPageCount())].slice(0, 5).map((_, index) => (
                       <button
                         className={clsx(
                           'relative inline-flex items-center px-4 py-2 font-semibold text-sm',

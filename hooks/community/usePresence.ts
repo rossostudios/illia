@@ -63,7 +63,7 @@ export function usePresence(options: UsePresenceOptions) {
         })
         .on('presence', { event: 'join' }, ({ key, newPresences }) => {
           if (newPresences && newPresences.length > 0) {
-            const newUser = newPresences[0] as UserPresence
+            const newUser = newPresences[0] as unknown as UserPresence
             options.onUserJoin?.(newUser)
           }
         })
@@ -100,7 +100,7 @@ export function usePresence(options: UsePresenceOptions) {
 
             // Store interval ID for cleanup
             channelRef.current = channel
-            ;(channelRef.current as string).presenceInterval = presenceInterval
+            ;(channelRef.current as any).presenceInterval = presenceInterval
           } else if (status === 'CHANNEL_ERROR') {
             setIsConnected(false)
           }
@@ -114,7 +114,7 @@ export function usePresence(options: UsePresenceOptions) {
     // Cleanup on unmount or channel change
     return () => {
       if (channelRef.current) {
-        const interval = (channelRef.current as string).presenceInterval
+        const interval = (channelRef.current as any).presenceInterval
         if (interval) {
           clearInterval(interval)
         }

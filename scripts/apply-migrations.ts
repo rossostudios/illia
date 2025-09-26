@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import { config } from 'dotenv'
 import fs from 'node:fs'
 import path from 'node:path'
 import { createClient } from '@supabase/supabase-js'
+import { config } from 'dotenv'
 
 // Load environment variables
 config()
@@ -57,9 +57,11 @@ async function applyMigration(filePath: string) {
 
       try {
         // Execute the statement using raw SQL
-        const { error } = await supabase.rpc('exec_sql', {
-          sql: statement + ';',
-        }).single()
+        const { error } = await supabase
+          .rpc('exec_sql', {
+            sql: `${statement};`,
+          })
+          .single()
 
         if (error) {
           // Try direct execution if RPC doesn't exist
@@ -72,7 +74,11 @@ async function applyMigration(filePath: string) {
         }
       } catch (err: any) {
         // Some statements might fail if they already exist (like CREATE IF NOT EXISTS)
-        if (err.message?.includes('already exists') || err.code === '42P07' || err.code === '42710') {
+        if (
+          err.message?.includes('already exists') ||
+          err.code === '42P07' ||
+          err.code === '42710'
+        ) {
           console.log(`  ⏭️  Skipped (already exists): ${statement.substring(0, 50)}...`)
         } else {
           console.error(`  ❌ Error in statement: ${statement.substring(0, 100)}...`)
@@ -132,7 +138,7 @@ async function main() {
     }
   }
 
-  console.log('\n' + '='.repeat(50))
+  console.log(`\n${'='.repeat(50)}`)
   console.log('📊 Migration Summary:')
   console.log(`  ✅ Successful: ${successCount}`)
   console.log(`  ❌ Failed: ${failCount}`)

@@ -1,4 +1,4 @@
-import type Database from '@/types/database'
+import type { Database } from '@/types/database'
 
 type ThreadRow = Database['public']['Tables']['community_threads']['Row']
 type ProfileRow = Database['public']['Tables']['profiles']['Row']
@@ -108,10 +108,10 @@ export function mapPost(row: ThreadPostRowWithAuthor): PostRow {
   const authorRaw = Array.isArray(row.author) ? row.author?.[0] : row.author
   return {
     id: row.id,
-    threadId: row.thread_id,
-    userId: row.user_id,
+    threadId: row.thread_id || '',
+    userId: row.user_id || '',
     body: row.body,
-    createdAt: row.created_at,
+    createdAt: row.created_at || '',
     editedAt: row.edited_at,
     author: authorRaw
       ? {
@@ -162,22 +162,22 @@ export function mapMember(row: Database['public']['Tables']['profiles']['Row']):
     city: row.city ?? null,
     tier: row.tier ?? null,
     languages: row.languages ?? null,
-    onboardingCompleted: row.onboarding_completed ?? null,
+    onboardingCompleted: row.onboarding_complete ?? null,
     createdAt: row.created_at,
   }
 }
 
 export function mapEvent(row: Record<string, unknown>): CommunityEventSummary {
   return {
-    id: row.id,
-    title: row.title,
-    description: row.description ?? null,
-    startAt: row.start_at ?? row.startAt ?? '',
-    endAt: row.end_at ?? row.endAt ?? null,
-    location: row.location ?? null,
-    tags: row.tags ?? null,
-    capacity: row.capacity ?? null,
-    attendeesCount: row.attendees_count ?? row.attendeesCount ?? null,
-    hostId: row.host_id ?? row.hostId ?? null,
+    id: row.id as string,
+    title: row.title as string,
+    description: (row.description as string | null) ?? null,
+    startAt: (row.start_at as string) ?? (row.startAt as string) ?? '',
+    endAt: (row.end_at as string | null) ?? (row.endAt as string | null) ?? null,
+    location: (row.location as string | null) ?? null,
+    tags: (row.tags as string[] | null) ?? null,
+    capacity: (row.capacity as number | null) ?? null,
+    attendeesCount: (row.attendees_count as number | null) ?? (row.attendeesCount as number | null) ?? null,
+    hostId: (row.host_id as string | null) ?? (row.hostId as string | null) ?? null,
   }
 }

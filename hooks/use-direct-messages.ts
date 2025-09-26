@@ -190,7 +190,14 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
     } finally {
       setLoading(false)
     }
-  }, [options.conversationId, options.otherUserId, user, supabase, markAsRead])
+  }, [
+    options.conversationId,
+    options.otherUserId,
+    user,
+    supabase,
+    markAsRead,
+    activeConversationId,
+  ])
 
   // Send a message
   const sendMessage = useCallback(
@@ -248,7 +255,14 @@ export function useDirectMessages(options: UseDirectMessagesOptions = {}) {
         setSending(false)
       }
     },
-    [user, options.otherUserId, options.conversationId, supabase, fetchConversations, activeConversationId]
+    [
+      user,
+      options.otherUserId,
+      options.conversationId,
+      supabase,
+      fetchConversations,
+      activeConversationId,
+    ]
   )
 
   // Delete a message

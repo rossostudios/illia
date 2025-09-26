@@ -4,7 +4,7 @@ import type { Database } from '@/types/database'
 
 type ServiceProvider = Database['public']['Tables']['service_providers']['Row']
 
-export interface ProviderFilters {
+export type ProviderFilters = {
   search?: string
   service?: string
   location?: string
@@ -36,7 +36,9 @@ export function useProviders(filters: ProviderFilters = {}) {
 
       // Apply filters
       if (filters.search) {
-        query = query.or(`name.ilike.%${filters.search}%,bio.ilike.%${filters.search}%,services.cs.{${filters.search}}`)
+        query = query.or(
+          `name.ilike.%${filters.search}%,bio.ilike.%${filters.search}%,services.cs.{${filters.search}}`
+        )
       }
 
       if (filters.city) {
@@ -74,7 +76,6 @@ export function useProviders(filters: ProviderFilters = {}) {
       setProviders(data || [])
       setTotalCount(count || 0)
     } catch (err) {
-      console.error('Error fetching providers:', err)
       setError(err instanceof Error ? err.message : 'Failed to fetch providers')
     } finally {
       setLoading(false)
@@ -99,18 +100,16 @@ export function useProviders(filters: ProviderFilters = {}) {
           table: 'service_providers',
         },
         (payload) => {
-          console.log('Provider change received:', payload)
-
           if (payload.eventType === 'INSERT') {
-            setProviders(prev => [payload.new as ServiceProvider, ...prev])
-            setTotalCount(prev => prev + 1)
+            setProviders((prev) => [payload.new as ServiceProvider, ...prev])
+            setTotalCount((prev) => prev + 1)
           } else if (payload.eventType === 'UPDATE') {
-            setProviders(prev =>
-              prev.map(p => p.id === payload.new.id ? payload.new as ServiceProvider : p)
+            setProviders((prev) =>
+              prev.map((p) => (p.id === payload.new.id ? (payload.new as ServiceProvider) : p))
             )
           } else if (payload.eventType === 'DELETE') {
-            setProviders(prev => prev.filter(p => p.id !== payload.old.id))
-            setTotalCount(prev => prev - 1)
+            setProviders((prev) => prev.filter((p) => p.id !== payload.old.id))
+            setTotalCount((prev) => prev - 1)
           }
         }
       )
@@ -121,9 +120,7 @@ export function useProviders(filters: ProviderFilters = {}) {
     }
   }, [supabase])
 
-  const refetch = useCallback(() => {
-    return fetchProviders()
-  }, [fetchProviders])
+  const refetch = useCallback(() => fetchProviders(), [fetchProviders])
 
   return {
     providers,

@@ -24,13 +24,15 @@ type SearchResult = {
 }
 
 type ProviderRecord = {
+  id?: string
   services?: string[] | null
-  neighborhood?: string | null
+  location?: string | null
   city?: string | null
   name?: string | null
   bio?: string | null
-  rating?: number | null
-  verified?: boolean | null
+  rating_avg?: number | null
+  status?: string | null
+  is_active?: boolean | null
   specialties?: string[] | null
 }
 
@@ -126,14 +128,16 @@ export async function GET(request: NextRequest) {
     const likeQuery = `%${escapeLike(query)}%`
 
     const supabase = await createClient()
-    const { data: providers, error } = await supabase
-      .from('providers')
-      .select('id, name, bio, city, neighborhood, services, specialties, rating, verified, active')
-      .eq('active', true)
+    const providerQuery = await supabase
+      .from('service_providers')
+      .select('id, name, bio, city, location, services, specialties, rating_avg, status, is_active')
+      .eq('is_active', true)
       .or(
-        `name.ilike.${likeQuery},bio.ilike.${likeQuery},city.ilike.${likeQuery},neighborhood.ilike.${likeQuery}`
+        `name.ilike.${likeQuery},bio.ilike.${likeQuery},city.ilike.${likeQuery},location.ilike.${likeQuery}`
       )
       .limit(20)
+
+    const { data: providers, error } = providerQuery
 
     if (error) {
       return NextResponse.json({ error: 'Search failed', message: error.message }, { status: 500 })
@@ -148,9 +152,9 @@ export async function GET(request: NextRequest) {
     for (const provider of providers || []) {
       // Provider result
       results.push({
-        id: provider.id,
+        id: provider.id || `provider-${Date.now()}`,
         type: 'provider',
-        title: provider.name,
+        title: provider.name || 'Unknown Provider',
         description: formatProviderDescription(provider),
         score: calculateProviderScore(provider, normalizedQuery),
       })
@@ -158,20 +162,20 @@ export async function GET(request: NextRequest) {
 
       // Location result when query matches a city/neighborhood
       const cityMatch = provider.city?.toLowerCase().includes(normalizedQuery)
-      const neighborhoodMatch = provider.neighborhood?.toLowerCase().includes(normalizedQuery)
+      const locationMatch = provider.location?.toLowerCase().includes(normalizedQuery)
 
-      if (cityMatch || neighborhoodMatch) {
-        const locationId = `location-${provider.city}-${provider.neighborhood || ''}`
+      if (cityMatch || locationMatch) {
+        const locationId = `location-${provider.city}-${provider.location || ''}`
         if (!locationSet.has(locationId)) {
           locationSet.add(locationId)
           results.push({
             id: locationId,
             type: 'location',
-            title: neighborhoodMatch
-              ? `${capitalize(provider.neighborhood)}, ${capitalize(provider.city)}`
-              : capitalize(provider.city),
-            description: neighborhoodMatch
-              ? `Neighborhood in ${capitalize(provider.city)}`
+            title: locationMatch
+              ? `${capitalize(provider.location || '')}, ${capitalize(provider.city || '')}`
+              : capitalize(provider.city || ''),
+            description: locationMatch
+              ? `Location in ${capitalize(provider.city || '')}`
               : 'City match',
             score: 60,
           })
@@ -216,9 +220,9 @@ function escapeLike(value: string) {
 function formatProviderDescription(provider: ProviderRecord) {
   const services = Array.isArray(provider.services) ? provider.services : []
   const primaryServices = services.slice(0, 2).map(capitalize).join(' • ')
-  const locationParts = [provider.neighborhood, provider.city]
+  const locationParts = [provider.location, provider.city]
     .filter(Boolean)
-    .map((part: string) => capitalize(part))
+    .map((part) => capitalize(String(part)))
     .join(', ')
 
   const serviceText = primaryServices ? `${primaryServices}` : 'Home services'
@@ -230,11 +234,11 @@ function formatProviderDescription(provider: ProviderRecord) {
 function calculateProviderScore(provider: ProviderRecord, query: string) {
   let score = 50
 
-  if (provider.rating) {
-    score += Math.min(20, provider.rating * 5)
+  if (provider.rating_avg) {
+    score += Math.min(20, provider.rating_avg * 5)
   }
 
-  if (provider.verified) {
+  if (provider.is_active) {
     score += 10
   }
 
@@ -248,7 +252,7 @@ function calculateProviderScore(provider: ProviderRecord, query: string) {
     services.includes(query) ||
     specialties.includes(query) ||
     bio.includes(query) ||
-    provider.name.toLowerCase().includes(query)
+    (provider.name?.toLowerCase() || '').includes(query)
   ) {
     score += 15
   }

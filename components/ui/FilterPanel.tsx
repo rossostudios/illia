@@ -150,14 +150,14 @@ export function FilterPanel({
     }
     if (key === 'priceRange') {
       return (
-        value.min !== DEFAULT_FILTERS.priceRange.min || value.max !== DEFAULT_FILTERS.priceRange.max
+        (value as any).min !== DEFAULT_FILTERS.priceRange.min || (value as any).max !== DEFAULT_FILTERS.priceRange.max
       )
     }
     if (key === 'priceType') {
       return value !== DEFAULT_FILTERS.priceType
     }
     if (key === 'rating') {
-      return value > 0
+      return (value as number) > 0
     }
     if (key === 'radius') {
       return value !== DEFAULT_FILTERS.radius
@@ -189,7 +189,7 @@ export function FilterPanel({
               {activeFilterCount}
             </span>
           )}
-        </button>
+        </Button>
       )}
 
       {/* Filter Panel */}
@@ -224,7 +224,7 @@ export function FilterPanel({
                     onClick={onToggle}
                   >
                     <X className="h-5 w-5 text-gray-500" />
-                  </button>
+                  </Button>
                 )}
               </div>
 
@@ -265,7 +265,7 @@ export function FilterPanel({
                           : localFilters.sortBy === 'rating'
                             ? 'Low'
                             : 'Near'}
-                      </button>
+                      </Button>
                       <Button
                         className={`flex-1 rounded px-3 py-1.5 text-sm transition-colors ${
                           localFilters.sortOrder === 'desc'
@@ -280,7 +280,7 @@ export function FilterPanel({
                           : localFilters.sortBy === 'rating'
                             ? 'High'
                             : 'Far'}
-                      </button>
+                      </Button>
                     </div>
                   )}
                 </div>
@@ -324,7 +324,7 @@ export function FilterPanel({
                   {/* Price Type Selector */}
                   <div className="flex gap-2">
                     {['monthly', 'hourly', 'both'].map((type) => (
-                      <button className={`flex-1 rounded-lg px-3 py-2 text-sm transition-colors ${
+                      <Button className={`flex-1 rounded-lg px-3 py-2 text-sm transition-colors ${
                           localFilters.priceType === type
                             ? 'border border-teal-300 bg-teal-100 text-teal-700 dark:border-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700'
@@ -336,7 +336,7 @@ export function FilterPanel({
                         type="button"
                       >
                         {type === 'monthly' ? 'Monthly' : type === 'hourly' ? 'Hourly' : 'Both'}
-                      </button>
+                      </Button>
                     ))}
                   </div>
 
@@ -387,7 +387,7 @@ export function FilterPanel({
                 </label>
                 <div className="flex items-center gap-2">
                   {[0, 3, 3.5, 4, 4.5].map((rating) => (
-                    <button className={`rounded-lg border px-3 py-1.5 transition-colors ${
+                    <Button className={`rounded-lg border px-3 py-1.5 transition-colors ${
                         localFilters.rating === rating
                           ? 'border-teal-500 bg-teal-50 text-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
                           : 'border-gray-300 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500'
@@ -397,7 +397,7 @@ export function FilterPanel({
                       type="button"
                     >
                       {rating === 0 ? 'Any' : `${rating}+`}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>
@@ -452,7 +452,7 @@ export function FilterPanel({
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {LANGUAGE_OPTIONS.map((language) => (
-                    <button className={`rounded-lg border px-3 py-1.5 transition-colors ${
+                    <Button className={`rounded-lg border px-3 py-1.5 transition-colors ${
                         localFilters.languages.includes(language)
                           ? 'border-teal-500 bg-teal-50 text-teal-700 dark:bg-teal-900/20 dark:text-teal-300'
                           : 'border-gray-300 hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500'
@@ -467,7 +467,7 @@ export function FilterPanel({
                       type="button"
                     >
                       {language}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>

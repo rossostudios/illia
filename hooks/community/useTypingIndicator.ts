@@ -109,6 +109,27 @@ export function useTypingIndicator(options: UseTypingIndicatorOptions) {
     supabase.removeChannel,
   ])
 
+  // Broadcast typing stop
+  const stopTyping = useCallback(async () => {
+    if (!(channelRef.current && user && isTyping)) {
+      return
+    }
+
+    setIsTyping(false)
+
+    await channelRef.current.send({
+      type: 'broadcast',
+      event: 'typing_stop',
+      payload: { user_id: user.id },
+    })
+
+    // Clear timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current)
+      typingTimeoutRef.current = null
+    }
+  }, [user, isTyping])
+
   // Broadcast typing start
   const startTyping = useCallback(async () => {
     if (!(channelRef.current && user)) {
@@ -146,27 +167,6 @@ export function useTypingIndicator(options: UseTypingIndicatorOptions) {
       stopTyping()
     }, 5000)
   }, [user, stopTyping])
-
-  // Broadcast typing stop
-  const stopTyping = useCallback(async () => {
-    if (!(channelRef.current && user && isTyping)) {
-      return
-    }
-
-    setIsTyping(false)
-
-    await channelRef.current.send({
-      type: 'broadcast',
-      event: 'typing_stop',
-      payload: { user_id: user.id },
-    })
-
-    // Clear timeout
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current)
-      typingTimeoutRef.current = null
-    }
-  }, [user, isTyping])
 
   // Handle input changes
   const handleInputChange = useCallback(() => {

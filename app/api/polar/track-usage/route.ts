@@ -33,10 +33,10 @@ export async function POST(request: NextRequest) {
         .from('usage_tracking')
         .select('*')
         .eq('user_id', user.id)
-        .eq('meter_type', meterType)
+        .eq('feature', meterType)
         .gte('created_at', new Date(new Date().setDate(1)).toISOString()) // Current month
 
-      const currentUsage = usage?.reduce((sum, record) => sum + (record.quantity || 0), 0) || 0
+      const currentUsage = usage?.reduce((sum, record) => sum + (record.usage || 0), 0) || 0
       const limit = limits[meterType as keyof typeof limits]
 
       if (currentUsage + quantity > limit) {
@@ -50,16 +50,16 @@ export async function POST(request: NextRequest) {
     // Track the usage in database
     await supabase.from('usage_tracking').insert({
       user_id: user.id,
-      meter_type: meterType,
-      quantity,
-      subscription_id: subscription?.subscription_id,
+      feature: meterType,
+      usage: quantity,
       created_at: new Date().toISOString(),
     })
 
     // Track with Polar (when API is available)
-    if (subscription?.customer_id) {
+    const customerId = (subscription?.metadata as any)?.customer_id
+    if (customerId) {
       await trackMeterUsage({
-        customerId: subscription.customer_id,
+        customerId,
         meterType,
         quantity,
       })
@@ -89,11 +89,11 @@ export async function GET(_request: NextRequest) {
       .eq('user_id', user.id)
       .gte('created_at', new Date(new Date().setDate(1)).toISOString())
 
-    // Group by meter type
+    // Group by feature type
     const usageSummary = usage?.reduce(
       (acc, record) => {
-        if (record.meter_type && record.quantity !== null) {
-          acc[record.meter_type] = (acc[record.meter_type] || 0) + record.quantity
+        if (record.feature && record.usage !== null) {
+          acc[record.feature] = (acc[record.feature] || 0) + record.usage
         }
         return acc
       },
@@ -108,9 +108,9 @@ export async function GET(_request: NextRequest) {
       .eq('status', 'active')
       .single()
 
-    const tier = subscription?.product_id?.includes('local')
+    const tier = subscription?.plan_id?.includes('local')
       ? 'local'
-      : subscription?.product_id?.includes('settler')
+      : subscription?.plan_id?.includes('settler')
         ? 'settler'
         : 'explorer'
 

@@ -134,7 +134,7 @@ function ProviderMarker({
     }
 
     // Use the global L variable from react-leaflet
-    const L = (window as string).L
+    const L = (window as any).L
     if (!L) {
       return null
     }

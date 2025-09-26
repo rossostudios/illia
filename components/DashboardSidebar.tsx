@@ -154,7 +154,7 @@ export default function DashboardSidebar({
         {/* Navigation */}
         <nav className={`flex-1 space-y-1 overflow-y-auto pt-3 ${isCollapsed ? 'px-2' : 'px-3'}`}>
           {sidebarItems.map((item) => {
-            const isActive = item.hasSubmenu ? pathname.includes(item.href) : pathname === item.href
+            const isActive = ('hasSubmenu' in item && item.hasSubmenu) ? pathname.includes(item.href) : pathname === item.href
 
             const linkElement = (
               <Link
@@ -163,7 +163,7 @@ export default function DashboardSidebar({
                 } ${isActive ? 'bg-teal-50 text-teal-600 dark:bg-teal-900/20 dark:text-teal-400' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'}`}
                 href={item.href}
                 onClick={(e) => {
-                  if (item.hasSubmenu && !isCollapsed) {
+                  if ('hasSubmenu' in item && item.hasSubmenu && !isCollapsed) {
                     e.preventDefault()
                     setShowExtractMenu(!showExtractMenu)
                   } else if (window.innerWidth < 768) {
@@ -179,7 +179,7 @@ export default function DashboardSidebar({
                     <item.icon
                       className={`${isCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${isActive ? 'text-teal-600 dark:text-teal-400' : ''}`}
                     />
-                    {item.badge > 0 && (
+                    {item.badge && item.badge > 0 && (
                       <span className="-top-1 -right-1 absolute flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 font-bold text-white text-xs">
                         {item.badge > 99 ? '99+' : item.badge}
                       </span>
@@ -189,7 +189,7 @@ export default function DashboardSidebar({
                     <div className="flex flex-1 flex-col">
                       <div className="flex items-center justify-between">
                         <span>{item.label}</span>
-                        {item.badge > 0 && !isCollapsed && (
+                        {item.badge && item.badge > 0 && !isCollapsed && (
                           <span className="ml-2 rounded-full bg-red-500 px-2 py-0.5 font-bold text-white text-xs">
                             {item.badge > 99 ? '99+' : item.badge}
                           </span>
@@ -203,11 +203,11 @@ export default function DashboardSidebar({
                     </div>
                   )}
                 </div>
-                {item.hasSubmenu && !isCollapsed && (
+                {'hasSubmenu' in item && item.hasSubmenu && !isCollapsed ? (
                   <ChevronDown
-                    className={`h-4 w-4 transition-transform ${item.isOpen ? 'rotate-180' : ''}`}
+                    className={`h-4 w-4 transition-transform ${'isOpen' in item && item.isOpen ? 'rotate-180' : ''}`}
                   />
-                )}
+                ) : null}
               </Link>
             )
 
@@ -220,9 +220,9 @@ export default function DashboardSidebar({
                 ) : (
                   linkElement
                 )}
-                {item.hasSubmenu && item.isOpen && !isCollapsed && (
+                {'hasSubmenu' in item && item.hasSubmenu && 'isOpen' in item && item.isOpen && !isCollapsed ? (
                   <div className="mt-1 ml-7 space-y-1">
-                    {item.submenu?.map((subitem) => (
+                    {'submenu' in item && (item.submenu as any[])?.map((subitem: any) => (
                       <Link
                         className={`block rounded-lg px-3 py-2 text-sm ${
                           pathname === subitem.href
@@ -236,7 +236,7 @@ export default function DashboardSidebar({
                       </Link>
                     ))}
                   </div>
-                )}
+                ) : null}
               </div>
             )
           })}

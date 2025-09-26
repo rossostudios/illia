@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { config } from 'dotenv'
 import { createClient } from '@supabase/supabase-js'
 import chalk from 'chalk'
+import { config } from 'dotenv'
 
 // Load environment variables
 config()
@@ -11,7 +11,7 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-interface ValidationResult {
+type ValidationResult = {
   category: string
   test: string
   status: 'pass' | 'fail' | 'warning'
@@ -20,31 +20,32 @@ interface ValidationResult {
 }
 
 class SystemValidator {
-  private results: ValidationResult[] = []
-  private supabase: any
+  private readonly results: ValidationResult[] = []
+  private readonly supabase: any
 
   constructor() {
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    if (!(SUPABASE_URL && SUPABASE_ANON_KEY)) {
       throw new Error('Missing Supabase environment variables')
     }
 
-    this.supabase = createClient(
-      SUPABASE_URL,
-      SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false,
-        },
-      }
-    )
+    this.supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    })
   }
 
   private addResult(result: ValidationResult) {
     this.results.push(result)
 
     const icon = result.status === 'pass' ? '✅' : result.status === 'warning' ? '⚠️' : '❌'
-    const color = result.status === 'pass' ? chalk.green : result.status === 'warning' ? chalk.yellow : chalk.red
+    const color =
+      result.status === 'pass'
+        ? chalk.green
+        : result.status === 'warning'
+          ? chalk.yellow
+          : chalk.red
 
     console.log(`${icon} ${color(result.test)}`)
     if (result.message) {
@@ -59,7 +60,9 @@ class SystemValidator {
     try {
       const { data, error } = await this.supabase.from('users').select('count').limit(0)
 
-      if (error) throw error
+      if (error) {
+        throw error
+      }
 
       this.addResult({
         category: 'Database',
@@ -98,7 +101,9 @@ class SystemValidator {
       try {
         const { error } = await this.supabase.from(table).select('*').limit(0)
 
-        if (error) throw error
+        if (error) {
+          throw error
+        }
 
         this.addResult({
           category: 'Schema',
@@ -146,7 +151,7 @@ class SystemValidator {
             category: 'Schema',
             test: `Columns in ${check.table}`,
             status: 'pass',
-            message: `All required columns present`,
+            message: 'All required columns present',
           })
         }
       } catch (error: any) {
@@ -207,7 +212,7 @@ class SystemValidator {
           }
         }
       }
-    } catch (error: any) {
+    } catch (_error: any) {
       this.addResult({
         category: 'Performance',
         test: 'Database indexes',
@@ -252,7 +257,7 @@ class SystemValidator {
             message: 'RLS appears to be enabled',
           })
         }
-      } catch (error) {
+      } catch (_error) {
         // Error accessing table is expected with RLS
         this.addResult({
           category: 'Security',
@@ -413,13 +418,13 @@ class SystemValidator {
 
   // Generate summary report
   generateReport() {
-    console.log(chalk.blue('\n' + '='.repeat(60)))
+    console.log(chalk.blue(`\n${'='.repeat(60)}`))
     console.log(chalk.blue.bold('VALIDATION SUMMARY'))
     console.log(chalk.blue('='.repeat(60)))
 
-    const passed = this.results.filter(r => r.status === 'pass').length
-    const warnings = this.results.filter(r => r.status === 'warning').length
-    const failed = this.results.filter(r => r.status === 'fail').length
+    const passed = this.results.filter((r) => r.status === 'pass').length
+    const warnings = this.results.filter((r) => r.status === 'warning').length
+    const failed = this.results.filter((r) => r.status === 'fail').length
     const total = this.results.length
 
     console.log(chalk.green(`✅ Passed: ${passed}/${total}`))
@@ -431,8 +436,8 @@ class SystemValidator {
       console.log('Please fix the following issues:')
 
       this.results
-        .filter(r => r.status === 'fail')
-        .forEach(r => {
+        .filter((r) => r.status === 'fail')
+        .forEach((r) => {
           console.log(chalk.red(`  - ${r.test}: ${r.message || 'Failed'}`))
         })
     } else if (warnings > 0) {
@@ -440,8 +445,8 @@ class SystemValidator {
       console.log('Consider addressing these warnings:')
 
       this.results
-        .filter(r => r.status === 'warning')
-        .forEach(r => {
+        .filter((r) => r.status === 'warning')
+        .forEach((r) => {
           console.log(chalk.yellow(`  - ${r.test}: ${r.message || 'Warning'}`))
         })
     } else {
@@ -449,7 +454,7 @@ class SystemValidator {
       console.log('Your system is properly configured and ready for production.')
     }
 
-    console.log(chalk.blue('\n' + '='.repeat(60)))
+    console.log(chalk.blue(`\n${'='.repeat(60)}`))
 
     return failed === 0
   }

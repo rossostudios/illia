@@ -80,19 +80,22 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
         const reactionsByPost =
           reactions?.reduce(
             (acc, reaction) => {
-              if (!acc[reaction.post_id]) {
-                acc[reaction.post_id] = {}
+              const postId = reaction.post_id
+              if (!postId) return acc
+
+              if (!acc[postId]) {
+                acc[postId] = {}
               }
-              if (!acc[reaction.post_id][reaction.reaction]) {
-                acc[reaction.post_id][reaction.reaction] = {
-                  reaction: reaction.reaction,
+              if (!acc[postId][reaction.reaction_type]) {
+                acc[postId][reaction.reaction_type] = {
+                  reaction: reaction.reaction_type,
                   count: 0,
                   user_reacted: false,
                 }
               }
-              acc[reaction.post_id][reaction.reaction].count++
+              acc[postId][reaction.reaction_type].count++
               if (user && reaction.user_id === user.id) {
-                acc[reaction.post_id][reaction.reaction].user_reacted = true
+                acc[postId][reaction.reaction_type].user_reacted = true
               }
               return acc
             },
@@ -102,12 +105,28 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
         // Attach reactions to posts
         const postsWithReactions = data.map((post) => ({
           ...post,
+          thread_id: post.thread_id || '',
+          user_id: post.user_id || '',
+          parent_post_id: post.parent_post_id || undefined,
+          created_at: post.created_at || '',
+          edited_at: post.edited_at || undefined,
+          likes_count: post.likes_count || 0,
+          is_solution: post.is_accepted_answer || false,
           reactions: Object.values(reactionsByPost[post.id] || {}),
         }))
 
-        setPosts(postsWithReactions)
+        setPosts(postsWithReactions as any)
       } else {
-        setPosts(data || [])
+        setPosts((data || []).map((post) => ({
+          ...post,
+          thread_id: post.thread_id || '',
+          user_id: post.user_id || '',
+          parent_post_id: post.parent_post_id || undefined,
+          created_at: post.created_at || '',
+          edited_at: post.edited_at || undefined,
+          likes_count: post.likes_count || 0,
+          is_solution: post.is_accepted_answer || false,
+        })) as any)
       }
     } catch (err) {
       setError(err as Error)
@@ -140,7 +159,9 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
       case 'DELETE':
         if (oldRecord && oldRecord.thread_id === options.threadId) {
           setPosts((prev) => prev.filter((post) => post.id !== oldRecord.id))
-          options.onPostDeleted?.(oldRecord.id)
+          if (oldRecord.id) {
+            options.onPostDeleted?.(oldRecord.id)
+          }
         }
         break
     }
@@ -314,7 +335,7 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
         edited_at: new Date().toISOString(),
       })
       .eq('id', postId)
-      .eq('user_id', user?.id) // Ensure user owns the post
+      .eq('user_id', user?.id || '') // Ensure user owns the post
       .select()
       .single()
 
@@ -330,7 +351,7 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
       .from('thread_posts')
       .delete()
       .eq('id', postId)
-      .eq('user_id', user?.id) // Ensure user owns the post
+      .eq('user_id', user?.id || '') // Ensure user owns the post
 
     if (error) {
       throw error
@@ -363,7 +384,7 @@ export function useRealtimePosts(options: UseRealtimePostsOptions) {
       const { error } = await supabase.from('thread_reactions').insert({
         post_id: postId,
         user_id: user.id,
-        reaction,
+        reaction_type: reaction,
       })
 
       if (error) {

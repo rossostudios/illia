@@ -134,7 +134,7 @@ export default function OptionsPanel({ isOpen, onClose, endpoint }: OptionsPanel
             <div className="relative flex items-center space-x-2">
               <span className="font-medium text-gray-700 text-sm">Exclude tags</span>
               <div className="relative">
-                <button className="text-gray-400 hover:text-gray-600" onMouseEnter={() => setShowExcludeTooltip(true)
+                <button className="text-gray-400 hover:text-gray-600" onMouseEnter={() => setShowExcludeTooltip(true)}
                   onMouseLeave={() => setShowExcludeTooltip(false)}
                   type="button"
                 >

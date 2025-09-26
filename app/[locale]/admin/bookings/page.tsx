@@ -10,12 +10,12 @@ export default async function BookingsPage({
   const params = await searchParams
   // const supabase = await createClient()
 
-  // TODO: Create bookings table in database before enabling this functionality
-  // The bookings table doesn't exist yet
-  const bookings: any[] = []
+  // TODO: Fetch actual bookings from database
+  // The bookings table now exists but needs proper type definitions
+  const bookings: Array<{ id: string; user: string; provider: string; date: string; status: string }> = []
 
   // Mock statistics for now
-  const statsData: any[] = []
+  const statsData = bookings
 
   const stats = {
     total: statsData?.length || 0,
@@ -23,7 +23,7 @@ export default async function BookingsPage({
     confirmed: statsData?.filter((b) => b.status === 'confirmed').length || 0,
     completed: statsData?.filter((b) => b.status === 'completed').length || 0,
     cancelled: statsData?.filter((b) => b.status === 'cancelled').length || 0,
-    totalRevenue: statsData?.reduce((sum, b) => sum + (b.total_amount || 0), 0) || 0,
+    totalRevenue: 0, // Will be calculated when we fetch actual booking data
   }
 
   return (

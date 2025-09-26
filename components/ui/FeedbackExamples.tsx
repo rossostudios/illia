@@ -49,7 +49,7 @@ export function DeleteButton({ onDelete }: { onDelete: () => void }) {
   const confirm = useConfirm()
 
   const handleDelete = () => {
-    confirm({
+    (confirm as any)({
       title: 'Delete this item?',
       description: 'This action cannot be undone. This will permanently delete the item.',
       type: 'danger',

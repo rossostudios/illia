@@ -18,19 +18,13 @@ export async function GET(request: NextRequest) {
 
     // Check if user is a provider
     const { data: provider } = await supabase
-      .from('providers')
+      .from('service_providers')
       .select('id')
-      .eq('id', user.id)
-      .single()
+      .eq('user_id', user.id)
+      .single() as { data: { id: string } | null; error: any }
 
     // Build query based on user type and filters
-    let query = supabase.from('bookings').select(`
-        *,
-        user:users!user_id(id, name, email, avatar_url),
-        provider:providers!bookings_provider_id_fkey(id, name, email, phone, whatsapp, photo_url),
-        service_agreements(accepted_at, version),
-        booking_reviews(rating, review_text)
-      `)
+    let query = supabase.from('bookings').select('*')
 
     // Filter by user type
     if (provider) {
@@ -112,7 +106,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check availability
-    const { data: availabilityCheck } = await supabase.rpc('check_booking_availability', {
+    const { data: availabilityCheck } = await (supabase as any).rpc('check_booking_availability', {
       p_provider_id: provider_id,
       p_date: booking_date,
       p_start_time: start_time,
@@ -124,7 +118,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create the booking
-    const { data: booking, error: bookingError } = await supabase
+    const { data: booking, error: bookingError } = await (supabase as any)
       .from('bookings')
       .insert({
         user_id: user.id,
@@ -152,7 +146,7 @@ export async function POST(request: NextRequest) {
 
     // Create recurring bookings if requested
     if (is_recurring && recurring_pattern) {
-      const { data: recurringBookings, error: recurringError } = await supabase.rpc(
+      const { data: recurringBookings, error: recurringError } = await (supabase as any).rpc(
         'create_recurring_bookings',
         {
           p_booking_id: booking.id,
@@ -168,7 +162,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create initial reminders (will be triggered on confirmation)
-    await supabase.from('booking_reminders').insert([
+    await (supabase as any).from('booking_reminders').insert([
       {
         booking_id: booking.id,
         reminder_type: 'confirmation',
@@ -212,7 +206,7 @@ export async function PUT(request: NextRequest) {
       .from('bookings')
       .select('user_id, provider_id')
       .eq('id', id)
-      .single()
+      .single() as { data: { user_id: string; provider_id: string } | null; error: any }
 
     if (fetchError || !existingBooking) {
       return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
@@ -220,10 +214,10 @@ export async function PUT(request: NextRequest) {
 
     // Check if user is the owner or provider
     const { data: provider } = await supabase
-      .from('providers')
+      .from('service_providers')
       .select('id')
-      .eq('id', user.id)
-      .single()
+      .eq('user_id', user.id)
+      .single() as { data: { id: string } | null; error: any }
 
     const isOwner = existingBooking.user_id === user.id
     const isProvider = provider?.id === existingBooking.provider_id
@@ -259,7 +253,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Update the booking
-    const { data: updatedBooking, error: updateError } = await supabase
+    const { data: updatedBooking, error: updateError } = await (supabase as any)
       .from('bookings')
       .update({
         ...allowedUpdates,
@@ -309,7 +303,7 @@ export async function DELETE(request: NextRequest) {
       .from('bookings')
       .select('user_id, provider_id, total_amount, booking_date, start_time, cancellation_policy')
       .eq('id', id)
-      .single()
+      .single() as { data: any | null; error: any }
 
     if (fetchError || !booking) {
       return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
@@ -319,10 +313,10 @@ export async function DELETE(request: NextRequest) {
     if (booking.user_id !== user.id) {
       // Check if user is the provider
       const { data: provider } = await supabase
-        .from('providers')
+        .from('service_providers')
         .select('id')
-        .eq('id', user.id)
-        .single()
+        .eq('user_id', user.id)
+        .single() as { data: { id: string } | null; error: any }
 
       if (!provider || provider.id !== booking.provider_id) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
@@ -330,12 +324,12 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Calculate cancellation fee
-    const { data: cancellationFee } = await supabase.rpc('calculate_cancellation_fee', {
+    const { data: cancellationFee } = await (supabase as any).rpc('calculate_cancellation_fee', {
       p_booking_id: id,
     })
 
     // Update booking status to cancelled
-    const { error: updateError } = await supabase
+    const { error: updateError } = await (supabase as any)
       .from('bookings')
       .update({
         status: 'cancelled',

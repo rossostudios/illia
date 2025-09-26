@@ -28,7 +28,7 @@ export function VirtualList<T>({
   const [scrollTop, setScrollTop] = useState(0)
   const scrollElementRef = useRef<HTMLDivElement>(null)
   const isScrolling = useRef(false)
-  const scrollTimeout = useRef<NodeJS.Timeout>()
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null)
 
   // Calculate item positions
   const getItemHeight = useCallback(
@@ -98,7 +98,9 @@ export function VirtualList<T>({
         isScrolling.current = true
       }
 
-      clearTimeout(scrollTimeout.current)
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current)
+      }
       scrollTimeout.current = setTimeout(() => {
         isScrolling.current = false
       }, 150)

@@ -38,7 +38,11 @@ export function ResponsiveNavigation({
   const [isScrolled, setIsScrolled] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
 
-  const { viewport, isMobile, isTablet, isDesktop } = useResponsive()
+  const responsive = useResponsive()
+  const { viewport } = responsive
+  const isMobile = viewport.isMobile
+  const isTablet = viewport.isTablet
+  const isDesktop = viewport.isDesktop
   const prefersReducedMotion = useMediaQuery(mediaQueries.prefersReducedMotion)
   const pathname = usePathname()
 
@@ -87,7 +91,7 @@ export function ResponsiveNavigation({
 
   // Prevent body scroll when menu is open on mobile
   useEffect(() => {
-    if (isOpen && isMobile()) {
+    if (isOpen && isMobile) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
@@ -101,7 +105,7 @@ export function ResponsiveNavigation({
   const navHeight = isScrolled && behavior === 'shrink-on-scroll' ? 60 : 80
 
   // Navigation variants
-  const navVariants = {
+  const navVariants: any = {
     visible: {
       y: 0,
       height: navHeight,
@@ -119,7 +123,7 @@ export function ResponsiveNavigation({
     },
   }
 
-  const menuVariants = {
+  const menuVariants: any = {
     closed: {
       x: '100%',
       transition: {
@@ -239,7 +243,7 @@ export function ResponsiveNavigation({
             <button
               className="flex items-center gap-2 rounded-lg px-4 py-2 font-medium text-fluid-sm text-gray-700 transition-all duration-200 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
               onClick={() => setActiveDropdown(isDropdownOpen ? null : item.id)}
-              onMouseEnter={() => isDesktop() && setActiveDropdown(item.id)}
+              onMouseEnter={() => isDesktop && setActiveDropdown(item.id)}
               type="button"
             >
               {item.icon && <item.icon className="h-4 w-4" />}
@@ -257,7 +261,7 @@ export function ResponsiveNavigation({
                   className="absolute top-full left-0 z-50 mt-2 w-56 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900"
                   exit="closed"
                   initial="closed"
-                  onMouseLeave={() => isDesktop() && setActiveDropdown(null)}
+                  onMouseLeave={() => isDesktop && setActiveDropdown(null)}
                   variants={dropdownVariants}
                 >
                   {item.children?.map((child) => (
@@ -312,7 +316,7 @@ export function ResponsiveNavigation({
             </div>
 
             {/* Desktop Navigation */}
-            {isDesktop() && (
+            {isDesktop && (
               <div className="hidden items-center gap-2 lg:flex">
                 {items.map((item) => renderNavItem(item))}
               </div>
@@ -341,7 +345,7 @@ export function ResponsiveNavigation({
               {actions}
 
               {/* Mobile menu toggle */}
-              {!isDesktop() && (
+              {!isDesktop && (
                 <button
                   aria-label={isOpen ? 'Close menu' : 'Open menu'}
                   className="rounded-lg p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -361,7 +365,7 @@ export function ResponsiveNavigation({
       </motion.nav>
 
       {/* Mobile Menu */}
-      {!isDesktop() && (
+      {!isDesktop && (
         <>
           {/* Backdrop */}
           <AnimatePresence>

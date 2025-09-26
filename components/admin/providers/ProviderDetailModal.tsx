@@ -37,10 +37,13 @@ export default function ProviderDetailModal({
   const handleApprove = async () => {
     setLoading(true)
     try {
-      const { error } = await supabase.rpc('approve_provider', {
-        provider_uuid: provider.id,
-        admin_notes: 'Approved via admin panel',
-      })
+      const { error } = await supabase
+        .from('service_providers')
+        .update({
+          status: 'approved',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', provider.id)
 
       if (error) {
         throw error
@@ -64,10 +67,13 @@ export default function ProviderDetailModal({
 
     setLoading(true)
     try {
-      const { error } = await supabase.rpc('reject_provider', {
-        provider_uuid: provider.id,
-        reason,
-      })
+      const { error } = await supabase
+        .from('service_providers')
+        .update({
+          status: 'rejected',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', provider.id)
 
       if (error) {
         throw error
@@ -91,23 +97,12 @@ export default function ProviderDetailModal({
 
     setLoading(true)
     try {
-      const { data: adminUser } = await supabase
-        .from('admin_users')
-        .select('id')
-        .eq('user_id', (await supabase.auth.getUser()).data.user?.id)
-        .single()
-
-      if (!adminUser) {
-        throw new Error('Admin user not found')
-      }
-
       const { error } = await supabase
-        .from('users')
+        .from('service_providers')
         .update({
-          approval_status: 'suspended',
-          suspended_at: new Date().toISOString(),
-          suspended_reason: reason,
-          suspended_by: adminUser.id,
+          status: 'suspended',
+          is_active: false,
+          updated_at: new Date().toISOString(),
         })
         .eq('id', provider.id)
 
@@ -129,12 +124,11 @@ export default function ProviderDetailModal({
     setLoading(true)
     try {
       const { error } = await supabase
-        .from('users')
+        .from('service_providers')
         .update({
-          approval_status: 'approved',
-          suspended_at: null,
-          suspended_reason: null,
-          suspended_by: null,
+          status: 'approved',
+          is_active: true,
+          updated_at: new Date().toISOString(),
         })
         .eq('id', provider.id)
 

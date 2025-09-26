@@ -36,7 +36,7 @@ export function ProviderCard({ provider, viewMode, onClick }: ProviderCardProps)
               <div className="flex items-center gap-2">
                 <p className="font-medium text-gray-900 dark:text-white">{provider.name}</p>
                 {provider.verified && (
-                  <Award className="h-4 w-4 text-blue-500" title="Verified Provider" />
+                  <Award className="h-4 w-4 text-blue-500" />
                 )}
               </div>
               <p className="text-gray-500 text-sm dark:text-gray-400">{provider.service}</p>

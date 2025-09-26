@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-import { config } from 'dotenv'
 import { exec } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { promisify } from 'node:util'
+import { config } from 'dotenv'
 
 const execAsync = promisify(exec)
 
 // Load environment variables
-config()
+config({ path: '.env.local' })
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -239,7 +239,9 @@ export * from './database-extended'
 
     console.log('\n📝 Alternative method:')
     console.log('Run this command directly:')
-    console.log(`npx supabase gen types typescript --project-id YOUR_PROJECT_ID > utils/database.types.ts`)
+    console.log(
+      'npx supabase gen types typescript --project-id YOUR_PROJECT_ID > utils/database.types.ts'
+    )
 
     process.exit(1)
   }

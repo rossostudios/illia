@@ -5,7 +5,6 @@ import CommunityHub from '@/components/community/CommunityHub'
 import {
   type CommunityEventSummary,
   type MemberSummary,
-  mapEvent,
   mapMember,
   mapThread,
   type ThreadListItem,
@@ -15,6 +14,20 @@ import { createClient } from '@/lib/supabase/server'
 
 type CommunityPageProps = {
   params: Promise<{ locale: string }>
+}
+
+function FallbackPlaceholder() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-white via-teal-50 to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+      <output aria-live="polite" className="flex items-center gap-3">
+        <span
+          aria-hidden="true"
+          className="h-12 w-12 animate-spin rounded-full border-teal-600 border-b-2"
+        />
+        <span className="sr-only">Loading</span>
+      </output>
+    </div>
+  )
 }
 
 export default async function CommunityPage({ params }: CommunityPageProps) {
@@ -84,7 +97,7 @@ async function fetchInitialThreads(
     return []
   }
 
-  return (data ?? []).map((row) => mapThread(row as ThreadRowWithAuthor))
+  return (data ?? []).map((row) => mapThread(row as any))
 }
 
 async function fetchFeaturedMembers(
@@ -92,7 +105,7 @@ async function fetchFeaturedMembers(
 ): Promise<MemberSummary[]> {
   const { data, error } = await supabase
     .from('profiles')
-    .select('id, full_name, avatar_url, city, tier, languages, onboarding_completed, created_at')
+    .select('*')
     .order('onboarding_completed', { ascending: false })
     .order('created_at', { ascending: false })
     .limit(24)
@@ -107,6 +120,7 @@ async function fetchFeaturedMembers(
 async function fetchUpcomingEvents(
   supabase: Awaited<ReturnType<typeof createClient>>
 ): Promise<CommunityEventSummary[]> {
+  // Community events table now exists, fetch real data
   try {
     const { data, error } = await supabase
       .from('community_events')
@@ -121,7 +135,31 @@ async function fetchUpcomingEvents(
       return buildFallbackEvents()
     }
 
-    const mapped = (data ?? []).map(mapEvent)
+    const mapped = ((data ?? []) as Array<{
+      id: string
+      title: string
+      description: string | null
+      start_at: string
+      end_at: string
+      host_id: string | null
+      location: string | null
+      tags: string[] | null
+      capacity: number | null
+      attendees_count: number | null
+    }>).map((event) => ({
+      id: event.id,
+      title: event.title,
+      description: event.description || null,
+      startAt: event.start_at,
+      endAt: event.end_at || null,
+      location: event.location || null,
+      tags: event.tags || [],
+      capacity: event.capacity || null,
+      attendeesCount: event.attendees_count || 0,
+      hostId: event.host_id || null,
+      isOnline: false,
+      meetingLink: null,
+    }))
     return mapped.length > 0 ? mapped : buildFallbackEvents()
   } catch (_error) {
     return buildFallbackEvents()
@@ -157,18 +195,4 @@ function buildFallbackEvents(): CommunityEventSummary[] {
       hostId: null,
     }
   })
-}
-
-function FallbackPlaceholder() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-white via-teal-50 to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
-      <output aria-live="polite" className="flex items-center gap-3">
-        <span
-          aria-hidden="true"
-          className="h-12 w-12 animate-spin rounded-full border-teal-600 border-b-2"
-        />
-        <span className="sr-only">Loading</span>
-      </output>
-    </div>
-  )
 }

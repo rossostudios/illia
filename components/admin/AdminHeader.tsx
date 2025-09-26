@@ -4,7 +4,7 @@ import { createBrowserClient } from '@supabase/ssr'
 import { Bell, Search, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import type { AdminUser } from '@/lib/admin/auth'
-import type { Database } from '@/lib/database.types'
+import type { Database } from '@/types/database'
 
 type AdminHeaderProps = {
   adminUser: AdminUser

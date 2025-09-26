@@ -60,7 +60,7 @@ export function ProviderModal({
                 onClick={onClose}
               >
                 <X className="h-4 w-4 text-white" />
-              </button>
+              </Button>
             </div>
 
             {/* Profile Photo */}
@@ -175,7 +175,7 @@ export function ProviderModal({
 
               {/* Action Buttons */}
               <div className="flex gap-3">
-                <Button className="flex-1" onClick={() => onContact(provider)} variant="default">
+                <Button className="flex-1" onClick={() => onContact(provider)} variant="primary">
                   <MessageSquare className="mr-2 h-4 w-4" />
                   Contact Provider
                 </Button>

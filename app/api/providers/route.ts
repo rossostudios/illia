@@ -17,11 +17,11 @@ export async function GET(request: NextRequest) {
 
     // Build query
     let query = supabase
-      .from('providers')
+      .from('service_providers')
       .select('*')
       .eq('city', city)
-      .eq('active', true)
-      .order('rating', { ascending: false })
+      .eq('is_active', true)
+      .order('rating_avg', { ascending: false })
       .limit(limit)
 
     // Filter by services if provided
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
     // Filter by budget if provided
     if (budgetMax) {
       // budgetMax comes as dollar amount * 100 (cents), convert to local currency
-      query = query.lte('rate_monthly', budgetMax)
+      query = query.lte('hourly_rate', budgetMax)
     }
 
     const { data: providers, error } = await query
@@ -60,13 +60,13 @@ export async function GET(request: NextRequest) {
       bio:
         provider.bio ||
         `Professional ${provider.services?.join(' and ') || 'service provider'} in ${provider.city}.`,
-      photo: provider.photo_url || `https://i.pravatar.cc/150?u=${provider.id}`,
+      photo: provider.avatar_url || `https://i.pravatar.cc/150?u=${provider.id}`,
       score: calculateScore(provider, { services, languages }),
-      rate: formatRate(provider.rate_monthly, city),
-      location: provider.neighborhood || city,
-      verified: provider.verified,
+      rate: formatRate(provider.hourly_rate, city),
+      location: provider.location || city,
+      verified: provider.is_active,
       specialties: provider.specialties || [],
-      availability: provider.availability || 'Flexible',
+      availability: provider.work_days?.join(', ') || 'Flexible',
       email: provider.email,
       phone: provider.phone,
       whatsapp: provider.whatsapp,

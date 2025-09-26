@@ -7,8 +7,8 @@ import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { MatchCard } from '@/components/matches/MatchCard'
 import { MatchDetailsModal } from '@/components/matches/MatchDetailsModal'
-import { MatchFilters } from '@/components/matches/MatchFilters'
 import { MatchesTable } from '@/components/matches/MatchesTable'
+import { MatchFilters } from '@/components/matches/MatchFilters'
 import type { Match } from '@/components/matches/types'
 import { useSessionContext } from '@/components/SessionProvider'
 import { Button } from '@/components/ui/Button'
@@ -36,17 +36,17 @@ export default function MatchesPage() {
 
   // Transform matches to match frontend interface
   const filteredMatches = useMemo((): Match[] => {
-    return matches.map((match) => ({
+    return matches.map((match: any) => ({
       // Database fields
-      id: match.id,
+      id: match.id || '',
       user_id: match.user_id || '',
-      provider_id: match.provider_id,
-      score: match.score,
+      provider_id: match.provider_id || '',
+      score: match.score || 0,
       explanation: match.explanation || '',
-      ai_model: match.ai_model,
-      created_at: match.created_at,
-      viewed_at: match.viewed_at,
-      dismissed_at: match.dismissed_at,
+      ai_model: match.ai_model || null,
+      created_at: match.created_at || null,
+      viewed_at: match.viewed_at || null,
+      dismissed_at: match.dismissed_at || null,
 
       // Computed fields
       status: (match.dismissed_at
@@ -91,14 +91,14 @@ export default function MatchesPage() {
 
   // Stats
   const stats = {
-    pending: matches.filter((m) => !(m.viewed_at || m.dismissed_at)).length,
-    contacted: matches.filter((m) => m.viewed_at && !m.dismissed_at).length,
-    dismissed: matches.filter((m) => m.dismissed_at).length,
+    pending: matches.filter((m: any) => !(m.viewed_at || m.dismissed_at)).length,
+    contacted: matches.filter((m: any) => m.viewed_at && !m.dismissed_at).length,
+    dismissed: matches.filter((m: any) => m.dismissed_at).length,
     total: matches.length,
   }
 
   const handleMatchAction = async (matchId: string, action: string) => {
-    const match = matches.find((m) => m.id === matchId)
+    const match = matches.find((m: any) => m.id === matchId)
     if (!match) {
       return
     }

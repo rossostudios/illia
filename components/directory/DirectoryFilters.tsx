@@ -53,7 +53,7 @@ export function DirectoryFilters({
               <Button
                 onClick={onToggleFilters}
                 size="sm"
-                variant={showFilters ? 'default' : 'outline'}
+                variant={showFilters ? 'primary' : 'outline'}
               >
                 <Filter className="mr-2 h-4 w-4" />
                 Filters
@@ -85,7 +85,7 @@ export function DirectoryFilters({
                   onClick={() => onFiltersChange({ ...filters, city: 'medellin' })}
                 >
                   Medellín
-                </button>
+                </Button>
                 <Button
                   className={`px-3 py-1.5 text-sm ${
                     filters.city === 'florianopolis'
@@ -95,7 +95,7 @@ export function DirectoryFilters({
                   onClick={() => onFiltersChange({ ...filters, city: 'florianopolis' })}
                 >
                   Florianópolis
-                </button>
+                </Button>
               </div>
 
               {/* View Toggle */}
@@ -103,21 +103,21 @@ export function DirectoryFilters({
                 <Button
                   onClick={() => onViewModeChange('grid')}
                   size="sm"
-                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                  variant={viewMode === 'grid' ? 'primary' : 'ghost'}
                 >
                   Grid
                 </Button>
                 <Button
                   onClick={() => onViewModeChange('table')}
                   size="sm"
-                  variant={viewMode === 'table' ? 'default' : 'ghost'}
+                  variant={viewMode === 'table' ? 'primary' : 'ghost'}
                 >
                   List
                 </Button>
                 <Button
                   onClick={() => onViewModeChange('map')}
                   size="sm"
-                  variant={viewMode === 'map' ? 'default' : 'ghost'}
+                  variant={viewMode === 'map' ? 'primary' : 'ghost'}
                 >
                   Map
                 </Button>

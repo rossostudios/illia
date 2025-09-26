@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { useSessionContext } from '@/components/SessionProvider'
+import { createClient } from '@/lib/supabase/client'
 import type { Database } from '@/types/database'
 
 type Match = Database['public']['Tables']['matches']['Row']
 
-export interface MatchFilters {
+export type MatchFilters = {
   dismissed?: boolean
   viewed?: boolean
   service?: string
@@ -103,34 +103,37 @@ export function useMatches(filters: MatchFilters = {}) {
       }
 
       // Transform the data to match our interface
-      const transformedData: MatchWithProvider[] = (data || []).map(match => ({
+      const transformedData: MatchWithProvider[] = (data || []).map((match) => ({
         ...match,
-        provider: match.service_providers ? {
-          id: match.service_providers.id,
-          name: match.service_providers.name,
-          email: match.service_providers.email,
-          service: match.service_providers.services?.[0] || '',
-          location: match.service_providers.city || '',
-          city: match.service_providers.city || '',
-          rating: match.service_providers.rating_avg || 0,
-          verified: match.service_providers.status === 'verified',
-          avatar_url: match.service_providers.avatar_url || undefined,
-        } : undefined,
+        provider: match.service_providers
+          ? {
+              id: match.service_providers.id,
+              name: match.service_providers.name,
+              email: match.service_providers.email,
+              service: match.service_providers.services?.[0] || '',
+              location: match.service_providers.city || '',
+              city: match.service_providers.city || '',
+              rating: match.service_providers.rating_avg || 0,
+              verified: match.service_providers.status === 'verified',
+              avatar_url: match.service_providers.avatar_url || undefined,
+            }
+          : undefined,
       }))
 
       // Apply client-side filters
       let filteredData = transformedData
       if (filters.search) {
         const searchLower = filters.search.toLowerCase()
-        filteredData = transformedData.filter(match =>
-          match.provider?.name.toLowerCase().includes(searchLower) ||
-          match.provider?.service.toLowerCase().includes(searchLower) ||
-          match.provider?.location.toLowerCase().includes(searchLower)
+        filteredData = transformedData.filter(
+          (match) =>
+            match.provider?.name.toLowerCase().includes(searchLower) ||
+            match.provider?.service.toLowerCase().includes(searchLower) ||
+            match.provider?.location.toLowerCase().includes(searchLower)
         )
       }
 
       if (filters.service && filters.service !== 'All Services') {
-        filteredData = filteredData.filter(match =>
+        filteredData = filteredData.filter((match) =>
           match.provider?.service.includes(filters.service!)
         )
       }
@@ -140,7 +143,6 @@ export function useMatches(filters: MatchFilters = {}) {
     } catch (err: any) {
       // Only set error if not aborted
       if (err?.name !== 'AbortError') {
-        console.error('Error fetching matches:', err)
         setError(err instanceof Error ? err.message : 'Failed to fetch matches')
       }
     } finally {
@@ -150,170 +152,178 @@ export function useMatches(filters: MatchFilters = {}) {
   }, [user?.id, filters.dismissed, filters.viewed, filters.search, filters.service, supabase])
 
   // Mark match as viewed
-  const markAsViewed = useCallback(async (matchId: string) => {
-    if (!user?.id) {
-      return { success: false, error: 'User not authenticated' }
-    }
-
-    try {
-      const { error: updateError } = await supabase
-        .from('matches')
-        .update({ viewed_at: new Date().toISOString() })
-        .eq('id', matchId)
-        .eq('user_id', user.id)
-
-      if (updateError) {
-        throw updateError
+  const markAsViewed = useCallback(
+    async (matchId: string) => {
+      if (!user?.id) {
+        return { success: false, error: 'User not authenticated' }
       }
 
-      // Update local state optimistically
-      setMatches(prev =>
-        prev.map(match =>
-          match.id === matchId ? { ...match, viewed_at: new Date().toISOString() } : match
-        )
-      )
-
-      return { success: true }
-    } catch (err) {
-      console.error('Error marking match as viewed:', err)
-      return {
-        success: false,
-        error: err instanceof Error ? err.message : 'Failed to mark match as viewed',
-      }
-    }
-  }, [user?.id, supabase])
-
-  // Dismiss a match
-  const dismissMatch = useCallback(async (matchId: string) => {
-    if (!user?.id) {
-      return { success: false, error: 'User not authenticated' }
-    }
-
-    try {
-      const { error: updateError } = await supabase
-        .from('matches')
-        .update({ dismissed_at: new Date().toISOString() })
-        .eq('id', matchId)
-        .eq('user_id', user.id)
-
-      if (updateError) {
-        throw updateError
-      }
-
-      // Update local state optimistically
-      setMatches(prev =>
-        prev.map(match =>
-          match.id === matchId ? { ...match, dismissed_at: new Date().toISOString() } : match
-        )
-      )
-
-      return { success: true }
-    } catch (err) {
-      console.error('Error dismissing match:', err)
-      return {
-        success: false,
-        error: err instanceof Error ? err.message : 'Failed to dismiss match',
-      }
-    }
-  }, [user?.id, supabase])
-
-  // Create a new match
-  const createMatch = useCallback(async (providerId: string, score: number = 85, explanation: string = 'Manual match created by user') => {
-    if (!user?.id) {
-      return { success: false, error: 'User not authenticated' }
-    }
-
-    try {
-      // Check if a match already exists
-      const { data: existingMatch } = await supabase
-        .from('matches')
-        .select('id, dismissed_at')
-        .eq('user_id', user.id)
-        .eq('provider_id', providerId)
-        .single()
-
-      if (existingMatch && !existingMatch.dismissed_at) {
-        return { success: false, error: 'Match already exists with this provider' }
-      }
-
-      // If a dismissed match exists, reactivate it
-      if (existingMatch && existingMatch.dismissed_at) {
-        const { data, error: updateError } = await supabase
+      try {
+        const { error: updateError } = await supabase
           .from('matches')
-          .update({
-            dismissed_at: null,
-            viewed_at: null,
-            score,
-            explanation,
-          })
-          .eq('id', existingMatch.id)
-          .select()
-          .single()
+          .update({ viewed_at: new Date().toISOString() })
+          .eq('id', matchId)
+          .eq('user_id', user.id)
 
         if (updateError) {
           throw updateError
         }
 
-        await fetchMatches()
+        // Update local state optimistically
+        setMatches((prev) =>
+          prev.map((match) =>
+            match.id === matchId ? { ...match, viewed_at: new Date().toISOString() } : match
+          )
+        )
+
+        return { success: true }
+      } catch (err) {
+        return {
+          success: false,
+          error: err instanceof Error ? err.message : 'Failed to mark match as viewed',
+        }
+      }
+    },
+    [user?.id, supabase]
+  )
+
+  // Dismiss a match
+  const dismissMatch = useCallback(
+    async (matchId: string) => {
+      if (!user?.id) {
+        return { success: false, error: 'User not authenticated' }
+      }
+
+      try {
+        const { error: updateError } = await supabase
+          .from('matches')
+          .update({ dismissed_at: new Date().toISOString() })
+          .eq('id', matchId)
+          .eq('user_id', user.id)
+
+        if (updateError) {
+          throw updateError
+        }
+
+        // Update local state optimistically
+        setMatches((prev) =>
+          prev.map((match) =>
+            match.id === matchId ? { ...match, dismissed_at: new Date().toISOString() } : match
+          )
+        )
+
+        return { success: true }
+      } catch (err) {
+        return {
+          success: false,
+          error: err instanceof Error ? err.message : 'Failed to dismiss match',
+        }
+      }
+    },
+    [user?.id, supabase]
+  )
+
+  // Create a new match
+  const createMatch = useCallback(
+    async (providerId: string, score = 85, explanation = 'Manual match created by user') => {
+      if (!user?.id) {
+        return { success: false, error: 'User not authenticated' }
+      }
+
+      try {
+        // Check if a match already exists
+        const { data: existingMatch } = await supabase
+          .from('matches')
+          .select('id, dismissed_at')
+          .eq('user_id', user.id)
+          .eq('provider_id', providerId)
+          .single()
+
+        if (existingMatch && !existingMatch.dismissed_at) {
+          return { success: false, error: 'Match already exists with this provider' }
+        }
+
+        // If a dismissed match exists, reactivate it
+        if (existingMatch?.dismissed_at) {
+          const { data, error: updateError } = await supabase
+            .from('matches')
+            .update({
+              dismissed_at: null,
+              viewed_at: null,
+              score,
+              explanation,
+            })
+            .eq('id', existingMatch.id)
+            .select()
+            .single()
+
+          if (updateError) {
+            throw updateError
+          }
+
+          await fetchMatches()
+          return { success: true, data }
+        }
+
+        // Create new match
+        const { data, error: createError } = await supabase
+          .from('matches')
+          .insert({
+            user_id: user.id,
+            provider_id: providerId,
+            score,
+            explanation,
+            ai_model: 'manual',
+          })
+          .select()
+          .single()
+
+        if (createError) {
+          throw createError
+        }
+
+        await fetchMatches() // Refresh the list
         return { success: true, data }
+      } catch (err: any) {
+        const errorMessage = err?.message || 'Failed to create match'
+        return {
+          success: false,
+          error: errorMessage,
+        }
       }
-
-      // Create new match
-      const { data, error: createError } = await supabase
-        .from('matches')
-        .insert({
-          user_id: user.id,
-          provider_id: providerId,
-          score,
-          explanation,
-          ai_model: 'manual',
-        })
-        .select()
-        .single()
-
-      if (createError) {
-        throw createError
-      }
-
-      await fetchMatches() // Refresh the list
-      return { success: true, data }
-    } catch (err: any) {
-      console.error('Error creating match:', err)
-      const errorMessage = err?.message || 'Failed to create match'
-      return {
-        success: false,
-        error: errorMessage,
-      }
-    }
-  }, [user?.id, supabase, fetchMatches])
+    },
+    [user?.id, supabase, fetchMatches]
+  )
 
   // Delete a match
-  const deleteMatch = useCallback(async (matchId: string) => {
-    if (!user?.id) {
-      return { success: false, error: 'User not authenticated' }
-    }
-
-    try {
-      const { error: deleteError } = await supabase
-        .from('matches')
-        .delete()
-        .eq('id', matchId)
-        .eq('user_id', user.id)
-
-      if (deleteError) {
-        throw deleteError
+  const deleteMatch = useCallback(
+    async (matchId: string) => {
+      if (!user?.id) {
+        return { success: false, error: 'User not authenticated' }
       }
 
-      setMatches(prev => prev.filter(match => match.id !== matchId))
-      return { success: true }
-    } catch (err) {
-      console.error('Error deleting match:', err)
-      return {
-        success: false,
-        error: err instanceof Error ? err.message : 'Failed to delete match',
+      try {
+        const { error: deleteError } = await supabase
+          .from('matches')
+          .delete()
+          .eq('id', matchId)
+          .eq('user_id', user.id)
+
+        if (deleteError) {
+          throw deleteError
+        }
+
+        setMatches((prev) => prev.filter((match) => match.id !== matchId))
+        return { success: true }
+      } catch (err) {
+        return {
+          success: false,
+          error: err instanceof Error ? err.message : 'Failed to delete match',
+        }
       }
-    }
-  }, [user?.id, supabase])
+    },
+    [user?.id, supabase]
+  )
 
   // Initial fetch when component mounts or filters change
   useEffect(() => {
@@ -324,7 +334,9 @@ export function useMatches(filters: MatchFilters = {}) {
 
   // Set up realtime subscription (separate from fetch)
   useEffect(() => {
-    if (!user?.id) return
+    if (!user?.id) {
+      return
+    }
 
     // Clean up any existing channel
     if (channelRef.current) {

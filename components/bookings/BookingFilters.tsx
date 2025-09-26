@@ -73,21 +73,21 @@ export function BookingFilters({
               <Button
                 onClick={() => onViewModeChange('grid')}
                 size="sm"
-                variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                variant={viewMode === 'grid' ? 'primary' : 'ghost'}
               >
                 <Grid3x3 className="h-4 w-4" />
               </Button>
               <Button
                 onClick={() => onViewModeChange('list')}
                 size="sm"
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
+                variant={viewMode === 'list' ? 'primary' : 'ghost'}
               >
                 <List className="h-4 w-4" />
               </Button>
               <Button
                 onClick={() => onViewModeChange('calendar')}
                 size="sm"
-                variant={viewMode === 'calendar' ? 'default' : 'ghost'}
+                variant={viewMode === 'calendar' ? 'primary' : 'ghost'}
               >
                 <Calendar className="h-4 w-4" />
               </Button>

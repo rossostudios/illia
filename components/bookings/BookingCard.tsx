@@ -93,7 +93,7 @@ export function BookingCard({ booking, viewMode, onAction }: BookingCardProps) {
           <div className="flex items-center gap-2">
             {booking.status === 'pending' && (
               <>
-                <Button onClick={() => onAction(booking.id, 'confirm')} size="sm" variant="default">
+                <Button onClick={() => onAction(booking.id, 'confirm')} size="sm" variant="primary">
                   Confirm
                 </Button>
                 <Button onClick={() => onAction(booking.id, 'cancel')} size="sm" variant="outline">
@@ -116,7 +116,7 @@ export function BookingCard({ booking, viewMode, onAction }: BookingCardProps) {
               </>
             )}
             {booking.status === 'completed' && !booking.booking_reviews?.length && (
-              <Button onClick={() => onAction(booking.id, 'review')} size="sm" variant="default">
+              <Button onClick={() => onAction(booking.id, 'review')} size="sm" variant="primary">
                 <Star className="mr-1 h-4 w-4" />
                 Review
               </Button>
@@ -201,7 +201,7 @@ export function BookingCard({ booking, viewMode, onAction }: BookingCardProps) {
             <Button
               className="flex-1"
               onClick={() => onAction(booking.id, 'confirm')}
-              variant="default"
+              variant="primary"
             >
               <CheckCircle className="mr-2 h-4 w-4" />
               Confirm
@@ -260,7 +260,7 @@ export function BookingCard({ booking, viewMode, onAction }: BookingCardProps) {
               <Button
                 className="flex-1"
                 onClick={() => onAction(booking.id, 'review')}
-                variant="default"
+                variant="primary"
               >
                 <Star className="mr-2 h-4 w-4" />
                 Leave Review

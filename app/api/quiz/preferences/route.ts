@@ -95,7 +95,8 @@ export async function POST(request: NextRequest) {
       const matches = providers.map((provider) => ({
         user_id: user.id,
         provider_id: provider.id,
-        match_score: calculateMatchScore(provider, { city, services, languages, budget }),
+        score: calculateMatchScore(provider, { city, services, languages, budget }),
+        explanation: `Matched based on: ${services.join(', ')} in ${city}`,
       }))
 
       await supabase.from('matches').upsert(matches)

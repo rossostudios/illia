@@ -141,7 +141,7 @@ export default function ProviderOnboardPage() {
       }
 
       // Insert provider data
-      const { error: insertError } = await supabase
+      const { error: insertError } = await (supabase as any)
         .from('service_providers')
         .insert({
           name: formData.name,

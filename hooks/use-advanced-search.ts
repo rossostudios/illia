@@ -86,7 +86,7 @@ type UseAdvancedSearchOptions = {
 export function useAdvancedSearch(options: UseAdvancedSearchOptions = {}) {
   const { enableAnalytics = true, debounceMs = 300, maxResults = 50 } = options
   const { user } = useSession()
-  const { showToast } = useToast()
+  const { error: showError } = useToast()
 
   const [filters, setFilters] = useState<SearchFilters>({})
   const [results, setResults] = useState<SearchResult[]>([])
@@ -214,7 +214,7 @@ export function useAdvancedSearch(options: UseAdvancedSearchOptions = {}) {
         }
 
         // Calculate distances if needed
-        let processedResults: SearchResult[] = data || []
+        let processedResults: SearchResult[] = (data || []) as any
 
         if (searchFilters.latitude && searchFilters.longitude) {
           processedResults = processedResults
@@ -260,12 +260,12 @@ export function useAdvancedSearch(options: UseAdvancedSearchOptions = {}) {
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Search failed'
         setError(errorMessage)
-        showToast(errorMessage, 'error')
+        showError('Search failed', errorMessage)
       } finally {
         setLoading(false)
       }
     },
-    [user, enableAnalytics, maxResults, showToast]
+    [user, enableAnalytics, maxResults, showError]
   )
 
   // Debounced search trigger

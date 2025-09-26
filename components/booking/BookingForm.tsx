@@ -268,13 +268,31 @@ export default function BookingForm({
 
   const sendBookingNotification = async (_bookingId: string) => {
     try {
-      // Get or create conversation with provider
-      const { data: conversation } = await supabase.rpc('get_or_create_conversation', {
-        user1_id: user?.id,
-        user2_id: provider.id,
-      })
+      // Create a new conversation
+      const { data: conversation } = await supabase
+        .from('conversations')
+        .insert({
+          created_at: new Date().toISOString(),
+          metadata: { type: 'booking' },
+        })
+        .select()
+        .single()
 
-      if (conversation) {
+      if (conversation && user) {
+        // Add participants to conversation
+        await supabase.from('conversation_participants').insert([
+          {
+            conversation_id: conversation.id,
+            user_id: user.id,
+            joined_at: new Date().toISOString(),
+          },
+          {
+            conversation_id: conversation.id,
+            user_id: provider.id,
+            joined_at: new Date().toISOString(),
+          },
+        ])
+
         // Send booking notification message
         const message = `🗓️ New Booking Request\n\nServices: ${selectedServices
           .map((s) => serviceOptions[s as keyof typeof serviceOptions]?.label)
@@ -282,11 +300,13 @@ export default function BookingForm({
           selectedSlot?.endTime
         }\nDuration: ${totalDuration} minutes\n\nPlease confirm or contact the client for any questions.`
 
-        await supabase.rpc('send_message', {
-          p_sender_id: user?.id,
-          p_receiver_id: provider.id,
-          p_message: message,
-          p_message_type: 'text',
+        await supabase.from('direct_messages').insert({
+          conversation_id: conversation.id,
+          sender_id: user.id,
+          receiver_id: provider.id,
+          message,
+          message_type: 'text',
+          created_at: new Date().toISOString(),
         })
       }
     } catch (_error) {

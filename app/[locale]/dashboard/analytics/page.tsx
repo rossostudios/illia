@@ -36,7 +36,9 @@ export default function AnalyticsDashboardPage() {
 
   // Memoize computed values
   const metrics = useMemo(() => {
-    if (!data) return null
+    if (!data) {
+      return null
+    }
     return {
       totalSearches: data.engagement.totalSearches.toLocaleString(),
       totalMatches: data.engagement.totalMatches.toLocaleString(),
@@ -44,9 +46,10 @@ export default function AnalyticsDashboardPage() {
       avgRating: data.providers.avgRating.toFixed(1),
       totalProviders: data.providers.totalProviders,
       verifiedProviders: data.providers.verifiedProviders,
-      verificationRate: data.providers.totalProviders > 0
-        ? ((data.providers.verifiedProviders / data.providers.totalProviders) * 100).toFixed(1)
-        : '0',
+      verificationRate:
+        data.providers.totalProviders > 0
+          ? ((data.providers.verifiedProviders / data.providers.totalProviders) * 100).toFixed(1)
+          : '0',
       totalLeads: data.engagement.totalLeads,
       avgSearchTime: `${data.engagement.avgSearchTime.toFixed(2)}s`,
       avgResultsPerSearch: data.search.avgResultsPerSearch.toFixed(1),
@@ -54,12 +57,16 @@ export default function AnalyticsDashboardPage() {
   }, [data])
 
   const topProviders = useMemo(() => {
-    if (!data) return []
+    if (!data) {
+      return []
+    }
     return data.providers.topRatedProviders.slice(0, 5)
   }, [data])
 
   const citiesDistribution = useMemo(() => {
-    if (!data) return []
+    if (!data) {
+      return []
+    }
     return data.providers.providersByCity.slice(0, 3)
   }, [data])
 
@@ -192,32 +199,16 @@ export default function AnalyticsDashboardPage() {
         <div className="flex flex-col gap-3 sm:flex-row">
           {/* Date Range Selector */}
           <div className="flex flex-wrap gap-2">
-            <Button
-              onClick={() => handleDateRangeChange('7d')}
-              size="sm"
-              variant="outline"
-            >
+            <Button onClick={() => handleDateRangeChange('7d')} size="sm" variant="outline">
               7 Days
             </Button>
-            <Button
-              onClick={() => handleDateRangeChange('30d')}
-              size="sm"
-              variant="outline"
-            >
+            <Button onClick={() => handleDateRangeChange('30d')} size="sm" variant="outline">
               30 Days
             </Button>
-            <Button
-              onClick={() => handleDateRangeChange('90d')}
-              size="sm"
-              variant="outline"
-            >
+            <Button onClick={() => handleDateRangeChange('90d')} size="sm" variant="outline">
               90 Days
             </Button>
-            <Button
-              onClick={() => handleDateRangeChange('1y')}
-              size="sm"
-              variant="outline"
-            >
+            <Button onClick={() => handleDateRangeChange('1y')} size="sm" variant="outline">
               1 Year
             </Button>
           </div>

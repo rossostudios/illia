@@ -231,7 +231,7 @@ export function EnhancedSearchResults({
                 onClick={() => setViewMode('list')}
               >
                 <List className="h-4 w-4" />
-              </button>
+              </Button>
               <Button
                 className={`p-2 transition-colors ${
                   viewMode === 'grid'
@@ -241,7 +241,7 @@ export function EnhancedSearchResults({
                 onClick={() => setViewMode('grid')}
               >
                 <Grid3X3 className="h-4 w-4" />
-              </button>
+              </Button>
               <Button
                 className={`rounded-r-lg p-2 transition-colors ${
                   viewMode === 'compact'
@@ -251,7 +251,7 @@ export function EnhancedSearchResults({
                 onClick={() => setViewMode('compact')}
               >
                 <SlidersHorizontal className="h-4 w-4" />
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -328,13 +328,13 @@ export function EnhancedSearchResults({
                   onClick={() => exportResults('csv')}
                 >
                   Export as CSV
-                </button>
+                </Button>
                 <Button
                   className="w-full px-4 py-2 text-left text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
                   onClick={() => exportResults('json')}
                 >
                   Export as JSON
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -512,7 +512,7 @@ const ResultCard = memo(function ResultCard({
         </div>
 
         {comparisonMode && (
-          <button className={`flex h-5 w-5 items-center justify-center rounded border-2 transition-colors ${
+          <Button className={`flex h-5 w-5 items-center justify-center rounded border-2 transition-colors ${
               isSelectedForComparison
                 ? 'border-teal-500 bg-teal-500 text-white'
                 : 'border-gray-300 hover:border-teal-400'
@@ -524,7 +524,7 @@ const ResultCard = memo(function ResultCard({
             type="button"
           >
             {isSelectedForComparison && <Check className="h-3 w-3" />}
-          </button>
+          </Button>
         )}
       </div>
     )
@@ -543,7 +543,7 @@ const ResultCard = memo(function ResultCard({
             <div className="mb-1 flex items-start justify-between">
               <h4 className="truncate font-medium text-gray-900 dark:text-white">{result.name}</h4>
               {comparisonMode && (
-                <button className={`ml-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
+                <Button className={`ml-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
                     isSelectedForComparison
                       ? 'border-teal-500 bg-teal-500 text-white'
                       : 'border-gray-300 hover:border-teal-400'
@@ -555,7 +555,7 @@ const ResultCard = memo(function ResultCard({
                   type="button"
                 >
                   {isSelectedForComparison && <Check className="h-3 w-3" />}
-                </button>
+                </Button>
               )}
             </div>
 
@@ -610,7 +610,7 @@ const ResultCard = memo(function ResultCard({
             <div className="mb-1 flex items-start justify-between">
               <h4 className="truncate font-medium text-gray-900 dark:text-white">{result.name}</h4>
               {comparisonMode && (
-                <button className={`ml-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
+                <Button className={`ml-2 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border-2 transition-colors ${
                     isSelectedForComparison
                       ? 'border-teal-500 bg-teal-500 text-white'
                       : 'border-gray-300 hover:border-teal-400'
@@ -622,7 +622,7 @@ const ResultCard = memo(function ResultCard({
                   type="button"
                 >
                   {isSelectedForComparison && <Check className="h-3 w-3" />}
-                </button>
+                </Button>
               )}
             </div>
 
@@ -637,7 +637,7 @@ const ResultCard = memo(function ResultCard({
                 <MapPin className="h-3 w-3" />
                 <span className="truncate">{result.neighborhood || result.city}</span>
               </div>
-              {result.experience && <span>{result.experience}</span>}
+              {'experience' in result && result.experience ? <span>{(result as any).experience}</span> : null}
             </div>
           </div>
         </div>

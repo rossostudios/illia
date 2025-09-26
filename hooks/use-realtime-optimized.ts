@@ -1,11 +1,8 @@
+import type { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supabase-js'
 import { useCallback, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import type {
-  RealtimeChannel,
-  RealtimePostgresChangesPayload,
-} from '@supabase/supabase-js'
 
-interface UseRealtimeOptions {
+type UseRealtimeOptions = {
   table: string
   event?: 'INSERT' | 'UPDATE' | 'DELETE' | '*'
   schema?: string
@@ -58,7 +55,9 @@ export function useRealtimeOptimized({
   )
 
   const subscribe = useCallback(() => {
-    if (!enabled) return
+    if (!enabled) {
+      return
+    }
 
     // Clean up existing subscription
     if (channelRef.current) {
@@ -86,15 +85,12 @@ export function useRealtimeOptimized({
       .on('postgres_changes', channelOptions, handleChange)
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
-          console.log(`✅ Subscribed to ${table} real-time updates`)
         } else if (status === 'CHANNEL_ERROR') {
-          console.error(`❌ Error subscribing to ${table}`)
           // Attempt reconnection after delay
           reconnectTimeoutRef.current = setTimeout(() => {
             subscribe()
           }, 5000)
         } else if (status === 'TIMED_OUT') {
-          console.warn(`⏰ Subscription to ${table} timed out, retrying...`)
           subscribe()
         }
       })
@@ -154,14 +150,14 @@ export function useRealtimeOptimized({
 /**
  * Hook for subscribing to multiple tables with a single subscription
  */
-export function useMultiTableRealtime(
-  subscriptions: Array<UseRealtimeOptions & { key: string }>
-) {
+export function useMultiTableRealtime(subscriptions: Array<UseRealtimeOptions & { key: string }>) {
   const supabase = createClient()
   const channelRef = useRef<RealtimeChannel | null>(null)
 
   useEffect(() => {
-    if (subscriptions.length === 0) return
+    if (subscriptions.length === 0) {
+      return
+    }
 
     // Clean up existing subscription
     if (channelRef.current) {
@@ -205,9 +201,7 @@ export function useMultiTableRealtime(
     // Subscribe to the channel
     channel.subscribe((status) => {
       if (status === 'SUBSCRIBED') {
-        console.log('✅ Subscribed to multi-table real-time updates')
       } else if (status === 'CHANNEL_ERROR') {
-        console.error('❌ Error subscribing to multi-table updates')
       }
     })
 
@@ -235,15 +229,10 @@ export function usePresence(channelName: string, userId: string, userData?: any)
     // Track presence
     channel
       .on('presence', { event: 'sync' }, () => {
-        const state = channel.presenceState()
-        console.log('Presence state:', state)
+        const _state = channel.presenceState()
       })
-      .on('presence', { event: 'join' }, ({ key, newPresences }) => {
-        console.log('User joined:', key, newPresences)
-      })
-      .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
-        console.log('User left:', key, leftPresences)
-      })
+      .on('presence', { event: 'join' }, ({ key, newPresences }) => {})
+      .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {})
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
           await channel.track({
@@ -271,25 +260,19 @@ export function usePresence(channelName: string, userId: string, userData?: any)
 /**
  * Hook for broadcast messages (real-time messaging)
  */
-export function useBroadcast(
-  channelName: string,
-  onMessage: (message: any) => void
-) {
+export function useBroadcast(channelName: string, onMessage: (message: any) => void) {
   const supabase = createClient()
   const channelRef = useRef<RealtimeChannel | null>(null)
 
-  const sendMessage = useCallback(
-    (eventName: string, payload: any) => {
-      if (channelRef.current) {
-        channelRef.current.send({
-          type: 'broadcast',
-          event: eventName,
-          payload,
-        })
-      }
-    },
-    []
-  )
+  const sendMessage = useCallback((eventName: string, payload: any) => {
+    if (channelRef.current) {
+      channelRef.current.send({
+        type: 'broadcast',
+        event: eventName,
+        payload,
+      })
+    }
+  }, [])
 
   useEffect(() => {
     const channel = supabase
@@ -299,7 +282,6 @@ export function useBroadcast(
       })
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
-          console.log(`✅ Subscribed to broadcast channel: ${channelName}`)
         }
       })
 

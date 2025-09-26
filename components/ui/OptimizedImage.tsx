@@ -100,9 +100,7 @@ export function OptimizedImage({
             {...props}
             alt={alt}
             blurDataURL={dataUrl(700, 475)}
-            className={`object-cover transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}
-              ${props.className || ''}
-            `}
+            className={`object-cover transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
             fill={!(props.width || props.height)}
             onError={handleError}
             onLoad={handleLoad}

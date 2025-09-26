@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { useSessionContext } from '@/components/SessionProvider'
+import { createClient } from '@/lib/supabase/client'
 import type { Database } from '@/types/database'
 
 type User = Database['public']['Tables']['users']['Row']
@@ -15,7 +15,7 @@ export interface UserProfile extends User {
   }>
 }
 
-export interface ProfileUpdateData {
+export type ProfileUpdateData = {
   name?: string
   email?: string
   bio?: string
@@ -111,104 +111,108 @@ export function useProfile() {
 
       setProfile(profile)
     } catch (err) {
-      console.error('Error fetching profile:', err)
       setError(err instanceof Error ? err.message : 'Failed to fetch profile')
     } finally {
       setLoading(false)
     }
-  }, [user?.id, supabase])
+  }, [user?.id, supabase, user.email, user.user_metadata?.name])
 
   // Update profile
-  const updateProfile = useCallback(async (updates: ProfileUpdateData) => {
-    if (!user?.id) {
-      return { success: false, error: 'User not authenticated' }
-    }
-
-    try {
-      // Map frontend field names to database column names
-      const mappedUpdates: any = {}
-      if ('name' in updates) {
-        mappedUpdates.full_name = updates.name
-      }
-      if ('bio' in updates) {
-        mappedUpdates.bio = updates.bio
-      }
-      if ('city' in updates) {
-        mappedUpdates.city = updates.city
-      }
-      if ('language' in updates) {
-        mappedUpdates.languages = [updates.language]
+  const updateProfile = useCallback(
+    async (updates: ProfileUpdateData) => {
+      if (!user?.id) {
+        return { success: false, error: 'User not authenticated' }
       }
 
-      const { data, error: updateError } = await supabase
-        .from('profiles')
-        .update({
-          ...mappedUpdates,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', user.id)
-        .select()
-        .single()
+      try {
+        // Map frontend field names to database column names
+        const mappedUpdates: any = {}
+        if ('name' in updates) {
+          mappedUpdates.full_name = updates.name
+        }
+        if ('bio' in updates) {
+          mappedUpdates.bio = updates.bio
+        }
+        if ('city' in updates) {
+          mappedUpdates.city = updates.city
+        }
+        if ('language' in updates) {
+          mappedUpdates.languages = [updates.language]
+        }
 
-      if (updateError) {
-        throw updateError
+        const { data, error: updateError } = await supabase
+          .from('profiles')
+          .update({
+            ...mappedUpdates,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', user.id)
+          .select()
+          .single()
+
+        if (updateError) {
+          throw updateError
+        }
+
+        setProfile((prev) => (prev ? { ...prev, ...data } : null))
+        return { success: true, data }
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : typeof err === 'object' && err !== null && 'message' in err
+              ? String(err.message)
+              : 'Failed to update profile'
+
+        return {
+          success: false,
+          error: errorMessage,
+        }
       }
-
-      setProfile(prev => prev ? { ...prev, ...data } : null)
-      return { success: true, data }
-    } catch (err) {
-      console.error('Error updating profile:', err)
-      const errorMessage = err instanceof Error
-        ? err.message
-        : typeof err === 'object' && err !== null && 'message' in err
-        ? String(err.message)
-        : 'Failed to update profile'
-
-      return {
-        success: false,
-        error: errorMessage,
-      }
-    }
-  }, [user?.id, supabase])
+    },
+    [user?.id, supabase]
+  )
 
   // Upload avatar
-  const uploadAvatar = useCallback(async (file: File) => {
-    if (!user?.id) {
-      return { success: false, error: 'User not authenticated' }
-    }
-
-    try {
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${user.id}-${Date.now()}.${fileExt}`
-      const filePath = `avatars/${fileName}`
-
-      // Upload to Supabase Storage
-      const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(filePath, file, {
-          upsert: true,
-        })
-
-      if (uploadError) {
-        throw uploadError
+  const uploadAvatar = useCallback(
+    async (file: File) => {
+      if (!user?.id) {
+        return { success: false, error: 'User not authenticated' }
       }
 
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('avatars')
-        .getPublicUrl(filePath)
+      try {
+        const fileExt = file.name.split('.').pop()
+        const fileName = `${user.id}-${Date.now()}.${fileExt}`
+        const filePath = `avatars/${fileName}`
 
-      // Update profile with avatar URL
-      const result = await updateProfile({ avatar_url: publicUrl })
-      return result
-    } catch (err) {
-      console.error('Error uploading avatar:', err)
-      return {
-        success: false,
-        error: err instanceof Error ? err.message : 'Failed to upload avatar',
+        // Upload to Supabase Storage
+        const { error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(filePath, file, {
+            upsert: true,
+          })
+
+        if (uploadError) {
+          throw uploadError
+        }
+
+        // Get public URL
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from('avatars').getPublicUrl(filePath)
+
+        // Update profile with avatar URL
+        const result = await updateProfile({ avatar_url: publicUrl })
+        return result
+      } catch (err) {
+        return {
+          success: false,
+          error: err instanceof Error ? err.message : 'Failed to upload avatar',
+        }
       }
-    }
-  }, [user?.id, supabase, updateProfile])
+    },
+    [user?.id, supabase, updateProfile]
+  )
 
   // Delete account
   const deleteAccount = useCallback(async () => {
@@ -234,7 +238,6 @@ export function useProfile() {
       await supabase.auth.signOut()
       return { success: true }
     } catch (err) {
-      console.error('Error deleting account:', err)
       return {
         success: false,
         error: err instanceof Error ? err.message : 'Failed to delete account',
@@ -244,19 +247,18 @@ export function useProfile() {
 
   // Export user data
   const exportUserData = useCallback(async () => {
-    if (!user?.id || !profile) {
+    if (!(user?.id && profile)) {
       return { success: false, error: 'No profile data available' }
     }
 
     try {
       // Fetch all user-related data
-      const [
-        { data: matches },
-        { data: messages },
-        { data: bookings },
-      ] = await Promise.all([
+      const [{ data: matches }, { data: messages }, { data: bookings }] = await Promise.all([
         supabase.from('matches').select('*').eq('user_id', user.id),
-        supabase.from('direct_messages').select('*').or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`),
+        supabase
+          .from('direct_messages')
+          .select('*')
+          .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`),
         supabase.from('bookings').select('*').eq('user_id', user.id),
       ])
 
@@ -270,7 +272,6 @@ export function useProfile() {
 
       return { success: true, data: exportData }
     } catch (err) {
-      console.error('Error exporting data:', err)
       return {
         success: false,
         error: err instanceof Error ? err.message : 'Failed to export data',
@@ -282,7 +283,9 @@ export function useProfile() {
   useEffect(() => {
     fetchProfile()
 
-    if (!user?.id) return
+    if (!user?.id) {
+      return
+    }
 
     const channel = supabase
       .channel(`profile-${user.id}`)
@@ -295,8 +298,7 @@ export function useProfile() {
           filter: `id=eq.${user.id}`,
         },
         (payload) => {
-          console.log('Profile change received:', payload)
-          setProfile(prev => prev ? { ...prev, ...payload.new } : null)
+          setProfile((prev) => (prev ? { ...prev, ...payload.new } : null))
         }
       )
       .subscribe()

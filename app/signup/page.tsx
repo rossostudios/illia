@@ -100,7 +100,7 @@ export default function SignupPage() {
       // Note: Apple provider isn't directly supported by Supabase
       const supabase = createClient()
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: provider === 'apple' ? 'google' : (provider as string),
+        provider: provider === 'apple' ? 'google' : provider as any,
         options: {
           redirectTo: `${window.location.origin}/dashboard`,
         },

@@ -1,5 +1,5 @@
 // Match types that align with database schema
-export interface Match {
+export type Match = {
   id: string // Database uses string IDs
   user_id: string
   provider_id: string

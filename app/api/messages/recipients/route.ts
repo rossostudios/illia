@@ -58,8 +58,7 @@ export async function GET(request: NextRequest) {
 
     const recipients = await searchRecipients(supabase, query, limit)
     return NextResponse.json({ recipients })
-  } catch (error) {
-    console.error('[api/messages/recipients] error', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'Unable to load recipients' }, { status: 500 })
   }
 }
@@ -71,17 +70,14 @@ async function searchRecipients(
 ) {
   let usersQuery = supabase
     .from('users')
-    .select(
-      'id, email, name, city, tier, approval_status, is_provider, is_deleted, specialties, services, languages, bio'
-    )
-    .eq('is_provider', true)
-    .eq('is_deleted', false)
+    .select('id, email, full_name, location_address, tier')
+    .neq('id', '')
     .order('created_at', { ascending: false })
     .limit(limit)
 
   if (query) {
     const escaped = sanitizeSearchTerm(query)
-    usersQuery = usersQuery.or(`name.ilike.%${escaped}%,email.ilike.%${escaped}%`)
+    usersQuery = usersQuery.or(`full_name.ilike.%${escaped}%,email.ilike.%${escaped}%`)
   }
 
   const { data: userRows, error } = await usersQuery
@@ -93,7 +89,7 @@ async function searchRecipients(
     return [] as RecipientResponse[]
   }
 
-  return mergeRecipientDetails(supabase, userRows)
+  return mergeRecipientDetails(supabase, userRows as any)
 }
 
 async function fetchRecipientsByIds(
@@ -106,9 +102,7 @@ async function fetchRecipientsByIds(
 
   const { data: userRows, error } = await supabase
     .from('users')
-    .select(
-      'id, email, name, city, tier, approval_status, is_provider, is_deleted, specialties, services, languages, bio'
-    )
+    .select('id, email, name, city, tier, services')
     .in('id', ids)
 
   if (error) {
@@ -119,7 +113,7 @@ async function fetchRecipientsByIds(
     return [] as RecipientResponse[]
   }
 
-  return mergeRecipientDetails(supabase, userRows)
+  return mergeRecipientDetails(supabase, userRows as any)
 }
 
 async function mergeRecipientDetails(

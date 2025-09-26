@@ -96,11 +96,10 @@ export function ThemeMenu() {
       >
         {options.find((opt) => opt.value === theme)?.icon && (
           <div className="h-4 w-4 text-gray-600 dark:text-gray-400">
-            {options.find((opt) => opt.value === theme)?.icon &&
-              (() => {
-                const Icon = options.find((opt) => opt.value === theme)?.icon
-                return <Icon className="h-4 w-4" />
-              })()}
+            {(() => {
+              const Icon = options.find((opt) => opt.value === theme)?.icon
+              return Icon ? <Icon className="h-4 w-4" /> : null
+            })()}
           </div>
         )}
         <span className="font-medium text-gray-700 text-sm dark:text-gray-300">

@@ -26,7 +26,6 @@ import { BookingStats } from '@/components/bookings/BookingStats'
 import { useSessionContext } from '@/components/SessionProvider'
 import { Button } from '@/components/ui/Button'
 import { MOCK_BOOKINGS } from '@/data/mock-bookings'
-import { createClient } from '@/lib/supabase/client'
 import type { Booking } from '@/types/booking'
 
 const WEEK_OPTIONS = { weekStartsOn: 1 } as const

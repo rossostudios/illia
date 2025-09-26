@@ -112,7 +112,7 @@ export function MembershipTab({ profile, onUpgrade }: MembershipTabProps) {
                   <Button
                     className="w-full"
                     onClick={onUpgrade}
-                    variant={plan.name === 'Premium' ? 'default' : 'outline'}
+                    variant={plan.name === 'Premium' ? 'primary' : 'outline'}
                   >
                     Upgrade to {plan.name}
                   </Button>

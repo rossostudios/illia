@@ -7,7 +7,6 @@ import {
   CheckCircle,
   ChevronRight,
   Clock,
-  DollarSign,
   MapPin,
   MessageSquare,
   Star,
@@ -132,7 +131,9 @@ export function MatchCard({ match, viewMode, onAction, onClick }: MatchCardProps
                 className="object-cover"
                 fill
                 sizes="48px"
-                src={match.provider.avatar_url || `https://i.pravatar.cc/100?u=${match.provider.id}`}
+                src={
+                  match.provider.avatar_url || `https://i.pravatar.cc/100?u=${match.provider.id}`
+                }
               />
             </div>
             <div>
@@ -191,11 +192,7 @@ export function MatchCard({ match, viewMode, onAction, onClick }: MatchCardProps
                 key={index}
               >
                 <span>
-                  {event.date ? (
-                    format(new Date(event.date), 'MMM d, h:mm a')
-                  ) : (
-                    'Unknown'
-                  )}
+                  {event.date ? format(new Date(event.date), 'MMM d, h:mm a') : 'Unknown'}
                 </span>
                 <span className="text-gray-400">•</span>
                 <span>{event.event}</span>

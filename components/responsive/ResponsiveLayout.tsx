@@ -43,7 +43,11 @@ export function ResponsiveLayout({
   mobileNav,
   className = '',
 }: ResponsiveLayoutProps) {
-  const { viewport, isMobile, isTablet, isDesktop } = useResponsive()
+  const responsive = useResponsive()
+  const { viewport } = responsive
+  const isMobile = viewport.isMobile
+  const isTablet = viewport.isTablet
+  const isDesktop = viewport.isDesktop
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showMobileSidebar, setShowMobileSidebar] = useState(false)
 

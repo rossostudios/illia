@@ -206,7 +206,7 @@ export default function MessagesPage() {
     ? (recipientMap[selectedOtherUserId] ?? DEFAULT_RECIPIENT)
     : null
 
-  let conversationListContent: JSX.Element
+  let conversationListContent: React.ReactElement
 
   if (loading) {
     conversationListContent = (
@@ -384,7 +384,7 @@ export default function MessagesPage() {
             id: conv.other_user_id,
             name: conv.other_user_name,
             email: conv.other_user_email,
-            tier: conv.other_user_tier,
+            tier: conv.other_user_tier ?? null,
           },
         }
       })
@@ -401,7 +401,7 @@ export default function MessagesPage() {
       await sendMessage(messageText)
       setMessageText('')
       messageInputRef.current?.focus()
-    } catch (error) {
+    } catch (_error) {
       toast.error('Message not sent', {
         description: 'Please check your connection and try again.',
       })
@@ -417,7 +417,7 @@ export default function MessagesPage() {
       await editMessage(editingMessageId, editText)
       setEditingMessageId(null)
       setEditText('')
-    } catch (error) {
+    } catch (_error) {
       toast.error('Unable to update message')
     }
   }, [editText, editingMessageId, editMessage])
@@ -431,12 +431,11 @@ export default function MessagesPage() {
 
       try {
         setStartingConversation(true)
-        const rpcPayload = Object.fromEntries([
-          ['user1_id', user.id],
-          ['user2_id', recipient.id],
-        ]) as { user1_id: string; user2_id: string }
-
-        const { data, error } = await supabase.rpc('get_or_create_conversation', rpcPayload)
+        const { data, error } = await (supabase as any)
+          .rpc('get_or_create_conversation', {
+            user1_id: user.id,
+            user2_id: recipient.id,
+          })
 
         if (error) {
           throw error
@@ -1055,7 +1054,7 @@ function NewChatModal({
     return null
   }
 
-  let resultsContent: JSX.Element
+  let resultsContent: React.ReactElement
 
   if (loading) {
     resultsContent = (

@@ -75,7 +75,11 @@ export function useAnalytics(dateRange?: DateRange) {
   const supabase = createClient()
 
   const fetchEngagementMetrics = useCallback(
-    async (startDate: Date, endDate: Date, signal?: AbortSignal): Promise<UserEngagementMetrics> => {
+    async (
+      startDate: Date,
+      endDate: Date,
+      signal?: AbortSignal
+    ): Promise<UserEngagementMetrics> => {
       try {
         // Get search analytics (if table exists)
         const { data: searches } = await supabase
@@ -83,7 +87,6 @@ export function useAnalytics(dateRange?: DateRange) {
           .select('created_at, result_count, time_to_results')
           .gte('created_at', startDate.toISOString())
           .lte('created_at', endDate.toISOString())
-          .abortSignal(signal || undefined)
 
         // Get matches data
         const { data: matches } = await supabase
@@ -91,7 +94,6 @@ export function useAnalytics(dateRange?: DateRange) {
           .select('created_at, score')
           .gte('created_at', startDate.toISOString())
           .lte('created_at', endDate.toISOString())
-          .abortSignal(signal || undefined)
 
         // Get leads data (if table exists)
         const { data: leads } = await supabase
@@ -99,7 +101,6 @@ export function useAnalytics(dateRange?: DateRange) {
           .select('created_at')
           .gte('created_at', startDate.toISOString())
           .lte('created_at', endDate.toISOString())
-          .abortSignal(signal || undefined)
 
         // Calculate metrics
         const totalSearches = searches?.length || 0
@@ -120,7 +121,9 @@ export function useAnalytics(dateRange?: DateRange) {
           const grouped = items.reduce(
             (acc, item) => {
               try {
-                if (!item[dateField]) return acc
+                if (!item[dateField]) {
+                  return acc
+                }
                 const date = new Date(item[dateField]).toISOString().split('T')[0]
                 acc[date] = (acc[date] || 0) + 1
               } catch {
@@ -132,7 +135,7 @@ export function useAnalytics(dateRange?: DateRange) {
           )
 
           return Object.entries(grouped)
-            .map(([date, count]) => ({ date, count }))
+            .map(([date, count]) => ({ date, count: count as number }))
             .sort((a, b) => a.date.localeCompare(b.date))
         }
 
@@ -165,7 +168,6 @@ export function useAnalytics(dateRange?: DateRange) {
           .select('query, search_type, result_count, clicked_result_id')
           .gte('created_at', startDate.toISOString())
           .lte('created_at', endDate.toISOString())
-          .abortSignal(signal || undefined)
 
         if (!analytics || analytics.length === 0) {
           return defaultAnalyticsData.search
@@ -183,9 +185,9 @@ export function useAnalytics(dateRange?: DateRange) {
         )
 
         const popularSearchTerms = Object.entries(termCounts)
-          .sort(([, a], [, b]) => b - a)
+          .sort(([, a], [, b]) => (b as number) - (a as number))
           .slice(0, 10)
-          .map(([term, count]) => ({ term, count }))
+          .map(([term, count]) => ({ term, count: count as number }))
 
         // Search type distribution
         const typeCounts = analytics.reduce(
@@ -199,7 +201,7 @@ export function useAnalytics(dateRange?: DateRange) {
 
         const searchTypeDistribution = Object.entries(typeCounts).map(([type, count]) => ({
           type,
-          count,
+          count: count as number,
         }))
 
         // Average results per search
@@ -218,12 +220,12 @@ export function useAnalytics(dateRange?: DateRange) {
         )
 
         const topClickedProviders = Object.entries(clickCounts)
-          .sort(([, a], [, b]) => b - a)
+          .sort(([, a], [, b]) => (b as number) - (a as number))
           .slice(0, 10)
           .map(([providerId, clicks]) => ({
             providerId,
             providerName: `Provider ${providerId.slice(0, 8)}...`,
-            clicks,
+            clicks: clicks as number,
           }))
 
         return {
@@ -249,7 +251,6 @@ export function useAnalytics(dateRange?: DateRange) {
         const { data: providers } = await supabase
           .from('service_providers')
           .select('id, name, rating_avg, reviews_count, services, city, status')
-          .abortSignal(signal || undefined)
 
         if (!providers || providers.length === 0) {
           return defaultAnalyticsData.providers
@@ -260,7 +261,8 @@ export function useAnalytics(dateRange?: DateRange) {
 
         // Average rating
         const ratings = providers.filter((p) => p.rating_avg).map((p) => p.rating_avg) || []
-        const avgRating = ratings.length > 0 ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0
+        const avgRating =
+          ratings.length > 0 ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0
 
         // Top rated providers
         const topRatedProviders = providers
@@ -287,8 +289,8 @@ export function useAnalytics(dateRange?: DateRange) {
         )
 
         const providersByService = Object.entries(serviceCounts)
-          .sort(([, a], [, b]) => b - a)
-          .map(([service, count]) => ({ service, count }))
+          .sort(([, a], [, b]) => (b as number) - (a as number))
+          .map(([service, count]) => ({ service, count: count as number }))
 
         // Providers by city
         const cityCounts = providers.reduce(
@@ -302,8 +304,8 @@ export function useAnalytics(dateRange?: DateRange) {
         )
 
         const providersByCity = Object.entries(cityCounts)
-          .sort(([, a], [, b]) => b - a)
-          .map(([city, count]) => ({ city, count }))
+          .sort(([, a], [, b]) => (b as number) - (a as number))
+          .map(([city, count]) => ({ city, count: count as number }))
 
         return {
           totalProviders,
@@ -353,7 +355,6 @@ export function useAnalytics(dateRange?: DateRange) {
         }
       } catch (err: any) {
         if (err?.name !== 'AbortError') {
-          console.error('Analytics fetch error:', err)
           // Use fallback data if fetch fails
           setData(defaultAnalyticsData)
           setError('Failed to fetch some analytics data. Showing default values.')
@@ -379,7 +380,7 @@ export function useAnalytics(dateRange?: DateRange) {
         abortControllerRef.current = null
       }
     }
-  }, [dateRange]) // Only depend on dateRange, not fetchAnalytics
+  }, [dateRange, fetchAnalytics]) // Only depend on dateRange, not fetchAnalytics
 
   return {
     data: data || defaultAnalyticsData,

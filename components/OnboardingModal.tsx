@@ -79,7 +79,9 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }: Onboard
         aria-hidden="true"
         className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
-      / role="button" tabIndex={0}>
+        role="button"
+        tabIndex={0}
+      />
 
       {/* Modal - Responsive positioning */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6">

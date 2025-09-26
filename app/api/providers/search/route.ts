@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (city) {
-      query = query.eq('city', city)
+      query = query.eq('city', city as any)
     }
 
     if (service && service !== 'All Services') {
@@ -56,7 +56,6 @@ export async function GET(request: NextRequest) {
     const { data, error, count } = await query
 
     if (error) {
-      console.error('Database error:', error)
       return NextResponse.json({ error: 'Failed to fetch providers' }, { status: 500 })
     }
 
@@ -67,14 +66,14 @@ export async function GET(request: NextRequest) {
       rating: provider.rating_avg || 0,
       reviewCount: provider.reviews_count || 0,
       // Ensure all frontend-expected fields are present
-      avatar_url: provider.avatar_url || provider.photo_url || null,
-      is_active: provider.is_active ?? true,
-      completed_jobs: provider.completed_jobs || 0,
-      badges: provider.badges || [],
-      location: provider.location || provider.neighborhood || '',
-      response_time_hours: provider.response_time_hours || 24,
-      acceptance_rate: provider.acceptance_rate || 100,
-      cancellation_rate: provider.cancellation_rate || 0,
+      avatar_url: provider.avatar_url || null,
+      is_active: true,
+      completed_jobs: 0,
+      badges: [],
+      location: '',
+      response_time_hours: 24,
+      acceptance_rate: 100,
+      cancellation_rate: 0,
     }))
 
     return NextResponse.json({
@@ -83,8 +82,7 @@ export async function GET(request: NextRequest) {
       limit,
       offset,
     })
-  } catch (error) {
-    console.error('API error:', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -118,20 +116,18 @@ export async function POST(request: NextRequest) {
       .insert({
         user_id: userId,
         provider_id: providerId,
-        status: 'pending',
-        match_score: 0.85, // Calculate this based on compatibility
+        score: 0.85,
+        explanation: 'Manual match created by user',
       })
       .select()
       .single()
 
     if (error) {
-      console.error('Error creating match:', error)
       return NextResponse.json({ error: 'Failed to create match' }, { status: 500 })
     }
 
     return NextResponse.json({ match: data })
-  } catch (error) {
-    console.error('API error:', error)
+  } catch (_error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

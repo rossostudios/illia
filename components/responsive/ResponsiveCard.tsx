@@ -37,7 +37,10 @@ export function ResponsiveCard({
 }: ResponsiveCardProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
-  const { viewport, isMobile, isTablet } = useResponsive()
+  const responsive = useResponsive()
+  const { viewport } = responsive
+  const isMobile = viewport.isMobile
+  const isTablet = viewport.isTablet
   const { ref: cardRef, isInView } = useInView({ threshold: 0.2 })
   const { ref: resizeRef, dimensions } = useElementResize<HTMLDivElement>()
 
@@ -61,7 +64,7 @@ export function ResponsiveCard({
     if (variant === 'compact') {
       return 'compact'
     }
-    if (variant === 'featured' && !isMobile()) {
+    if (variant === 'featured' && !isMobile) {
       return 'horizontal'
     }
     if (dimensions.width < 300) {
@@ -73,7 +76,7 @@ export function ResponsiveCard({
   const layout = getLayout()
 
   // Animation variants
-  const cardVariants = {
+  const cardVariants: any = {
     initial: {
       opacity: 0,
       y: 20,
@@ -111,7 +114,7 @@ export function ResponsiveCard({
 
   // Handle mouse move for 3D effect
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!interactive || isMobile()) {
+    if (!interactive || isMobile) {
       return
     }
 
@@ -268,7 +271,7 @@ export function ResponsiveCard({
             <button className="mb-3 text-fluid-xs text-teal-600 hover:underline dark:text-teal-400" onClick={(e) => {
                 e.stopPropagation()
                 setIsExpanded(!isExpanded)
-              }
+              }}
               type="button"
             >
               {isExpanded ? 'Show less' : 'Show more'}
